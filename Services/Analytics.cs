@@ -15,15 +15,17 @@ namespace SchoolGradebook.Services
         {
             Context = context;
         }
+        //Admin
         public int getTeachersCount()
         {
             return Context.Teachers.Count();
         }
+        //Teacher
         public int getStudentsCount()
         {
             return Context.Students.Count();
         }
-        public double getStudentsToTeachersRatio(int decimalPlaces)
+        public double getStudentsToTeachersRatio(int decimalPlaces = 2)
         {
             return Math.Round(getStudentsCount() / (double) getTeachersCount(), decimalPlaces);
         }
@@ -41,5 +43,78 @@ namespace SchoolGradebook.Services
                 .CountAsync();
             return countOfSubjects;
         }
+        //Student
+        public double getTotalAverage(string userId, int decimalPlaces = 2)
+        {
+            var enrollments = Context.Enrollments
+                .Include(s => s.Subject)
+                .Where(s => s.Student.UserAuthId == userId)
+                .ToArray();
+            double totalASumOfAverages = 0.0;
+            int countOfSubjectsWithGrades = 0;
+            //Iterating only through student's subjects
+            for (int i = 0; i < enrollments.Length; i++)
+            {
+                //Getting averages of every subject that the student has
+                double currentlyAdded = getSubjectAverageForStudent(userId, enrollments[i].Subject.Id, decimalPlaces);
+                if(currentlyAdded.CompareTo(Double.NaN) != 0) // getSubjectAverageForStudent returns 0 if student has no grades or is not enrolled in the subject
+                {
+                    countOfSubjectsWithGrades++;
+                    totalASumOfAverages += currentlyAdded;
+                }
+                
+            }
+            //Averaging subject averages (totalASumOfAverages / subjects count)
+            return Math.Round(totalASumOfAverages / countOfSubjectsWithGrades, decimalPlaces);
+        }
+        public Subject[] getAllSubjectsByUserId(string userId)
+        {
+            //Accessing Subjects via Enrollments table => Subject
+            var enrollments = Context.Enrollments
+                .Include(s => s.Subject)
+                .Include(s => s.Subject.Teacher)
+                .Where(s => s.Student.UserAuthId == userId)
+                .ToArray();
+            Subject[] output = new Subject[enrollments.Length];
+            for (int i = 0; i < enrollments.Length; i++)
+            {
+                output[i] = enrollments[i].Subject;
+            }
+            return output;
+        }
+        public double getSubjectAverageForStudent(string userId, int subjectId, int decimalPlaces = 2)
+        {
+            //Accessing all grades in a subject via Enrollments table => Subject => Grades
+            var enrollment = Context.Enrollments
+                .Where(s => s.Student.UserAuthId == userId && s.SubjectId == subjectId)
+                .Include(s => s.Subject)
+                    .ThenInclude(s => s.Grades)
+                        .ThenInclude(s => s.Student)
+                .FirstOrDefault();
+            if (enrollment == null) //Student is not in the given subject
+            {
+                return 0;
+            }
+            if (enrollment.Subject.Grades == null) //Student doesn't have any grades in the given subject
+            {
+                return 0;
+            }
+            List<Grade> filtredGrades = new List<Grade>();
+            foreach (Grade g in enrollment.Subject.Grades)
+            {
+                if(g.Student.UserAuthId == userId)
+                {
+                    filtredGrades.Add(g);
+                } 
+            }
+            double sum = 0.0;
+            int count = filtredGrades.Count;
+            foreach (Grade g in filtredGrades)
+            {
+                sum += (double) g.Value;
+            }
+            return Math.Round(sum / count, decimalPlaces);
+        }
+
     }
 }

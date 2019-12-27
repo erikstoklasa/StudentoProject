@@ -14,6 +14,9 @@ namespace SchoolGradebook.Models
         public String FirstName { get; set; }
         [Display(Name = "Přijímení")]
         public String LastName { get; set; }
+
+        public String getFullName() => FirstName + " " + LastName;
+
         public ICollection<Enrollment> Enrollments { get; set; }
         public ICollection<Grade> Grades { get; set; }
     }

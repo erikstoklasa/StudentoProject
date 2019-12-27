@@ -17,12 +17,14 @@ namespace SchoolGradebook.Pages
     {
         private readonly SchoolContext _context;
         private UserManager<IdentityUser> UsersManager;
+        private SignInManager<IdentityUser> SignInManager;
         private string UserId { get; set; }
 
-        public ActivateAccountModel(SchoolContext context, IHttpContextAccessor httpContextAccessor, UserManager<IdentityUser> userManager) 
+        public ActivateAccountModel(SchoolContext context, IHttpContextAccessor httpContextAccessor, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager) 
         {
             _context = context;
             UsersManager = userManager;
+            SignInManager = signInManager;
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             UserId = UserId == null ? "" : UserId;
 
@@ -79,8 +81,8 @@ namespace SchoolGradebook.Pages
                 user = UsersManager.FindByIdAsync(UserId).Result;
                 UsersManager.AddToRoleAsync(user, "teacher").Wait();
             }
-
-            return Page();
+            await SignInManager.SignOutAsync();
+            return LocalRedirect(Url.Page("/Account/Login", new { area = "Identity" }));
         }
     }
 }

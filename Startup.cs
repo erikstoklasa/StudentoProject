@@ -78,13 +78,11 @@ namespace SchoolGradebook
             roleManager.CreateAsync(new IdentityRole("student")).Wait();
 
             IdentityUser user;
-            user = userManager.FindByEmailAsync("admin@erikstoklasa.cz").Result;
-            userManager.AddToRoleAsync(user, "admin").Wait();
-
-            user = userManager.FindByEmailAsync("teacher@erikstoklasa.cz").Result;
-            userManager.AddToRoleAsync(user, "teacher").Wait();
-
-
+            if(userManager.FindByEmailAsync("admin@erikstoklasa.cz").Result != null)
+            {
+                user = userManager.FindByEmailAsync("admin@erikstoklasa.cz").Result;
+                userManager.AddToRoleAsync(user, "admin").Wait();
+            }
         }
     }
 }

@@ -1,45 +1,49 @@
-﻿@page "{subjectId?}"
+﻿@page "{subjectId:int?}"
 @model SchoolGradebook.IndexModelGrades
 @using SchoolGradebook.Models
 
 @{
     ViewData["Title"] = "Tvé známky";
 }
-<--!>Each page has a route with subjectId, in index subjectId is optional</--!>
-<h1>Známky</h1>
 @if (User.IsInRole("teacher"))
 {
-    @Html.Raw(Model.SubjectId)
-    @if (Model.Subject.Count == 0)
+    @if (Model.Subjects.Count == 0)
     {
-        <p>
-            <a asp-page="Create">Přidat známku</a>
-        </p>
-        <h2>Neučíte žádné předměty</h2>
+        <h2 class="text-center mt-5">Neučíte žádné předměty</h2>
     }
     else
-    {
-    <div class="d-flex justify-content-between">
-        @foreach (Subject s in Model.Subject)
-        {
-            <div class="card" style="width: 18rem; margin: 0 1rem 0 1rem;">
-                <div class="card-body">
-                    <h5 class="card-title">@Html.Raw(s.Name)</h5>
-                    <p class="card-text">Description</p>
-                    <a asp-page="./Index" asp-route-subjectId="@s.Id">Otevřít</a>
+    { <a class="btn btn-primary" asp-page="Create">Přidat známku</a>
+        <div class="d-flex justify-content-between">
+            @foreach (Subject s in Model.Subjects)
+            {
+                <div class="card mx-1" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">@Html.Raw(s.Name)</h5>
+                        <p class="card-text">Description</p>
+                        <a class="btn btn-primary" asp-page="./Index" asp-route-subjectId="@s.Id">Otevřít</a>
+                    </div>
                 </div>
-            </div>
-        }
-    </div>
+            }
+        </div>
 
     }
 
 }
 @if (User.IsInRole("student"))
 {
-    @if (Model.Grade.Count == 0)
+    @if (Model.Subject != null)
     {
-        <h2>Žádné známky</h2>
+        <h1>@Html.Raw(Model.Subject.Name)</h1>
+        <p>@Html.Raw(Model.Teacher.getFullName())</p>
+    }
+    else
+    {
+        <h1>Všechny známky</h1>
+    }
+
+    @if (Model.Grades.Count == 0)
+    {
+        <h2 class="text-center mt-5">Žádné známky 🙁</h2>
     }
     else
     {
@@ -47,22 +51,22 @@
             <thead>
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.Grade[0].Subject)
+                        Předmět
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Grade[0].Value)
+                        @Html.DisplayNameFor(model => model.Grades[0].Value)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Grade[0].Added)
+                        @Html.DisplayNameFor(model => model.Grades[0].Added)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Grade[0].Subject.Teacher)
+                        Učitel
                     </th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.Grade)
+                @foreach (var item in Model.Grades)
                 {
                     <tr>
                         <td>
@@ -75,10 +79,10 @@
                             @Html.Raw(Model.getRelativeTime(item.Added))
                         </td>
                         <td>
-                            @Html.Raw(item.Subject.Teacher.FirstName + " " + item.Subject.Teacher.LastName)
+                            @Html.Raw(item.Subject.Teacher.getFullName())
                         </td>
                         <td>
-                            <a asp-page="./Details" asp-route-id="@item.Id">Details</a>
+                            <a asp-page="./Details" asp-route-id="@item.Id">Zobrazit</a>
                         </td>
                     </tr>
                 }

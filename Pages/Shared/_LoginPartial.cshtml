@@ -15,12 +15,12 @@
     {
         Student s = context.Students
                     .Where(g => g.UserAuthId == UserId).FirstOrDefault();
-        fullName = s == null ? "" : s.FirstName + " " + s.LastName;
+        fullName = s == null ? "" : s.getFullName();
     } else if (User.IsInRole("teacher"))
     {
         Teacher t = context.Teachers
                     .Where(g => g.UserAuthId == UserId).FirstOrDefault();
-        fullName = t == null ? "null" : t.FirstName + " " + t.LastName;
+        fullName = t == null ? "" : t.getFullName();
     }
     else if (User.IsInRole("admin"))
     {

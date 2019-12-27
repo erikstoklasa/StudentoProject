@@ -72,33 +72,44 @@ namespace SchoolGradebook
             }
         }
 
-        public IList<Grade> Grade { get;set; }
-        public IList<Subject> Subject { get; set; }
-        public string SubjectId { get; set; }
+        public IList<Grade> Grades { get;set; }
+        public IList<Subject> Subjects { get; set; }
+        public Subject Subject { get; set; }
+        public Teacher Teacher { get; set; }
 
-        public async Task OnGetAsync(string subjectId)
+        public async Task OnGetAsync(int subjectId)
         {
-            SubjectId = subjectId;
+            Subject = await _context.Subjects
+                .Where(s => s.Id == subjectId)
+                .Include(s => s.Teacher)
+                .FirstOrDefaultAsync();
+            if (Subject != null)
+            {
+                Teacher = Subject.Teacher;
+            }     
             if (isTeacher)
             {
-                Subject = await _context.Subjects
+                Subjects = await _context.Subjects
                     .Where(g => g.Teacher.UserAuthId == UserId)
                 .ToListAsync();
-                /*Grade = await _context.Grades
-                .Include(g => g.Student)
-                .Include(g => g.Subject)
-                    .ThenInclude(g => g.Teacher)
-                    .Where(g => g.Subject.Teacher.UserAuthId == UserId)
-                .ToListAsync();*/
             }
-            else
+            else //Student
             {
-                Grade = await _context.Grades
-                .Include(g => g.Student)
-                .Where(g => g.Student.UserAuthId == UserId)
-                .Include(g => g.Subject)
-                    .ThenInclude(g => g.Teacher)
-                .ToListAsync();
+                if(subjectId == 0)
+                {
+                    Grades = await _context.Grades
+                        .Where(g => g.Student.UserAuthId == UserId)
+                        .Include(g => g.Subject)
+                            .ThenInclude(g => g.Teacher)
+                        .ToListAsync();
+                } else {
+                    Grades = await _context.Grades
+                        .Where(g => g.Student.UserAuthId == UserId && g.SubjectId == subjectId)
+                        .Include(g => g.Subject)
+                            .ThenInclude(g => g.Teacher)
+                        .ToListAsync();
+                }
+                
             }
             
         }

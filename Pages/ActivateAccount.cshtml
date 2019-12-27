@@ -1,0 +1,17 @@
+﻿@page
+@model SchoolGradebook.Pages.ActivateAccountModel
+@{
+}
+    <div class="mx-auto text-center">
+        <h2 class="mx-auto">Zadej kód, který ti dal vyučijící</h2>
+        <small class="mx-auto">Může vypadat třeba takto <strong>123bt</strong></small>
+        </div>
+            <form method="post" class="col-3 pt-2 mx-auto">
+                <div class="form-group">
+                    <label for="humanCode" class="control-label"></label>
+                    <input name="humanCode" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Aktivovat účet" class="btn btn-primary" />
+                </div>
+            </form>

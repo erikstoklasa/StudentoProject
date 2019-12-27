@@ -1,0 +1,10 @@
+﻿Creating human activation codes
+1) Only admins can create activation codes for teachers
+2) Only techers can create activation codes for students
+
+Creation process
+- codes are 5 character string
+- codes can include all letters of alphabet except: o, i, l, (total 26)
+- codes can include also numbers 1 through 9 (9)
+
+total characters 35

@@ -1,0 +1,56 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Http;
+@using System.Security.Claims;
+@using SchoolGradebook.Models;
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@inject SchoolContext context
+@inject IHttpContextAccessor httpContextAccessor
+@{
+    string UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+    UserId = UserId == null ? "" : UserId;
+    string fullName;
+    if (User.IsInRole("student"))
+    {
+        Student s = context.Students
+                    .Where(g => g.UserAuthId == UserId).FirstOrDefault();
+        fullName = s == null ? "" : s.FirstName + " " + s.LastName;
+    } else if (User.IsInRole("teacher"))
+    {
+        Teacher t = context.Teachers
+                    .Where(g => g.UserAuthId == UserId).FirstOrDefault();
+        fullName = t == null ? "null" : t.FirstName + " " + t.LastName;
+    }
+    else if (User.IsInRole("admin"))
+    {
+        fullName = "Administrátor";
+    }
+    else
+    {
+        fullName = "Neaktivovaný";
+    }
+}
+
+<ul class="navbar-nav">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@Html.Raw(fullName)</a>
+        </li>
+        <li class="nav-item">
+            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                <button type="submit" class="nav-link btn btn-link text-dark">Odhlásit se</button>
+            </form>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Registrace</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Přihlaš se</a>
+        </li>
+    }
+</ul>

@@ -1,0 +1,78 @@
+﻿@page
+@model IndexModel
+@using  SchoolGradebook.Services
+@using Microsoft.AspNetCore.Http;
+@using System.Security.Claims;
+@inject Analytics  analytics
+@inject IHttpContextAccessor httpContextAccessor
+@{
+    ViewData["Title"] = "Home page";
+    string UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+    UserId = UserId == null ? "" : UserId;
+}
+
+<div class="text-center">
+    @if (
+!(User.IsInRole("teacher") || User.IsInRole("student") || User.IsInRole("admin")) &&
+User.Identity.IsAuthenticated
+)
+    {
+        <h1 class="mt-3">Tvůj účet není aktivován</h1>
+        <a class="btn btn-primary mt-3" asp-area="" asp-page="/ActivateAccount">Aktivovat účet</a>
+
+    }
+    else if (User.IsInRole("student"))
+    {
+        <h1 class="display-4">Moderní žákovská</h1>
+        <div class="row d-flex justify-content-center">
+            <ul class="list-group col-md-6 center">
+                <li class="list-group-item">Místo pro učební materiály ✔️</li>
+                <li class="list-group-item">Predikce vývoje známek žáků ✔️</li>
+                <li class="list-group-item">Automatizované testování ✔️</li>
+            </ul>
+        </div>
+    }
+    else if (User.IsInRole("teacher"))
+    {
+        <div class="d-flex justify-content-around">
+            <div>
+                <p>Počet vašich studentů</p>
+                <h2>@Html.Raw(await analytics.getStudentsCountByTeacherId(UserId))</h2>
+            </div>
+            <div>
+                <p>Počet vašich předmětů</p>
+                <h2>@Html.Raw(await analytics.getSubjectsCountByTeacherId(UserId))</h2>
+            </div>
+        </div>
+    }
+    else if (User.IsInRole("admin"))
+    {
+        <div class="d-flex justify-content-around">
+            <div>
+                <p>Počet vyučujících</p>
+                <h2>@Html.Raw(analytics.getTeachersCount())</h2>
+            </div>
+            <div>
+                <p>Počet studentů</p>
+                <h2>@Html.Raw(analytics.getStudentsCount())</h2>
+            </div>
+        </div>
+        <div class="pt-2">
+            <p>Poměr studentů na vyučujícího</p>
+            <h3>@Html.Raw(analytics.getStudentsToTeachersRatio(2))</h3>
+        </div>
+    }
+    else
+    {
+        <h1 class="display-4">Moderní žákovská</h1>
+        <div class="row d-flex justify-content-center">
+            <ul class="list-group col-md-6 center">
+                <li class="list-group-item">Místo pro učební materiály ✔️</li>
+                <li class="list-group-item">Predikce vývoje známek žáků ✔️</li>
+                <li class="list-group-item">Automatizované testování ✔️</li>
+            </ul>
+        </div>
+    }
+
+
+</div>

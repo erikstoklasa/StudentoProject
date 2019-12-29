@@ -7,6 +7,10 @@ Creation process
 - codes can include all letters of alphabet except: o, i, l, (total 26)
 - codes can include also numbers 1 through 9 (9)
 
-total characters 35
+total characters 35ˇ5 = 52 mil combinations 
 
-SQL Creation:
+Grades page
+ - CRUD pages with grade id parameter in route
+ - index will be displaying all grades (sorted by recency)
+Subjects page
+ - 

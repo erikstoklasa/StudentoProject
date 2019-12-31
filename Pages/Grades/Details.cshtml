@@ -1,15 +1,14 @@
 ﻿@page "{gradeId}"
 @model SchoolGradebook.DetailsModelGrades
+@using System.Globalization;
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detail";
+    System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("cs-CZ");
 }
 
-<h1>Details</h1>
-
 <div>
-    <h4>Grade</h4>
-    <hr />
+    <h1>@Html.Raw(Model.Grade.Subject.Name)</h1>
     <dl class="row">
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Grade.Value)
@@ -21,23 +20,16 @@
             @Html.DisplayNameFor(model => model.Grade.Added)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Grade.Added)
+            @Html.Raw(Model.Grade.Added.ToLocalTime())
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Grade.Student)
+            Vyučující
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Grade.Student.Id)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Grade.Subject)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Grade.Subject.Id)
+            @Html.Raw(Model.Grade.Subject.Teacher.getFullName())
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-page="./Edit" asp-route-id="@Model.Grade.Id">Edit</a> |
-    <a asp-page="./Index">Back to List</a>
+    <a asp-page="./Index">Zpět</a>
 </div>

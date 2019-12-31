@@ -21,7 +21,7 @@ namespace SchoolGradebook
 
         public Grade Grade { get; set; }
 
-        [BindProperty]
+        [BindProperty(SupportsGet = true)]
         public int gradeId { get; set; }
 
         public async Task<IActionResult> OnGetAsync()
@@ -29,6 +29,7 @@ namespace SchoolGradebook
 
             Grade = await _context.Grades
                 .Include(g => g.Student)
+                .Include(g => g.Subject.Teacher)
                 .Include(g => g.Subject).FirstOrDefaultAsync(m => m.Id == gradeId);
 
             if (Grade == null)

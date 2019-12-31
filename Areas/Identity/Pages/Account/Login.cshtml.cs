@@ -47,10 +47,11 @@ namespace SchoolGradebook.Areas.Identity.Pages.Account
             public string Email { get; set; }
 
             [Required]
+            [Display(Name = "Heslo")]
             [DataType(DataType.Password)]
             public string Password { get; set; }
 
-            [Display(Name = "Remember me?")]
+            [Display(Name = "Zapamatovat si přihlášení")]
             public bool RememberMe { get; set; }
         }
 

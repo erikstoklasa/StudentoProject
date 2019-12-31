@@ -8,92 +8,140 @@
 @inject IHttpContextAccessor httpContextAccessor
 @inject SchoolContext context
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Domů";
     string UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
     UserId = UserId == null ? "" : UserId;
     Student s = context.Students
                     .Where(g => g.UserAuthId == UserId).FirstOrDefault();
     String firstName = "";
-    if(s != null)
+    if (s != null)
     {
         firstName = s.FirstName;
     }
-    
-    
+
+
 }
 
-    <div class="text-center">
-        @if (
-   !(User.IsInRole("teacher") || User.IsInRole("student") || User.IsInRole("admin")) &&
-   User.Identity.IsAuthenticated
-   )
-        {
-            <h1 class="mt-3">Tvůj účet není aktivován</h1>
-            <a class="btn btn-primary mt-3" asp-area="" asp-page="/ActivateAccount">Aktivovat účet</a>
+<div class="text-center">
+    @if (
+!(User.IsInRole("teacher") || User.IsInRole("student") || User.IsInRole("admin")) &&
+User.Identity.IsAuthenticated
+)
+    {
+        <h1 class="mt-3">Tvůj účet není aktivován</h1>
+        <a class="btn btn-primary mt-3" asp-area="" asp-page="/ActivateAccount">Aktivovat účet</a>
 
-        }
-        else if (User.IsInRole("student"))
-        {
-            <h1 class="text-left" style="font-weight: 400;">
-                Ahoj @Html.Raw(CzechNamePersonalizer.Sklonuj(firstName)),<br>
-                máš skvělý celkový průměr <strong>@Html.Raw(analytics.getTotalAverage(UserId).ToString())</strong>
-            </h1>
-            <div class="d-flex justify-content-between">
-                @foreach (Subject x in analytics.getAllSubjectsByUserId(UserId))
-                {
-                    <div class="card" style="width: 18rem; margin: 0 1rem 0 1rem;">
-                        <div class="card-body">
-                            <h5 class="card-title">@Html.Raw(x.Name)</h5>
-                            <p class="card-text">@Html.Raw(x.Teacher.FirstName + " " + x.Teacher.LastName)</p>
-                            <p class="card-text"><strong>@Html.Raw(analytics.getSubjectAverageForStudent(UserId, x.Id).CompareTo(Double.NaN) == 0 ?
-                                                "Bez známek" : analytics.getSubjectAverageForStudent(UserId, x.Id).ToString())</strong></p>
-                            <a class="btn btn-primary" asp-page="/Grades/Index" asp-route-subjectId="@x.Id">Zobrazit známky</a>
-                        </div>
-                    </div>
-                }
-               </div>
-                }
-                else if (User.IsInRole("teacher"))
-                {
-                <div class="d-flex justify-content-around">
-                    <div>
-                        <p>Počet vašich studentů</p>
-                        <h2>@Html.Raw(await analytics.getStudentsCountByTeacherId(UserId))</h2>
-                    </div>
-                    <div>
-                        <p>Počet vašich předmětů</p>
-                        <h2>@Html.Raw(await analytics.getSubjectsCountByTeacherId(UserId))</h2>
-                    </div>
-                </div>
-                }
-                else if (User.IsInRole("admin"))
-                {
-                <div class="d-flex justify-content-around">
-                    <div>
-                        <p>Počet vyučujících</p>
-                        <h2>@Html.Raw(analytics.getTeachersCount())</h2>
-                    </div>
-                    <div>
-                        <p>Počet studentů</p>
-                        <h2>@Html.Raw(analytics.getStudentsCount())</h2>
-                    </div>
-                </div>
-                <div class="pt-2">
-                    <p>Poměr studentů na vyučujícího</p>
-                    <h3>@Html.Raw(analytics.getStudentsToTeachersRatio(2))</h3>
-                </div>
-                }
-                else
-                {
-                <h1 class="display-4">Moderní žákovská</h1>
-                <div class="row d-flex justify-content-center">
-                    <ul class="list-group col-md-6 center">
-                        <li class="list-group-item">Místo pro učební materiály ✔️</li>
-                        <li class="list-group-item">Predikce vývoje známek žáků ✔️</li>
-                        <li class="list-group-item">Automatizované testování ✔️</li>
-                    </ul>
-                </div>
-                }
-
-
+    }
+    else if (User.IsInRole("student"))
+    {
+        <div class="d-flex flex-row h-100">
+            <div class="d-flex flex-row w-50">
+                <table class="table mr-3">
+                    <thead>
+                        <tr>
+                            <th>
+                                Známka
+                            </th>
+                            <th>
+                                Předmět
+                            </th>
+                            <th>
+                                Datum
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var grade in analytics.getRecentGradesByUserId(UserId))
+                        {
+                            <tr>
+                                <td>
+                                    @Html.Raw(grade.Value.ToString())
+                                </td>
+                                <td>
+                                    @Html.Raw(grade.Subject.Name.ToString())
+                                </td>
+                                <td>
+                                    @Html.Raw(LanguageHelper.getRelativeTime(grade.Added))
+                                </td>
+                                <td>
+                                    <a asp-page="Grades/Details" asp-route-gradeId="@grade.Id">Zobrazit</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
+            <div class="d-flex flex-column w-50">
+                <div class="ml-3">
+                    <h1 class="text-left" style="font-weight: 400;">
+                        Ahoj <strong>@Html.Raw(LanguageHelper.Sklonuj(firstName)),</strong><br>jsi <strong>skvělý</strong> student!
+                    </h1>
+                    <h3 class="text-left mt-5" style="font-weight: 400;">Celkový průměr: <strong>@Html.Raw(analytics.getTotalAverage(UserId).ToString("f2"))</strong></h3>
+                </div>
+            </div>
+        </div>
+        <p class="text-left">Všechny předměty:</p>
+        <div class="d-flex flex-row flex-wrap">
+            @foreach (Subject x in analytics.getAllSubjectsByUserId(UserId))
+            {
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">@Html.Raw(x.Name)</h5>
+                        <p class="card-text">@Html.Raw(x.Teacher.getFullName())</p>
+                        <p class="card-text">
+                            <strong>
+                                @Html.Raw(analytics.getSubjectAverageForStudent(UserId, x.Id).CompareTo(Double.NaN) == 0 ?
+                   "Bez známek" : analytics.getSubjectAverageForStudent(UserId, x.Id).ToString("f2"))
+                            </strong>
+                        </p>
+                        <a class="btn btn-primary" asp-page="/Grades/Index" asp-route-subjectId="@x.Id">Zobrazit známky</a>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else if (User.IsInRole("teacher"))
+    {
+        <div class="d-flex justify-content-around">
+            <div>
+                <p>Počet vašich studentů</p>
+                <h2>@Html.Raw(await analytics.getStudentsCountByTeacherId(UserId))</h2>
+            </div>
+            <div>
+                <p>Počet vašich předmětů</p>
+                <h2>@Html.Raw(await analytics.getSubjectsCountByTeacherId(UserId))</h2>
+            </div>
+        </div>
+    }
+    else if (User.IsInRole("admin"))
+    {
+        <div class="d-flex justify-content-around">
+            <div>
+                <p>Počet vyučujících</p>
+                <h2>@Html.Raw(analytics.getTeachersCount())</h2>
+            </div>
+            <div>
+                <p>Počet studentů</p>
+                <h2>@Html.Raw(analytics.getStudentsCount())</h2>
+            </div>
+        </div>
+        <div class="pt-2">
+            <p>Poměr studentů na vyučujícího</p>
+            <h3>@Html.Raw(analytics.getStudentsToTeachersRatio(2))</h3>
+        </div>
+    }
+    else
+    {
+        <h1 class="display-4">Moderní žákovská</h1>
+        <div class="row d-flex justify-content-center">
+            <ul class="list-group col-md-6 center">
+                <li class="list-group-item">Místo pro učební materiály ✔️</li>
+                <li class="list-group-item">Predikce vývoje známek žáků ✔️</li>
+                <li class="list-group-item">Automatizované testování ✔️</li>
+            </ul>
+        </div>
+    }
+
+
+</div>

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace SchoolGradebook.Services
 {
-    public static class CzechNamePersonalizer
+    public static class LanguageHelper
     {
         //Following code found at: https://www.itnetwork.cz/csharp/oop/zdrojove-kody/csharp-algoritmy-prevod-jmena-do-5-padu
         //Author credit: https://www.itnetwork.cz/portfolio/1246
@@ -87,6 +87,50 @@ namespace SchoolGradebook.Services
 
             }
             return vysledneSlovo;
+        }
+
+        public static string getRelativeTime(DateTime dateTime)
+        {
+            const int SECOND = 1;
+            const int MINUTE = 60 * SECOND;
+            const int HOUR = 60 * MINUTE;
+            const int DAY = 24 * HOUR;
+            const int MONTH = 30 * DAY;
+
+            var ts = new TimeSpan(DateTime.UtcNow.Ticks - dateTime.Ticks);
+            double delta = Math.Abs(ts.TotalSeconds);
+
+            if (delta < 1 * MINUTE)
+                return ts.Seconds == 1 ? "před sekundou" : "před " + ts.Seconds + " sekundami";
+
+            if (delta < 2 * MINUTE)
+                return "před minutou";
+
+            if (delta < 55 * MINUTE)
+                return "před " + ts.Minutes + " minutami";
+
+            if (delta < 70 * MINUTE)
+                return "před hodinou";
+
+            if (delta < 24 * HOUR)
+                return "před " + ts.Hours + " hodinami";
+
+            if (delta < 48 * HOUR)
+                return "včera";
+
+            if (delta < 30 * DAY)
+                return "před " + ts.Days + " dny";
+
+            if (delta < 12 * MONTH)
+            {
+                int months = Convert.ToInt32(Math.Floor((double)ts.Days / 30));
+                return months <= 1 ? "před měsícem" : "před " + months + " měsíci";
+            }
+            else
+            {
+                int years = Convert.ToInt32(Math.Floor((double)ts.Days / 365));
+                return years <= 1 ? "před rokem" : "před " + years + " roky";
+            }
         }
     }
 }

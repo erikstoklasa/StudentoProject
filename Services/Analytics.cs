@@ -25,6 +25,12 @@ namespace SchoolGradebook.Services
         {
             return Context.Students.Count();
         }
+        public int getStudentsCountInSubject(int subjectId)
+        {
+            return Context.Enrollments
+                .Where(s => s.SubjectId == subjectId)
+                .Count();
+        }
         public double getStudentsToTeachersRatio(int decimalPlaces = 2)
         {
             return Math.Round(getStudentsCount() / (double) getTeachersCount(), decimalPlaces);
@@ -74,6 +80,7 @@ namespace SchoolGradebook.Services
                 .Include(s => s.Subject)
                 .Include(s => s.Subject.Teacher)
                 .Where(s => s.Student.UserAuthId == userId)
+                .OrderBy(s => s.Subject.Name)
                 .ToArray();
             Subject[] output = new Subject[enrollments.Length];
             for (int i = 0; i < enrollments.Length; i++)
@@ -95,10 +102,6 @@ namespace SchoolGradebook.Services
             {
                 return 0;
             }
-            if (enrollment.Subject.Grades == null) //Student doesn't have any grades in the given subject
-            {
-                return 0;
-            }
             List<Grade> filtredGrades = new List<Grade>();
             foreach (Grade g in enrollment.Subject.Grades)
             {
@@ -109,6 +112,10 @@ namespace SchoolGradebook.Services
             }
             double sum = 0.0;
             int count = filtredGrades.Count;
+            if (filtredGrades.Count == 0) //Student doesn't have any grades in the given subject
+            {
+                return 0; 
+            }
             foreach (Grade g in filtredGrades)
             {
                 sum += (double) g.Value;
@@ -116,5 +123,25 @@ namespace SchoolGradebook.Services
             return Math.Round(sum / count, decimalPlaces);
         }
 
+        public Grade[] getRecentGradesByUserId(string userId, int maxNumberOfGrades = 5)
+        {
+            //Accessing Subjects via Enrollments table => Subject
+            var grades = Context.Grades
+                .Include(s => s.Subject)
+                .Include(s => s.Subject.Teacher)
+                .Where(s => s.Student.UserAuthId == userId)
+                .OrderBy(s => s.Added)
+                .ToArray();
+            if (maxNumberOfGrades > grades.Length) //If less than 5 grades are in the database for a specific student
+            {
+                maxNumberOfGrades = grades.Length;
+            }
+            Grade[] output = new Grade[maxNumberOfGrades];
+            for (int i = 0; i < maxNumberOfGrades; i++)
+            {
+                output[i] = grades[i];
+            }
+            return output;
+        }
     }
 }

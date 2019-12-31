@@ -9,38 +9,43 @@ using SchoolGradebook.Models;
 using SchoolGradebook.Data;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
 
 namespace SchoolGradebook
 {
     public class CreateModelGrades : PageModel
     {
-        private readonly SchoolGradebook.Data.SchoolContext _context;
-        public List<SelectListItem> Subjects { get; private set; }
+        private readonly SchoolContext _context;
         public List<SelectListItem> Students { get; private set; }
         private string UserId { get; set; }
+        public string SubjectName { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public int SubjectId { get; set; }
 
-        public CreateModelGrades(SchoolGradebook.Data.SchoolContext context, IHttpContextAccessor httpContextAccessor)
+        public CreateModelGrades(SchoolContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            List<Student> tempStud = _context.Students.ToList();
-            List<Subject> tempSubj = _context.Subjects
-                .Where(s => s.Teacher.UserAuthId == UserId)
-                .ToList();
-            Subjects = new List<SelectListItem> { };
-            Students = new List<SelectListItem> { };
-            foreach (Subject s in tempSubj)
-            {
-                foreach (Student stud in tempStud)
-                {
-                    Students.Add(new SelectListItem(stud.FirstName + " " + stud.LastName, stud.Id.ToString()));
-                }
-                Subjects.Add(new SelectListItem(s.Name, s.Id.ToString()));
-            }
         }
 
         public IActionResult OnGet()
         {
+            Subject s = _context.Subjects
+                .Find(SubjectId);
+            SubjectName = s.Name;
+            Enrollment[] enrollments = _context.Enrollments
+                .Include(s => s.Student)
+                .Where(s => s.SubjectId == SubjectId)
+                .ToArray();
+            Students = new List<SelectListItem> { };
+            for (int i = 0; i < enrollments.Length; i++)
+            {
+                Students.Add(
+                    new SelectListItem(
+                        enrollments[i].Student.getFullName(),
+                        enrollments[i].StudentId.ToString())
+                    );
+            }
             return Page();
         }
 
@@ -49,8 +54,34 @@ namespace SchoolGradebook
 
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync(int subjectId)
+        public async Task<IActionResult> OnPostAsync()
         {
+            Grade.Added = DateTime.UtcNow;
+            Subject[] teachersSubjects = _context.Subjects
+                .Where(s => s.Teacher.UserAuthId == UserId)
+                .ToArray();
+            if (teachersSubjects == null)//Teacher has no subjects assigned
+            {
+                return Page();
+            }
+            bool teacherCanAdd = false;
+            foreach (Subject s in teachersSubjects)
+            {
+                if (s.Id == SubjectId)
+                {
+                    teacherCanAdd = true;
+                }
+            }
+            if (!teacherCanAdd)
+            {
+                return Page();
+            }
+            if (Grade.Value == null)
+            {
+                return Page();
+            }
+            //In this state teacher is elegible for adding the grade to the specified subject
+            Grade.SubjectId = SubjectId;
             if (!ModelState.IsValid)
             {
                 return Page();

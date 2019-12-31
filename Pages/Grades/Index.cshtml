@@ -1,6 +1,8 @@
-﻿@page "{subjectId:int?}"
+﻿@page
 @model SchoolGradebook.IndexModelGrades
 @using SchoolGradebook.Models
+@using SchoolGradebook.Services
+@inject Analytics analytics
 
 @{
     ViewData["Title"] = "Tvé známky";
@@ -12,15 +14,15 @@
         <h2 class="text-center mt-5">Neučíte žádné předměty</h2>
     }
     else
-    { <a class="btn btn-primary" asp-page="Create">Přidat známku</a>
+    { 
         <div class="d-flex justify-content-between">
             @foreach (Subject s in Model.Subjects)
             {
-                <div class="card mx-1" style="width: 18rem;">
+                <div class="card mx-1">
                     <div class="card-body">
                         <h5 class="card-title">@Html.Raw(s.Name)</h5>
-                        <p class="card-text">Description</p>
-                        <a class="btn btn-primary" asp-page="./Index" asp-route-subjectId="@s.Id">Otevřít</a>
+                        <p class="card-text">Studentů: @Html.Raw(analytics.getStudentsCountInSubject(s.Id))</p>
+                        <a class="btn btn-primary" asp-page="Create" asp-route-subjectId="@s.Id">Přidat známku</a>
                     </div>
                 </div>
             }
@@ -76,13 +78,13 @@
                             @Html.DisplayFor(modelItem => item.Value)
                         </td>
                         <td>
-                            @Html.Raw(Model.getRelativeTime(item.Added))
+                            @Html.Raw(LanguageHelper.getRelativeTime(item.Added))
                         </td>
                         <td>
                             @Html.Raw(item.Subject.Teacher.getFullName())
                         </td>
                         <td>
-                            <a asp-page="./Details" asp-route-id="@item.Id">Zobrazit</a>
+                            <a asp-page="Details" asp-route-gradeId="@item.Id">Zobrazit</a>
                         </td>
                     </tr>
                 }

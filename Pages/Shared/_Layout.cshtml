@@ -3,42 +3,42 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - SchoolGradebook</title>
+    <title>@ViewData["Title"] - Studento</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-primary border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">SchoolGradebook</a>
+                <a class="navbar-brand text-light" asp-area="" asp-page="/Index">Studento</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
-                    <ul class="navbar-nav flex-grow-1">
+                    <ul class="navbar-nav flex-grow-1 justify-content-center">
                         @if (User.IsInRole("admin") || User.IsInRole("teacher"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Students/Index">Studenti</a>
+                                <a class="nav-link text-light" asp-area="" asp-page="/Students/Index">Studenti</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/HumanCodes/Index">Aktivační kódy</a>
+                                <a class="nav-link text-light" asp-area="" asp-page="/HumanCodes/Index">Aktivační kódy</a>
                             </li>
                         }
                         @if (User.IsInRole("admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Teachers/Index">Učitelé</a>
+                                <a class="nav-link text-light" asp-area="" asp-page="/Teachers/Index">Učitelé</a>
                             </li>
                         }
 
                         @if (User.IsInRole("teacher") || User.IsInRole("student"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Grades/Index">Známky</a>
+                                <a class="nav-link text-light" asp-area="" asp-page="/Grades/Index">Známky</a>
                             </li>
                         }
                     </ul>
@@ -54,7 +54,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2019 - SchoolGradebook - <a asp-area="" asp-page="/Privacy">Privacy</a>
+            &copy; 2019 - Studento
         </div>
     </footer>
 

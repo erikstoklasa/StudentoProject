@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using SchoolGradebook.Models;
 using SchoolGradebook.Data;
 
-namespace SchoolGradebook
+namespace SchoolGradebook.Pages.Students
 {
     public class CreateModel : PageModel
     {

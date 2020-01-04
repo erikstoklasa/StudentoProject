@@ -11,9 +11,9 @@ using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 
-namespace SchoolGradebook
+namespace SchoolGradebook.Pages.Grades
 {
-    public class CreateModelGrades : PageModel
+    public class CreateModel : PageModel
     {
         private readonly SchoolContext _context;
         public List<SelectListItem> Students { get; private set; }
@@ -22,7 +22,7 @@ namespace SchoolGradebook
         [BindProperty(SupportsGet = true)]
         public int SubjectId { get; set; }
 
-        public CreateModelGrades(SchoolContext context, IHttpContextAccessor httpContextAccessor)
+        public CreateModel(SchoolContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);

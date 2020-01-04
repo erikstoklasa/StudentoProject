@@ -88,7 +88,7 @@ namespace SchoolGradebook.Services
             }
             return vysledneSlovo;
         }
-
+        //End of credited code
         public static string getRelativeTime(DateTime dateTime)
         {
             const int SECOND = 1;

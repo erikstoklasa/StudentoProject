@@ -8,13 +8,13 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using SchoolGradebook.Models;
 using SchoolGradebook.Data;
 
-namespace SchoolGradebook
+namespace SchoolGradebook.Pages.Teachers
 {
-    public class CreateModelTeacher : PageModel
+    public class CreateModel : PageModel
     {
         private readonly SchoolGradebook.Data.SchoolContext _context;
 
-        public CreateModelTeacher(SchoolGradebook.Data.SchoolContext context)
+        public CreateModel(SchoolGradebook.Data.SchoolContext context)
         {
             _context = context;
         }

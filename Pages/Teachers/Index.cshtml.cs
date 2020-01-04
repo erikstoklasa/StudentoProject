@@ -8,13 +8,13 @@ using Microsoft.EntityFrameworkCore;
 using SchoolGradebook.Data;
 using SchoolGradebook.Models;
 
-namespace SchoolGradebook
+namespace SchoolGradebook.Pages.Teachers
 {
-    public class IndexModelTeacher : PageModel
+    public class IndexModel : PageModel
     {
         private readonly SchoolGradebook.Data.SchoolContext _context;
 
-        public IndexModelTeacher(SchoolGradebook.Data.SchoolContext context)
+        public IndexModel(SchoolGradebook.Data.SchoolContext context)
         {
             _context = context;
         }

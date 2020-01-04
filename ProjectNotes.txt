@@ -1,8 +1,8 @@
-﻿Creating human activation codes
+Creating human activation codes
 1) Only admins can create activation codes for teachers
 2) Only techers can create activation codes for students
 
-Creation process
+Human activation codes creation process
 - codes are 5 character string
 - codes can include all letters of alphabet except: o, i, l, (total 26)
 - codes can include also numbers 1 through 9 (9)
@@ -13,4 +13,4 @@ Grades page
  - CRUD pages with grade id parameter in route
  - index will be displaying all grades (sorted by recency)
 Subjects page
- - 
+ - display all subjects, details of subjects display its grades

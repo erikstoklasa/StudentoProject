@@ -10,16 +10,16 @@ using SchoolGradebook.Data;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 
-namespace SchoolGradebook
+namespace SchoolGradebook.Pages.Grades
 {
-    public class IndexModelGrades : PageModel
+    public class IndexModel : PageModel
     {
         private readonly SchoolGradebook.Data.SchoolContext _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
         public string UserId { get; set; }
         private bool isTeacher = false;
 
-        public IndexModelGrades(SchoolContext context, IHttpContextAccessor httpContextAccessor)
+        public IndexModel(SchoolContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _httpContextAccessor = httpContextAccessor;

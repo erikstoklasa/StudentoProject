@@ -9,15 +9,15 @@ using Microsoft.EntityFrameworkCore;
 using SchoolGradebook.Models;
 using SchoolGradebook.Data;
 
-namespace SchoolGradebook
+namespace SchoolGradebook.Pages.Grades
 {
-    public class EditModelGrades : PageModel
+    public class EditModel : PageModel
     {
         private readonly SchoolGradebook.Data.SchoolContext _context;
         public List<SelectListItem> Subjects { get; private set; }
         public List<SelectListItem> Students { get; private set; }
 
-        public EditModelGrades(SchoolGradebook.Data.SchoolContext context)
+        public EditModel(SchoolGradebook.Data.SchoolContext context)
         {
             _context = context;
             List<Student> tempStud = _context.Students.ToList();

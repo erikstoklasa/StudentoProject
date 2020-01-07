@@ -9,13 +9,13 @@ using Microsoft.EntityFrameworkCore;
 using SchoolGradebook.Models;
 using SchoolGradebook.Data;
 
-namespace SchoolGradebook
+namespace SchoolGradebook.Pages.Teachers
 {
-    public class EditModelTeacher : PageModel
+    public class EditModel : PageModel
     {
         private readonly SchoolGradebook.Data.SchoolContext _context;
 
-        public EditModelTeacher(SchoolGradebook.Data.SchoolContext context)
+        public EditModel(SchoolGradebook.Data.SchoolContext context)
         {
             _context = context;
         }

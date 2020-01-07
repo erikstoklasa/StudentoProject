@@ -1,2 +1,5 @@
 appsettings.Development.json
 appsettings.json
+SQL_User_Templates/
+.vs/
+obj/

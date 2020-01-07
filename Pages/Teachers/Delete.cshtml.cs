@@ -8,13 +8,13 @@ using Microsoft.EntityFrameworkCore;
 using SchoolGradebook.Models;
 using SchoolGradebook.Data;
 
-namespace SchoolGradebook
+namespace SchoolGradebook.Pages.Teachers
 {
-    public class DeleteModelTeacher : PageModel
+    public class DeleteModel : PageModel
     {
         private readonly SchoolGradebook.Data.SchoolContext _context;
 
-        public DeleteModelTeacher(SchoolGradebook.Data.SchoolContext context)
+        public DeleteModel(SchoolGradebook.Data.SchoolContext context)
         {
             _context = context;
         }

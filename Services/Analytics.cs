@@ -100,7 +100,7 @@ namespace SchoolGradebook.Services
                 .FirstOrDefault();
             if (enrollment == null) //Student is not in the given subject
             {
-                return 0;
+                return Double.NaN;
             }
             List<Grade> filtredGrades = new List<Grade>();
             foreach (Grade g in enrollment.Subject.Grades)
@@ -114,7 +114,7 @@ namespace SchoolGradebook.Services
             int count = filtredGrades.Count;
             if (filtredGrades.Count == 0) //Student doesn't have any grades in the given subject
             {
-                return 0; 
+                return Double.NaN; 
             }
             foreach (Grade g in filtredGrades)
             {
@@ -130,7 +130,7 @@ namespace SchoolGradebook.Services
                 .Include(s => s.Subject)
                 .Include(s => s.Subject.Teacher)
                 .Where(s => s.Student.UserAuthId == userId)
-                .OrderBy(s => s.Added)
+                .OrderByDescending(s => s.Added)
                 .ToArray();
             if (maxNumberOfGrades > grades.Length) //If less than 5 grades are in the database for a specific student
             {

@@ -9,8 +9,8 @@ namespace SchoolGradebook.Models
     public enum CodeType { Teacher, Student }
     public class HumanActivationCode
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int Id { get; set; } //Teacher/Student Id
+        public int Id { get; set; } 
+        public int TargetId { get; set; } //Teacher/Student Id
         public string HumanCode { get; set; }
         public CodeType CodeType { get; set; }
     }

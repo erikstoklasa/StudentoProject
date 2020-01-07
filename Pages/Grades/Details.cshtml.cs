@@ -8,13 +8,13 @@ using Microsoft.EntityFrameworkCore;
 using SchoolGradebook.Models;
 using SchoolGradebook.Data;
 
-namespace SchoolGradebook
+namespace SchoolGradebook.Pages.Grades
 {
-    public class DetailsModelGrades : PageModel
+    public class DetailsModel : PageModel
     {
         private readonly SchoolGradebook.Data.SchoolContext _context;
 
-        public DetailsModelGrades(SchoolGradebook.Data.SchoolContext context)
+        public DetailsModel(SchoolGradebook.Data.SchoolContext context)
         {
             _context = context;
         }

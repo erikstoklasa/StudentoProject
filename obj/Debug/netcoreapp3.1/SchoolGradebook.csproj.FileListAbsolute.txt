@@ -429,3 +429,8 @@ D:\Documents\GitHub\SchoolGrdebook\obj\Debug\netcoreapp3.1\SchoolGradebook.Views
 D:\Documents\GitHub\SchoolGrdebook\obj\Debug\netcoreapp3.1\SchoolGradebook.csproj.CopyComplete
 D:\Documents\GitHub\SchoolGrdebook\obj\Debug\netcoreapp3.1\SchoolGradebook.dll
 D:\Documents\GitHub\SchoolGrdebook\obj\Debug\netcoreapp3.1\SchoolGradebook.pdb
+D:\Documents\GitHub\SchoolGrdebook\obj\Debug\netcoreapp3.1\Razor\Pages\Subjects\Create.cshtml.g.cs
+D:\Documents\GitHub\SchoolGrdebook\obj\Debug\netcoreapp3.1\Razor\Pages\Subjects\Delete.cshtml.g.cs
+D:\Documents\GitHub\SchoolGrdebook\obj\Debug\netcoreapp3.1\Razor\Pages\Subjects\Details.cshtml.g.cs
+D:\Documents\GitHub\SchoolGrdebook\obj\Debug\netcoreapp3.1\Razor\Pages\Subjects\Edit.cshtml.g.cs
+D:\Documents\GitHub\SchoolGrdebook\obj\Debug\netcoreapp3.1\Razor\Pages\Subjects\Index.cshtml.g.cs

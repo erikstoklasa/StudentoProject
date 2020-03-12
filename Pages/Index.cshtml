@@ -77,7 +77,11 @@ User.Identity.IsAuthenticated
                     <h1 class="text-left" style="font-weight: 400;">
                         Ahoj <strong>@Html.Raw(LanguageHelper.Sklonuj(firstName)),</strong><br>jsi <strong>skvělý</strong> student!
                     </h1>
-                    <h3 class="text-left mt-5" style="font-weight: 400;">Celkový průměr: <strong>@Html.Raw(analytics.getTotalAverage(UserId).ToString("f2"))</strong></h3>
+                    <h3 class="text-left mt-5" style="font-weight: 400;">Celkový průměr: <strong>
+                        @Html.Raw(
+                       analytics.getTotalAverage(UserId).CompareTo(Double.NaN) == 0 ?
+                       "Žádné známky" : analytics.getTotalAverage(UserId).ToString("f2"))
+                              </strong></h3>
                 </div>
             </div>
         </div>

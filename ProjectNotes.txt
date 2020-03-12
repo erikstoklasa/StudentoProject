@@ -7,10 +7,21 @@ Human activation codes creation process
 - codes can include all letters of alphabet except: o, i, l, (total 26)
 - codes can include also numbers 1 through 9 (9)
 
-total characters 35ˇ5 = 52 mil combinations 
+total characters 35ˇ5 = 52 mil. combinations 
 
-Grades page
+TO-DO:
+[0] Authorization routing
+    Teacher could access only:
+        /Teacher/Grades
+        /Teacher/etc.
+    Students could access: only:
+        /Students/Grades
+        /Students/etc.
+    Admins could access: only:
+        /Admin/Grades
+        /Admin/etc.
+[0] Subjects page
+ - display all subjects, details of subjects display its grades
+[0] Grades page 
  - CRUD pages with grade id parameter in route
  - index will be displaying all grades (sorted by recency)
-Subjects page
- - display all subjects, details of subjects display its grades

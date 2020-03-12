@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Documents\\GitHub\\SchoolGrdebook\\SchoolGradebook.csproj": {}
+    "C:\\Users\\stokl\\Documents\\GitHub\\SchoolGrdebook\\SchoolGradebook.csproj": {}
   },
   "projects": {
-    "D:\\Documents\\GitHub\\SchoolGrdebook\\SchoolGradebook.csproj": {
+    "C:\\Users\\stokl\\Documents\\GitHub\\SchoolGrdebook\\SchoolGradebook.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Documents\\GitHub\\SchoolGrdebook\\SchoolGradebook.csproj",
+        "projectUniqueName": "C:\\Users\\stokl\\Documents\\GitHub\\SchoolGrdebook\\SchoolGradebook.csproj",
         "projectName": "SchoolGradebook",
-        "projectPath": "D:\\Documents\\GitHub\\SchoolGrdebook\\SchoolGradebook.csproj",
+        "projectPath": "C:\\Users\\stokl\\Documents\\GitHub\\SchoolGrdebook\\SchoolGradebook.csproj",
         "packagesPath": "C:\\Users\\stokl\\.nuget\\packages\\",
-        "outputPath": "D:\\Documents\\GitHub\\SchoolGrdebook\\obj\\",
+        "outputPath": "C:\\Users\\stokl\\Documents\\GitHub\\SchoolGrdebook\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

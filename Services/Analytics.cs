@@ -33,7 +33,9 @@ namespace SchoolGradebook.Services
         }
         public double getStudentsToTeachersRatio(int decimalPlaces = 2)
         {
-            return Math.Round(getStudentsCount() / (double) getTeachersCount(), decimalPlaces);
+            double output = Math.Round(getStudentsCount() / (double)getTeachersCount(), decimalPlaces);
+            output = output == Double.NaN ? 0d : output;
+            return output;
         }
         public async Task<int> getStudentsCountByTeacherId(string userId)
         {

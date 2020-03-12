@@ -45,12 +45,13 @@ namespace SchoolGradebook.Pages.Grades
                     .Where(g => g.Teacher.UserAuthId == UserId)
                 .ToListAsync();
             }
-            else
+            else //Student
             {
                 Grades = await _context.Grades
                         .Where(g => g.Student.UserAuthId == UserId)
                         .Include(g => g.Subject)
                             .ThenInclude(g => g.Teacher)
+                        .OrderByDescending(g => g.Added)
                         .ToListAsync();
 
             }

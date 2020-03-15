@@ -98,7 +98,7 @@ User.Identity.IsAuthenticated
                    "Bez známek" : analytics.getSubjectAverageForStudent(UserId, x.Id).ToString("f2"))
                             </strong>
                         </p>
-                        <a class="btn btn-primary" asp-page="/Grades/Index" asp-route-subjectId="@x.Id">Zobrazit známky</a>
+                        <a class="btn btn-primary" asp-page="/Subjects/Details" asp-route-Id="@x.Id">Zobrazit známky</a>
                     </div>
                 </div>
             }

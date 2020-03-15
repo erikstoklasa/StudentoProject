@@ -39,23 +39,9 @@ namespace SchoolGradebook.Pages.Grades
             {
                 Teacher = Subject.Teacher;
             }     
-            if (isTeacher)
-            {
-                Subjects = await _context.Subjects
-                    .Where(g => g.Teacher.UserAuthId == UserId)
-                .ToListAsync();
-            }
-            else //Student
-            {
-                Grades = await _context.Grades
-                        .Where(g => g.Student.UserAuthId == UserId)
-                        .Include(g => g.Subject)
-                            .ThenInclude(g => g.Teacher)
-                        .OrderByDescending(g => g.Added)
-                        .ToListAsync();
-
-            }
-            
+            Subjects = await _context.Subjects
+                .Where(g => g.Teacher.UserAuthId == UserId)
+            .ToListAsync();
         }
     }
 }

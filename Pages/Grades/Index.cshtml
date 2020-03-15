@@ -43,7 +43,7 @@
         <h1>Všechny známky</h1>
     }
 
-    @if (Model.Grades.Count == 0)
+    @if (analytics.getAllGradesByUserId(Model.UserId).Length == 0)
     {
         <h2 class="text-center mt-5">Žádné známky 🙁</h2>
     }
@@ -56,10 +56,10 @@
                         Předmět
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Grades[0].Value)
+                        Známka
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Grades[0].Added)
+                        Přidáno
                     </th>
                     <th>
                         Učitel
@@ -68,7 +68,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.Grades)
+                @foreach (var item in analytics.getAllGradesByUserId(Model.UserId))
                 {
                     <tr>
                         <td>

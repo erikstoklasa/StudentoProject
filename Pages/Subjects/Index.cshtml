@@ -1,15 +1,21 @@
 ﻿@page
 @model SchoolGradebook.Pages.Subjects.IndexModel
+@using SchoolGradebook.Services
+@using Microsoft.AspNetCore.Http;
+@using System.Security.Claims;
+@inject Analytics analytics
+@inject IHttpContextAccessor httpContextAccessor
 
 @{
+    string UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Všechny tvé předměty</h1>
 @if (User.IsInRole("teacher"))
 {
     <p>
-        <a asp-page="Create">Create New</a>
+        <a asp-page="Create">Vytvořit nový</a>
     </p>
 }
 
@@ -26,21 +32,44 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Subjects)
+        @if (User.IsInRole("teacher"))
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.Raw(item.Teacher.getFullName())
-                </td>
-                <td>
-                    <a asp-page="./Edit" asp-route-id="@item.Id">Upravit</a> |
-                    <a asp-page="./Details" asp-route-id="@item.Id">Detail</a> |
-                    <a asp-page="./Delete" asp-route-id="@item.Id">Odstranit</a>
-                </td>
-            </tr>
+            @foreach (var item in Model.Subjects)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.Raw(item.Teacher.getFullName())
+                    </td>
+                    <td>
+                        <a asp-page="./Edit" asp-route-id="@item.Id">Upravit</a> |
+                        <a asp-page="./Details" asp-route-id="@item.Id">Detail</a> |
+                        <a asp-page="./Delete" asp-route-id="@item.Id">Odstranit</a>
+                    </td>
+                </tr>
+            }
         }
+        else
+        {
+            @foreach (var item in Model.Subjects)
+            {
+    
+        <tr>
+            <td><a asp-page="./Details" asp-route-id="@item.Id">
+    @Html.DisplayFor(modelItem => item.Name)</a>
+</td>
+            <td>
+                @Html.Raw(item.Teacher.getFullName())
+            </td>
+            <td>
+                @Html.Raw(analytics.getSubjectAverageForStudent(UserId, item.Id).CompareTo(Double.NaN) == 0 ?
+               "Žádné známky" : analytics.getSubjectAverageForStudent(UserId, item.Id).ToString("f2"))
+            </td>
+        </tr>
+            }
+        }
+
     </tbody>
 </table>

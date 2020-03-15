@@ -1,31 +1,40 @@
 ﻿@page
 @model SchoolGradebook.Pages.Subjects.DetailsModel
 
+@using SchoolGradebook.Services;
+@using SchoolGradebook.Models;
+@inject Analytics analytics
+
 @{
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
-
-<div>
-    <h4>Subject</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Subject.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Subject.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Subject.Teacher)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Subject.Teacher.Id)
-        </dd>
-    </dl>
+    <div class="d-flex flex-column h-100">
+        <h1>@Html.Raw(Model.Subject.Name)</h1>
+        <h2><small>@Html.Raw(Model.Subject.Teacher.getFullName())</small></h2>
+        <h3 class="text-left" style="font-weight: 400;">
+            Celkový průměr: <strong>
+                @Html.Raw(analytics.getSubjectAverageForStudent(Model.UserId, Model.Subject.Id).CompareTo(Double.NaN) == 0 ?
+               "Žádné známky" : analytics.getSubjectAverageForStudent(Model.UserId, Model.Subject.Id).ToString("f2"))
+            </strong>
+        </h3>
+    </div>
+<p class="text-left">Všechny známky:</p>
+<div class="d-flex flex-row flex-wrap">
+    @foreach (Grade x in analytics.getSubjectGradesByUserId(Model.UserId, Model.Subject.Id))
+    {
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">@Html.Raw(x.Value)</h5>
+                <p class="card-text">
+                    @Html.Raw(LanguageHelper.getRelativeTime(x.Added))
+                </p>
+                <a class="btn btn-primary" asp-page="/Grades/Details" asp-route-gradeId="@x.Id">Více</a>
+            </div>
+        </div>
+    }
 </div>
 <div>
     <a asp-page="./Edit" asp-route-id="@Model.Subject.Id">Edit</a> |
-    <a asp-page="./Index">Back to List</a>
+    <a asp-page="./Index">Všechny předměty</a>
 </div>

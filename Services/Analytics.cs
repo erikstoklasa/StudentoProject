@@ -127,7 +127,6 @@ namespace SchoolGradebook.Services
 
         public Grade[] getRecentGradesByUserId(string userId, int maxNumberOfGrades = 5)
         {
-            //Accessing Subjects via Enrollments table => Subject
             var grades = Context.Grades
                 .Include(s => s.Subject)
                 .Include(s => s.Subject.Teacher)
@@ -144,6 +143,29 @@ namespace SchoolGradebook.Services
                 output[i] = grades[i];
             }
             return output;
+        }
+
+        public Grade[] getSubjectGradesByUserId(string userId, int subjectId)
+        {
+            var grades = Context.Grades
+                .Where(s => s.Student.UserAuthId == userId)
+                .Where(s => s.Subject.Id == subjectId)
+                .OrderByDescending(s => s.Added)
+                .ToArray();
+
+            return grades;
+        }
+
+        public Grade[] getAllGradesByUserId(string userId)
+        {
+            //Accessing Subjects via Enrollments table => Subject
+            var grades = Context.Grades
+                .Include(s => s.Subject)
+                .Include(s => s.Subject.Teacher)
+                .Where(s => s.Student.UserAuthId == userId)
+                .OrderByDescending(s => s.Added)
+                .ToArray();
+            return grades;
         }
     }
 }

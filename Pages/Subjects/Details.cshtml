@@ -9,31 +9,81 @@
     ViewData["Title"] = "Details";
 }
 
-    <div class="d-flex flex-column h-100">
-        <h1>@Html.Raw(Model.Subject.Name)</h1>
-        <h2><small>@Html.Raw(Model.Subject.Teacher.getFullName())</small></h2>
-        <h3 class="text-left" style="font-weight: 400;">
-            Celkový průměr: <strong>
-                @Html.Raw(analytics.getSubjectAverageForStudent(Model.UserId, Model.Subject.Id).CompareTo(Double.NaN) == 0 ?
-               "Žádné známky" : analytics.getSubjectAverageForStudent(Model.UserId, Model.Subject.Id).ToString("f2"))
-            </strong>
-        </h3>
-    </div>
-<p class="text-left">Všechny známky:</p>
-<div class="d-flex flex-row flex-wrap">
-    @foreach (Grade x in analytics.getSubjectGradesByUserId(Model.UserId, Model.Subject.Id))
+<div class="d-flex flex-row h-100 mt-5">
+
+
+
+
+    @if (analytics.getSubjectAverageForStudent(Model.UserId, Model.Subject.Id).CompareTo(Double.NaN) == 0)
     {
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">@Html.Raw(x.Value)</h5>
-                <p class="card-text">
-                    @Html.Raw(LanguageHelper.getRelativeTime(x.Added))
-                </p>
-                <a class="btn btn-primary" asp-page="/Grades/Details" asp-route-gradeId="@x.Id">Více</a>
-            </div>
+        <div class="d-flex flex-column w-50">
+            <h1>@Html.Raw(Model.Subject.Name)</h1>
+            <p>@Html.Raw(Model.Subject.Teacher.getFullName())</p>
+            <p class="alert alert-warning my-5">Zatím ti vyučující nepřidal žádné známky 🙁</p>
+        </div>
+
+
+    }
+    else //There are some grades to display
+    {
+        <div class="d-flex flex-column w-50">
+            <h1>@Html.Raw(Model.Subject.Name)</h1>
+            <p>@Html.Raw(Model.Subject.Teacher.getFullName())</p>
+            <p class="text-left mt-5 mb-0">Všechny známky:</p>
+            <table class="table table-responsive mr-3">
+                <thead>
+                    <tr>
+                        <th>
+                            Známka
+                        </th>
+                        <th>
+                            Název
+                        </th>
+                        <th>
+                            Datum
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Grade x in analytics.getSubjectGradesByUserId(Model.UserId, Model.Subject.Id))
+                    {
+                        <tr>
+                            <td>
+                                @Html.Raw(x.Value.ToString())
+                            </td>
+                            <td>
+                                @Html.Raw(x.Subject.Name.ToString())
+                            </td>
+                            <td>
+                                @Html.Raw(LanguageHelper.getRelativeTime(x.Added))
+                            </td>
+                            <td>
+                                <a asp-page="/Grades/Details" asp-route-gradeId="@x.Id">Zobrazit známku</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="d-flex flex-column w-50">
+            <h3 class="text-left" style="font-weight: 400;">
+                Průměr: <strong>
+                    @Html.Raw(analytics.getSubjectAverageForStudent(Model.UserId, Model.Subject.Id).ToString("f2"))
+                </strong>
+            </h3>
+            @if (analytics.getSubjectAverageForStudent(Model.UserId, Model.Subject.Id, 60, 30) > analytics.getSubjectAverageForStudent(Model.UserId, Model.Subject.Id, 30))
+            {
+                <small>Což je <strong>lepší</strong> než minulý měsíc (@Html.Raw(analytics.getSubjectAverageForStudent(Model.UserId, Model.Subject.Id, 60, 30).ToString("f2")))</small>
+            }
+            else if (analytics.getSubjectAverageForStudent(Model.UserId, Model.Subject.Id, 60, 30) < analytics.getSubjectAverageForStudent(Model.UserId, Model.Subject.Id, 30))
+            {
+                <small>Což je <strong>horší</strong> než minulý měsíc (@Html.Raw(analytics.getSubjectAverageForStudent(Model.UserId, Model.Subject.Id, 60, 30).ToString("f2")))</small>
+            }
         </div>
     }
 </div>
+
 <div>
     <a asp-page="./Edit" asp-route-id="@Model.Subject.Id">Edit</a> |
     <a asp-page="./Index">Všechny předměty</a>

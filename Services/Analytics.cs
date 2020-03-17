@@ -91,7 +91,7 @@ namespace SchoolGradebook.Services
             }
             return output;
         }
-        public double getSubjectAverageForStudent(string userId, int subjectId, int decimalPlaces = 2)
+        public double getSubjectAverageForStudent(string userId, int subjectId, int maxGradeDayAge = 0, int minGradeDayAge = 0, int decimalPlaces = 2)
         {
             //Accessing all grades in a subject via Enrollments table => Subject => Grades
             var enrollment = Context.Enrollments
@@ -107,7 +107,10 @@ namespace SchoolGradebook.Services
             List<Grade> filtredGrades = new List<Grade>();
             foreach (Grade g in enrollment.Subject.Grades)
             {
-                if(g.Student.UserAuthId == userId)
+                if(g.Student.UserAuthId == userId && 
+                    (maxGradeDayAge == 0 || maxGradeDayAge >= DateTime.Now.Subtract(g.Added).TotalDays) && //if maxGradeDayAge is set, then add only grades younger than maxGradeDayAge
+                    (minGradeDayAge == 0 || minGradeDayAge <= DateTime.Now.Subtract(g.Added).TotalDays) //if minGradeDayAge is set, then add only grades older than minGradeDayAge
+                    )
                 {
                     filtredGrades.Add(g);
                 } 

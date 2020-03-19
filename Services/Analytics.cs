@@ -64,7 +64,7 @@ namespace SchoolGradebook.Services
             for (int i = 0; i < enrollments.Length; i++)
             {
                 //Getting averages of every subject that the student has
-                double currentlyAdded = getSubjectAverageForStudent(userId, enrollments[i].Subject.Id, decimalPlaces);
+                double currentlyAdded = getSubjectAverageForStudent(userId, enrollments[i].Subject.Id, 0, 0, decimalPlaces);
                 if(currentlyAdded.CompareTo(Double.NaN) != 0) // getSubjectAverageForStudent returns 0 if student has no grades or is not enrolled in the subject
                 {
                     countOfSubjectsWithGrades++;

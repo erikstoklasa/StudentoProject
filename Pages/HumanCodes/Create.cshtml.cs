@@ -16,51 +16,53 @@ namespace SchoolGradebook.Pages.HumanCodes
         private readonly SchoolGradebook.Data.SchoolContext _context;
         public Student Student { get; set; }
         public Teacher Teacher { get; set; }
+        HumanActivationCode humanActivationCode;
 
 
         public CreateModel(SchoolGradebook.Data.SchoolContext context)
         {
             _context = context;
 
-
+            humanActivationCode = new HumanActivationCode();
             //Return to view either name of teahcer or student so that they can view the list and choose for whom they want to generate a code
         }
 
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGetAsync(int targetId, CodeType codeType)
         {
 
-            return Page();
+            humanActivationCode.TargetId = targetId;
+            humanActivationCode.CodeType = codeType;
+            humanActivationCode.HumanCode = humanActivationCode.getNewHumanCode();
+            _context.HumanActivationCodes.Add(humanActivationCode);
+            await _context.SaveChangesAsync();
+            if(codeType == CodeType.Student)
+            {
+                return RedirectToPage("/Students/Index");
+            } else
+            {
+                return RedirectToPage("/Teachers/Index");
+            }
+            
         }
-
-        [BindProperty]
-        public HumanActivationCode HumanActivationCode { get; set; }
 
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(int targetId, CodeType codeType)
         {
             if (!ModelState.IsValid)
             {
                 return Page();
             }
-            HumanActivationCode.HumanCode = getNewHumanCode();
-            _context.HumanActivationCodes.Add(HumanActivationCode);
+            if (targetId != 0) //Internal post from /Students/index or /Teachers/index
+            {
+                humanActivationCode.TargetId = targetId;
+                humanActivationCode.CodeType = codeType;
+            }
+            humanActivationCode.HumanCode = humanActivationCode.getNewHumanCode();
+            _context.HumanActivationCodes.Add(humanActivationCode);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
-        }
-        public string getNewHumanCode()
-        {
-            char[] alphabet = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'm', 'n', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
-            string code = "";
-            Random r = new Random();
-            for (int i = 0; i < 6; i++)
-            {
-                int indexOfChar = (int)Math.Floor(r.NextDouble() * 34);
-                code += alphabet[indexOfChar];
-            }
-            return code;
-
         }
     }
 }

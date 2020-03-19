@@ -1,5 +1,7 @@
 ﻿@page
 @model SchoolGradebook.Pages.Teachers.IndexModel
+@using SchoolGradebook.Models
+@inject SchoolContext context;
 
 @{
     ViewData["Title"] = "Index";
@@ -13,6 +15,7 @@
 <table class="table">
     <thead>
         <tr>
+            <th>Aktivační kód</th>
             <th>
                 @Html.DisplayNameFor(model => model.Teacher[0].UserAuthId)
             </th>
@@ -26,26 +29,41 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Teacher) {
-        <tr>
-            <td>
-                @if (item.UserAuthId != null)
-                {
-                    @Html.Raw("Přidáno");
-                }
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.Teacher)
+        {
+            HumanActivationCode c = context.HumanActivationCodes
+                .Where(b => b.TargetId == item.Id)
+                .Where(b => b.CodeType == CodeType.Teacher)
+                .FirstOrDefault();
+            bool hasActivationCode = c != null;
+            <tr>
+                <td>
+                    @if (hasActivationCode)
+                    {
+                        @Html.Raw(c.HumanCode);
+                    }
+                </td>
+                <td>
+                    @if (item.UserAuthId != null)
+                    {
+                        @Html.Raw("Přidáno");
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    <a asp-page="/HumanCodes/Create"
+                       asp-route-targetId="@item.Id"
+                       asp-route-codeType="@CodeType.Student">Vygenerovat nový kód</a> |
+                    <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

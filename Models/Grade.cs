@@ -9,6 +9,7 @@ namespace SchoolGradebook.Models
     public class Grade
     {
         public int Id { get; set; }
+        public string Name { get; set; }
         [Display(Name = "Známka")]
         public int? Value { get; set; }
         public int StudentId { get; set; } 

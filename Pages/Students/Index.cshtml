@@ -19,7 +19,7 @@
                 Aktivační kód
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Student[0].UserAuthId)
+                Stav
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Student[0].FirstName)
@@ -48,7 +48,7 @@
                 <td>
                     @if (item.UserAuthId != null)
                     {
-                        @Html.Raw("Přidáno");
+                        @Html.Raw("Spárováno");
                     }
                 </td>
                 <td>

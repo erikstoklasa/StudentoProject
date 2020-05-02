@@ -17,7 +17,7 @@
         <tr>
             <th>Aktivační kód</th>
             <th>
-                @Html.DisplayNameFor(model => model.Teacher[0].UserAuthId)
+                Stav
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Teacher[0].FirstName)
@@ -46,7 +46,7 @@
                 <td>
                     @if (item.UserAuthId != null)
                     {
-                        @Html.Raw("Přidáno");
+                        @Html.Raw("Spárováno");
                     }
                 </td>
                 <td>
@@ -58,7 +58,7 @@
                 <td>
                     <a asp-page="/HumanCodes/Create"
                        asp-route-targetId="@item.Id"
-                       asp-route-codeType="@CodeType.Student">Vygenerovat nový kód</a> |
+                       asp-route-codeType="@CodeType.Teacher">Vygenerovat nový kód</a> |
                     <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
                     <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>

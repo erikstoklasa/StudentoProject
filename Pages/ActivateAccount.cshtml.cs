@@ -45,7 +45,12 @@ namespace SchoolGradebook.Pages
                 var student = await _context.Students.FindAsync(id);
                 if (student == null)
                 {
-                    return NotFound();
+                    return NotFound(); //Needs to be redone
+                }
+                if(student.UserAuthId != null)
+                {
+                    return NotFound(); //UserAuthId is already set
+                    //Needs to be redone
                 }
                 //Updating User Auth id
                 student.UserAuthId = UserId;
@@ -54,6 +59,7 @@ namespace SchoolGradebook.Pages
                     "student",
                     s => s.UserAuthId, s => s.FirstName, s => s.LastName))
                 {
+                    _context.HumanActivationCodes.Remove(code);
                     await _context.SaveChangesAsync();
                 }
                 //Assigning user a student role
@@ -74,6 +80,7 @@ namespace SchoolGradebook.Pages
                     "teacher",
                     t => t.UserAuthId, t => t.FirstName, t => t.LastName))
                 {
+                    _context.HumanActivationCodes.Remove(code);
                     await _context.SaveChangesAsync();
                 }
                 //Assigning user a teacher role

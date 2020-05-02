@@ -31,20 +31,6 @@
             <p>@Html.Raw(Model.Subject.Teacher.getFullName())</p>
             <p class="text-left mt-5 mb-0">Všechny známky:</p>
             <table class="table table-responsive mr-3">
-                <thead>
-                    <tr>
-                        <th>
-                            Známka
-                        </th>
-                        <th>
-                            Název
-                        </th>
-                        <th>
-                            Datum
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
                 <tbody>
                     @foreach (Grade x in analytics.getSubjectGradesByUserId(Model.UserId, Model.Subject.Id))
                     {
@@ -53,7 +39,7 @@
                                 @Html.Raw(x.Value.ToString())
                             </td>
                             <td>
-                                @Html.Raw(x.Subject.Name.ToString())
+                                @Html.Raw(x.Name)
                             </td>
                             <td>
                                 @Html.Raw(LanguageHelper.getRelativeTime(x.Added))
@@ -85,6 +71,14 @@
 </div>
 
 <div>
-    <a asp-page="./Edit" asp-route-id="@Model.Subject.Id">Edit</a> |
-    <a asp-page="./Index">Všechny předměty</a>
+    @if (User.IsInRole("teacher"))
+    {
+        <a asp-page="./Edit" asp-route-id="@Model.Subject.Id">Edit</a>
+        <a asp-page="./Index">Všechny předměty</a>
+    }
+    else
+    {
+        <a asp-page="./Index">Všechny předměty</a>
+    }
+
 </div>

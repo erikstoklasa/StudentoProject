@@ -32,8 +32,13 @@ namespace SchoolGradebook.Pages.HumanCodes
 
             humanActivationCode.TargetId = targetId;
             humanActivationCode.CodeType = codeType;
-            humanActivationCode.HumanCode = humanActivationCode.getNewHumanCode();
-            _context.HumanActivationCodes.Add(humanActivationCode);
+            do
+            {
+                humanActivationCode.HumanCode = humanActivationCode.getNewHumanCode();
+            }
+            while (_context.HumanActivationCodes.Where(s => s.HumanCode == humanActivationCode.HumanCode).Any()); //Until no HumanCodes duplicates exist
+            //Generate new ids until there are no duplicates in the db
+            await _context.HumanActivationCodes.AddAsync(humanActivationCode);
             await _context.SaveChangesAsync();
             if(codeType == CodeType.Student)
             {

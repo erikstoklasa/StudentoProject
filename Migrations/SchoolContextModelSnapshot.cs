@@ -51,6 +51,9 @@ namespace SchoolGradebook.Migrations
                     b.Property<DateTime>("Added")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
 

@@ -11,19 +11,19 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.HumanActivationCode[0].TargetId)
+                @Html.DisplayNameFor(model => model.HumanActivationCodes[0].TargetId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HumanActivationCode[0].HumanCode)
+                Kód
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HumanActivationCode[0].CodeType)
+                @Html.DisplayNameFor(model => model.HumanActivationCodes[0].CodeType)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.HumanActivationCode) {
+@foreach (var item in Model.HumanActivationCodes) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.TargetId)

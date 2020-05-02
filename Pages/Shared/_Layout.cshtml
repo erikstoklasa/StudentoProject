@@ -19,23 +19,7 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1 justify-content-center">
-                        @if (User.IsInRole("admin") || User.IsInRole("teacher"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-page="/Students/Index">Studenti</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-page="/HumanCodes/Index">Aktivační kódy</a>
-                            </li>
-                        }
-                        @if (User.IsInRole("admin"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-page="/Teachers/Index">Učitelé</a>
-                            </li>
-                        }
-
-                        @if (User.IsInRole("teacher") || User.IsInRole("student"))
+                        @if (User.IsInRole("student") || User.IsInRole("teacher"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-light" asp-area="" asp-page="/Grades/Index">Známky</a>
@@ -44,6 +28,23 @@
                                 <a class="nav-link text-light" asp-area="" asp-page="/Subjects/Index">Předměty</a>
                             </li>
                         }
+                        @if (User.IsInRole("teacher") || User.IsInRole("admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-page="/Students/Index">Studenti</a>
+                            </li>
+                        }
+                        @if (User.IsInRole("admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-page="/Teachers/Index">Učitelé</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-page="/HumanCodes/Index">Aktivační kódy</a>
+                            </li>
+                        }
+
+
                     </ul>
                 </div>
             </div>

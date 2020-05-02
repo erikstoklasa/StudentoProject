@@ -19,11 +19,11 @@ namespace SchoolGradebook.Pages.HumanCodes
             _context = context;
         }
 
-        public IList<HumanActivationCode> HumanActivationCode { get;set; }
+        public IList<HumanActivationCode> HumanActivationCodes { get;set; }
 
         public async Task OnGetAsync()
         {
-            HumanActivationCode = await _context.HumanActivationCodes.ToListAsync();
+            HumanActivationCodes = await _context.HumanActivationCodes.ToListAsync();
         }
     }
 }

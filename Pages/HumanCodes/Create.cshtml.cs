@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using SchoolGradebook.Data;
 using SchoolGradebook.Models;
 
@@ -16,29 +17,33 @@ namespace SchoolGradebook.Pages.HumanCodes
         private readonly SchoolGradebook.Data.SchoolContext _context;
         public Student Student { get; set; }
         public Teacher Teacher { get; set; }
-        HumanActivationCode humanActivationCode;
+        HumanActivationCode code;
 
 
         public CreateModel(SchoolGradebook.Data.SchoolContext context)
         {
             _context = context;
 
-            humanActivationCode = new HumanActivationCode();
+            code = new HumanActivationCode();
             //Return to view either name of teahcer or student so that they can view the list and choose for whom they want to generate a code
         }
 
         public async Task<IActionResult> OnGetAsync(int targetId, CodeType codeType)
         {
-
-            humanActivationCode.TargetId = targetId;
-            humanActivationCode.CodeType = codeType;
+            HumanActivationCode oldCode = await _context.HumanActivationCodes.Where(s => s.TargetId == targetId && s.CodeType == codeType).FirstOrDefaultAsync();
+            if (oldCode != null)
+            {
+                _context.HumanActivationCodes.Remove(oldCode);
+            }
+            code.TargetId = targetId;
+            code.CodeType = codeType;
             do
             {
-                humanActivationCode.HumanCode = humanActivationCode.getNewHumanCode();
+                code.HumanCode = code.getNewHumanCode();
             }
-            while (_context.HumanActivationCodes.Where(s => s.HumanCode == humanActivationCode.HumanCode).Any()); //Until no HumanCodes duplicates exist
+            while (_context.HumanActivationCodes.Where(s => s.HumanCode == code.HumanCode).Any()); //Until no HumanCodes duplicates exist
             //Generate new ids until there are no duplicates in the db
-            await _context.HumanActivationCodes.AddAsync(humanActivationCode);
+            await _context.HumanActivationCodes.AddAsync(code);
             await _context.SaveChangesAsync();
             if(codeType == CodeType.Student)
             {
@@ -50,8 +55,6 @@ namespace SchoolGradebook.Pages.HumanCodes
             
         }
 
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync(int targetId, CodeType codeType)
         {
             if (!ModelState.IsValid)
@@ -60,11 +63,11 @@ namespace SchoolGradebook.Pages.HumanCodes
             }
             if (targetId != 0) //Internal post from /Students/index or /Teachers/index
             {
-                humanActivationCode.TargetId = targetId;
-                humanActivationCode.CodeType = codeType;
+                code.TargetId = targetId;
+                code.CodeType = codeType;
             }
-            humanActivationCode.HumanCode = humanActivationCode.getNewHumanCode();
-            _context.HumanActivationCodes.Add(humanActivationCode);
+            code.HumanCode = code.getNewHumanCode();
+            _context.HumanActivationCodes.Add(code);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");

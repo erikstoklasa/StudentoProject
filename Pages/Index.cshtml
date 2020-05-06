@@ -86,7 +86,10 @@ User.Identity.IsAuthenticated
         </div>
         <p class="text-left">Všechny předměty:</p>
         <div class="d-flex flex-row flex-wrap">
-            @foreach (Subject x in analytics.getAllSubjectsByUserId(UserId))
+            @{ 
+                Subject[] subjects = await analytics.getAllSubjectsByUserId(UserId);
+            }
+            @foreach (Subject x in subjects)
             {
                 <div class="card">
                     <div class="card-body">

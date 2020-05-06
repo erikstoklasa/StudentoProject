@@ -37,20 +37,19 @@ namespace SchoolGradebook.Pages
             */
             HumanActivationCode code = await _context.HumanActivationCodes
                     .Where(g => g.HumanCode == humanCode).FirstOrDefaultAsync();
-            int id = code.Id; //Student Or Teacher id
+            int targetId = code.TargetId; //Student Or Teacher id
             CodeType codeType = code.CodeType;
 
             if (codeType == CodeType.Student)
             {
-                var student = await _context.Students.FindAsync(id);
+                var student = await _context.Students.FindAsync(targetId);
                 if (student == null)
                 {
-                    return NotFound(); //Needs to be redone
+                    return Page();
                 }
                 if(student.UserAuthId != null)
                 {
-                    return NotFound(); //UserAuthId is already set
-                    //Needs to be redone
+                    return Page(); //UserAuthId is already set
                 }
                 //Updating User Auth id
                 student.UserAuthId = UserId;
@@ -69,7 +68,7 @@ namespace SchoolGradebook.Pages
             }
             else
             {
-                var teacher = await _context.Teachers.FindAsync(id);
+                var teacher = await _context.Teachers.FindAsync(targetId);
                 if (teacher == null)
                 {
                     return NotFound();

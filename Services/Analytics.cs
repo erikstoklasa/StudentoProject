@@ -75,15 +75,15 @@ namespace SchoolGradebook.Services
             //Averaging subject averages (totalASumOfAverages / subjects count)
             return Math.Round(totalASumOfAverages / countOfSubjectsWithGrades, decimalPlaces);
         }
-        public Subject[] getAllSubjectsByUserId(string userId)
+        public async Task<Subject[]> getAllSubjectsByUserId(string userId)
         {
             //Accessing Subjects via Enrollments table => Subject
-            var enrollments = Context.Enrollments
+            var enrollments = await Context.Enrollments
                 .Include(s => s.Subject)
                 .Include(s => s.Subject.Teacher)
                 .Where(s => s.Student.UserAuthId == userId)
                 .OrderBy(s => s.Subject.Name)
-                .ToArray();
+                .ToArrayAsync();
             Subject[] output = new Subject[enrollments.Length];
             for (int i = 0; i < enrollments.Length; i++)
             {

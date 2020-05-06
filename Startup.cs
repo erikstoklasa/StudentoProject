@@ -38,11 +38,13 @@ namespace SchoolGradebook
                 .AddDefaultTokenProviders(); ;
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<Analytics>();
-            //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
-            //.AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddRazorPages().AddRazorPagesOptions(options =>
             {
-                options.Conventions.AuthorizePage("/Students");
+                options.Conventions.AuthorizeFolder("/Students");
+                options.Conventions.AuthorizeFolder("/Grades");
+                options.Conventions.AuthorizeFolder("/Teachers");
+                options.Conventions.AuthorizeFolder("/Subjects");
+                options.Conventions.AuthorizeFolder("/HumanCodes");
             });
             services.AddDbContext<SchoolContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("SchoolContext")));

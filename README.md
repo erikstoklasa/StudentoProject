@@ -1,7 +1,7 @@
 ﻿# Školní systém Studento
 Vítej na repozitáři moderního klasifikačního systému Studento, aplikace je poskytována zdarma :blush:
 
-Nelíbí se nám, že aplikace jako **Bakaláři svůj systém neinovují**, proto jsme tady my :sunglasses:
+Nelíbí se nám, že aplikace jako **Bakaláři svůj systém neinovují**, proto jsme tady my! :sunglasses:
 
 Takhle zatím vypadá naše aplikace ->
 ![Studento dashboard](/github_readme_images/dashboard_v1.jpg)

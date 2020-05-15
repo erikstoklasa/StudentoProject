@@ -43,6 +43,9 @@ namespace SchoolGradebook.Pages.Teachers
         // more details see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
+            Teacher t = await _context.Teachers.AsNoTracking().FirstOrDefaultAsync(m => m.Id == Teacher.Id);
+            Teacher.UserAuthId = t.UserAuthId;
+
             if (!ModelState.IsValid)
             {
                 return Page();

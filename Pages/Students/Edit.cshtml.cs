@@ -31,7 +31,6 @@ namespace SchoolGradebook.Pages.Students
             }
 
             Student = await _context.Students.FirstOrDefaultAsync(m => m.Id == id);
-
             if (Student == null)
             {
                 return NotFound();
@@ -43,6 +42,8 @@ namespace SchoolGradebook.Pages.Students
         // more details see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
+            Student s = await _context.Students.AsNoTracking().FirstOrDefaultAsync(m => m.Id == Student.Id);
+            Student.UserAuthId = s.UserAuthId;
 
             if (!ModelState.IsValid)
             {

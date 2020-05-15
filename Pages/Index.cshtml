@@ -52,7 +52,7 @@ User.Identity.IsAuthenticated
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var grade in analytics.getRecentGradesByUserId(UserId))
+                        @foreach (var grade in await analytics.getRecentGradesByUserIdAsync(UserId))
                         {
                             <tr>
                                 <td>
@@ -78,8 +78,8 @@ User.Identity.IsAuthenticated
                         Ahoj <strong>@Html.Raw(LanguageHelper.Sklonuj(firstName)),</strong><br>jsi <strong>skvělý</strong> student!
                     </h1>
                     <h3 class="text-left mt-5" style="font-weight: 400;">Celkový průměr: <strong>
-                        @Html.Raw(analytics.getTotalAverage(UserId).CompareTo(Double.NaN) == 0 ?
-                       "Žádné známky" : analytics.getTotalAverage(UserId).ToString("f2"))
+                        @Html.Raw((await analytics.getTotalAverageAsync(UserId)).CompareTo(Double.NaN) == 0 ?
+                       "Žádné známky" : (await analytics.getTotalAverageAsync(UserId)).ToString("f2"))
                               </strong></h3>
                 </div>
             </div>
@@ -87,7 +87,7 @@ User.Identity.IsAuthenticated
         <p class="text-left">Všechny předměty:</p>
         <div class="d-flex flex-row flex-wrap">
             @{ 
-                Subject[] subjects = await analytics.getAllSubjectsByUserId(UserId);
+                Subject[] subjects = await analytics.getAllSubjectsByUserIdAsync(UserId);
             }
             @foreach (Subject x in subjects)
             {
@@ -97,8 +97,8 @@ User.Identity.IsAuthenticated
                         <p class="card-text">@Html.Raw(x.Teacher.getFullName())</p>
                         <p class="card-text">
                             <strong>
-                                @Html.Raw(analytics.getSubjectAverageForStudent(UserId, x.Id).CompareTo(Double.NaN) == 0 ?
-                   "Bez známek" : analytics.getSubjectAverageForStudent(UserId, x.Id).ToString("f2"))
+                                @Html.Raw((await analytics.getSubjectAverageForStudentAsync(UserId, x.Id)).CompareTo(Double.NaN) == 0 ?
+                   "Bez známek" : (await analytics.getSubjectAverageForStudentAsync(UserId, x.Id)).ToString("f2"))
                             </strong>
                         </p>
                         <a class="btn btn-primary" asp-page="/Subjects/Details" asp-route-Id="@x.Id">Zobrazit známky</a>
@@ -112,11 +112,11 @@ User.Identity.IsAuthenticated
         <div class="d-flex justify-content-around">
             <div>
                 <p>Počet vašich studentů</p>
-                <h2>@Html.Raw(await analytics.getStudentsCountByTeacherId(UserId))</h2>
+                <h2>@Html.Raw(await analytics.getStudentsCountByTeacherIdAsync(UserId))</h2>
             </div>
             <div>
                 <p>Počet vašich předmětů</p>
-                <h2>@Html.Raw(await analytics.getSubjectsCountByTeacherId(UserId))</h2>
+                <h2>@Html.Raw(await analytics.getSubjectsCountByTeacherIdAsync(UserId))</h2>
             </div>
         </div>
     }
@@ -125,16 +125,16 @@ User.Identity.IsAuthenticated
         <div class="d-flex justify-content-around">
             <div>
                 <p>Počet vyučujících</p>
-                <h2>@Html.Raw(analytics.getTeachersCount())</h2>
+                <h2>@Html.Raw(await analytics.getTeachersCountAsync())</h2>
             </div>
             <div>
                 <p>Počet studentů</p>
-                <h2>@Html.Raw(analytics.getStudentsCount())</h2>
+                <h2>@Html.Raw(await analytics.getStudentsCountAsync())</h2>
             </div>
         </div>
         <div class="pt-2">
             <p>Poměr studentů na vyučujícího</p>
-            <h3>@Html.Raw(analytics.getStudentsToTeachersRatio(2))</h3>
+            <h3>@Html.Raw(await analytics.getStudentsToTeachersRatioAsync(2))</h3>
         </div>
     }
     else

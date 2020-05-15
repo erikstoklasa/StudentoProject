@@ -35,7 +35,7 @@ namespace SchoolGradebook
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders(); ;
+                .AddDefaultTokenProviders();
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<Analytics>();
             services.AddRazorPages().AddRazorPagesOptions(options =>
@@ -68,7 +68,7 @@ namespace SchoolGradebook
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            
+
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
@@ -79,13 +79,16 @@ namespace SchoolGradebook
             roleManager.CreateAsync(new IdentityRole("admin")).Wait();
             roleManager.CreateAsync(new IdentityRole("teacher")).Wait();
             roleManager.CreateAsync(new IdentityRole("student")).Wait();
-
             IdentityUser user;
-            if(userManager.FindByEmailAsync("admin@erikstoklasa.cz").Result != null)
+            if (userManager.FindByEmailAsync("admin@erikstoklasa.cz").Result != null)
             {
                 user = userManager.FindByEmailAsync("admin@erikstoklasa.cz").Result;
                 userManager.AddToRoleAsync(user, "admin").Wait();
             }
+
+
+
+
         }
     }
 }

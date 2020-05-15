@@ -16,35 +16,35 @@ namespace SchoolGradebook.Services
             Context = context;
         }
         //Admin
-        public int getTeachersCount()
+        public async Task<int> getTeachersCountAsync()
         {
-            return Context.Teachers.Count();
+            return await Context.Teachers.CountAsync();
         }
         //Teacher
-        public int getStudentsCount()
+        public async Task<int> getStudentsCountAsync()
         {
-            return Context.Students.Count();
+            return await Context.Students.CountAsync();
         }
-        public int getStudentsCountInSubject(int subjectId)
+        public async Task<int> getStudentsCountInSubjectAsync(int subjectId)
         {
-            return Context.Enrollments
+            return await Context.Enrollments
                 .Where(s => s.SubjectId == subjectId)
-                .Count();
+                .CountAsync();
         }
-        public double getStudentsToTeachersRatio(int decimalPlaces = 2)
+        public async Task<double> getStudentsToTeachersRatioAsync(int decimalPlaces = 2)
         {
-            double output = Math.Round(getStudentsCount() / (double)getTeachersCount(), decimalPlaces);
+            double output = Math.Round(await getStudentsCountAsync() / (double) await getTeachersCountAsync(), decimalPlaces);
             output = output == Double.NaN ? 0 : output;
             return output;
         }
-        public async Task<int> getStudentsCountByTeacherId(string userId)
+        public async Task<int> getStudentsCountByTeacherIdAsync(string userId)
         {
             int countOfStudents = await Context.Enrollments
                 .Where(s => s.Subject.Teacher.UserAuthId == userId)
                 .CountAsync();
             return countOfStudents;
         }
-        public async Task<int> getSubjectsCountByTeacherId(string userId)
+        public async Task<int> getSubjectsCountByTeacherIdAsync(string userId)
         {
             int countOfSubjects = await Context.Subjects
                 .Where(s => s.Teacher.UserAuthId == userId)
@@ -52,19 +52,19 @@ namespace SchoolGradebook.Services
             return countOfSubjects;
         }
         //Student
-        public double getTotalAverage(string userId, int decimalPlaces = 2)
+        public async Task<double> getTotalAverageAsync(string userId, int decimalPlaces = 2)
         {
-            var enrollments = Context.Enrollments
+            var enrollments = await Context.Enrollments
                 .Include(s => s.Subject)
                 .Where(s => s.Student.UserAuthId == userId)
-                .ToArray();
+                .ToArrayAsync();
             double totalASumOfAverages = 0.0;
             int countOfSubjectsWithGrades = 0;
             //Iterating only through student's subjects
             for (int i = 0; i < enrollments.Length; i++)
             {
                 //Getting averages of every subject that the student has
-                double currentlyAdded = getSubjectAverageForStudent(userId, enrollments[i].Subject.Id, 0, 0, decimalPlaces);
+                double currentlyAdded = await getSubjectAverageForStudentAsync(userId, enrollments[i].Subject.Id, 0, 0, decimalPlaces);
                 if(currentlyAdded.CompareTo(Double.NaN) != 0) // getSubjectAverageForStudent returns 0 if student has no grades or is not enrolled in the subject
                 {
                     countOfSubjectsWithGrades++;
@@ -75,7 +75,7 @@ namespace SchoolGradebook.Services
             //Averaging subject averages (totalASumOfAverages / subjects count)
             return Math.Round(totalASumOfAverages / countOfSubjectsWithGrades, decimalPlaces);
         }
-        public async Task<Subject[]> getAllSubjectsByUserId(string userId)
+        public async Task<Subject[]> getAllSubjectsByUserIdAsync(string userId)
         {
             //Accessing Subjects via Enrollments table => Subject
             var enrollments = await Context.Enrollments
@@ -91,15 +91,20 @@ namespace SchoolGradebook.Services
             }
             return output;
         }
-        public double getSubjectAverageForStudent(string userId, int subjectId, int maxGradeDayAge = 0, int minGradeDayAge = 0, int decimalPlaces = 2)
+        public async Task<double> getSubjectAverageForStudentAsync(
+            string userId,
+            int subjectId, 
+            int maxGradeDayAge = 0, 
+            int minGradeDayAge = 0, 
+            int decimalPlaces = 2)
         {
             //Accessing all grades in a subject via Enrollments table => Subject => Grades
-            var enrollment = Context.Enrollments
+            var enrollment = await Context.Enrollments
                 .Where(s => s.Student.UserAuthId == userId && s.SubjectId == subjectId)
                 .Include(s => s.Subject)
                     .ThenInclude(s => s.Grades)
                         .ThenInclude(s => s.Student)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
             if (enrollment == null) //Student is not in the given subject
             {
                 return Double.NaN;
@@ -128,14 +133,9 @@ namespace SchoolGradebook.Services
             return Math.Round(sum / count, decimalPlaces);
         }
 
-        public Grade[] getRecentGradesByUserId(string userId, int maxNumberOfGrades = 5)
+        public async Task<Grade[]> getRecentGradesByUserIdAsync(string userId, int maxNumberOfGrades = 5)
         {
-            var grades = Context.Grades
-                .Include(s => s.Subject)
-                .Include(s => s.Subject.Teacher)
-                .Where(s => s.Student.UserAuthId == userId)
-                .OrderByDescending(s => s.Added)
-                .ToArray();
+            var grades = await getAllGradesByUserIdAsync(userId);
             if (maxNumberOfGrades > grades.Length) //If less than 5 grades are in the database for a specific student
             {
                 maxNumberOfGrades = grades.Length;
@@ -148,26 +148,26 @@ namespace SchoolGradebook.Services
             return output;
         }
 
-        public Grade[] getSubjectGradesByUserId(string userId, int subjectId)
+        public async Task<Grade[]> getSubjectGradesByUserIdAsync(string userId, int subjectId)
         {
-            var grades = Context.Grades
+            var grades = await Context.Grades
                 .Where(s => s.Student.UserAuthId == userId)
                 .Where(s => s.Subject.Id == subjectId)
                 .OrderByDescending(s => s.Added)
-                .ToArray();
+                .ToArrayAsync();
 
             return grades;
         }
 
-        public Grade[] getAllGradesByUserId(string userId)
+        public async Task<Grade[]> getAllGradesByUserIdAsync(string userId)
         {
             //Accessing Subjects via Enrollments table => Subject
-            var grades = Context.Grades
+            var grades = await Context.Grades
                 .Include(s => s.Subject)
                 .Include(s => s.Subject.Teacher)
                 .Where(s => s.Student.UserAuthId == userId)
                 .OrderByDescending(s => s.Added)
-                .ToArray();
+                .ToArrayAsync();
             return grades;
         }
     }

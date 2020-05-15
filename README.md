@@ -9,20 +9,14 @@ Takhle zatím vypadá naše aplikace ->
 ## Naše milníky:
 
 :white_check_mark: Správa klasifikace žáků a jednoduchá analýza
-
 :red_circle: Verze pro veřejnost
-
 :red_circle: Podrobnější analýza, předpovědi vývoje známek
-
 :red_circle: Mobilní aplikace
 
 ## Úkolníček před dalším milníkem:
-:red_circle: Podrobná správa dat o studentovi
-
-:red_circle: Demo verze
-
+:white_check_mark: Podrobná správa dat o studentovi
+:white_check_mark: Demo verze: [studento.org](https://studento.org)
 :red_circle: Pololetní vysvedčení
-
 :red_circle: Více typů rolí (ředitel, zástupce)
 
 

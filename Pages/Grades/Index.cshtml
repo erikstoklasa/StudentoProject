@@ -21,7 +21,7 @@
                 <div class="card mx-1">
                     <div class="card-body">
                         <h5 class="card-title">@Html.Raw(s.Name)</h5>
-                        <p class="card-text">Studentů: @Html.Raw(analytics.getStudentsCountInSubject(s.Id))</p>
+                        <p class="card-text">Studentů: @Html.Raw(await analytics.getStudentsCountInSubjectAsync(s.Id))</p>
                         <a class="btn btn-primary" asp-page="Create" asp-route-subjectId="@s.Id">Přidat známku</a>
                     </div>
                 </div>
@@ -43,7 +43,7 @@
         <h1>Všechny známky</h1>
     }
 
-    @if (analytics.getAllGradesByUserId(Model.UserId).Length == 0)
+    @if ((await analytics.getAllGradesByUserIdAsync(Model.UserId)).Length == 0)
     {
         <h2 class="text-center mt-5">Žádné známky 🙁</h2>
     }
@@ -68,7 +68,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in analytics.getAllGradesByUserId(Model.UserId))
+                @foreach (var item in await analytics.getAllGradesByUserIdAsync(Model.UserId))
                 {
                     <tr>
                         <td>

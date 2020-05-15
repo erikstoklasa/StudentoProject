@@ -97,7 +97,7 @@ namespace SchoolGradebook.Areas.Identity.Pages.Account
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "Špatné heslo, nebo emailová adresa");
                     return Page();
                 }
             }

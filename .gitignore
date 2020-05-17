@@ -4,3 +4,6 @@ SQL_User_Templates/
 .vs/
 obj/
 *.config
+/bin
+/Migrations
+/Properties/PublishProfiles

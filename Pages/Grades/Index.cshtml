@@ -43,7 +43,7 @@
         <h1>Všechny známky</h1>
     }
 
-    @if ((await analytics.getAllGradesByUserIdAsync(Model.UserId)).Length == 0)
+    @if ((await analytics.getGradesAsync(Model.UserId)).Length == 0)
     {
         <h2 class="text-center mt-5">Žádné známky 🙁</h2>
     }
@@ -68,7 +68,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in await analytics.getAllGradesByUserIdAsync(Model.UserId))
+                @foreach (var item in await analytics.getGradesAsync(Model.UserId))
                 {
                     <tr>
                         <td>

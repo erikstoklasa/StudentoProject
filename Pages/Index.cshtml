@@ -87,7 +87,7 @@ User.Identity.IsAuthenticated
         <p class="text-left">Všechny předměty:</p>
         <div class="d-flex flex-row flex-wrap">
             @{ 
-                Subject[] subjects = await analytics.getAllSubjectsByUserIdAsync(UserId);
+                Subject[] subjects = await analytics.getAllSubjectsAsync(UserId);
             }
             @foreach (Subject x in subjects)
             {
@@ -112,7 +112,7 @@ User.Identity.IsAuthenticated
         <div class="d-flex justify-content-around">
             <div>
                 <p>Počet vašich studentů</p>
-                <h2>@Html.Raw(await analytics.getStudentsCountByTeacherIdAsync(UserId))</h2>
+                <h2>@Html.Raw(await analytics.getStudentsCountByTeacherUserAuthIdAsync(UserId))</h2>
             </div>
             <div>
                 <p>Počet vašich předmětů</p>

@@ -13,6 +13,11 @@
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
+                <label asp-for="Grade.Name" class="control-label">Název</label>
+                <input asp-for="Grade.Name" class="form-control" />
+                <span asp-validation-for="Grade.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Grade.Value" class="control-label">Známka</label>
                 <input asp-for="Grade.Value" class="form-control" />
                 <span asp-validation-for="Grade.Value" class="text-danger"></span>

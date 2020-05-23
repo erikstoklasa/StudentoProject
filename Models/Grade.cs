@@ -9,8 +9,11 @@ namespace SchoolGradebook.Models
     public class Grade
     {
         public int Id { get; set; }
+        [Display(Name = "Název")]
+        [Required(ErrorMessage = "Zadejte prosím název")]
         public string Name { get; set; }
         [Display(Name = "Známka")]
+        [Range(1,5, ErrorMessage = "Zadejte známku mezi 1 a 5")]
         public int? Value { get; set; }
         public int StudentId { get; set; } 
         public int SubjectId { get; set; }

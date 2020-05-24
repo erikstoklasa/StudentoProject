@@ -1,0 +1,69 @@
+﻿@page
+@model SchoolGradebook.Areas.Student.Pages.Grades.IndexModel
+@using SchoolGradebook.Models
+@using SchoolGradebook.Services
+@inject Analytics analytics
+
+@{
+    ViewData["Title"] = "Tvé známky";
+}
+@if (Model.Subject != null)
+{
+    <h1>@Html.Raw(Model.Subject.Name)</h1>
+    <p>@Html.Raw(Model.Teacher.getFullName())</p>
+}
+else
+{
+    <h1>Všechny známky</h1>
+}
+
+@if ((await analytics.getGradesAsync(Model.UserId)).Length == 0)
+{
+    <h2 class="text-center mt-5">Žádné známky 🙁</h2>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Předmět
+                </th>
+                <th>
+                    Známka
+                </th>
+                <th>
+                    Přidáno
+                </th>
+                <th>
+                    Učitel
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in await analytics.getGradesAsync(Model.UserId))
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Subject.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Value)
+                    </td>
+                    <td>
+                        @Html.Raw(LanguageHelper.getRelativeTime(item.Added))
+                    </td>
+                    <td>
+                        @Html.Raw(item.Subject.Teacher.getFullName())
+                    </td>
+                    <td>
+                        <a asp-page="Details" asp-route-gradeId="@item.Id">Zobrazit</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+}

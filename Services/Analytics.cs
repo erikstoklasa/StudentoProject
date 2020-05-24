@@ -51,6 +51,46 @@ namespace SchoolGradebook.Services
                 .CountAsync();
             return countOfSubjects;
         }
+        public async Task<Student[]> getAllStudentsBySubjectIdAsync(int Id)
+        {
+            //Accessing Students via Enrollments table => Students
+            var enrollments = await Context.Enrollments
+                .Include(s => s.Student)
+                .Where(s => s.Subject.Id == Id)
+                .OrderBy(s => s.Subject.Name)
+                .ToArrayAsync();
+            Student[] output = new Student[enrollments.Length];
+            for (int i = 0; i < enrollments.Length; i++)
+            {
+                output[i] = enrollments[i].Student;
+            }
+            return output;
+        }
+        public async Task<double> getSubjectAverageForStudentByStudentIdAsync(int studentId, int subjectId)
+        {
+            var enrollment = await Context.Enrollments
+                .Where(s => s.Student.Id == studentId && s.SubjectId == subjectId)
+                .Include(s => s.Subject)
+                    .ThenInclude(s => s.Grades)
+                .FirstOrDefaultAsync();
+            if (enrollment == null) //Student is not in the given subject
+            {
+                return Double.NaN;
+            }
+
+            double sum = 0.0;
+            var grades = enrollment.Subject.Grades;
+            int count = enrollment.Subject.Grades.Count;
+            if (grades.Count == 0) //Student doesn't have any grades in the given subject
+            {
+                return Double.NaN;
+            }
+            foreach (Grade g in grades)
+            {
+                sum += (double) g.Value;
+            }
+            return Math.Round(sum / count, 2);
+        }
         //Student
         public async Task<double> getTotalAverageAsync(string userId, int decimalPlaces = 2)
         {
@@ -112,23 +152,23 @@ namespace SchoolGradebook.Services
             List<Grade> filtredGrades = new List<Grade>();
             foreach (Grade g in enrollment.Subject.Grades)
             {
-                if(g.Student.UserAuthId == userId && 
+                if (g.Student.UserAuthId == userId &&
                     (maxGradeDayAge == 0 || maxGradeDayAge >= DateTime.Now.Subtract(g.Added).TotalDays) && //if maxGradeDayAge is set, then add only grades younger than maxGradeDayAge
                     (minGradeDayAge == 0 || minGradeDayAge <= DateTime.Now.Subtract(g.Added).TotalDays) //if minGradeDayAge is set, then add only grades older than minGradeDayAge
                     )
                 {
                     filtredGrades.Add(g);
-                } 
+                }
             }
             double sum = 0.0;
             int count = filtredGrades.Count;
             if (filtredGrades.Count == 0) //Student doesn't have any grades in the given subject
             {
-                return Double.NaN; 
+                return Double.NaN;
             }
             foreach (Grade g in filtredGrades)
             {
-                sum += (double) g.Value;
+                sum += (double)g.Value;
             }
             return Math.Round(sum / count, decimalPlaces);
         }

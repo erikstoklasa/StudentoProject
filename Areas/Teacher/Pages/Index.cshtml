@@ -1,0 +1,36 @@
+﻿@page
+@model SchoolGradebook.Areas.Teacher.Pages.IndexModel
+@using  SchoolGradebook.Services
+@using  SchoolGradebook.Models
+@using Microsoft.AspNetCore.Http;
+@using System.Security.Claims;
+@inject Analytics  analytics
+@inject IHttpContextAccessor httpContextAccessor
+@inject SchoolContext context
+@{
+    ViewData["Title"] = "Domů";
+    string UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+    UserId = UserId == null ? "" : UserId;
+    Student s = context.Students
+                    .Where(g => g.UserAuthId == UserId).FirstOrDefault();
+    String firstName = "";
+    if (s != null)
+    {
+        firstName = s.FirstName;
+    }
+
+
+}
+
+<div class="text-center">
+        <div class="d-flex justify-content-around">
+            <div>
+                <p>Počet vašich studentů</p>
+                <h2>@Html.Raw(await analytics.getStudentsCountByTeacherUserAuthIdAsync(UserId))</h2>
+            </div>
+            <div>
+                <p>Počet vašich předmětů</p>
+                <h2>@Html.Raw(await analytics.getSubjectsCountByTeacherIdAsync(UserId))</h2>
+            </div>
+        </div>
+</div>

@@ -12,7 +12,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-primary border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand text-light" asp-area="" asp-page="/Index">Studento</a>
+                <a class="navbar-brand text-light" asp-area="Student" asp-page="/Index">Studento - Student</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -20,32 +20,12 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1 justify-content-center">
-                        @if (User.IsInRole("student") || User.IsInRole("teacher"))
-                        {
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-page="/Grades/Index">Známky</a>
+                                <a class="nav-link text-light" asp-area="Student" asp-page="/Grades/Index">Známky</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-page="/Subjects/Index">Předměty</a>
+                                <a class="nav-link text-light" asp-area="Student" asp-page="/Subjects/Index">Předměty</a>
                             </li>
-                        }
-                        @if (User.IsInRole("teacher") || User.IsInRole("admin"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-page="/Students/Index">Studenti</a>
-                            </li>
-                        }
-                        @if (User.IsInRole("admin"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-page="/Teachers/Index">Učitelé</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-page="/HumanCodes/Index">Aktivační kódy</a>
-                            </li>
-                        }
-
-
                     </ul>
                 </div>
             </div>

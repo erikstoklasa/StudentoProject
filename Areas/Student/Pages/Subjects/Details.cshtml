@@ -58,14 +58,7 @@
                     @Html.Raw((await analytics.getSubjectAverageForStudentAsync(Model.UserId, Model.Subject.Id)).ToString("f2"))
                 </strong>
             </h3>
-            @if ((await analytics.getSubjectAverageForStudentAsync(Model.UserId, Model.Subject.Id, 60, 30)) > await analytics.getSubjectAverageForStudentAsync(Model.UserId, Model.Subject.Id, 30))
-            {
-                <small>Což je <strong>lepší</strong> než minulý měsíc (@Html.Raw((await analytics.getSubjectAverageForStudentAsync(Model.UserId, Model.Subject.Id, 60, 30)).ToString("f2")))</small>
-            }
-            else if (await analytics.getSubjectAverageForStudentAsync(Model.UserId, Model.Subject.Id, 60, 30) < await analytics.getSubjectAverageForStudentAsync(Model.UserId, Model.Subject.Id, 30))
-            {
-                <small>Což je <strong>horší</strong> než minulý měsíc (@Html.Raw((await analytics.getSubjectAverageForStudentAsync(Model.UserId, Model.Subject.Id, 60, 30)).ToString("f2")))</small>
-            }
+            @Html.Raw(ViewData["ComparisonString"])
         </div>
     }
 </div>

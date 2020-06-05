@@ -77,16 +77,18 @@ User.Identity.IsAuthenticated
                     <h1 class="text-left" style="font-weight: 400;">
                         Ahoj <strong>@Html.Raw(LanguageHelper.Sklonuj(firstName)),</strong><br>jsi <strong>skvělý</strong> student!
                     </h1>
-                    <h3 class="text-left mt-5" style="font-weight: 400;">Celkový průměr: <strong>
-                        @Html.Raw((await analytics.getTotalAverageAsync(UserId)).CompareTo(Double.NaN) == 0 ?
-                       "Žádné známky" : (await analytics.getTotalAverageAsync(UserId)).ToString("f2"))
-                              </strong></h3>
+                    <h3 class="text-left mt-5" style="font-weight: 400;">
+                        Celkový průměr: <strong>
+                            @Html.Raw((await analytics.getTotalAverageAsync(UserId)).CompareTo(Double.NaN) == 0 ?
+                           "Žádné známky" : (await analytics.getTotalAverageAsync(UserId)).ToString("f2"))
+                        </strong>
+                    </h3>
                 </div>
             </div>
         </div>
         <p class="text-left">Všechny předměty:</p>
         <div class="d-flex flex-row flex-wrap">
-            @{ 
+            @{
                 Subject[] subjects = await analytics.getAllSubjectsAsync(UserId);
             }
             @foreach (Subject x in subjects)
@@ -139,13 +141,25 @@ User.Identity.IsAuthenticated
     }
     else
     {
-        <h1 class="display-4">Moderní žákovská</h1>
-        <div class="row d-flex justify-content-center">
-            <ul class="list-group col-md-6 center">
-                <li class="list-group-item">Místo pro učební materiály ✔️</li>
-                <li class="list-group-item">Predikce vývoje známek žáků ✔️</li>
-                <li class="list-group-item">Automatizované testování ✔️</li>
-            </ul>
+        <div class="text-left" style="max-width: 800px; margin: 0 auto;">
+            <h1 class="font-weight-bold pb-5" style="font-size: 4rem;">Moderní škola<br>je za dveřmi</h1>
+
+            <a href="#" class="btn-lg btn-primary">Vyzkoušet</a>
+
+            <div class="d-flex flex-column justify-content-start pt-5">
+                <h2 style="font-size: 2rem;" class="pb-2">Co už umíme</h2>
+                <ul style="list-style-type: none; line-height: 2; padding-left: 0; font-size: 1.5rem;">
+                    <li>✅ Jednoduchá školní matrika</li>
+                    <li>✅ Zaznamenávání známek</li>
+                </ul>
+            </div>
+            <div class="d-flex flex-column justify-content-start pt-5">
+                <h2 style="font-size: 2rem;" class="pb-2">Na co se můžete těšit</h2>
+                <ul style="list-style-type: none; line-height: 2; padding-left: 0; font-size: 1.5rem;">
+                    <li>🔵 Generování pololetního vysvědčení</li>
+                    <li>🔵 Více typů rolí (ředitel, rodič)</li>
+                </ul>
+            </div>
         </div>
     }
 

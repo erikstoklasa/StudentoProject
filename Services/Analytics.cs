@@ -26,7 +26,7 @@ namespace SchoolGradebook.Services
         }
         public async Task<double> getStudentsToTeachersRatioAsync(int decimalPlaces = 2)
         {
-            double output = Math.Round(await getStudentsCountAsync() / (double) await getTeachersCountAsync(), decimalPlaces);
+            double output = Math.Round(await getStudentsCountAsync() / (double)await getTeachersCountAsync(), decimalPlaces);
             output = output == Double.NaN ? 0 : output;
             return output;
         }
@@ -87,12 +87,16 @@ namespace SchoolGradebook.Services
             }
             foreach (Grade g in grades)
             {
-                sum += (double) g.Value;
+                sum += (double)g.Value;
             }
             return Math.Round(sum / count, 2);
         }
         //Student
-        public async Task<double> getTotalAverageAsync(string userId, int decimalPlaces = 2)
+        public async Task<double> getTotalAverageAsync(
+            string userId, 
+            int maxGradeDayAge = 0,
+            int minGradeDayAge = 0, 
+            int decimalPlaces = 2)
         {
             var enrollments = await Context.Enrollments
                 .Include(s => s.Subject)
@@ -100,17 +104,18 @@ namespace SchoolGradebook.Services
                 .ToArrayAsync();
             double totalASumOfAverages = 0.0;
             int countOfSubjectsWithGrades = 0;
+            double currentSubjectAvg = 0;
             //Iterating only through student's subjects
             for (int i = 0; i < enrollments.Length; i++)
             {
                 //Getting averages of every subject that the student has
-                double currentlyAdded = await getSubjectAverageForStudentAsync(userId, enrollments[i].Subject.Id, 0, 0, decimalPlaces);
-                if(currentlyAdded.CompareTo(Double.NaN) != 0) // getSubjectAverageForStudent returns 0 if student has no grades or is not enrolled in the subject
+                currentSubjectAvg = await getSubjectAverageForStudentAsync(userId, enrollments[i].Subject.Id, maxGradeDayAge, minGradeDayAge, 5);
+                if (currentSubjectAvg.CompareTo(Double.NaN) != 0) // getSubjectAverageForStudent returns 0 if student has no grades or is not enrolled in the subject
                 {
                     countOfSubjectsWithGrades++;
-                    totalASumOfAverages += currentlyAdded;
+                    totalASumOfAverages += currentSubjectAvg;
                 }
-                
+
             }
             //Averaging subject averages (totalASumOfAverages / subjects count)
             return Math.Round(totalASumOfAverages / countOfSubjectsWithGrades, decimalPlaces);
@@ -133,9 +138,9 @@ namespace SchoolGradebook.Services
         }
         public async Task<double> getSubjectAverageForStudentAsync(
             string userId,
-            int subjectId, 
-            int maxGradeDayAge = 0, 
-            int minGradeDayAge = 0, 
+            int subjectId,
+            int maxGradeDayAge = 0,
+            int minGradeDayAge = 0,
             int decimalPlaces = 2)
         {
             //Accessing all grades in a subject via Enrollments table => Subject => Grades

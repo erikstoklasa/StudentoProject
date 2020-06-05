@@ -132,5 +132,21 @@ namespace SchoolGradebook.Services
                 return years <= 1 ? "před rokem" : "před " + years + " roky";
             }
         }
+
+        public static string getAverageComparisonString(double currentAverage, double lastAverage)
+        {
+            if (lastAverage > currentAverage)
+            {
+                return $"<small> Což je <strong class=\"text-success\">lepší</strong> než minulý měsíc ({lastAverage:f2})</small>";
+            }
+            else if (currentAverage > lastAverage)
+            {
+                return $"<small> Což je <strong class=\"text-danger\">horší</strong> než minulý měsíc ({lastAverage:f2})</small>";
+            }
+            else
+            {
+                return "";
+            }
+        }
     }
 }

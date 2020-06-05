@@ -1,16 +1,32 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using SchoolGradebook.Services;
 
 namespace SchoolGradebook.Areas.Student.Pages
 {
     public class IndexModel : PageModel
     {
-        public void OnGet()
+        private readonly SchoolGradebook.Data.SchoolContext _context;
+        private readonly Analytics _analytics;
+        public string UserId { get; private set; }
+
+        public IndexModel(SchoolGradebook.Data.SchoolContext context, IHttpContextAccessor httpContextAccessor, Analytics analytics)
         {
+            UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            _context = context;
+            _analytics = analytics;
+        }
+        public async Task OnGet()
+        {
+            double currentAvg = await _analytics.getTotalAverageAsync(UserId);
+            double comparisonAvg = await _analytics.getTotalAverageAsync(UserId, 365, 30);
+            ViewData["ComparisonString"] = LanguageHelper.getAverageComparisonString(currentAvg, comparisonAvg);
         }
     }
 }

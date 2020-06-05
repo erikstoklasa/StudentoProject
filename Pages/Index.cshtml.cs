@@ -22,9 +22,20 @@ namespace SchoolGradebook.Pages
             _context = context;
         }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
-
+            if (User.IsInRole("teacher"))
+            {
+                return LocalRedirect("~/Teacher/Index");
+            }
+            else if (User.IsInRole("student"))
+            {
+                return LocalRedirect("~/Student/Index");
+            }
+            else
+            {
+                return Page();
+            }
         }
     }
 }

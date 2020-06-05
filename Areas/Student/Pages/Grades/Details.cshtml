@@ -26,7 +26,7 @@
             @Html.DisplayNameFor(model => model.Grade.Added)
         </dt>
         <dd class="col-sm-10">
-            @Html.Raw(Model.Grade.Added.ToLocalTime())
+            @Html.Raw(Model.Grade.Added.ToLocalTime().ToString("dddd, d. MMMM yyyy HH:mm"))
         </dd>
         <dt class="col-sm-2">
             Vyučující

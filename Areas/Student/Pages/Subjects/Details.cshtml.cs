@@ -9,17 +9,20 @@ using Microsoft.EntityFrameworkCore;
 using SchoolGradebook.Data;
 using SchoolGradebook.Models;
 using System.Security.Claims;
+using SchoolGradebook.Services;
 
 namespace SchoolGradebook.Areas.Student.Pages.Subjects
 {
     public class DetailsModel : PageModel
     {
         private readonly SchoolGradebook.Data.SchoolContext _context;
+        private readonly Analytics _analytics;
 
-        public DetailsModel(SchoolGradebook.Data.SchoolContext context, IHttpContextAccessor httpContextAccessor)
+        public DetailsModel(SchoolGradebook.Data.SchoolContext context, IHttpContextAccessor httpContextAccessor, Analytics analytics)
         {
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             _context = context;
+            _analytics = analytics;
         }
 
         public string UserId { get; private set; }
@@ -34,6 +37,10 @@ namespace SchoolGradebook.Areas.Student.Pages.Subjects
 
             Subject = await _context.Subjects
                 .Include(s => s.Teacher).FirstOrDefaultAsync(m => m.Id == id);
+
+            double currentAvg = await _analytics.getSubjectAverageForStudentAsync(UserId, Subject.Id);
+            double comparisonAvg = await _analytics.getSubjectAverageForStudentAsync(UserId, Subject.Id, 365, 30);
+            ViewData["ComparisonString"] = LanguageHelper.getAverageComparisonString(currentAvg, comparisonAvg);
 
             if (Subject == null)
             {

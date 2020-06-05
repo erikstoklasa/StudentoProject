@@ -12,13 +12,6 @@
 }
 
 <h1>Všechny tvé předměty</h1>
-@if (User.IsInRole("teacher"))
-{
-    <p>
-        <a asp-page="Create">Vytvořit nový</a>
-    </p>
-}
-
 <table class="table">
     <thead>
         <tr>

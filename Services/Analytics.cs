@@ -69,9 +69,9 @@ namespace SchoolGradebook.Services
         public async Task<double> getSubjectAverageForStudentByStudentIdAsync(int studentId, int subjectId)
         {
             var enrollment = await Context.Enrollments
-                .Where(s => s.Student.Id == studentId && s.SubjectId == subjectId)
-                .Include(s => s.Subject)
-                    .ThenInclude(s => s.Grades)
+                .Where(e => e.StudentId == studentId && e.SubjectId == subjectId)
+                .Include(e => e.Subject)
+                    .ThenInclude(e => e.Grades)
                 .FirstOrDefaultAsync();
             if (enrollment == null) //Student is not in the given subject
             {
@@ -79,9 +79,9 @@ namespace SchoolGradebook.Services
             }
 
             double sum = 0.0;
-            var grades = enrollment.Subject.Grades;
-            int count = enrollment.Subject.Grades.Count;
-            if (grades.Count == 0) //Student doesn't have any grades in the given subject
+            var grades = enrollment.Subject.Grades.Where(g => g.StudentId == studentId);
+            int count = grades.Count();
+            if (count == 0) //Student doesn't have any grades in the given subject
             {
                 return Double.NaN;
             }

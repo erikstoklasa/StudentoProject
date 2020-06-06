@@ -21,15 +21,17 @@ else
     <div class="d-flex justify-content flex-wrap">
         @foreach (Models.Subject s in Model.Subjects)
         {
-            <a asp-page="Details" asp-route-id="@s.Id">
-                <div class="card mx-1">
-                    <div class="card-body">
+
+            <div class="card mx-1">
+                <div class="card-body">
+                    <a asp-page="Details" asp-route-id="@s.Id">
                         <h5 class="card-title">@Html.Raw(s.Name)</h5>
-                        <p class="card-text">Studentů: @Html.Raw(await analytics.getStudentsCountInSubjectAsync(s.Id))</p>
-                        <a class="btn btn-primary" asp-page="Create" asp-route-subjectId="@s.Id">Přidat známku</a>
-                    </div>
+                    </a>
+                    <p class="card-text">Studentů: @Html.Raw(await analytics.getStudentsCountInSubjectAsync(s.Id))</p>
+                    <a class="btn btn-primary" asp-area="Teacher" asp-page="/Grades/Create" asp-route-SubjectId="@s.Id">Přidat známku</a>
                 </div>
-            </a>
+            </div>
+
         }
     </div>
 

@@ -19,6 +19,7 @@ namespace SchoolGradebook.Areas.Teacher.Pages.Grades
         public List<SelectListItem> Students { get; private set; }
         private string UserId { get; set; }
         public string SubjectName { get; set; }
+
         [BindProperty(SupportsGet = true)]
         public int SubjectId { get; set; }
 
@@ -27,6 +28,9 @@ namespace SchoolGradebook.Areas.Teacher.Pages.Grades
             _context = context;
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
         }
+
+        [BindProperty(SupportsGet = true)]
+        public int StudentId { get; set; }
 
         public IActionResult OnGet()
         {
@@ -40,11 +44,14 @@ namespace SchoolGradebook.Areas.Teacher.Pages.Grades
             Students = new List<SelectListItem> { };
             for (int i = 0; i < enrollments.Length; i++)
             {
-                Students.Add(
+                if (enrollments[i].StudentId == StudentId || StudentId == 0)
+                {
+                    Students.Add(
                     new SelectListItem(
                         enrollments[i].Student.getFullName(),
                         enrollments[i].StudentId.ToString())
                     );
+                }
             }
             return Page();
         }
@@ -52,8 +59,6 @@ namespace SchoolGradebook.Areas.Teacher.Pages.Grades
         [BindProperty]
         public Grade Grade { get; set; }
 
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
             Grade.Added = DateTime.UtcNow;
@@ -90,7 +95,7 @@ namespace SchoolGradebook.Areas.Teacher.Pages.Grades
             _context.Grades.Add(Grade);
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("./Index");
+            return LocalRedirect($"~/Teacher/Subjects/Details?id={ SubjectId }");
         }
     }
 }

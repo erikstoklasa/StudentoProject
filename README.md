@@ -6,7 +6,7 @@ Inovujeme zastaralé systémy, které se dnes používají na školách.
 [![Build Status](https://dev.azure.com/me0193/Web%20Application/_apis/build/status/Web%20Application?branchName=master)](https://dev.azure.com/me0193/Web%20Application/_build/latest?definitionId=1&branchName=master)
 
 Takhle zatím vypadá naše aplikace ->
-![Studento dashboard](/github_readme_images/dashboard_v1.jpg)
+![Studento dashboard](/github_readme_images/dashboard_v2.jpg)
 
 ## Naše milníky:
 

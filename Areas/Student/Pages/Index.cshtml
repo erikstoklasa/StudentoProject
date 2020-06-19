@@ -44,13 +44,13 @@
                     {
                         <tr>
                             <td>
-                                @Html.Raw(grade.Value.ToString())
+                                @grade.Value.ToString()
                             </td>
                             <td>
-                                @Html.Raw(grade.Subject.Name.ToString())
+                                @grade.Subject.Name.ToString()
                             </td>
                             <td>
-                                @Html.Raw(LanguageHelper.getRelativeTime(grade.Added))
+                                @LanguageHelper.getRelativeTime(grade.Added)
                             </td>
                             <td>
                                 <a asp-page="Grades/Details" asp-route-gradeId="@grade.Id">Zobrazit</a>
@@ -63,12 +63,12 @@
         <div class="d-flex flex-column w-50">
             <div class="ml-3 text-left">
                 <h1 style="font-weight: 400;">
-                    Ahoj <strong>@Html.Raw(LanguageHelper.Sklonuj(firstName)),</strong><br>jsi <strong>skvělý</strong> student!
+                    Ahoj <strong>@LanguageHelper.Sklonuj(firstName),</strong><br>jsi <strong>skvělý</strong> student!
                 </h1>
                 <h3 class="mt-5" style="font-weight: 400;">
                     Celkový průměr: <strong>
-                        @Html.Raw((await analytics.getTotalAverageAsync(UserId)).CompareTo(Double.NaN) == 0 ?
-                       "Žádné známky" : (await analytics.getTotalAverageAsync(UserId)).ToString("f2"))
+                        @((await analytics.getTotalAverageAsync(UserId)).CompareTo(Double.NaN) == 0 ? 
+                            "Žádné známky" : (await analytics.getTotalAverageAsync(UserId)).ToString("f2"))
                     </strong>
                 </h3>
                 @Html.Raw(ViewData["ComparisonString"])
@@ -84,12 +84,12 @@
         {
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">@Html.Raw(x.Name)</h5>
-                    <p class="card-text">@Html.Raw(x.Teacher.getFullName())</p>
+                    <h5 class="card-title">@x.Name</h5>
+                    <p class="card-text">@x.Teacher.getFullName()</p>
                     <p class="card-text">
                         <strong>
-                            @Html.Raw((await analytics.getSubjectAverageForStudentAsync(UserId, x.Id)).CompareTo(Double.NaN) == 0 ?
-               "Bez známek" : (await analytics.getSubjectAverageForStudentAsync(UserId, x.Id)).ToString("f2"))
+                            @((await analytics.getSubjectAverageForStudentAsync(UserId, x.Id)).CompareTo(Double.NaN) == 0 ?
+               "Bez známek" : (await analytics.getSubjectAverageForStudentAsync(UserId, x.Id)).ToString("f2")))
                         </strong>
                     </p>
                     <a class="btn btn-primary" asp-page="/Subjects/Details" asp-route-Id="@x.Id">Zobrazit známky</a>

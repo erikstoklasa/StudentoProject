@@ -80,9 +80,9 @@ namespace SchoolGradebook
             roleManager.CreateAsync(new IdentityRole("teacher")).Wait();
             roleManager.CreateAsync(new IdentityRole("student")).Wait();
             IdentityUser user;
-            if (userManager.FindByEmailAsync("admin@erikstoklasa.cz").Result != null)
+            if (userManager.FindByEmailAsync("admin@studento.cz").Result != null)
             {
-                user = userManager.FindByEmailAsync("admin@erikstoklasa.cz").Result;
+                user = userManager.FindByEmailAsync("admin@studento.cz").Result;
                 userManager.AddToRoleAsync(user, "admin").Wait();
             }
 

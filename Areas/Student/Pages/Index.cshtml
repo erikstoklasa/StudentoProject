@@ -89,7 +89,7 @@
                     <p class="card-text">
                         <strong>
                             @((await analytics.getSubjectAverageForStudentAsync(UserId, x.Id)).CompareTo(Double.NaN) == 0 ?
-               "Bez známek" : (await analytics.getSubjectAverageForStudentAsync(UserId, x.Id)).ToString("f2")))
+               "Bez známek" : (await analytics.getSubjectAverageForStudentAsync(UserId, x.Id)).ToString("f2"))
                         </strong>
                     </p>
                     <a class="btn btn-primary" asp-page="/Subjects/Details" asp-route-Id="@x.Id">Zobrazit známky</a>

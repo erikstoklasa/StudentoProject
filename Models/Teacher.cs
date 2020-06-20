@@ -13,7 +13,7 @@ namespace SchoolGradebook.Models
         public string? UserAuthId { get; set; }
         [Display(Name = "Jméno")]
         public String? FirstName { get; set; }
-        [Display(Name = "Přijímení")]
+        [Display(Name = "Příjmení")]
         public String? LastName { get; set; }
         public DateTime? Birthdate { get; set; }
         public String? PersonalIdentifNumber { get; set; }

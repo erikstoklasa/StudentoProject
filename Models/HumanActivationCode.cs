@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,9 +10,10 @@ namespace SchoolGradebook.Models
     public enum CodeType { Teacher, Student }
     public class HumanActivationCode
     {
-        public int Id { get; set; } 
-        public int TargetId { get; set; } //Teacher/Student Id
+        public int Id { get; set; }
+        public int TargetId { get; set; } //Teacher or student Id
         public string HumanCode { get; set; }
+        [Display(Name = "Typ kódu")]
         public CodeType CodeType { get; set; }
         public string getNewHumanCode()
         {

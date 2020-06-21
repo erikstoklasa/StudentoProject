@@ -11,18 +11,24 @@ namespace SchoolGradebook.Models
         #nullable enable
         public int Id { get; set; }
         public string? UserAuthId { get; set; }
-        [Display(Name="Jméno")]
+        [Display(Name = "Jméno")]
         public String? FirstName { get; set; }
         [Display(Name = "Příjmení")]
         public String? LastName { get; set; }
+        [Display(Name = "Datum narození")]
         public DateTime? Birthdate { get; set; }
+        [Display(Name = "Rodné číslo")]
         public String? PersonalIdentifNumber { get; set; }
         //Address
+        [Display(Name = "Ulice a čp.")]
         public String? StreetAdrress { get; set; }
+        [Display(Name = "Město")]
         public String? CityAdrress { get; set; }
+        [Display(Name = "PSČ")]
         public String? ZipCode { get; set; }
         //Contact
         public String? Email { get; set; }
+        [Display(Name = "Telefonní číslo")]
         public String? PhoneNumber { get; set; }
 
         public String getFullName() => FirstName + " " + LastName;

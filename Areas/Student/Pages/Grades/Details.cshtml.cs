@@ -1,40 +1,38 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using SchoolGradebook.Models;
-using SchoolGradebook.Data;
+using SchoolGradebook.Services;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace SchoolGradebook.Areas.Student.Pages.Grades
 {
     public class DetailsModel : PageModel
     {
-        private readonly SchoolGradebook.Data.SchoolContext _context;
-
-        public DetailsModel(SchoolGradebook.Data.SchoolContext context)
-        {
-            _context = context;
-        }
-
+        private readonly Analytics _analytics;
+        public string UserId { get; set; }
         public Grade Grade { get; set; }
 
         [BindProperty(SupportsGet = true)]
         public int gradeId { get; set; }
 
+        public DetailsModel(Analytics analytics, IHttpContextAccessor httpContextAccessor)
+        {
+            _analytics = analytics;
+
+            UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            UserId ??= "";
+        }
+
         public async Task<IActionResult> OnGetAsync()
         {
-
-            Grade = await _context.Grades
-                .Include(g => g.Student)
-                .Include(g => g.Subject.Teacher)
-                .Include(g => g.Subject).FirstOrDefaultAsync(m => m.Id == gradeId);
-
+            Grade = await _analytics.getGradeAsync(UserId, gradeId);
             if (Grade == null)
             {
                 return NotFound();
+                //Not found or access not premitted
             }
             return Page();
         }

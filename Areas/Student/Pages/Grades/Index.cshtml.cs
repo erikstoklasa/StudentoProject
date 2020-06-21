@@ -1,47 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using SchoolGradebook.Models;
-using SchoolGradebook.Data;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
+using SchoolGradebook.Services;
 
 namespace SchoolGradebook.Areas.Student.Pages.Grades
 {
     public class IndexModel : PageModel
     {
-        private readonly SchoolGradebook.Data.SchoolContext _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly Analytics _analytics;
         public string UserId { get; set; }
-        private bool isTeacher = false;
+        public IList<Grade> Grades { get; set; }
 
-        public IndexModel(SchoolContext context, IHttpContextAccessor httpContextAccessor)
+        public IndexModel(IHttpContextAccessor httpContextAccessor, Analytics analytics)
         {
-            _context = context;
             _httpContextAccessor = httpContextAccessor;
-            UserId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            UserId = UserId == null ? "" : UserId;
-            isTeacher = _httpContextAccessor.HttpContext.User.IsInRole("teacher");
-        }
+            _analytics = analytics;
 
-        public IList<Grade> Grades { get;set; }
-        public IList<Subject> Subjects { get; set; }
-        public Subject Subject { get; set; }
-        public Models.Teacher Teacher { get; set; }
+            UserId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            UserId ??= "";
+        }
 
         public async Task OnGetAsync()
         {
-            if (Subject != null)
-            {
-                Teacher = Subject.Teacher;
-            }     
-            Subjects = await _context.Subjects
-                .Where(g => g.Teacher.UserAuthId == UserId)
-            .ToListAsync();
+            Grades = await _analytics.getGradesAsync(UserId);
         }
     }
 }

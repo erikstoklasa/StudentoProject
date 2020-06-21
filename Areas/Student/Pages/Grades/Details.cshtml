@@ -3,39 +3,39 @@
 @using System.Globalization;
 
 @{
-    ViewData["Title"] = "Detail";
+    ViewData["Title"] = "Známka";
     System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("cs-CZ");
 }
 
 <div>
-    <h1>@Html.Raw(Model.Grade.Name)</h1>
+    <h1>@Model.Grade.Name</h1>
     <dl class="row">
         <dt class="col-sm-2">
             Předmět
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Grade.Subject.Name)
+            @Model.Grade.Subject.Name
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Grade.Value)
+            Známka
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Grade.Value)
+            @Model.Grade.Value
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Grade.Added)
+            Datum přidání
         </dt>
         <dd class="col-sm-10">
-            @Html.Raw(Model.Grade.Added.ToLocalTime().ToString("dddd, d. MMMM yyyy HH:mm"))
+            @Model.Grade.Added.ToLocalTime().ToString("d. MMMM yyyy HH:mm")
         </dd>
         <dt class="col-sm-2">
             Vyučující
         </dt>
         <dd class="col-sm-10">
-            @Html.Raw(Model.Grade.Subject.Teacher.getFullName())
+            @Model.Grade.Subject.Teacher.getFullName()
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-page="./Index">Zpět</a>
+    <a asp-area="Student" asp-page="./Index">Zpět</a>
 </div>

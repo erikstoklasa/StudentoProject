@@ -38,8 +38,8 @@
                     @Html.Raw(item.Teacher.getFullName())
                 </td>
                 <td>
-                    @Html.Raw((await analytics.getSubjectAverageForStudentAsync(UserId, item.Id)).CompareTo(Double.NaN) == 0 ?
-                   "Žádné známky" : (await analytics.getSubjectAverageForStudentAsync(UserId, item.Id)).ToString("f2"))
+                    @Html.Raw((await analytics.GetSubjectAverageForStudentAsync(UserId, item.Id)).CompareTo(Double.NaN) == 0 ?
+                   "Žádné známky" : (await analytics.GetSubjectAverageForStudentAsync(UserId, item.Id)).ToString("f2"))
                 </td>
             </tr>
         }

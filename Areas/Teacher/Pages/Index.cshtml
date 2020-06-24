@@ -26,11 +26,11 @@
         <div class="d-flex justify-content-around">
             <div>
                 <p>Počet vašich studentů</p>
-                <h2>@Html.Raw(await analytics.getStudentsCountByTeacherUserAuthIdAsync(UserId))</h2>
+                <h2>@Html.Raw(await analytics.GetStudentsCountByTeacherUserAuthIdAsync(UserId))</h2>
             </div>
             <div>
                 <p>Počet vašich předmětů</p>
-                <h2>@Html.Raw(await analytics.getSubjectsCountByTeacherIdAsync(UserId))</h2>
+                <h2>@Html.Raw(await analytics.GetSubjectsCountByTeacherIdAsync(UserId))</h2>
             </div>
         </div>
 </div>

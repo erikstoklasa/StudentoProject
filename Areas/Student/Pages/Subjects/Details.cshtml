@@ -14,7 +14,7 @@
 
 
 
-    @if ((await analytics.getSubjectAverageForStudentAsync(Model.UserId, Model.Subject.Id)).CompareTo(Double.NaN) == 0)
+    @if ((await analytics.GetSubjectAverageForStudentAsync(Model.UserId, Model.Subject.Id)).CompareTo(Double.NaN) == 0)
     {
         <div class="d-flex flex-column w-50">
             <h1>@Html.Raw(Model.Subject.Name)</h1>
@@ -32,7 +32,7 @@
             <p class="text-left mt-5 mb-0">Všechny známky:</p>
             <table class="table table-responsive mr-3">
                 <tbody>
-                    @foreach (Grade x in await analytics.getGradesAsync(Model.UserId, Model.Subject.Id))
+                    @foreach (Grade x in await analytics.GetGradesAsync(Model.UserId, Model.Subject.Id))
                     {
                         <tr>
                             <td>
@@ -55,7 +55,7 @@
         <div class="d-flex flex-column w-50">
             <h3 class="text-left" style="font-weight: 400;">
                 Průměr: <strong>
-                    @Html.Raw((await analytics.getSubjectAverageForStudentAsync(Model.UserId, Model.Subject.Id)).ToString("f2"))
+                    @Html.Raw((await analytics.GetSubjectAverageForStudentAsync(Model.UserId, Model.Subject.Id)).ToString("f2"))
                 </strong>
             </h3>
             @Html.Raw(ViewData["ComparisonString"])

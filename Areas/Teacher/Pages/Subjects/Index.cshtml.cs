@@ -23,11 +23,11 @@ namespace SchoolGradebook.Areas.Teacher.Pages.Subjects
 
         public async Task OnGetAsync()
         {
-            Subjects = await _analytics.getAllSubjectsByTeacherUserAuthAsync(UserId);
+            Subjects = await _analytics.GetAllSubjectsByTeacherUserAuthAsync(UserId);
             StudentsCount = new int[Subjects.Length];
             for (int i = 0; i < Subjects.Length; i++)
             {
-                StudentsCount[i] = await _analytics.getStudentsCountInSubjectAsync(Subjects[i].Id);
+                StudentsCount[i] = await _analytics.GetStudentsCountInSubjectAsync(Subjects[i].Id);
             }
         }
     }

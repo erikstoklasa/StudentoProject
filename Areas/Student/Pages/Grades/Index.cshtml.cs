@@ -27,7 +27,7 @@ namespace SchoolGradebook.Areas.Student.Pages.Grades
 
         public async Task OnGetAsync()
         {
-            Grades = await _analytics.getGradesAsync(UserId);
+            Grades = await _analytics.GetGradesAsync(UserId);
         }
     }
 }

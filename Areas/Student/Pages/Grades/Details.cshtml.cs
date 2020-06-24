@@ -28,7 +28,7 @@ namespace SchoolGradebook.Areas.Student.Pages.Grades
 
         public async Task<IActionResult> OnGetAsync()
         {
-            Grade = await _analytics.getGradeAsync(UserId, gradeId);
+            Grade = await _analytics.GetGradeAsync(UserId, gradeId);
             if (Grade == null)
             {
                 return NotFound();

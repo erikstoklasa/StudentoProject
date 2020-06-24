@@ -38,8 +38,8 @@ namespace SchoolGradebook.Areas.Student.Pages.Subjects
             Subject = await _context.Subjects
                 .Include(s => s.Teacher).FirstOrDefaultAsync(m => m.Id == id);
 
-            double currentAvg = await _analytics.getSubjectAverageForStudentAsync(UserId, Subject.Id);
-            double comparisonAvg = await _analytics.getSubjectAverageForStudentAsync(UserId, Subject.Id, 365, 30);
+            double currentAvg = await _analytics.GetSubjectAverageForStudentAsync(UserId, Subject.Id);
+            double comparisonAvg = await _analytics.GetSubjectAverageForStudentAsync(UserId, Subject.Id, 365, 30);
             ViewData["ComparisonString"] = LanguageHelper.getAverageComparisonString(currentAvg, comparisonAvg);
 
             if (Subject == null)

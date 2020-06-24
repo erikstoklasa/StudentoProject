@@ -24,8 +24,8 @@ namespace SchoolGradebook.Areas.Student.Pages
         }
         public async Task OnGet()
         {
-            double currentAvg = await _analytics.getTotalAverageAsync(UserId);
-            double comparisonAvg = await _analytics.getTotalAverageAsync(UserId, 365, 30);
+            double currentAvg = await _analytics.GetTotalAverageAsync(UserId);
+            double comparisonAvg = await _analytics.GetTotalAverageAsync(UserId, 365, 30);
             ViewData["ComparisonString"] = LanguageHelper.getAverageComparisonString(currentAvg, comparisonAvg);
         }
     }

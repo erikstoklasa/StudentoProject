@@ -40,7 +40,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var grade in await analytics.getRecentGradesByUserIdAsync(UserId))
+                    @foreach (var grade in await analytics.GetRecentGradesByUserIdAsync(UserId))
                     {
                         <tr>
                             <td>
@@ -67,8 +67,8 @@
                 </h1>
                 <h3 class="mt-5" style="font-weight: 400;">
                     Celkový průměr: <strong>
-                        @((await analytics.getTotalAverageAsync(UserId)).CompareTo(Double.NaN) == 0 ? 
-                            "Žádné známky" : (await analytics.getTotalAverageAsync(UserId)).ToString("f2"))
+                        @((await analytics.GetTotalAverageAsync(UserId)).CompareTo(Double.NaN) == 0 ? 
+                            "Žádné známky" : (await analytics.GetTotalAverageAsync(UserId)).ToString("f2"))
                     </strong>
                 </h3>
                 @Html.Raw(ViewData["ComparisonString"])
@@ -78,7 +78,7 @@
     <p class="text-left">Všechny předměty:</p>
     <div class="d-flex flex-row flex-wrap">
         @{
-            Subject[] subjects = await analytics.getAllSubjectsByStudentUserAuthAsync(UserId);
+            Subject[] subjects = await analytics.GetAllSubjectsByStudentUserAuthAsync(UserId);
         }
         @foreach (Subject x in subjects)
         {
@@ -88,8 +88,8 @@
                     <p class="card-text">@x.Teacher.getFullName()</p>
                     <p class="card-text">
                         <strong>
-                            @((await analytics.getSubjectAverageForStudentAsync(UserId, x.Id)).CompareTo(Double.NaN) == 0 ?
-               "Bez známek" : (await analytics.getSubjectAverageForStudentAsync(UserId, x.Id)).ToString("f2"))
+                            @((await analytics.GetSubjectAverageForStudentAsync(UserId, x.Id)).CompareTo(Double.NaN) == 0 ?
+               "Bez známek" : (await analytics.GetSubjectAverageForStudentAsync(UserId, x.Id)).ToString("f2"))
                         </strong>
                     </p>
                     <a class="btn btn-primary" asp-page="/Subjects/Details" asp-route-Id="@x.Id">Zobrazit známky</a>

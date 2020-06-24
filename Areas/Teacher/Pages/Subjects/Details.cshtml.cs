@@ -31,7 +31,7 @@ namespace SchoolGradebook.Areas.Teacher.Pages.Subjects
                 return NotFound();
             }
 
-            Subject = await _analytics.getSubjectAsync((int)id);
+            Subject = await _analytics.GetSubjectAsync((int)id);
 
             if (Subject == null || Subject.Teacher.UserAuthId != UserId)
             {
@@ -39,12 +39,12 @@ namespace SchoolGradebook.Areas.Teacher.Pages.Subjects
                 //Subject not found or access not permitted
             }
 
-            Students = await _analytics.getAllStudentsBySubjectIdAsync(Subject.Id);
+            Students = await _analytics.GetAllStudentsBySubjectIdAsync(Subject.Id);
             StudentAverages = new double[Students.Length];
 
             for (int i = 0; i < Students.Length; i++)
             {
-                StudentAverages[i] = await _analytics.getSubjectAverageForStudentByStudentIdAsync(Students[i].Id, (int)id);
+                StudentAverages[i] = await _analytics.GetSubjectAverageForStudentByStudentIdAsync(Students[i].Id, (int)id);
             }
 
             return Page();

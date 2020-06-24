@@ -33,7 +33,7 @@ namespace SchoolGradebook.Areas.Student.Pages.Subjects
 
         public async Task OnGetAsync()
         {
-            Subjects = await analytics.getAllSubjectsByStudentUserAuthAsync(UserId);
+            Subjects = await analytics.GetAllSubjectsByStudentUserAuthAsync(UserId);
         }
     }
 }

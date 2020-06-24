@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using SchoolGradebook.Data;
 using SchoolGradebook.Models;
 using System.Security.Claims;
 using SchoolGradebook.Services;
@@ -15,19 +11,18 @@ namespace SchoolGradebook.Areas.Teacher.Pages.Subjects
 {
     public class DetailsModel : PageModel
     {
-        private readonly SchoolGradebook.Data.SchoolContext _context;
-        private Analytics _analytics;
+        private readonly Analytics _analytics;
 
-        public DetailsModel(SchoolGradebook.Data.SchoolContext context, IHttpContextAccessor httpContextAccessor, Analytics analytics)
+        public DetailsModel(IHttpContextAccessor httpContextAccessor, Analytics analytics)
         {
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            _context = context;
             _analytics = analytics;
         }
 
         public string UserId { get; private set; }
         public Subject Subject { get; set; }
         public Models.Student[] Students { get; set; }
+        public double[] StudentAverages { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -36,15 +31,21 @@ namespace SchoolGradebook.Areas.Teacher.Pages.Subjects
                 return NotFound();
             }
 
-            Subject = await _context.Subjects
-                .Include(s => s.Teacher)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            Subject = await _analytics.getSubjectAsync((int)id);
 
-            if (Subject == null)
+            if (Subject == null || Subject.Teacher.UserAuthId != UserId)
             {
                 return NotFound();
+                //Subject not found or access not permitted
             }
+
             Students = await _analytics.getAllStudentsBySubjectIdAsync(Subject.Id);
+            StudentAverages = new double[Students.Length];
+
+            for (int i = 0; i < Students.Length; i++)
+            {
+                StudentAverages[i] = await _analytics.getSubjectAverageForStudentByStudentIdAsync(Students[i].Id, (int)id);
+            }
 
             return Page();
         }

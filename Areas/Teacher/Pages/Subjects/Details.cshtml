@@ -1,25 +1,18 @@
 ﻿@page
 @model SchoolGradebook.Areas.Teacher.Pages.Subjects.DetailsModel
 
-@using SchoolGradebook.Services;
-@using SchoolGradebook.Models;
-@inject Analytics analytics
-
 @{
     ViewData["Title"] = "Details";
 }
 
 <div class="d-flex flex-row h-100 mt-5">
     <div class="d-flex flex-column w-50">
-        <h1>@Html.Raw(Model.Subject.Name)</h1>
+        <h1>@Model.Subject.Name</h1>
         <table class="table">
             <thead>
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.Students[0].FirstName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Students[0].LastName)
+                        Jméno
                     </th>
                     <th>
                         Průměr
@@ -28,21 +21,18 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var s in Model.Students)
+                @for (int i = 0; i < Model.Students.Length; i++)
                 {
 
                     <tr>
                         <td>
-                            @Html.Raw(s.FirstName)
+                            <a asp-area="Teacher" asp-page="/Students/Details" asp-route-id="@Model.Students[i].Id">@Model.Students[i].getFullName()</a>
                         </td>
                         <td>
-                            @Html.Raw(s.LastName)
+                            @Model.StudentAverages[i]
                         </td>
                         <td>
-                            @Html.Raw(await analytics.getSubjectAverageForStudentByStudentIdAsync(s.Id, Model.Subject.Id))
-                        </td>
-                        <td>
-                            <a asp-area="Teacher" asp-page="/Grades/Create" asp-route-SubjectId="@Model.Subject.Id" asp-route-StudentId="@s.Id">Přidat známku</a>
+                            <a asp-area="Teacher" asp-page="/Grades/Create" asp-route-SubjectId="@Model.Subject.Id" asp-route-StudentId="@Model.Students[i].Id">Přidat známku</a>
                         </td>
                     </tr>
                 }
@@ -52,5 +42,5 @@
 </div>
 
 <div>
-    <a asp-page="./Index">Všechny předměty</a>
+    <a asp-area="Teacher" asp-page="./Index">Všechny předměty</a>
 </div>

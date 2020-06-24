@@ -31,6 +31,16 @@ namespace SchoolGradebook.Services
             return output;
         }
         //Teacher
+        public async Task<Subject> getSubjectAsync(int subjectId)
+        {
+            //Accessing Subjects via Enrollments table => Subject
+            Subject subject = await Context.Subjects
+                .Where(s => s.Id == subjectId)
+                .Include(s => s.Teacher)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+            return subject;
+        }
         public async Task<int> getStudentsCountInSubjectAsync(int subjectId)
         {
             return await Context.Enrollments

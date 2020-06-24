@@ -78,7 +78,7 @@
     <p class="text-left">Všechny předměty:</p>
     <div class="d-flex flex-row flex-wrap">
         @{
-            Subject[] subjects = await analytics.getAllSubjectsAsync(UserId);
+            Subject[] subjects = await analytics.getAllSubjectsByStudentUserAuthAsync(UserId);
         }
         @foreach (Subject x in subjects)
         {

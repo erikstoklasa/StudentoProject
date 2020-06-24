@@ -1,34 +1,28 @@
 ﻿@page
 @model SchoolGradebook.Areas.Teacher.Pages.Subjects.IndexModel
-@using SchoolGradebook.Services
-@using Microsoft.AspNetCore.Http;
-@using System.Security.Claims;
-@inject Analytics analytics
-@inject IHttpContextAccessor httpContextAccessor
 
 @{
-    string UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
     ViewData["Title"] = "Index";
 }
 
 <h1>Všechny tvé předměty</h1>
-@if (Model.Subjects.Count == 0)
+@if (Model.Subjects.Length == 0)
 {
     <p class="alert alert-warning my-5">Zatím Vám administrátor nepřidělil žádný předmět 🙁</p>
 }
 else
 {
     <div class="d-flex justify-content flex-wrap">
-        @foreach (Models.Subject s in Model.Subjects)
+        @for (int i = 0; i < Model.Subjects.Length; i++)
         {
 
             <div class="card mx-1">
                 <div class="card-body">
-                    <a asp-page="Details" asp-route-id="@s.Id">
-                        <h5 class="card-title">@Html.Raw(s.Name)</h5>
+                    <a asp-page="Details" asp-route-id="@Model.Subjects[i].Id">
+                        <h5 class="card-title">@Model.Subjects[i].Name</h5>
                     </a>
-                    <p class="card-text">Studentů: @Html.Raw(await analytics.getStudentsCountInSubjectAsync(s.Id))</p>
-                    <a class="btn btn-primary" asp-area="Teacher" asp-page="/Grades/Create" asp-route-SubjectId="@s.Id">Přidat známku</a>
+                    <p class="card-text">Studentů: @Model.StudentsCount[i]</p>
+                    <a class="btn btn-primary" asp-area="Teacher" asp-page="/Grades/Create" asp-route-SubjectId="@Model.Subjects[i].Id">Přidat známku</a>
                 </div>
             </div>
 

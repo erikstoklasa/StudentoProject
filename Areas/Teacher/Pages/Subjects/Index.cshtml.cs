@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using SchoolGradebook.Data;
 using SchoolGradebook.Models;
 using SchoolGradebook.Services;
 
@@ -15,22 +9,26 @@ namespace SchoolGradebook.Areas.Teacher.Pages.Subjects
 {
     public class IndexModel : PageModel
     {
-        private readonly SchoolGradebook.Data.SchoolContext _context;
         public string UserId { get; set; }
-        public IList<Subject> Subjects { get; set; }
+        public Subject[] Subjects { get; set; }
+        private readonly Analytics _analytics;
+        public int[] StudentsCount { get; set; }
 
-        public IndexModel(SchoolGradebook.Data.SchoolContext context, IHttpContextAccessor httpContextAccessor)
+        public IndexModel(IHttpContextAccessor httpContextAccessor, Analytics analytics)
         {
-            _context = context;
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            UserId = UserId == null ? "" : UserId;
+            UserId ??= "";
+            _analytics = analytics;
         }
 
         public async Task OnGetAsync()
         {
-            Subjects = await _context.Subjects
-                .Where(g => g.Teacher.UserAuthId == UserId)
-            .ToListAsync();
+            Subjects = await _analytics.getAllSubjectsByTeacherUserAuthAsync(UserId);
+            StudentsCount = new int[Subjects.Length];
+            for (int i = 0; i < Subjects.Length; i++)
+            {
+                StudentsCount[i] = await _analytics.getStudentsCountInSubjectAsync(Subjects[i].Id);
+            }
         }
     }
 }

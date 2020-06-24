@@ -31,6 +31,15 @@ namespace SchoolGradebook.Services
             return output;
         }
         //Teacher
+        public async Task<Subject[]> getAllSubjectsByTeacherUserAuthAsync(string userId)
+        {
+            Subject[] subjects = await Context.Subjects
+                .Where(s => s.Teacher.UserAuthId == userId)
+                .OrderBy(s => s.Name)
+                .AsNoTracking()
+                .ToArrayAsync();
+            return subjects;
+        }
         public async Task<Subject> getSubjectAsync(int subjectId)
         {
             //Accessing Subjects via Enrollments table => Subject
@@ -131,7 +140,7 @@ namespace SchoolGradebook.Services
             //Averaging subject averages (totalASumOfAverages / subjects count)
             return Math.Round(totalASumOfAverages / countOfSubjectsWithGrades, decimalPlaces);
         }
-        public async Task<Subject[]> getAllSubjectsAsync(string userId)
+        public async Task<Subject[]> getAllSubjectsByStudentUserAuthAsync(string userId)
         {
             //Accessing Subjects via Enrollments table => Subject
             var enrollments = await Context.Enrollments

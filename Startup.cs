@@ -45,6 +45,9 @@ namespace SchoolGradebook
                 options.Conventions.AuthorizeFolder("/Teachers");
                 options.Conventions.AuthorizeFolder("/Subjects");
                 options.Conventions.AuthorizeFolder("/HumanCodes");
+                options.Conventions.AuthorizeAreaFolder("Teacher", "/");
+                options.Conventions.AuthorizeAreaFolder("Admin", "/");
+                options.Conventions.AuthorizeAreaFolder("Student", "/");
             });
             services.AddDbContext<SchoolContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("SchoolContext")));

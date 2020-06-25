@@ -1,0 +1,42 @@
+﻿@page
+@model SchoolGradebook.Areas.Admin.Pages.Subjects.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="d-flex flex-row h-100 mt-5">
+    <div class="d-flex flex-column w-100">
+        <h1>@Model.Subject.Name</h1>
+        <p>@Model.Subject.Teacher.getFullName()</p>
+        <a asp-area="Admin" asp-page="" asp-route-SubjectId="@Model.Subject.Id">Přidat studenty</a>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Jméno
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Students.Length; i++)
+                {
+
+                    <tr>
+                        <td>
+                            <a asp-area="Admin" asp-page="/Students/Details" asp-route-id="@Model.Students[i].Id">@Model.Students[i].getFullName()</a>
+                        </td>
+                        <td>
+                            <a asp-area="Admin" asp-page="" asp-route-SubjectId="@Model.Subject.Id" asp-route-StudentId="@Model.Students[i].Id">Odebrat</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div>
+    <a asp-area="Admin" asp-page="./Index">Všechny předměty</a>
+</div>

@@ -32,6 +32,10 @@ namespace SchoolGradebook.Pages
             {
                 return LocalRedirect("~/Student/Index");
             }
+            else if (User.IsInRole("admin"))
+            {
+                return LocalRedirect("~/Admin/Index");
+            }
             else
             {
                 return Page();

@@ -30,6 +30,14 @@ namespace SchoolGradebook.Services
             output = output == Double.NaN ? 0 : output;
             return output;
         }
+        public async Task<Subject[]> GetAllSubjects()
+        {
+            return await Context.Subjects
+                .Include(s => s.Teacher)
+                .OrderBy(s => s.Name)
+                .AsNoTracking()
+                .ToArrayAsync();
+        }
         //Teacher
         public async Task<Grade[]> GetGradesByTeacherUserAuthIdAsync(string userId, int subjectId, int studentId)
         {

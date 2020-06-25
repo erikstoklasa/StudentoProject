@@ -32,7 +32,7 @@
             <p class="text-left mt-5 mb-0">Všechny známky:</p>
             <table class="table table-responsive mr-3">
                 <tbody>
-                    @foreach (Grade x in await analytics.GetGradesAsync(Model.UserId, Model.Subject.Id))
+                    @foreach (Grade x in await analytics.GetGradesByUserAuthAsync(Model.UserId, Model.Subject.Id))
                     {
                         <tr>
                             <td>

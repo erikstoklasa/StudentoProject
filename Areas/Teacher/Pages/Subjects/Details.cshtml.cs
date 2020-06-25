@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using SchoolGradebook.Models;
 using System.Security.Claims;
 using SchoolGradebook.Services;
+using System.Collections.Generic;
 
 namespace SchoolGradebook.Areas.Teacher.Pages.Subjects
 {
@@ -17,12 +18,14 @@ namespace SchoolGradebook.Areas.Teacher.Pages.Subjects
         {
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             _analytics = analytics;
+            StudentGrades = new List<Grade[]>();
         }
 
         public string UserId { get; private set; }
         public Subject Subject { get; set; }
         public Models.Student[] Students { get; set; }
         public double[] StudentAverages { get; set; }
+        public List<Grade[]> StudentGrades { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -45,6 +48,7 @@ namespace SchoolGradebook.Areas.Teacher.Pages.Subjects
             for (int i = 0; i < Students.Length; i++)
             {
                 StudentAverages[i] = await _analytics.GetSubjectAverageForStudentByStudentIdAsync(Students[i].Id, (int)id);
+                StudentGrades.Add(await _analytics.GetGradesByTeacherUserAuthIdAsync(UserId, (int)id, Students[i].Id));
             }
 
             return Page();

@@ -6,7 +6,7 @@
 }
 
 <div class="d-flex flex-row h-100 mt-5">
-    <div class="d-flex flex-column w-50">
+    <div class="d-flex flex-column w-100">
         <h1>@Model.Subject.Name</h1>
         <table class="table">
             <thead>
@@ -16,6 +16,9 @@
                     </th>
                     <th>
                         Průměr
+                    </th>
+                    <th>
+                        Známky
                     </th>
                     <th></th>
                 </tr>
@@ -29,7 +32,16 @@
                             <a asp-area="Teacher" asp-page="/Students/Details" asp-route-id="@Model.Students[i].Id">@Model.Students[i].getFullName()</a>
                         </td>
                         <td>
-                            @Model.StudentAverages[i]
+                            @($"{Model.StudentAverages[i]:f2}")
+                        </td>
+                        <td>
+                            @for (int y = 0; y < Model.StudentGrades[i].Length; y++)
+                            {
+                                @Model.StudentGrades[i][y].Value
+                                if(y != Model.StudentGrades[i].Length - 1) {
+                                    @(",")
+                                }
+                            }
                         </td>
                         <td>
                             <a asp-area="Teacher" asp-page="/Grades/Create" asp-route-SubjectId="@Model.Subject.Id" asp-route-StudentId="@Model.Students[i].Id">Přidat známku</a>

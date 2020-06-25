@@ -31,6 +31,16 @@ namespace SchoolGradebook.Services
             return output;
         }
         //Teacher
+        public async Task<Grade[]> GetGradesByTeacherUserAuthIdAsync(string userId, int subjectId, int studentId)
+        {
+            Grade[] grades = await Context.Grades
+                .Where(s => s.Subject.Teacher.UserAuthId == userId && s.StudentId == studentId && s.SubjectId == subjectId)
+                .OrderByDescending(s => s.Added)
+                .AsNoTracking()
+                .ToArrayAsync();
+
+            return grades;
+        }
         public async Task<Subject[]> GetAllSubjectsByTeacherUserAuthAsync(string userId)
         {
             Subject[] subjects = await Context.Subjects
@@ -229,7 +239,7 @@ namespace SchoolGradebook.Services
 
             return grade;
         }
-        public async Task<Grade[]> GetGradesAsync(string userId, int subjectId)
+        public async Task<Grade[]> GetGradesByUserAuthAsync(string userId, int subjectId)
         {
             Grade[] grades = await Context.Grades
                 .Where(s => s.Student.UserAuthId == userId)

@@ -31,7 +31,7 @@ namespace SchoolGradebook.Areas.Admin.Pages.Subjects
                 return NotFound();
             }
 
-            Subject = await _analytics.((int)id);
+            Subject = await _analytics.GetSubjectAsync((int)id);
 
             if (Subject == null)
             {

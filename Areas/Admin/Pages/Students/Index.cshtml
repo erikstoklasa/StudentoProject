@@ -8,6 +8,7 @@
 }
 
 <h1>Studenti</h1>
+<p><a asp-area="Admin" asp-page="./Create">Přidat studenta</a></p>
 <table class="table">
     <thead>
         <tr>
@@ -58,7 +59,8 @@
                        asp-route-targetId="@item.Id"
                        asp-route-codeType="@CodeType.Student">Vygenerovat nový kód</a> |
                     <a asp-page="./Edit" asp-route-id="@item.Id">Upravit</a> |
-                    <a asp-page="./Details" asp-route-id="@item.Id">Detaily</a>
+                    <a asp-page="./Details" asp-route-id="@item.Id">Detaily</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.Id">Odstranit</a>
                 </td>
             </tr>
         }

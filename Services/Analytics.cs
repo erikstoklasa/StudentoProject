@@ -34,9 +34,32 @@ namespace SchoolGradebook.Services
         {
             return await Context.Subjects
                 .Include(s => s.Teacher)
+                .Include(s => s.Enrollments)
                 .OrderBy(s => s.Name)
                 .AsNoTracking()
                 .ToArrayAsync();
+        }
+        public async Task<Student> GetStudentByIdAsync(int studentId)
+        {
+            Student student = await Context.Students
+                .FindAsync(studentId);
+            return student;
+        }
+        public async Task<Subject[]> GetAllSubjectsByStudentIdAsync(int studentId)
+        {
+            //Accessing Subjects via Enrollments table => Subject
+            var enrollments = await Context.Enrollments
+                .Include(s => s.Subject)
+                .Where(s => s.Student.Id == studentId)
+                .OrderBy(s => s.Subject.Name)
+                .AsNoTracking()
+                .ToArrayAsync();
+            Subject[] output = new Subject[enrollments.Length];
+            for (int i = 0; i < enrollments.Length; i++)
+            {
+                output[i] = enrollments[i].Subject;
+            }
+            return output;
         }
         //Teacher
         public async Task<Grade[]> GetGradesByTeacherUserAuthIdAsync(string userId, int subjectId, int studentId)
@@ -64,6 +87,7 @@ namespace SchoolGradebook.Services
             Subject subject = await Context.Subjects
                 .Where(s => s.Id == subjectId)
                 .Include(s => s.Teacher)
+                .Include(s => s.Enrollments)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
             return subject;

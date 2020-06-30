@@ -76,7 +76,7 @@
         </div>
     </div>
     <p class="text-left">Všechny předměty:</p>
-    <div class="d-flex flex-row flex-wrap">
+    <div class="subject-container">
         @{
             Subject[] subjects = await analytics.GetAllSubjectsByStudentUserAuthAsync(UserId);
         }

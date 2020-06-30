@@ -7,6 +7,16 @@ a.navbar-brand {
     word-break: break-all;
 }
 
+.subject-container {
+    justify-content: space-evenly;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+    .subject-container .card {
+        flex-grow: 0.3;
+    }
 /* Provide sufficient contrast against white background */
 a {
     color: #0366d6;
@@ -20,6 +30,7 @@ a {
 .table td, .table th {
     border-top: none;
     text-align: left;
+    padding: 0.45rem;
 }
 
 .table thead th {

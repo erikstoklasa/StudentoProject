@@ -1,0 +1,25 @@
+﻿@page
+@model SchoolGradebook.Areas.Admin.Pages.Import.IndexModel
+@{
+}
+@if ((string) ViewData["status"] == "OK")
+{
+    <p class="alert alert-success">Uspěšně přidáno</p>
+}
+else if(ViewData["status"] != null)
+{
+    <p class="alert alert-danger">Vyskytla se chyba</p>
+}
+
+<form enctype="multipart/form-data" method="post">
+    <dl>
+        <dt>
+            <label asp-for="FileUpload">Soubor se záznamy o studentech</label>
+        </dt>
+        <dd>
+            <input asp-for="FileUpload" type="file" accept=".csv,.tsv">
+            <span asp-validation-for="FileUpload"></span>
+        </dd>
+    </dl>
+    <input asp-page-handler="Upload" class="btn btn-primary" type="submit" value="Nahrát" />
+</form>

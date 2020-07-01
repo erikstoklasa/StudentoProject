@@ -27,6 +27,11 @@ Takhle zatím vypadá naše aplikace ->
 
 :red_circle: Více typů rolí (ředitel, zástupce)
 
+## Docs
 
-## Credits / Děkujeme: 
-- [Microsoft Documentation](https://github.com/aspnet/AspNetCore.Docs/tree/master/aspnetcore/data/ef-rp/intro/samples)
+Human activation codes
+- codes are 6 character string
+- codes can include all letters of alphabet except: o, i, l, (total 26)
+- codes can include also numbers 1 through 9 (9)
+
+total characters 35⁶ = 1 800 mil. combinations 

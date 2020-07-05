@@ -5,9 +5,7 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
-
-<h4>Subject</h4>
+<h1>Upravit předmět</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -15,24 +13,24 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Subject.Id" />
             <div class="form-group">
-                <label asp-for="Subject.TeacherId" class="control-label"></label>
-                <select asp-for="Subject.TeacherId" class="form-control" asp-items="ViewBag.TeacherId"></select>
+                <label asp-for="Subject.TeacherId" class="control-label">Vyučující</label>
+                <select asp-for="Subject.TeacherId" class="form-control" asp-items="Model.TeacherSelectList"></select>
                 <span asp-validation-for="Subject.TeacherId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Subject.Name" class="control-label"></label>
+                <label asp-for="Subject.Name" class="control-label">Název</label>
                 <input asp-for="Subject.Name" class="form-control" />
                 <span asp-validation-for="Subject.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Upravit" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-page="./Index">Back to List</a>
+    <a asp-page="./Index">Zpět</a>
 </div>
 
 @section Scripts {

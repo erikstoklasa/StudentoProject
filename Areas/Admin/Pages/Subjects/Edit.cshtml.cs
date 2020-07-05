@@ -8,16 +8,20 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SchoolGradebook.Data;
 using SchoolGradebook.Models;
+using SchoolGradebook.Services;
 
 namespace SchoolGradebook.Areas.Admin.Pages.Subjects
 {
     public class EditModel : PageModel
     {
         private readonly SchoolGradebook.Data.SchoolContext _context;
-
-        public EditModel(SchoolGradebook.Data.SchoolContext context)
+        public List<SelectListItem> TeacherSelectList { get; set; }
+        private readonly Analytics _analytics;
+        public EditModel(SchoolGradebook.Data.SchoolContext context, Analytics analytics)
         {
             _context = context;
+            _analytics = analytics;
+            TeacherSelectList = new List<SelectListItem>();
         }
 
         [BindProperty]
@@ -29,15 +33,28 @@ namespace SchoolGradebook.Areas.Admin.Pages.Subjects
             {
                 return NotFound();
             }
-
+            
             Subject = await _context.Subjects
                 .Include(s => s.Teacher).FirstOrDefaultAsync(m => m.Id == id);
+
+            foreach (Models.Teacher t in await _analytics.GetAllTeachersAsync())
+            {
+                if(Subject.TeacherId == t.Id)
+                {
+                    TeacherSelectList.Add(new SelectListItem() { Text = t.getFullName(), Value = t.Id.ToString(), Selected = true });
+                } else
+                {
+                    TeacherSelectList.Add(new SelectListItem() { Text = t.getFullName(), Value = t.Id.ToString() });
+                }
+                
+            }
 
             if (Subject == null)
             {
                 return NotFound();
             }
-           ViewData["TeacherId"] = new SelectList(_context.Teachers, "Id", "Id");
+
+            ViewData["TeacherId"] = new SelectList(_context.Teachers, "Id", "Id");
             return Page();
         }
 

@@ -163,13 +163,6 @@ namespace SchoolGradebook.Services
             }
             return Math.Round(sum / count, 2);
         }
-        public async Task<SubjectMaterial[]> GetAllSubjectMaterialsAsync(int subjectId)
-        {
-            return await Context.SubjectMaterials
-                .Where(m => m.SubjectId == subjectId)
-                .AsNoTracking()
-                .ToArrayAsync();
-        }
         //Student
         public async Task<double> GetTotalAverageAsync(
             string userId,

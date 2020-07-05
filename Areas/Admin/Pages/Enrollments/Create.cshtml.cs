@@ -33,7 +33,7 @@ namespace SchoolGradebook.Areas.Admin.Pages.Enrollments
         public async Task<IActionResult> OnGet()
         {
             Students = new List<Models.Student>{ await _analytics.GetStudentByIdAsync(StudentId) };
-            Subjects = (await _analytics.GetAllSubjects()).ToList();
+            Subjects = (await _analytics.GetAllSubjectsAsync()).ToList();
             StudentSubjects = (await _analytics.GetAllSubjectsByStudentIdAsync(StudentId)).ToList();
 
             StudentsSelectList.Add(new SelectListItem(Students[0].getFullName(), Students[0].Id.ToString()));

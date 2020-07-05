@@ -23,7 +23,7 @@ namespace SchoolGradebook.Areas.Admin.Pages.Subjects
 
         public async Task OnGetAsync()
         {
-            Subjects = await _analytics.GetAllSubjects();
+            Subjects = await _analytics.GetAllSubjectsAsync();
             StudentsCount = new int[Subjects.Length];
             for (int i = 0; i < Subjects.Length; i++)
             {

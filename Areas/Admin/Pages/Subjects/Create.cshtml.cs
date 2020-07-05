@@ -7,21 +7,30 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SchoolGradebook.Data;
 using SchoolGradebook.Models;
+using SchoolGradebook.Services;
 
 namespace SchoolGradebook.Areas.Admin.Pages.Subjects
 {
     public class CreateModel : PageModel
     {
         private readonly SchoolGradebook.Data.SchoolContext _context;
+        public List<SelectListItem> TeacherSelectList { get; set; }
+        private readonly Analytics _analytics;
 
-        public CreateModel(SchoolGradebook.Data.SchoolContext context)
+        public CreateModel(SchoolGradebook.Data.SchoolContext context, Analytics analytics)
         {
             _context = context;
+            TeacherSelectList = new List<SelectListItem>();
+            _analytics = analytics;
         }
 
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGet()
         {
-            ViewData["TeacherId"] = new SelectList(_context.Teachers, "Id", "LastName");
+            foreach (Models.Teacher t in await _analytics.GetAllTeachersAsync())
+            {
+                TeacherSelectList.Add(new SelectListItem() { Text = t.getFullName(), Value = t.Id.ToString() });
+            }
+            //ViewData["TeacherId"] = new SelectList(_context.Teachers, "Id", "LastName");
             return Page();
         }
 

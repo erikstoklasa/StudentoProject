@@ -1,6 +1,7 @@
 ﻿@page
 @model SchoolGradebook.Areas.Admin.Pages.Import.IndexModel
 @{
+    ViewData["Title"] = "Import";
 }
 @if ((string) ViewData["status"] == "OK")
 {
@@ -10,7 +11,7 @@ else if(ViewData["status"] != null)
 {
     <p class="alert alert-danger">Vyskytla se chyba</p>
 }
-
+<p>Import studentů bude zpracován Studentem, až bude import dokončený, budeme Vás informovat emailem.</p>
 <form enctype="multipart/form-data" method="post">
     <dl>
         <dt>

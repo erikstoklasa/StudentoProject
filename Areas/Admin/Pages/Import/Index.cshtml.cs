@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,9 +7,12 @@ using Azure;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Configuration;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 
 namespace SchoolGradebook.Areas.Admin.Pages.Import
 {
@@ -49,8 +52,11 @@ namespace SchoolGradebook.Areas.Admin.Pages.Import
                     ViewData["status"] = "OK";
                 }
             }
-            // Process uploaded files
-            // Don't rely on or trust the FileName property without validation.
+            await SendEmail(
+                "me@erikstoklasa.cz",
+                "Importování začalo",
+                "<h1>Status importování studentů</h1><p>Přijali jsme Vaše záznamy o studentech, jakmile budou naimportovány, tak Vás informujeme emailem. Může to trvat několik hodin.</p>");
+
             return Page();
         }
         public async Task<Response<BlobContentInfo>> UploadToAzureBlobStorage(string filePath)
@@ -61,6 +67,21 @@ namespace SchoolGradebook.Areas.Admin.Pages.Import
             BlobClient blobClient = containerClient.GetBlobClient($"{Guid.NewGuid()}.csv");
             using FileStream uploadFileStream = System.IO.File.OpenRead(filePath);
             return await blobClient.UploadAsync(uploadFileStream, true);
+        }
+        public async Task<SendGrid.Response> SendEmail(string emailTo, string subject, string content)
+        {
+            string apiKey = _configuration.GetConnectionString("SEND_GRID_KEY");
+            SendGridClient client = new SendGridClient(apiKey);
+            var msg = new SendGridMessage
+            {
+                From = new EmailAddress("mailer@studento.cz", "Studento import"),
+                Subject = subject
+            };
+            msg.AddContent(MimeType.Html, content);
+            msg.AddTo(emailTo, "Admin");
+            //SendGridMessage msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlMessage);
+            SendGrid.Response r = await client.SendEmailAsync(msg);
+            return r;
         }
     }
 }

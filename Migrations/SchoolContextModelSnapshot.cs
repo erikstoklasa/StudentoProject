@@ -15,7 +15,7 @@ namespace SchoolGradebook.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.0")
+                .HasAnnotation("ProductVersion", "3.1.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -52,6 +52,7 @@ namespace SchoolGradebook.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("StudentId")
@@ -155,6 +156,32 @@ namespace SchoolGradebook.Migrations
                     b.ToTable("Subjects");
                 });
 
+            modelBuilder.Entity("SchoolGradebook.Models.SubjectMaterial", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Added")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FileExt")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SubjectId");
+
+                    b.ToTable("SubjectMaterials");
+                });
+
             modelBuilder.Entity("SchoolGradebook.Models.Teacher", b =>
                 {
                     b.Property<int>("Id")
@@ -232,6 +259,15 @@ namespace SchoolGradebook.Migrations
                     b.HasOne("SchoolGradebook.Models.Teacher", "Teacher")
                         .WithMany("Subjects")
                         .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SchoolGradebook.Models.SubjectMaterial", b =>
+                {
+                    b.HasOne("SchoolGradebook.Models.Subject", "Subject")
+                        .WithMany()
+                        .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

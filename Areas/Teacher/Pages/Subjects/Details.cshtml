@@ -38,7 +38,8 @@
                             @for (int y = 0; y < Model.StudentGrades[i].Length; y++)
                             {
                                 @Model.StudentGrades[i][y].Value
-                                if(y != Model.StudentGrades[i].Length - 1) {
+                                if (y != Model.StudentGrades[i].Length - 1)
+                                {
                                     @(",")
                                 }
                             }
@@ -50,6 +51,21 @@
                 }
             </tbody>
         </table>
+        <!--Place for files-->
+        <a class="btn btn-primary" asp-area="Teacher" asp-page="Materials/Create">Přidat studijní materiál</a>
+        <div class="d-flex flex-row flex-wrap">
+            @foreach (SchoolGradebook.Models.SubjectMaterial subjectMaterial in Model.SubjectMaterials)
+            {
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">@subjectMaterial.Name</h5>
+                        <h6 class="card-subtitle mb-3 text-muted">@subjectMaterial.Added</h6>
+                        <a class="card-link" asp-area="Teacher" asp-page="Materials/Details" asp-route-id="@subjectMaterial.Id">Stáhnout</a>
+                        <a class="card-link" asp-area="Teacher" asp-page="Materials/Delete" asp-route-id="@subjectMaterial.Id">Odstranit</a>
+                    </div>
+                </div>
+            }
+        </div>
     </div>
 </div>
 

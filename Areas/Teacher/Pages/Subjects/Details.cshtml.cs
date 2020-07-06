@@ -7,6 +7,7 @@ using SchoolGradebook.Models;
 using System.Security.Claims;
 using SchoolGradebook.Services;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SchoolGradebook.Areas.Teacher.Pages.Subjects
 {
@@ -19,6 +20,7 @@ namespace SchoolGradebook.Areas.Teacher.Pages.Subjects
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             _analytics = analytics;
             StudentGrades = new List<Grade[]>();
+            SubjectMaterials = new List<SubjectMaterial>();
         }
 
         public string UserId { get; private set; }
@@ -26,9 +28,11 @@ namespace SchoolGradebook.Areas.Teacher.Pages.Subjects
         public Models.Student[] Students { get; set; }
         public double[] StudentAverages { get; set; }
         public List<Grade[]> StudentGrades { get; set; }
+        public List<SubjectMaterial> SubjectMaterials { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
+            SubjectMaterials = (await _analytics.GetAllSubjectMaterialsAsync((int)id)).ToList();
             if (id == null)
             {
                 return NotFound();

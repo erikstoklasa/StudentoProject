@@ -20,6 +20,7 @@ namespace SchoolGradebook.Data
         public DbSet<Grade> Grades { get; set; }
         public DbSet<Enrollment> Enrollments { get; set; }
         public DbSet<HumanActivationCode> HumanActivationCodes { get; set; }
+        public DbSet<SubjectMaterial> SubjectMaterials { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -29,6 +30,7 @@ namespace SchoolGradebook.Data
             modelBuilder.Entity<Enrollment>().ToTable("Enrollments");
             modelBuilder.Entity<Grade>().ToTable("Grades");
             modelBuilder.Entity<HumanActivationCode>().ToTable("HumanActivationCodes");
+            modelBuilder.Entity<SubjectMaterial>().ToTable("SubjectMaterials");
         }
     }
 }

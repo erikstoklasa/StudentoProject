@@ -167,6 +167,7 @@ namespace SchoolGradebook.Services
         {
             return await Context.SubjectMaterials
                 .Where(m => m.SubjectId == subjectId)
+                .OrderBy(m => m.Added)
                 .AsNoTracking()
                 .ToArrayAsync();
         }

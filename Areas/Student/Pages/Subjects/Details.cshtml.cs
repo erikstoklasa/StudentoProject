@@ -17,6 +17,7 @@ namespace SchoolGradebook.Areas.Student.Pages.Subjects
     {
         private readonly SchoolGradebook.Data.SchoolContext _context;
         private readonly Analytics _analytics;
+        public SubjectMaterial[] SubjectMaterials { get; set; }
 
         public DetailsModel(SchoolGradebook.Data.SchoolContext context, IHttpContextAccessor httpContextAccessor, Analytics analytics)
         {
@@ -37,6 +38,7 @@ namespace SchoolGradebook.Areas.Student.Pages.Subjects
 
             Subject = await _context.Subjects
                 .Include(s => s.Teacher).FirstOrDefaultAsync(m => m.Id == id);
+            SubjectMaterials = await _analytics.GetAllSubjectMaterialsAsync((int)id);
 
             double currentAvg = await _analytics.GetSubjectAverageForStudentAsync(UserId, Subject.Id);
             double comparisonAvg = await _analytics.GetSubjectAverageForStudentAsync(UserId, Subject.Id, 365, 30);

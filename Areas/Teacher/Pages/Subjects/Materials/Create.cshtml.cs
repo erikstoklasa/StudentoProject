@@ -9,7 +9,9 @@ using Microsoft.Extensions.Configuration;
 using MimeTypes;
 using SchoolGradebook.Data;
 using SchoolGradebook.Models;
+using SchoolGradebook.Services;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -19,16 +21,32 @@ namespace SchoolGradebook.Areas.Teacher.Pages.Subjects.Materials
     {
         private readonly SchoolContext _context;
         private readonly IConfiguration _configuration;
+        private readonly Analytics _analytics;
+        public List<SelectListItem> SubjectSelectList { get; set; }
 
-        public CreateModel(SchoolContext context, IConfiguration configuration)
+        public CreateModel(SchoolContext context, IConfiguration configuration, Analytics analytics)
         {
             _context = context;
             _configuration = configuration;
+            SubjectSelectList = new List<SelectListItem>();
+            _analytics = analytics;
         }
 
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGetAsync(int? subjectId)
         {
-            ViewData["SubjectId"] = new SelectList(_context.Subjects, "Id", "Id");
+            if (subjectId == null)
+            {
+                return NotFound();
+            }
+
+            Subject s = await _analytics.GetSubjectAsync((int)subjectId);
+            
+            if (s == null)
+            {
+                return NotFound();
+            }
+
+            SubjectSelectList.Add(new SelectListItem(s.Name, s.Id.ToString()));
             return Page();
         }
         public IFormFile FileUpload { get; set; }

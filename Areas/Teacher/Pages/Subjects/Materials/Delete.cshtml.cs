@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using SchoolGradebook.Data;
 using SchoolGradebook.Models;
+using SchoolGradebook.Services;
 
 namespace SchoolGradebook.Areas.Teacher.Pages.Subjects.Materials
 {
     public class DeleteModel : PageModel
     {
         private readonly SchoolGradebook.Data.SchoolContext _context;
+        private readonly Analytics _analytics;
 
-        public DeleteModel(SchoolGradebook.Data.SchoolContext context)
+        public DeleteModel(SchoolGradebook.Data.SchoolContext context, Analytics analytics)
         {
             _context = context;
+            _analytics = analytics;
         }
 
         [BindProperty]
@@ -29,8 +32,7 @@ namespace SchoolGradebook.Areas.Teacher.Pages.Subjects.Materials
                 return NotFound();
             }
 
-            SubjectMaterial = await _context.SubjectMaterials
-                .Include(s => s.Subject).FirstOrDefaultAsync(m => m.Id == id);
+            SubjectMaterial = await _analytics.GetSubjectMaterialAsync((Guid)id);
 
             if (SubjectMaterial == null)
             {

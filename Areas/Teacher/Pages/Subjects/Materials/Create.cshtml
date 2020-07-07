@@ -5,38 +5,36 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
-
-<h4>SubjectMaterial</h4>
+<h1>Přidat studijní materiál</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="SubjectMaterial.SubjectId" class="control-label"></label>
-                <select asp-for="SubjectMaterial.SubjectId" class="form-control" asp-items="ViewBag.SubjectId"></select>
+                <label asp-for="SubjectMaterial.SubjectId" class="control-label">Předmět</label>
+                <select asp-for="SubjectMaterial.SubjectId" class="form-control" asp-items="Model.SubjectSelectList"></select>
             </div>
             <div class="form-group">
-                <label asp-for="SubjectMaterial.Name" class="control-label"></label>
+                <label asp-for="SubjectMaterial.Name" class="control-label">Název metriálu</label>
                 <input asp-for="SubjectMaterial.Name" class="form-control" />
                 <span asp-validation-for="SubjectMaterial.Name" class="text-danger"></span>
             </div>
             <div>
-                <label asp-for="FileUpload">Soubor se záznamy o studentech</label>
+                <label asp-for="FileUpload">Zde vložte soubor</label>
             </div>
             <div>
                 <input asp-for="FileUpload" type="file">
                 <span asp-validation-for="FileUpload"></span>
             </div>
-            <div class="form-group">
-                <input asp-page-handler="Upload" type="submit" value="Create" class="btn btn-primary" />
+            <div class="form-group mt-4">
+                <input asp-page-handler="Upload" type="submit" value="Přidat materiál" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-page="Index">Back to List</a>
+    <a asp-area="Teacher" asp-page="/Subjects/Details" asp-route-id="@Model.SubjectSelectList[0].Value">Zpět</a>
 </div>
 

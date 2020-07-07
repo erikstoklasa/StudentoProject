@@ -171,6 +171,14 @@ namespace SchoolGradebook.Services
                 .AsNoTracking()
                 .ToArrayAsync();
         }
+        public async Task<SubjectMaterial> GetSubjectMaterialAsync(Guid subjectMaterialId)
+        {
+            return await Context.SubjectMaterials
+                .Where(m => m.Id == subjectMaterialId)
+                .Include(m => m.Subject)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+        }
         //Student
         public async Task<double> GetTotalAverageAsync(
             string userId,

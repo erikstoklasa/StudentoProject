@@ -1,31 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using SchoolGradebook.Data;
 using SchoolGradebook.Models;
 using SchoolGradebook.Services;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace SchoolGradebook.Areas.Student.Pages.Subjects
 {
     public class IndexModel : PageModel
     {
-        private readonly SchoolGradebook.Data.SchoolContext _context;
         public string UserId { get; set; }
-        private bool isTeacher = false;
-        private Analytics analytics;
+        private readonly Analytics analytics;
 
-        public IndexModel(SchoolGradebook.Data.SchoolContext context, IHttpContextAccessor httpContextAccessor, Analytics _analytics)
+        public IndexModel(IHttpContextAccessor httpContextAccessor, Analytics _analytics)
         {
-            _context = context;
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            UserId = UserId == null ? "" : UserId;
-            isTeacher = httpContextAccessor.HttpContext.User.IsInRole("teacher");
+            UserId ??= "";
             analytics = _analytics;
         }
 

@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[AspNetUsers] (
+CREATE TABLE [dbo].[AspNetUsers] (
     [Id]                   NVARCHAR (450)     NOT NULL,
     [UserName]             NVARCHAR (256)     NULL,
     [NormalizedUserName]   NVARCHAR (256)     NULL,
@@ -27,7 +27,7 @@ GO
 CREATE UNIQUE NONCLUSTERED INDEX [UserNameIndex]
     ON [dbo].[AspNetUsers]([NormalizedUserName] ASC) WHERE ([NormalizedUserName] IS NOT NULL);
 
-﻿CREATE TABLE [dbo].[AspNetRoles] (
+CREATE TABLE [dbo].[AspNetRoles] (
     [Id]               NVARCHAR (450) NOT NULL,
     [Name]             NVARCHAR (256) NULL,
     [NormalizedName]   NVARCHAR (256) NULL,
@@ -40,7 +40,7 @@ GO
 CREATE UNIQUE NONCLUSTERED INDEX [RoleNameIndex]
     ON [dbo].[AspNetRoles]([NormalizedName] ASC) WHERE ([NormalizedName] IS NOT NULL);
 
-﻿CREATE TABLE [dbo].[AspNetUserRoles] (
+CREATE TABLE [dbo].[AspNetUserRoles] (
     [UserId] NVARCHAR (450) NOT NULL,
     [RoleId] NVARCHAR (450) NOT NULL,
     CONSTRAINT [PK_AspNetUserRoles] PRIMARY KEY CLUSTERED ([UserId] ASC, [RoleId] ASC),
@@ -53,7 +53,7 @@ GO
 CREATE NONCLUSTERED INDEX [IX_AspNetUserRoles_RoleId]
     ON [dbo].[AspNetUserRoles]([RoleId] ASC);
 
-﻿CREATE TABLE [dbo].[AspNetRoleClaims] (
+CREATE TABLE [dbo].[AspNetRoleClaims] (
     [Id]         INT            IDENTITY (1, 1) NOT NULL,
     [RoleId]     NVARCHAR (450) NOT NULL,
     [ClaimType]  NVARCHAR (MAX) NULL,
@@ -67,7 +67,7 @@ GO
 CREATE NONCLUSTERED INDEX [IX_AspNetRoleClaims_RoleId]
     ON [dbo].[AspNetRoleClaims]([RoleId] ASC);
 
-﻿CREATE TABLE [dbo].[AspNetUserClaims] (
+CREATE TABLE [dbo].[AspNetUserClaims] (
     [Id]         INT            IDENTITY (1, 1) NOT NULL,
     [UserId]     NVARCHAR (450) NOT NULL,
     [ClaimType]  NVARCHAR (MAX) NULL,
@@ -81,7 +81,7 @@ GO
 CREATE NONCLUSTERED INDEX [IX_AspNetUserClaims_UserId]
     ON [dbo].[AspNetUserClaims]([UserId] ASC);
 
-﻿CREATE TABLE [dbo].[AspNetUserTokens] (
+CREATE TABLE [dbo].[AspNetUserTokens] (
     [UserId]        NVARCHAR (450) NOT NULL,
     [LoginProvider] NVARCHAR (128) NOT NULL,
     [Name]          NVARCHAR (128) NOT NULL,
@@ -90,7 +90,7 @@ CREATE NONCLUSTERED INDEX [IX_AspNetUserClaims_UserId]
     CONSTRAINT [FK_AspNetUserTokens_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [dbo].[AspNetUsers] ([Id]) ON DELETE CASCADE
 );
 
-﻿CREATE TABLE [dbo].[AspNetUserLogins] (
+CREATE TABLE [dbo].[AspNetUserLogins] (
     [LoginProvider]       NVARCHAR (128) NOT NULL,
     [ProviderKey]         NVARCHAR (128) NOT NULL,
     [ProviderDisplayName] NVARCHAR (MAX) NULL,

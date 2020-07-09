@@ -32,16 +32,22 @@
                         @if (User.IsInRole("student"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-page="/Students/Index">Studenti</a>
+                                <a class="nav-link text-light" asp-page="/Student/Grades/Index">Známky</a>
                             </li>
                         }
                         @if (User.IsInRole("admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-page="/Teachers/Index">Učitelé</a>
+                                <a class="nav-link text-light" asp-page="/Admin/Teachers/Index">Učitelé</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-page="/HumanCodes/Index">Aktivační kódy</a>
+                                <a class="nav-link text-light" asp-page="/Admin/Students/Index">Studenti</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-page="/Admin/Subjects/Index">Předměty</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-page="/HumanCodes/Index">Aktivační kódy</a>
                             </li>
                         }
                     </ul>
@@ -55,9 +61,11 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container d-flex flex-column">
-            <span>Studento &copy; 2020</span>
+    <footer class="border-top footer text-muted d-flex flex-column">
+        <div class="container">
+            <div>Studento &copy; 2020</div>
+        </div>
+        <div class="container">
             <a class="text-dark" asp-page="/Privacy">Ochrana osobních údajů</a>
         </div>
     </footer>

@@ -1,17 +1,21 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using SchoolGradebook.Models;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using SchoolGradebook.Models;
+using SchoolGradebook.Data;
 
-namespace SchoolGradebook.Pages.Teacher.Students
+namespace SchoolGradebook.Pages.Admin.Students
 {
     public class EditModel : PageModel
     {
-        private readonly Data.SchoolContext _context;
+        private readonly SchoolGradebook.Data.SchoolContext _context;
 
-        public EditModel(Data.SchoolContext context)
+        public EditModel(SchoolGradebook.Data.SchoolContext context)
         {
             _context = context;
         }

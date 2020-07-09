@@ -15,12 +15,12 @@ namespace SchoolGradebook.Pages.HumanCodes
     public class CreateModel : PageModel
     {
         private readonly SchoolGradebook.Data.SchoolContext _context;
-        public Student Student { get; set; }
+        public Models.Student Student { get; set; }
         public Models.Teacher Teacher { get; set; }
-        HumanActivationCode code;
 
+        readonly HumanActivationCode code;
 
-        public CreateModel(SchoolGradebook.Data.SchoolContext context)
+        public CreateModel(SchoolContext context)
         {
             _context = context;
 

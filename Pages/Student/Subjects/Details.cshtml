@@ -1,0 +1,80 @@
+﻿@page
+@model SchoolGradebook.Pages.Student.Subjects.DetailsModel
+
+@using SchoolGradebook.Services;
+@using SchoolGradebook.Models;
+@inject Analytics analytics
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="d-flex flex-row h-100 mt-5">
+
+
+
+
+    @if ((await analytics.GetSubjectAverageForStudentAsync(Model.UserId, Model.Subject.Id)).CompareTo(Double.NaN) == 0)
+    {
+        <div class="d-flex flex-column w-50">
+            <h1>@Html.Raw(Model.Subject.Name)</h1>
+            <p>@Html.Raw(Model.Subject.Teacher.getFullName())</p>
+            <p class="alert alert-warning my-5">Zatím ti vyučující nepřidal žádné známky 🙁</p>
+        </div>
+
+
+    }
+    else //There are some grades to display
+    {
+        <div class="d-flex flex-column w-50">
+            <h1>@Html.Raw(Model.Subject.Name)</h1>
+            <p>@Html.Raw(Model.Subject.Teacher.getFullName())</p>
+            <p class="text-left mt-5 mb-0">Všechny známky:</p>
+            <table class="table table-responsive mr-3">
+                <tbody>
+                    @foreach (Grade x in await analytics.GetGradesByUserAuthAsync(Model.UserId, Model.Subject.Id))
+                    {
+                        <tr>
+                            <td>
+                                @Html.Raw(x.Value.ToString())
+                            </td>
+                            <td>
+                                @Html.Raw(x.Name)
+                            </td>
+                            <td>
+                                @Html.Raw(LanguageHelper.getRelativeTime(x.Added))
+                            </td>
+                            <td>
+                                <a asp-page="/Student/Grades/Details" asp-route-gradeId="@x.Id">Zobrazit známku</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="d-flex flex-column w-50">
+            <h3 class="text-left" style="font-weight: 400;">
+                Průměr: <strong>
+                    @Html.Raw((await analytics.GetSubjectAverageForStudentAsync(Model.UserId, Model.Subject.Id)).ToString("f2"))
+                </strong>
+            </h3>
+            @Html.Raw(ViewData["ComparisonString"])
+            <div class="d-flex flex-row flex-wrap">
+                @foreach (SchoolGradebook.Models.SubjectMaterial subjectMaterial in Model.SubjectMaterials)
+                {
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">@subjectMaterial.Name</h5>
+                            <h6 class="card-subtitle mb-3 text-muted">@subjectMaterial.Added.ToLocalTime().ToString("d. MMMM yyyy HH:mm")</h6>
+                            <a class="card-link" asp-page="Materials/Details" asp-route-id="@subjectMaterial.Id">Stáhnout</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+<div>
+    <a asp-page="./Index">Všechny předměty</a>
+</div>

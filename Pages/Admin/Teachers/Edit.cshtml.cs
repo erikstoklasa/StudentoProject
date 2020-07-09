@@ -1,23 +1,27 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using SchoolGradebook.Models;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using SchoolGradebook.Models;
+using SchoolGradebook.Data;
 
-namespace SchoolGradebook.Pages.Teacher.Students
+namespace SchoolGradebook.Pages.Admin.Teachers
 {
     public class EditModel : PageModel
     {
-        private readonly Data.SchoolContext _context;
+        private readonly SchoolGradebook.Data.SchoolContext _context;
 
-        public EditModel(Data.SchoolContext context)
+        public EditModel(SchoolGradebook.Data.SchoolContext context)
         {
             _context = context;
         }
 
         [BindProperty]
-        public Models.Student Student { get; set; }
+        public Models.Teacher Teacher { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -26,8 +30,9 @@ namespace SchoolGradebook.Pages.Teacher.Students
                 return NotFound();
             }
 
-            Student = await _context.Students.FirstOrDefaultAsync(m => m.Id == id);
-            if (Student == null)
+            Teacher = await _context.Teachers.FirstOrDefaultAsync(m => m.Id == id);
+
+            if (Teacher == null)
             {
                 return NotFound();
             }
@@ -38,15 +43,15 @@ namespace SchoolGradebook.Pages.Teacher.Students
         // more details see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            Models.Student s = await _context.Students.AsNoTracking().FirstOrDefaultAsync(m => m.Id == Student.Id);
-            Student.UserAuthId = s.UserAuthId;
+            Models.Teacher t = await _context.Teachers.AsNoTracking().FirstOrDefaultAsync(m => m.Id == Teacher.Id);
+            Teacher.UserAuthId = t.UserAuthId;
 
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            _context.Attach(Student).State = EntityState.Modified;
+            _context.Attach(Teacher).State = EntityState.Modified;
 
             try
             {
@@ -54,7 +59,7 @@ namespace SchoolGradebook.Pages.Teacher.Students
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!StudentExists(Student.Id))
+                if (!TeacherExists(Teacher.Id))
                 {
                     return NotFound();
                 }
@@ -67,9 +72,9 @@ namespace SchoolGradebook.Pages.Teacher.Students
             return RedirectToPage("./Index");
         }
 
-        private bool StudentExists(int id)
+        private bool TeacherExists(int id)
         {
-            return _context.Students.Any(e => e.Id == id);
+            return _context.Teachers.Any(e => e.Id == id);
         }
     }
 }

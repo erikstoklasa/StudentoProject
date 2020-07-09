@@ -8,31 +8,31 @@
 }
 
 <div>
-    <h1>@Html.Raw(Model.Grade.Name)</h1>
+    <h1>@Model.Grade.Name</h1>
     <dl class="row">
         <dt class="col-sm-2">
             Předmět
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Grade.Subject.Name)
+            @Model.Grade.Subject.Name
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Grade.Value)
+            Známka
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Grade.Value)
+            @Model.Grade.Value
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Grade.Added)
+            Přidáno
         </dt>
         <dd class="col-sm-10">
-            @Html.Raw(Model.Grade.Added.ToLocalTime())
+            @Model.Grade.Added.ToLocalTime()
         </dd>
         <dt class="col-sm-2">
             Vyučující
         </dt>
         <dd class="col-sm-10">
-            @Html.Raw(Model.Grade.Subject.Teacher.getFullName())
+            @Model.Grade.Subject.Teacher.getFullName()
         </dd>
     </dl>
 </div>

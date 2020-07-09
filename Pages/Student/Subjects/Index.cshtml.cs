@@ -11,20 +11,20 @@ namespace SchoolGradebook.Pages.Student.Subjects
     public class IndexModel : PageModel
     {
         public string UserId { get; set; }
-        private readonly Analytics analytics;
+        private readonly Analytics _analytics;
 
-        public IndexModel(IHttpContextAccessor httpContextAccessor, Analytics _analytics)
+        public IndexModel(IHttpContextAccessor httpContextAccessor, Analytics analytics)
         {
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             UserId ??= "";
-            analytics = _analytics;
+            _analytics = analytics;
         }
 
         public IList<Subject> Subjects { get;set; }
 
         public async Task OnGetAsync()
         {
-            Subjects = await analytics.GetAllSubjectsByStudentUserAuthAsync(UserId);
+            Subjects = await _analytics.GetAllSubjectsByStudentUserAuthAsync(UserId);
         }
     }
 }

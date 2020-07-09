@@ -31,11 +31,11 @@
             <tr>
                 <td>
                     <a asp-page="./Details" asp-route-id="@item.Id">
-                        @Html.DisplayFor(modelItem => item.Name)
+                        @item.Name
                     </a>
                 </td>
                 <td>
-                    @Html.Raw(item.Teacher.getFullName())
+                    @item.Teacher.getFullName()
                 </td>
                 <td>
                     @Html.Raw((await analytics.GetSubjectAverageForStudentAsync(UserId, item.Id)).CompareTo(Double.NaN) == 0 ?

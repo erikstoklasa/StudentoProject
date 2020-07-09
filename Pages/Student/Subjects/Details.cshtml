@@ -17,8 +17,8 @@
     @if ((await analytics.GetSubjectAverageForStudentAsync(Model.UserId, Model.Subject.Id)).CompareTo(Double.NaN) == 0)
     {
         <div class="d-flex flex-column w-50">
-            <h1>@Html.Raw(Model.Subject.Name)</h1>
-            <p>@Html.Raw(Model.Subject.Teacher.getFullName())</p>
+            <h1>@Model.Subject.Name</h1>
+            <p>@Model.Subject.Teacher.getFullName()</p>
             <p class="alert alert-warning my-5">Zatím ti vyučující nepřidal žádné známky 🙁</p>
         </div>
 
@@ -27,8 +27,8 @@
     else //There are some grades to display
     {
         <div class="d-flex flex-column w-50">
-            <h1>@Html.Raw(Model.Subject.Name)</h1>
-            <p>@Html.Raw(Model.Subject.Teacher.getFullName())</p>
+            <h1>@Model.Subject.Name</h1>
+            <p>@Model.Subject.Teacher.getFullName()</p>
             <p class="text-left mt-5 mb-0">Všechny známky:</p>
             <table class="table table-responsive mr-3">
                 <tbody>
@@ -36,13 +36,13 @@
                     {
                         <tr>
                             <td>
-                                @Html.Raw(x.Value.ToString())
+                                @x.Value.ToString()
                             </td>
                             <td>
-                                @Html.Raw(x.Name)
+                                @x.Name
                             </td>
                             <td>
-                                @Html.Raw(LanguageHelper.getRelativeTime(x.Added))
+                                @LanguageHelper.getRelativeTime(x.Added)
                             </td>
                             <td>
                                 <a asp-page="/Student/Grades/Details" asp-route-gradeId="@x.Id">Zobrazit známku</a>
@@ -55,7 +55,7 @@
         <div class="d-flex flex-column w-50">
             <h3 class="text-left" style="font-weight: 400;">
                 Průměr: <strong>
-                    @Html.Raw((await analytics.GetSubjectAverageForStudentAsync(Model.UserId, Model.Subject.Id)).ToString("f2"))
+                    @((await analytics.GetSubjectAverageForStudentAsync(Model.UserId, Model.Subject.Id)).ToString("f2"))
                 </strong>
             </h3>
             @Html.Raw(ViewData["ComparisonString"])

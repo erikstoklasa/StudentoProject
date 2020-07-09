@@ -20,10 +20,10 @@
                 Stav
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Teacher[0].FirstName)
+                Jméno
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Teacher[0].LastName)
+                Příjmení
             </th>
             <th></th>
         </tr>
@@ -40,20 +40,20 @@
                 <td>
                     @if (hasActivationCode)
                     {
-                        @Html.Raw(c.HumanCode);
+                        @c.HumanCode
                     }
                 </td>
                 <td>
                     @if (item.UserAuthId != null)
                     {
-                        @Html.Raw("Spárováno");
+                        @("Spárováno")
                     }
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.FirstName)
+                    @item.FirstName
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.LastName)
+                    @item.LastName
                 </td>
                 <td>
                     <a asp-page="/HumanCodes/Create"

@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using SchoolGradebook.Models;
-using SchoolGradebook.Data;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SchoolGradebook.Pages.Teacher.Grades
 {
@@ -21,14 +18,17 @@ namespace SchoolGradebook.Pages.Teacher.Grades
 
         [BindProperty]
         public Grade Grade { get; set; }
-        [BindProperty]
-        public int gradeId { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public int GradeId { get; set; }
 
         public async Task<IActionResult> OnGetAsync()
         {
             Grade = await _context.Grades
                 .Include(g => g.Student)
-                .Include(g => g.Subject).FirstOrDefaultAsync(m => m.Id == gradeId);
+                .Include(g => g.Subject.Teacher)
+                .Where(g => g.Id == GradeId)
+                .FirstOrDefaultAsync();
 
             if (Grade == null)
             {
@@ -37,10 +37,10 @@ namespace SchoolGradebook.Pages.Teacher.Grades
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(int gradeId)
+        public async Task<IActionResult> OnPostAsync()
         {
 
-            Grade = await _context.Grades.FindAsync(gradeId);
+            Grade = await _context.Grades.FindAsync(Grade.Id);
 
             if (Grade != null)
             {

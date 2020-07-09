@@ -1,6 +1,47 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
+/*Studento style adaptation*/
+.btn-primary {
+    background-color: #feb23c !important;
+    border-color: #feb23c !important;
+    color: #1a0504 !important;
+}
+
+.bg-primary {
+    background-color: #ffcb7a !important;
+}
+
+.text-dark {
+    color: #1a0504 !important;
+}
+
+h2 {
+    font-weight: 600;
+}
+.main-image{
+    height: 400px;
+}
+.landing-page{
+    max-width: 720px;
+    margin: 0 auto;
+}
+.main-logo {
+    background: #fff;
+    border-radius: 3px;
+    padding: 8px 30px;
+}
+.main-logo:hover {
+    background: #f6f6f6;
+}
+.vertical-separator {
+    margin: 0 5px;
+    width: 2px;
+    background: #1a0504;
+}
+/*p, li, oi, dt, dl {
+    font-family: 'Prata', serif;
+}*/
 a.navbar-brand {
     white-space: normal;
     text-align: center;
@@ -36,17 +77,6 @@ a {
 .table thead th {
     border-bottom: none;
 }
-
-.btn-primary {
-    color: #fff;
-    background-color: #3b86d4;
-    border-color: #3b86d4;
-}
-
-.bg-primary {
-    background-color: #3b86d4 !important;
-}
-
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
     color: #fff;
@@ -93,7 +123,7 @@ html {
 body {
     /* Margin bottom by footer height */
     margin-bottom: 60px;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Open Sans', sans-serif;
 }
 
 .footer {

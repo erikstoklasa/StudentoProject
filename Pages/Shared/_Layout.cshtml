@@ -6,13 +6,13 @@
     <title>@ViewData["Title"] - Studento</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;800&family=Prata&display=swap" rel="stylesheet">
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-primary border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand text-light" asp-area="" asp-page="/Index">Studento</a>
+                <a class="navbar-brand text-dark main-logo" asp-page="/Index">Studento</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -23,31 +23,31 @@
                         @if (User.IsInRole("teacher"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-page="/Teacher/Subjects/Index">Předměty</a>
+                                <a class="nav-link text-dark" asp-page="/Teacher/Subjects/Index">Předměty</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-page="/Teacher/Students/Index">Studenti</a>
+                                <a class="nav-link text-dark" asp-page="/Teacher/Students/Index">Studenti</a>
                             </li>
                         }
                         @if (User.IsInRole("student"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-page="/Student/Grades/Index">Známky</a>
+                                <a class="nav-link text-dark" asp-page="/Student/Grades/Index">Známky</a>
                             </li>
                         }
                         @if (User.IsInRole("admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-page="/Admin/Teachers/Index">Učitelé</a>
+                                <a class="nav-link text-dark" asp-page="/Admin/Teachers/Index">Učitelé</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-page="/Admin/Students/Index">Studenti</a>
+                                <a class="nav-link text-dark" asp-page="/Admin/Students/Index">Studenti</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-page="/Admin/Subjects/Index">Předměty</a>
+                                <a class="nav-link text-dark" asp-page="/Admin/Subjects/Index">Předměty</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-page="/HumanCodes/Index">Aktivační kódy</a>
+                                <a class="nav-link text-dark" asp-page="/HumanCodes/Index">Aktivační kódy</a>
                             </li>
                         }
                     </ul>
@@ -62,9 +62,9 @@
     </div>
 
     <footer class="border-top footer text-muted">
-        <div class="container">
-            Studento &copy; 2020
-            <a class="text-dark" asp-page="/Privacy">Ochrana osobních údajů</a>
+        <div class="container d-flex justify-content-between">
+            <span>Studento &copy; 2020</span>
+            <a class="text-muted" asp-page="/Privacy">Ochrana osobních údajů</a>
         </div>
     </footer>
 

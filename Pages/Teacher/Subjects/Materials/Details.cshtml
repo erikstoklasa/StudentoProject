@@ -1,0 +1,29 @@
+﻿@page
+@model SchoolGradebook.Pages.Teacher.Subjects.Materials.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>SubjectMaterial</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Název
+        </dt>
+        <dd class="col-sm-10">
+            @Model.SubjectMaterial.Name
+        </dd>
+        <dt class="col-sm-2">
+            Předmět
+        </dt>
+        <dd class="col-sm-10">
+            @Model.SubjectMaterial.Subject
+        </dd>
+    </dl>
+</div>
+<div>
+</div>

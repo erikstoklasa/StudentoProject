@@ -1,0 +1,31 @@
+﻿@page
+@model SchoolGradebook.Pages.Admin.Subjects.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+<h3>Opravdu chcete odstranit tento předmět?</h3>
+<div>
+    <h4>Subject</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Název
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Subject.Name
+        </dd>
+        <dt class="col-sm-2">
+            Učitel
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Subject.Teacher.Id
+        </dd>
+    </dl>
+
+    <form method="post">
+        <input type="hidden" asp-for="Subject.Id" />
+        <input type="submit" value="Odstranit předmět" class="btn btn-danger" /> |
+        <a asp-page="./Index">Zpět</a>
+    </form>
+</div>

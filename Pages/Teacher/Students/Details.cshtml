@@ -1,0 +1,106 @@
+﻿@page
+@model SchoolGradebook.Pages.Teacher.Students.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Detail</h1>
+
+<div>
+    <h4>Student</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            UserAuthId
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Student.UserAuthId
+        </dd>
+        <dt class="col-sm-2">
+            Jméno
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Student.FirstName
+        </dd>
+        <dt class="col-sm-2">
+            Příjmení
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Student.LastName
+        </dd>
+        <dt class="col-sm-2">
+            Datum narození
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Student.Birthdate
+        </dd>
+        <dt class="col-sm-2">
+            Ulice
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Student.StreetAdrress
+        </dd>
+        <dt class="col-sm-2">
+            Město
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Student.CityAdrress
+        </dd>
+        <dt class="col-sm-2">
+            PSČ
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Student.ZipCode
+        </dd>
+        <dt class="col-sm-2">
+            Rodné číslo
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Student.PersonalIdentifNumber
+        </dd>
+        <dt class="col-sm-2">
+            Email
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Student.Email
+        </dd>
+        <dt class="col-sm-2">
+            Telefonní číslo
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Student.PhoneNumber
+        </dd>
+
+
+
+
+        <dt class="col-sm-2">
+            Přiřazen k:
+        </dt>
+        <dd class="col-sm-10">
+            <table class="table">
+                <tr>
+                    <th>Předmět</th>
+                    <th>Učitel</th>
+                </tr>
+                @foreach (var item in Model.Student.Enrollments)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Subject.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Subject.Teacher.FirstName)
+                            @Html.DisplayFor(modelItem => item.Subject.Teacher.LastName)
+                        </td>
+                    </tr>
+                }
+            </table>
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Student.Id">Upravit</a> |
+    <a asp-page="./Index">Zpět</a>
+</div>

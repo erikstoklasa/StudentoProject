@@ -1,0 +1,41 @@
+﻿@page "{gradeId}"
+@model SchoolGradebook.Pages.Student.Grades.DetailsModel
+@using System.Globalization;
+
+@{
+    ViewData["Title"] = "Známka";
+    System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("cs-CZ");
+}
+
+<div>
+    <h1>@Model.Grade.Name</h1>
+    <dl class="row">
+        <dt class="col-sm-2">
+            Předmět
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Grade.Subject.Name
+        </dd>
+        <dt class="col-sm-2">
+            Známka
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Grade.Value
+        </dd>
+        <dt class="col-sm-2">
+            Datum přidání
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Grade.Added.ToLocalTime().ToString("d. MMMM yyyy HH:mm")
+        </dd>
+        <dt class="col-sm-2">
+            Vyučující
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Grade.Subject.Teacher.getFullName()
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="/Student/Grades/Index">Zpět</a>
+</div>

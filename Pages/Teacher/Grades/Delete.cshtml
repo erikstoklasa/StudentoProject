@@ -1,0 +1,45 @@
+﻿@model SchoolGradebook.Pages.Teacher.Grades.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Grade</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Předmět
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Grade.Subject.Name
+        </dd>
+        <dt class="col-sm-2">
+            Známka
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Grade.Value
+        </dd>
+        <dt class="col-sm-2">
+            Přidáno
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Grade.Added.ToLocalTime()
+        </dd>
+        <dt class="col-sm-2">
+            Vyučující
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Grade.Subject.Teacher.getFullName()
+        </dd>
+    </dl>
+
+    <form method="post">
+        <input type="hidden" asp-for="Grade.Id" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-page="./Index">Back to List</a>
+    </form>
+</div>

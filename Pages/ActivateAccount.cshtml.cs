@@ -16,8 +16,8 @@ namespace SchoolGradebook.Pages
     public class ActivateAccountModel : PageModel
     {
         private readonly SchoolContext _context;
-        private UserManager<IdentityUser> UsersManager;
-        private SignInManager<IdentityUser> SignInManager;
+        private readonly UserManager<IdentityUser> UsersManager;
+        private readonly SignInManager<IdentityUser> SignInManager;
         private string UserId { get; set; }
 
         public ActivateAccountModel(SchoolContext context, IHttpContextAccessor httpContextAccessor, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager) 
@@ -26,7 +26,7 @@ namespace SchoolGradebook.Pages
             UsersManager = userManager;
             SignInManager = signInManager;
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            UserId = UserId == null ? "" : UserId;
+            UserId ??= "";
 
         }
         public async Task<IActionResult> OnPostAsync(string humanCode)
@@ -53,7 +53,7 @@ namespace SchoolGradebook.Pages
                 }
                 //Updating User Auth id
                 student.UserAuthId = UserId;
-                if (await TryUpdateModelAsync<Student>(
+                if (await TryUpdateModelAsync<Models.Student>(
                     student,
                     "student",
                     s => s.UserAuthId, s => s.FirstName, s => s.LastName))
@@ -74,7 +74,7 @@ namespace SchoolGradebook.Pages
                     return NotFound();
                 }
                 teacher.UserAuthId = UserId;
-                if (await TryUpdateModelAsync<Teacher>(
+                if (await TryUpdateModelAsync<Models.Teacher>(
                     teacher,
                     "teacher",
                     t => t.UserAuthId, t => t.FirstName, t => t.LastName))

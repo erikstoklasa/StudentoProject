@@ -11,7 +11,7 @@
     ViewData["Title"] = "Domů";
     string UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
     UserId = UserId == null ? "" : UserId;
-    Student s = context.Students
+    Models.Student s = context.Students
                     .Where(g => g.UserAuthId == UserId).FirstOrDefault();
     String firstName = "";
     if (s != null)

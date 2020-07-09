@@ -1,0 +1,79 @@
+﻿@page
+@model SchoolGradebook.Pages.Admin.Teachers.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Dateil</h1>
+
+<div>
+    <h4>Učitel</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            UserAuthId
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Teacher.UserAuthId
+        </dd>
+        <dt class="col-sm-2">
+            Jméno
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Teacher.FirstName
+        </dd>
+        <dt class="col-sm-2">
+            Příjmení
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Teacher.LastName
+        </dd>
+        <dt class="col-sm-2">
+            Datum narození
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Teacher.Birthdate
+        </dd>
+        <dt class="col-sm-2">
+            Ulice
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Teacher.StreetAdrress
+        </dd>
+        <dt class="col-sm-2">
+            Město
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Teacher.CityAdrress
+        </dd>
+        <dt class="col-sm-2">
+            PSČ
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Teacher.ZipCode
+        </dd>
+        <dt class="col-sm-2">
+            Rodné číslo
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Teacher.PersonalIdentifNumber
+        </dd>
+        <dt class="col-sm-2">
+            Email
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Teacher.Email
+        </dd>
+        <dt class="col-sm-2">
+            Telefonní číslo
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Teacher.PhoneNumber
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Teacher.Id">Upravit</a> |
+    <a asp-page="./Index">Zpět</a>
+</div>

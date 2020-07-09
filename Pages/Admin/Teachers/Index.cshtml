@@ -1,0 +1,69 @@
+﻿@page
+@model SchoolGradebook.Pages.Admin.Teachers.IndexModel
+@using SchoolGradebook.Models
+@inject SchoolContext context;
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Učitelé</h1>
+
+<p>
+    <a asp-page="Create">Přidat nového učitele</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Aktivační kód</th>
+            <th>
+                Stav
+            </th>
+            <th>
+                Jméno
+            </th>
+            <th>
+                Příjmení
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Teacher)
+        {
+            HumanActivationCode c = context.HumanActivationCodes
+                .Where(b => b.TargetId == item.Id)
+                .Where(b => b.CodeType == CodeType.Teacher)
+                .FirstOrDefault();
+            bool hasActivationCode = c != null;
+            <tr>
+                <td>
+                    @if (hasActivationCode)
+                    {
+                        @c.HumanCode
+                    }
+                </td>
+                <td>
+                    @if (item.UserAuthId != null)
+                    {
+                        @("Spárováno")
+                    }
+                </td>
+                <td>
+                    @item.FirstName
+                </td>
+                <td>
+                    @item.LastName
+                </td>
+                <td>
+                    <a asp-page="/HumanCodes/Create"
+                       asp-route-targetId="@item.Id"
+                       asp-route-codeType="@CodeType.Teacher">Vygenerovat nový kód</a> |
+                    <a asp-page="./Edit" asp-route-id="@item.Id">Upravit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.Id">Detaily</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.Id">Odstranit</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

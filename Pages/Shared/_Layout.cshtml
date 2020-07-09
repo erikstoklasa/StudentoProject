@@ -20,34 +20,36 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1 justify-content-center">
-                        @if (User.IsInRole("student") || User.IsInRole("teacher"))
+                        @if (User.IsInRole("teacher"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-page="/Grades/Index">Známky</a>
+                                <a class="nav-link text-light" asp-page="/Teacher/Subjects/Index">Předměty</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-page="/Subjects/Index">Předměty</a>
+                                <a class="nav-link text-light" asp-page="/Teacher/Students/Index">Studenti</a>
                             </li>
                         }
-                        @if (User.IsInRole("teacher") || User.IsInRole("admin"))
+                        @if (User.IsInRole("student"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-page="/Students/Index">Studenti</a>
+                                <a class="nav-link text-light" asp-page="/Student/Grades/Index">Známky</a>
                             </li>
                         }
                         @if (User.IsInRole("admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-page="/Teachers/Index">Učitelé</a>
+                                <a class="nav-link text-light" asp-page="/Admin/Teachers/Index">Učitelé</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-page="/HumanCodes/Index">Aktivační kódy</a>
+                                <a class="nav-link text-light" asp-page="/Admin/Students/Index">Studenti</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-page="/Admin/Subjects/Index">Předměty</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-page="/HumanCodes/Index">Aktivační kódy</a>
                             </li>
                         }
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-page="/Privacy">Ochrana údajů</a>
-                        </li>
-
                     </ul>
                 </div>
             </div>
@@ -61,7 +63,8 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2020 - Studento
+            Studento &copy; 2020
+            <a class="text-dark" asp-page="/Privacy">Ochrana osobních údajů</a>
         </div>
     </footer>
 

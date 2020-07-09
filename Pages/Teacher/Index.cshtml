@@ -1,0 +1,18 @@
+﻿@page
+@model SchoolGradebook.Pages.Teacher.IndexModel
+@{
+    ViewData["Title"] = "Domů";
+}
+
+<div class="text-center">
+        <div class="d-flex justify-content-around">
+            <div>
+                <p>Počet vašich studentů</p>
+                <h2>@Model.StudentCount</h2>
+            </div>
+            <div>
+                <p>Počet vašich předmětů</p>
+                <h2>@Model.SubjectCount</h2>
+            </div>
+        </div>
+</div>

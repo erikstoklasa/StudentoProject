@@ -15,12 +15,12 @@ namespace SchoolGradebook.Pages.HumanCodes
     public class CreateModel : PageModel
     {
         private readonly SchoolGradebook.Data.SchoolContext _context;
-        public Student Student { get; set; }
-        public Teacher Teacher { get; set; }
-        HumanActivationCode code;
+        public Models.Student Student { get; set; }
+        public Models.Teacher Teacher { get; set; }
 
+        readonly HumanActivationCode code;
 
-        public CreateModel(SchoolGradebook.Data.SchoolContext context)
+        public CreateModel(SchoolContext context)
         {
             _context = context;
 
@@ -45,14 +45,21 @@ namespace SchoolGradebook.Pages.HumanCodes
             //Generate new ids until there are no duplicates in the db
             await _context.HumanActivationCodes.AddAsync(code);
             await _context.SaveChangesAsync();
-            if(codeType == CodeType.Student)
+            if (User.IsInRole("admin"))
             {
-                return RedirectToPage("/Students/Index");
-            } else
-            {
-                return RedirectToPage("/Teachers/Index");
+                if (codeType == CodeType.Student)
+                {
+                    return RedirectToPage("/Admin/Students/Index");
+                }
+                else
+                {
+                    return RedirectToPage("/Admin/Teachers/Index");
+                }
             }
-            
+            else
+            {
+                return RedirectToPage("/Teacher/Students/Index");
+            }
         }
 
         public async Task<IActionResult> OnPostAsync(int targetId, CodeType codeType)

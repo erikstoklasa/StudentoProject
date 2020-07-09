@@ -74,7 +74,7 @@ namespace SchoolGradebook.Pages
                     return NotFound();
                 }
                 teacher.UserAuthId = UserId;
-                if (await TryUpdateModelAsync<Teacher>(
+                if (await TryUpdateModelAsync<Models.Teacher>(
                     teacher,
                     "teacher",
                     t => t.UserAuthId, t => t.FirstName, t => t.LastName))

@@ -1,0 +1,76 @@
+﻿@page
+@model SchoolGradebook.Pages.Teacher.Subjects.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="d-flex flex-row h-100 mt-5">
+    <div class="d-flex flex-column w-100">
+        <h1>@Model.Subject.Name</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Jméno
+                    </th>
+                    <th>
+                        Průměr
+                    </th>
+                    <th>
+                        Známky
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Students.Length; i++)
+                {
+
+                    <tr>
+                        <td>
+                            <a asp-page="/Teacher/Students/Details" asp-route-id="@Model.Students[i].Id">@Model.Students[i].getFullName()</a>
+                        </td>
+                        <td>
+                            @($"{Model.StudentAverages[i]:f2}")
+                        </td>
+                        <td>
+                            @for (int y = 0; y < Model.StudentGrades[i].Length; y++)
+                            {
+                                @Model.StudentGrades[i][y].Value
+                                if (y != Model.StudentGrades[i].Length - 1)
+                                {
+                                    @(",")
+                                }
+                            }
+                        </td>
+                        <td>
+                            <a asp-page="/Teacher/Grades/Create" asp-route-SubjectId="@Model.Subject.Id" asp-route-StudentId="@Model.Students[i].Id">Přidat známku</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <!--Place for files-->
+        <div class="row mx-1">
+            <a class="btn btn-primary" asp-page="Materials/Create" asp-route-subjectId="@Model.Subject.Id">Přidat studijní materiál</a>
+        </div>
+        <div class="d-flex flex-row flex-wrap">
+            @foreach (SchoolGradebook.Models.SubjectMaterial subjectMaterial in Model.SubjectMaterials)
+            {
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">@subjectMaterial.Name</h5>
+                        <h6 class="card-subtitle mb-3 text-muted">@subjectMaterial.Added.ToLocalTime().ToString("d. MMMM yyyy HH:mm")</h6>
+                        <a class="card-link" asp-page="Materials/Details" asp-route-id="@subjectMaterial.Id">Stáhnout</a>
+                        <a class="card-link" asp-page="Materials/Delete" asp-route-id="@subjectMaterial.Id">Odstranit</a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Všechny předměty</a>
+</div>

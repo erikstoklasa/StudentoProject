@@ -104,7 +104,7 @@ namespace SchoolGradebook.Migrations
                     b.Property<DateTime?>("Birthdate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CityAdrress")
+                    b.Property<string>("CityAddress")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -122,7 +122,7 @@ namespace SchoolGradebook.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("StreetAdrress")
+                    b.Property<string>("StreetAddress")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserAuthId")
@@ -192,7 +192,7 @@ namespace SchoolGradebook.Migrations
                     b.Property<DateTime?>("Birthdate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CityAdrress")
+                    b.Property<string>("CityAddress")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -210,7 +210,7 @@ namespace SchoolGradebook.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("StreetAdrress")
+                    b.Property<string>("StreetAddress")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserAuthId")

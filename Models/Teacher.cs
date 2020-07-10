@@ -21,9 +21,9 @@ namespace SchoolGradebook.Models
         public String? PersonalIdentifNumber { get; set; }
         //Address
         [Display(Name = "Ulice a čp.")]
-        public String? StreetAdrress { get; set; }
+        public String? StreetAddress { get; set; }
         [Display(Name = "Město")]
-        public String? CityAdrress { get; set; }
+        public String? CityAddress { get; set; }
         [Display(Name = "PSČ")]
         public String? ZipCode { get; set; }
         //Contact

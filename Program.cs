@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -31,6 +32,14 @@ namespace SchoolGradebook
                 try
                 {
                     var context = services.GetRequiredService<SchoolContext>();
+                    /* 
+                     * Note: 
+                     * Uncomment these in case you need to forcefully recreate the tables.
+                     * Don't forget to query db_init.sql afterwards and encomment these back. 
+                     */
+                    //context.Database.EnsureDeleted();
+                    //context.Database.EnsureCreated();
+                    //context.Database.Migrate();
                     DbInitializer.Initialize(context);
                 }
                 catch (Exception ex)

@@ -28,8 +28,8 @@ namespace SchoolGradebook.Pages.Admin.Enrollments
         [BindProperty(SupportsGet = true)]
         public int StudentId { get; set; }
         public List<Models.Student> Students { get; set; }
-        public List<Models.Subject> Subjects { get; set; }
-        public List<Models.Subject> StudentSubjects { get; set; }
+        public List<Models.SubjectInstance> Subjects { get; set; }
+        public List<Models.SubjectInstance> StudentSubjects { get; set; }
         public async Task<IActionResult> OnGet()
         {
             Students = new List<Models.Student>{ await _analytics.GetStudentByIdAsync(StudentId) };
@@ -38,7 +38,7 @@ namespace SchoolGradebook.Pages.Admin.Enrollments
 
             StudentsSelectList.Add(new SelectListItem(Students[0].getFullName(), Students[0].Id.ToString()));
 
-            foreach (Models.Subject sub in Subjects)
+            foreach (Models.SubjectInstance sub in Subjects)
             {
                 if (!sub.Enrollments.Where(s => s.StudentId == StudentId).Any())
                 {

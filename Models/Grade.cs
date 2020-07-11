@@ -16,11 +16,11 @@ namespace SchoolGradebook.Models
         [Range(1,5, ErrorMessage = "Zadejte známku mezi 1 a 5")]
         public int? Value { get; set; }
         public int StudentId { get; set; } 
-        public int SubjectId { get; set; }
+        public int SubjectInstanceId { get; set; }
         [Display(Name = "Datum přidání")]
         public DateTime Added { get; set; }
 
         public Student Student { get; set; }
-        public Subject Subject { get; set; }
+        public SubjectInstance SubjectInstance { get; set; }
     }
 }

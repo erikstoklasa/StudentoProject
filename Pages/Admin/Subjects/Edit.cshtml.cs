@@ -25,7 +25,7 @@ namespace SchoolGradebook.Pages.Admin.Subjects
         }
 
         [BindProperty]
-        public Subject Subject { get; set; }
+        public SubjectInstance Subject { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {

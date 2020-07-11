@@ -21,7 +21,7 @@ namespace SchoolGradebook.Pages.Admin.Subjects
         }
 
         public string UserId { get; private set; }
-        public Subject Subject { get; set; }
+        public SubjectInstance Subject { get; set; }
         public Models.Student[] Students { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
@@ -38,7 +38,7 @@ namespace SchoolGradebook.Pages.Admin.Subjects
                 return NotFound();
             }
 
-            Students = await _analytics.GetAllStudentsBySubjectIdAsync(Subject.Id);
+            Students = await _analytics.GetAllStudentsBySubjectInstanceIdAsync(Subject.Id);
 
             return Page();
         }

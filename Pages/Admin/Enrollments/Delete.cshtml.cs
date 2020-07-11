@@ -31,7 +31,7 @@ namespace SchoolGradebook.Pages.Admin.Enrollments
 
             Enrollment = await _context.Enrollments
                 .Include(e => e.Student)
-                .Include(e => e.Subject).FirstOrDefaultAsync(m => m.Id == id);
+                .Include(e => e.SubjectInstance).FirstOrDefaultAsync(m => m.Id == id);
 
             if (Enrollment == null)
             {

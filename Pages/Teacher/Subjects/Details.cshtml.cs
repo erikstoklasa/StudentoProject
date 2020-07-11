@@ -24,7 +24,7 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
         }
 
         public string UserId { get; private set; }
-        public Subject Subject { get; set; }
+        public SubjectInstance Subject { get; set; }
         public Models.Student[] Students { get; set; }
         public double[] StudentAverages { get; set; }
         public List<Grade[]> StudentGrades { get; set; }
@@ -46,7 +46,7 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
                 //Subject not found or access not permitted
             }
 
-            Students = await _analytics.GetAllStudentsBySubjectIdAsync(Subject.Id);
+            Students = await _analytics.GetAllStudentsBySubjectInstanceIdAsync(Subject.Id);
             StudentAverages = new double[Students.Length];
 
             for (int i = 0; i < Students.Length; i++)

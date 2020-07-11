@@ -21,14 +21,14 @@ namespace SchoolGradebook.Pages.Teacher.Grades
         {
             _context = context;
             List<Models.Student> tempStud = _context.Students.ToList();
-            List<Subject> tempSubj = _context.Subjects.ToList();
+            List<SubjectInstance> tempSubj = _context.Subjects.ToList();
             Subjects = new List<SelectListItem> {};
             Students = new List<SelectListItem> {};
             foreach (Models.Student s in tempStud)
             {
                 Students.Add(new SelectListItem(s.FirstName + " " + s.LastName, s.Id.ToString()));
             }
-            foreach (Subject s in tempSubj)
+            foreach (SubjectInstance s in tempSubj)
             {
                 Subjects.Add(new SelectListItem(s.Name, s.Id.ToString()));
             }
@@ -45,7 +45,7 @@ namespace SchoolGradebook.Pages.Teacher.Grades
 
             Grade = await _context.Grades
                 .Include(g => g.Student)
-                .Include(g => g.Subject).FirstOrDefaultAsync(m => m.Id == gradeId);
+                .Include(g => g.SubjectInstance).FirstOrDefaultAsync(m => m.Id == gradeId);
 
             if (Grade == null)
             {

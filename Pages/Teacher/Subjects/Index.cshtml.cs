@@ -10,7 +10,7 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
     public class IndexModel : PageModel
     {
         public string UserId { get; set; }
-        public Subject[] Subjects { get; set; }
+        public SubjectInstance[] Subjects { get; set; }
         private readonly Analytics _analytics;
         public int[] StudentsCount { get; set; }
 

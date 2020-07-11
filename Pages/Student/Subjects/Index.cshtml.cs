@@ -20,7 +20,7 @@ namespace SchoolGradebook.Pages.Student.Subjects
             _analytics = analytics;
         }
 
-        public IList<Subject> Subjects { get;set; }
+        public IList<SubjectInstance> Subjects { get;set; }
 
         public async Task OnGetAsync()
         {

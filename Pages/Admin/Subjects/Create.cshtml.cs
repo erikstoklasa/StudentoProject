@@ -35,7 +35,7 @@ namespace SchoolGradebook.Pages.Admin.Subjects
         }
 
         [BindProperty]
-        public Subject Subject { get; set; }
+        public SubjectInstance SubjectInstance { get; set; }
 
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
@@ -46,7 +46,7 @@ namespace SchoolGradebook.Pages.Admin.Subjects
                 return Page();
             }
 
-            _context.Subjects.Add(Subject);
+            _context.Subjects.Add(SubjectInstance);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");

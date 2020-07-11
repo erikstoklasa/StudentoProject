@@ -11,12 +11,12 @@ namespace SchoolGradebook.Models
         [Key]
         public Guid Id { get; set; }
         [Required]
-        public int SubjectId { get; set; }
+        public int SubjectInstanceId { get; set; }
         [Required(ErrorMessage = "Zadejte název materiálu")]
         public string Name { get; set; }
         public string FileExt { get; set; }
         public DateTime Added { get; set; }
 
-        public Subject Subject { get; set; }
+        public SubjectInstance Subject { get; set; } // TODO: Replace with subjecttype NOT subject instance!
     }
 }

@@ -98,10 +98,10 @@
                     {
                         <tr>
                             <td>
-                                @item.Subject.Name
+                                @item.SubjectInstance.Name
                             </td>
                             <td>
-                                @item.Subject.Teacher.getFullName()
+                                @item.SubjectInstance.Teacher.getFullName()
                             </td>
                             <td>
                                 <a asp-page="/Admin/Enrollments/Delete" asp-route-id="@item.Id">Odebrat</a>

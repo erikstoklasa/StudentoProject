@@ -13,18 +13,18 @@
             Název
         </dt>
         <dd class="col-sm-10">
-            @Model.Subject.Name
+            @Model.SubjectInstance.Name
         </dd>
         <dt class="col-sm-2">
             Učitel
         </dt>
         <dd class="col-sm-10">
-            @Model.Subject.Teacher.Id
+            @Model.SubjectInstance.Teacher.Id
         </dd>
     </dl>
 
     <form method="post">
-        <input type="hidden" asp-for="Subject.Id" />
+        <input type="hidden" asp-for="SubjectInstance.Id" />
         <input type="submit" value="Odstranit předmět" class="btn btn-danger" /> |
         <a asp-page="./Index">Zpět</a>
     </form>

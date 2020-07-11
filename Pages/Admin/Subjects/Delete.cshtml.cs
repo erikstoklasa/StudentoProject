@@ -20,7 +20,7 @@ namespace SchoolGradebook.Pages.Admin.Subjects
         }
 
         [BindProperty]
-        public Subject Subject { get; set; }
+        public SubjectInstance SubjectInstance { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -29,10 +29,10 @@ namespace SchoolGradebook.Pages.Admin.Subjects
                 return NotFound();
             }
 
-            Subject = await _context.Subjects
+            SubjectInstance = await _context.Subjects
                 .Include(s => s.Teacher).FirstOrDefaultAsync(m => m.Id == id);
 
-            if (Subject == null)
+            if (SubjectInstance == null)
             {
                 return NotFound();
             }
@@ -46,11 +46,11 @@ namespace SchoolGradebook.Pages.Admin.Subjects
                 return NotFound();
             }
 
-            Subject = await _context.Subjects.FindAsync(id);
+            SubjectInstance = await _context.Subjects.FindAsync(id);
 
-            if (Subject != null)
+            if (SubjectInstance != null)
             {
-                _context.Subjects.Remove(Subject);
+                _context.Subjects.Remove(SubjectInstance);
                 await _context.SaveChangesAsync();
             }
 

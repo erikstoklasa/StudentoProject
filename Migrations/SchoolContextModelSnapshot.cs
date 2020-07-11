@@ -29,14 +29,14 @@ namespace SchoolGradebook.Migrations
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SubjectId")
+                    b.Property<int>("SubjectInstanceId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("StudentId");
 
-                    b.HasIndex("SubjectId");
+                    b.HasIndex("SubjectInstanceId");
 
                     b.ToTable("Enrollments");
                 });
@@ -58,7 +58,7 @@ namespace SchoolGradebook.Migrations
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SubjectId")
+                    b.Property<int>("SubjectInstanceId")
                         .HasColumnType("int");
 
                     b.Property<int?>("Value")
@@ -68,7 +68,7 @@ namespace SchoolGradebook.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.HasIndex("SubjectId");
+                    b.HasIndex("SubjectInstanceId");
 
                     b.ToTable("Grades");
                 });
@@ -172,12 +172,12 @@ namespace SchoolGradebook.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SubjectId")
+                    b.Property<int>("SubjectInstanceId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SubjectId");
+                    b.HasIndex("SubjectInstanceId");
 
                     b.ToTable("SubjectMaterials");
                 });
@@ -234,7 +234,7 @@ namespace SchoolGradebook.Migrations
 
                     b.HasOne("SchoolGradebook.Models.Subject", "Subject")
                         .WithMany("Enrollments")
-                        .HasForeignKey("SubjectId")
+                        .HasForeignKey("SubjectInstanceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -249,7 +249,7 @@ namespace SchoolGradebook.Migrations
 
                     b.HasOne("SchoolGradebook.Models.Subject", "Subject")
                         .WithMany("Grades")
-                        .HasForeignKey("SubjectId")
+                        .HasForeignKey("SubjectInstanceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -267,7 +267,7 @@ namespace SchoolGradebook.Migrations
                 {
                     b.HasOne("SchoolGradebook.Models.Subject", "Subject")
                         .WithMany()
-                        .HasForeignKey("SubjectId")
+                        .HasForeignKey("SubjectInstanceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

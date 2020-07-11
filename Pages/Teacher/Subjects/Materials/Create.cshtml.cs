@@ -32,14 +32,14 @@ namespace SchoolGradebook.Pages.Teacher.Subjects.Materials
             _analytics = analytics;
         }
 
-        public async Task<IActionResult> OnGetAsync(int? subjectId)
+        public async Task<IActionResult> OnGetAsync(int? SubjectInstanceId)
         {
-            if (subjectId == null)
+            if (SubjectInstanceId == null)
             {
                 return NotFound();
             }
 
-            Subject s = await _analytics.GetSubjectAsync((int)subjectId);
+            SubjectInstance s = await _analytics.GetSubjectAsync((int)SubjectInstanceId);
             
             if (s == null)
             {
@@ -90,7 +90,7 @@ namespace SchoolGradebook.Pages.Teacher.Subjects.Materials
                     ViewData["status"] = "OK";
                 }
             }
-            return LocalRedirect($"~/Teacher/Subjects/Details?id={ SubjectMaterial.SubjectId }");
+            return LocalRedirect($"~/Teacher/Subjects/Details?id={ SubjectMaterial.SubjectInstanceId }");
         }
         public async Task<Response<BlobContentInfo>> UploadToAzureBlobStorage(Guid id, string filePath, string fileExt)
         {

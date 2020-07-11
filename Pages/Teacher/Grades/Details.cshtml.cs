@@ -29,8 +29,8 @@ namespace SchoolGradebook.Pages.Teacher.Grades
 
             Grade = await _context.Grades
                 .Include(g => g.Student)
-                .Include(g => g.Subject.Teacher)
-                .Include(g => g.Subject).FirstOrDefaultAsync(m => m.Id == gradeId);
+                .Include(g => g.SubjectInstance.Teacher)
+                .Include(g => g.SubjectInstance).FirstOrDefaultAsync(m => m.Id == gradeId);
 
             if (Grade == null)
             {

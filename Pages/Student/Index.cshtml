@@ -47,7 +47,7 @@
                                 @grade.Value.ToString()
                             </td>
                             <td>
-                                @grade.Subject.Name.ToString()
+                                @grade.SubjectInstance.Name.ToString()
                             </td>
                             <td>
                                 @LanguageHelper.getRelativeTime(grade.Added)
@@ -78,9 +78,9 @@
     <p class="text-left">Všechny předměty:</p>
     <div class="subject-container">
         @{
-            Subject[] subjects = await analytics.GetAllSubjectsByStudentUserAuthAsync(UserId);
+            SubjectInstance[] subjects = await analytics.GetAllSubjectsByStudentUserAuthAsync(UserId);
         }
-        @foreach (Subject x in subjects)
+        @foreach (SubjectInstance x in subjects)
         {
             <div class="card">
                 <div class="card-body">

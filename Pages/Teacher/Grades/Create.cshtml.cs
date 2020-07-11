@@ -21,7 +21,7 @@ namespace SchoolGradebook.Pages.Teacher.Grades
         public string SubjectName { get; set; }
 
         [BindProperty(SupportsGet = true)]
-        public int SubjectId { get; set; }
+        public int SubjectInstanceId { get; set; }
 
         public CreateModel(SchoolContext context, IHttpContextAccessor httpContextAccessor)
         {
@@ -34,12 +34,12 @@ namespace SchoolGradebook.Pages.Teacher.Grades
 
         public IActionResult OnGet()
         {
-            Subject s = _context.Subjects
-                .Find(SubjectId);
+            SubjectInstance s = _context.Subjects
+                .Find(SubjectInstanceId);
             SubjectName = s.Name;
             Enrollment[] enrollments = _context.Enrollments
                 .Include(s => s.Student)
-                .Where(s => s.SubjectId == SubjectId)
+                .Where(s => s.SubjectInstanceId == SubjectInstanceId)
                 .ToArray();
             Students = new List<SelectListItem> { };
             for (int i = 0; i < enrollments.Length; i++)
@@ -62,7 +62,7 @@ namespace SchoolGradebook.Pages.Teacher.Grades
         public async Task<IActionResult> OnPostAsync()
         {
             Grade.Added = DateTime.UtcNow;
-            Subject[] teachersSubjects = _context.Subjects
+            SubjectInstance[] teachersSubjects = _context.Subjects
                 .Where(s => s.Teacher.UserAuthId == UserId)
                 .ToArray();
             if (teachersSubjects == null)//Teacher has no subjects assigned
@@ -70,9 +70,9 @@ namespace SchoolGradebook.Pages.Teacher.Grades
                 return Page();
             }
             bool teacherCanAdd = false;
-            foreach (Subject s in teachersSubjects)
+            foreach (SubjectInstance s in teachersSubjects)
             {
-                if (s.Id == SubjectId)
+                if (s.Id == SubjectInstanceId)
                 {
                     teacherCanAdd = true;
                 }
@@ -86,7 +86,7 @@ namespace SchoolGradebook.Pages.Teacher.Grades
                 return Page();
             }
             //In this state teacher is elegible for adding the grade to the specified subject
-            Grade.SubjectId = SubjectId;
+            Grade.SubjectInstanceId = SubjectInstanceId;
             if (!ModelState.IsValid)
             {
                 return Page();
@@ -95,7 +95,7 @@ namespace SchoolGradebook.Pages.Teacher.Grades
             _context.Grades.Add(Grade);
             await _context.SaveChangesAsync();
 
-            return LocalRedirect($"~/Teacher/Subjects/Details?id={ SubjectId }");
+            return LocalRedirect($"~/Teacher/Subjects/Details?id={ SubjectInstanceId }");
         }
     }
 }

@@ -25,7 +25,7 @@ namespace SchoolGradebook.Pages.Teacher.Students
 
             Student = await _context.Students
                 .Include(s => s.Enrollments)
-                .ThenInclude(e => e.Subject)
+                .ThenInclude(e => e.SubjectInstance)
                 .ThenInclude(d => d.Teacher)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.Id == id);

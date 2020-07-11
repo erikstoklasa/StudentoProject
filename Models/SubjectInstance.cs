@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace SchoolGradebook.Models
 {
-    public class Subject
+    public class SubjectInstance
     {
         public int Id { get; set; }
         public int TeacherId { get; set; }

@@ -26,6 +26,6 @@
     <form method="post">
         <input type="hidden" asp-for="SubjectMaterial.Id" />
         <input type="submit" value="Odstranit materiál" class="btn btn-danger" /> |
-        <a asp-page="Subjects/Details" asp-route-id="@Model.SubjectMaterial.SubjectId">Zpět</a>
+        <a asp-page="Subjects/Details" asp-route-id="@Model.SubjectMaterial.SubjectInstanceId">Zpět</a>
     </form>
 </div>

@@ -27,7 +27,7 @@ namespace SchoolGradebook.Pages.Student.Subjects
         }
 
         public string UserId { get; private set; }
-        public Subject Subject { get; set; }
+        public SubjectInstance Subject { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {

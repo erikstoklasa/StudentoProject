@@ -59,17 +59,17 @@ namespace SchoolGradebook.Data
             //Subjects
             if (!context.Subjects.Any())
             {
-                var subjects = new Subject[]
+                var subjects = new SubjectInstance[]
                     {
-                        new Subject{TeacherId=3, Name="Matematika"},
-                        new Subject{TeacherId=3, Name="Fyzika"},
-                        new Subject{TeacherId=3, Name="Český jazyk"},
-                        new Subject{TeacherId=3, Name="Chemie"},
-                        new Subject{TeacherId=3, Name="Anglický jazyk"},
-                        new Subject{TeacherId=3, Name="Německý jazyk"},
-                        new Subject{TeacherId=3, Name="Informatika"}
+                        new SubjectInstance{TeacherId=3, Name="Matematika"},
+                        new SubjectInstance{TeacherId=3, Name="Fyzika"},
+                        new SubjectInstance{TeacherId=3, Name="Český jazyk"},
+                        new SubjectInstance{TeacherId=3, Name="Chemie"},
+                        new SubjectInstance{TeacherId=3, Name="Anglický jazyk"},
+                        new SubjectInstance{TeacherId=3, Name="Německý jazyk"},
+                        new SubjectInstance{TeacherId=3, Name="Informatika"}
                     };
-                foreach (Subject d in subjects)
+                foreach (SubjectInstance d in subjects)
                 {
                     context.Subjects.Add(d);
                 }
@@ -88,7 +88,7 @@ namespace SchoolGradebook.Data
                             Value = r.Next(1, 6),
                             Name = "Domácí úkol - prezentace",
                             StudentId = r.Next(1, NUMBER_OF_STUDENTS + 1),
-                            SubjectId = r.Next(1, 8),
+                            SubjectInstanceId = r.Next(1, 8),
                             Added = dates[r.Next(dates.Length)]
                         });
                 }
@@ -104,13 +104,13 @@ namespace SchoolGradebook.Data
             {
                 var enrollments = new Enrollment[]
                     {
-                    new Enrollment{StudentId=1, SubjectId=1},
-                    new Enrollment{StudentId=1, SubjectId=2},
-                    new Enrollment{StudentId=1, SubjectId=3},
-                    new Enrollment{StudentId=1, SubjectId=4},
-                    new Enrollment{StudentId=1, SubjectId=5},
-                    new Enrollment{StudentId=1, SubjectId=6},
-                    new Enrollment{StudentId=1, SubjectId=7}
+                    new Enrollment{StudentId=1, SubjectInstanceId=1},
+                    new Enrollment{StudentId=1, SubjectInstanceId=2},
+                    new Enrollment{StudentId=1, SubjectInstanceId=3},
+                    new Enrollment{StudentId=1, SubjectInstanceId=4},
+                    new Enrollment{StudentId=1, SubjectInstanceId=5},
+                    new Enrollment{StudentId=1, SubjectInstanceId=6},
+                    new Enrollment{StudentId=1, SubjectInstanceId=7}
                     };
                 foreach (Enrollment c in enrollments)
                 {

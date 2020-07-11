@@ -22,7 +22,7 @@ else
                         <h5 class="card-title">@Model.Subjects[i].Name</h5>
                     </a>
                     <p class="card-text">Studentů: @Model.StudentsCount[i]</p>
-                    <a class="btn btn-primary" asp-page="/Teacher/Grades/Create" asp-route-SubjectId="@Model.Subjects[i].Id">Přidat známku</a>
+                    <a class="btn btn-primary" asp-page="/Teacher/Grades/Create" asp-route-SubjectInstanceId="@Model.Subjects[i].Id">Přidat známku</a>
                 </div>
             </div>
 

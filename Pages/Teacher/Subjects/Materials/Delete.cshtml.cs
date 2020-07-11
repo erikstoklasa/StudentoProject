@@ -49,7 +49,7 @@ namespace SchoolGradebook.Pages.Teacher.Subjects.Materials
             }
 
             SubjectMaterial = await _context.SubjectMaterials.FindAsync(id);
-            int subjectId = SubjectMaterial.SubjectId;
+            int SubjectInstanceId = SubjectMaterial.SubjectInstanceId;
 
             if (SubjectMaterial != null)
             {
@@ -57,7 +57,7 @@ namespace SchoolGradebook.Pages.Teacher.Subjects.Materials
                 await _context.SaveChangesAsync();
             }
 
-            return LocalRedirect($"~/Teacher/Subjects/Details?id={ subjectId }");
+            return LocalRedirect($"~/Teacher/Subjects/Details?id={ SubjectInstanceId }");
         }
     }
 }

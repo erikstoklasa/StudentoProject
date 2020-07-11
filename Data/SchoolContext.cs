@@ -15,7 +15,7 @@ namespace SchoolGradebook.Data
         }
 
         public DbSet<Student> Students { get; set; }
-        public DbSet<Subject> Subjects { get; set; }
+        public DbSet<SubjectInstance> Subjects { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Grade> Grades { get; set; }
         public DbSet<Enrollment> Enrollments { get; set; }
@@ -25,7 +25,7 @@ namespace SchoolGradebook.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Teacher>().ToTable("Teachers");
-            modelBuilder.Entity<Subject>().ToTable("Subjects");
+            modelBuilder.Entity<SubjectInstance>().ToTable("Subjects");
             modelBuilder.Entity<Student>().ToTable("Students");
             modelBuilder.Entity<Enrollment>().ToTable("Enrollments");
             modelBuilder.Entity<Grade>().ToTable("Grades");

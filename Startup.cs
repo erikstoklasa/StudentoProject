@@ -33,21 +33,34 @@ namespace SchoolGradebook
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
+            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            {
+                options.SignIn.RequireConfirmedAccount = false;
+                options.Password.RequiredUniqueChars = 0;
+                options.User.RequireUniqueEmail = true;
+            })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("OnlyAdmin", policy => policy.RequireRole("admin"));
+                options.AddPolicy("OnlyTeacher", policy => policy.RequireRole("teacher"));
+                options.AddPolicy("OnlyStudent", policy => policy.RequireRole("student"));
+                options.AddPolicy("AdminAndTeacher", policy =>
+                    policy.RequireAssertion(
+                        context => context.User.IsInRole("admin") || context.User.IsInRole("teacher"))
+                    );
+            });
+
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<Analytics>();
             services.AddRazorPages().AddRazorPagesOptions(options =>
             {
-                options.Conventions.AuthorizeFolder("/Students");
-                options.Conventions.AuthorizeFolder("/Grades");
-                options.Conventions.AuthorizeFolder("/Teachers");
-                options.Conventions.AuthorizeFolder("/Subjects");
-                options.Conventions.AuthorizeFolder("/HumanCodes");
-                options.Conventions.AuthorizeAreaFolder("Teacher", "/");
-                options.Conventions.AuthorizeAreaFolder("Admin", "/");
-                options.Conventions.AuthorizeAreaFolder("Student", "/");
+                options.Conventions.AuthorizeFolder("/HumanCodes", "AdminAndTeacher");
+                options.Conventions.AuthorizeFolder("/Teacher", "OnlyTeacher");
+                options.Conventions.AuthorizeFolder("/Admin", "OnlyAdmin");
+                options.Conventions.AuthorizeFolder("/Student", "OnlyStudent");
             });
             services.AddDbContext<SchoolContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("SchoolContext")));

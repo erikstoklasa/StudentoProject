@@ -8,6 +8,11 @@ for details on configuring this project to bundle and minify static web assets. 
     color: #1a0504 !important;
 }
 
+.btn {
+    padding: 0.6rem 1rem;
+    width: 100%;
+}
+
 .bg-primary {
     background-color: #ffcb7a !important;
 }
@@ -19,21 +24,26 @@ for details on configuring this project to bundle and minify static web assets. 
 h2 {
     font-weight: 600;
 }
-.main-image{
+
+.main-image {
     height: 400px;
 }
-.landing-page{
+
+.landing-page {
     max-width: 720px;
     margin: 0 auto;
 }
+
 .main-logo {
     background: #fff;
     border-radius: 3px;
-    padding: 8px 30px;
+    padding: 8px 5px;
 }
-.main-logo:hover {
-    background: #f6f6f6;
-}
+
+    .main-logo:hover {
+        background: #f6f6f6;
+    }
+
 .vertical-separator {
     margin: 0 5px;
     width: 2px;
@@ -42,6 +52,16 @@ h2 {
 /*p, li, oi, dt, dl {
     font-family: 'Prata', serif;
 }*/
+.main-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.nav-item .btn {
+    padding: 0.5rem 0; 
+    width: auto;
+}
+
 a.navbar-brand {
     white-space: normal;
     text-align: center;
@@ -93,6 +113,17 @@ html {
 @media (min-width: 768px) {
     html {
         font-size: 16px;
+    }
+}
+
+@media (min-width: 576px) {
+    .btn {
+        padding: .375rem .75rem;
+        width: auto;
+    }
+
+    .main-container {
+        flex-direction: row;
     }
 }
 

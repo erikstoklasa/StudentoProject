@@ -10,6 +10,10 @@
 <h1>Studenti</h1>
 <p><a asp-page="./Create">Přidat studenta</a></p>
 <p><a asp-page="/Admin/Import/Index">Naimportovat skupinu studentů</a></p>
+<form class="search-bar">
+    <label for="search">Zadejte jméno nebo příjmení studenta</label>
+    <input class="form-control" id="search">
+</form>
 <table class="table">
     <thead>
         <tr>
@@ -20,10 +24,7 @@
                 Stav
             </th>
             <th>
-                Jméno
-            </th>
-            <th>
-                Příjmení
+                Jméno a příjmení
             </th>
             <th></th>
         </tr>
@@ -49,11 +50,8 @@
                         @("Spárováno")
                     }
                 </td>
-                <td>
-                    @item.FirstName
-                </td>
-                <td>
-                    @item.LastName
+                <td class="search-data">
+                    @item.getFullName()
                 </td>
                 <td>
                     <a asp-page="/HumanCodes/Create"

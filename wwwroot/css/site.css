@@ -78,6 +78,11 @@ a.navbar-brand {
     .subject-container .card {
         flex-grow: 0.3;
     }
+
+.search-bar{
+    max-width: 20rem;
+    margin: 2rem 0;
+}
 /* Provide sufficient contrast against white background */
 a {
     color: #0366d6;

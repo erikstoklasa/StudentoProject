@@ -1,24 +1,35 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using SchoolGradebook.Services;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace SchoolGradebook.Pages.Teacher.Students
 {
     public class IndexModel : PageModel
     {
-        private readonly Data.SchoolContext _context;
+        private readonly StudentService studentService;
+        private readonly TeacherService teacherService;
 
-        public IndexModel(Data.SchoolContext context)
+        public string UserId { get; set; }
+
+        public IndexModel(StudentService studentService, TeacherService teacherService, IHttpContextAccessor httpContextAccessor)
         {
-            _context = context;
+            this.studentService = studentService;
+            this.teacherService = teacherService;
+            UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
         }
 
-        public IList<Models.Student> Student { get;set; }
+        public List<Models.Student> Students { get; set; }
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
-            Student = await _context.Students.ToListAsync();
+            int teacherId = await teacherService.GetTeacherId(UserId);
+            Students = await studentService.GetAllStudentsByTeacherAsync(teacherId);
+            return Page();
         }
     }
 }

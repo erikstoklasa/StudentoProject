@@ -1,17 +1,30 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using SchoolGradebook.Data;
+using SchoolGradebook.Services;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace SchoolGradebook.Pages.Teacher.Students
 {
     public class DetailsModel : PageModel
     {
-        private readonly Data.SchoolContext _context;
+        private readonly TeacherService teacherService;
+        private readonly TeacherAccessValidation teacherAccessValidation;
+        private readonly StudentService studentService;
 
-        public DetailsModel(Data.SchoolContext context)
+        public string UserId { get; set; }
+        public int TeacherId { get; set; }
+
+        public DetailsModel(IHttpContextAccessor httpContextAccessor, TeacherService teacherService, TeacherAccessValidation teacherAccessValidation, StudentService studentService)
         {
-            _context = context;
+            this.teacherService = teacherService;
+            this.teacherAccessValidation = teacherAccessValidation;
+            this.studentService = studentService;
+            UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            
         }
 
         public Models.Student Student { get; set; }
@@ -23,17 +36,20 @@ namespace SchoolGradebook.Pages.Teacher.Students
                 return NotFound();
             }
 
-            Student = await _context.Students
-                .Include(s => s.Enrollments)
-                .ThenInclude(e => e.Subject)
-                .ThenInclude(d => d.Teacher)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(m => m.Id == id);
+            Student = await studentService.GetStudentFullProfileAsync((int)id);
 
             if (Student == null)
             {
                 return NotFound();
             }
+
+            TeacherId = await teacherService.GetTeacherId(UserId);
+            bool hasAccessToStudent = await teacherAccessValidation.HasAccessToStudent(TeacherId, Student.Id);
+            if (!hasAccessToStudent)
+            {
+                return BadRequest();
+            }
+
             return Page();
         }
     }

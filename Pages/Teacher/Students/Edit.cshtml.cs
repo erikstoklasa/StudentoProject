@@ -1,19 +1,30 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using SchoolGradebook.Models;
+using SchoolGradebook.Data;
+using SchoolGradebook.Services;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace SchoolGradebook.Pages.Teacher.Students
 {
     public class EditModel : PageModel
     {
-        private readonly Data.SchoolContext _context;
+        private readonly TeacherAccessValidation teacherAccessValidation;
+        private readonly TeacherService teacherService;
+        private readonly StudentService studentService;
 
-        public EditModel(Data.SchoolContext context)
+        public string UserId { get; set; }
+        public int TeacherId { get; set; }
+
+        public EditModel(IHttpContextAccessor httpContextAccessor, TeacherAccessValidation teacherAccessValidation, TeacherService teacherService, StudentService studentService)
         {
-            _context = context;
+            this.teacherAccessValidation = teacherAccessValidation;
+            this.teacherService = teacherService;
+            this.studentService = studentService;
+            UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
         }
 
         [BindProperty]
@@ -26,50 +37,54 @@ namespace SchoolGradebook.Pages.Teacher.Students
                 return NotFound();
             }
 
-            Student = await _context.Students.FirstOrDefaultAsync(m => m.Id == id);
+            Student = await studentService.GetStudentAsync((int)id);
             if (Student == null)
             {
                 return NotFound();
             }
+
+            TeacherId = await teacherService.GetTeacherId(UserId);
+            bool teacherHasAccessToStudent = await teacherAccessValidation.HasAccessToStudent(TeacherId, Student.Id);
+            if (!teacherHasAccessToStudent)
+            {
+                return BadRequest();
+            }
             return Page();
         }
 
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            Models.Student s = await _context.Students.AsNoTracking().FirstOrDefaultAsync(m => m.Id == Student.Id);
-            Student.UserAuthId = s.UserAuthId;
-
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            _context.Attach(Student).State = EntityState.Modified;
-
-            try
+            if (Student == null)
             {
-                await _context.SaveChangesAsync();
+                return NotFound();
             }
-            catch (DbUpdateConcurrencyException)
+
+            Models.Student student = await studentService.GetStudentAsync(Student.Id);
+            Student.UserAuthId = student.UserAuthId;
+            //Preventing from teacher overposting UserAuthId and changing it
+
+            TeacherId = await teacherService.GetTeacherId(UserId);
+            bool teacherHasAccessToStudent = await teacherAccessValidation.HasAccessToStudent(TeacherId, Student.Id);
+
+            if (!teacherHasAccessToStudent)
             {
-                if (!StudentExists(Student.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest();
+            }
+
+            bool updatedSuccessfully = await studentService.UpdateStudent(Student);
+            if (!updatedSuccessfully)
+            {
+                ViewData["status_type"] = "error";
+                ViewData["status_message"] = "Nevyplnili jste všechny údaje správně.";
+                return Page();
             }
 
             return RedirectToPage("./Index");
-        }
-
-        private bool StudentExists(int id)
-        {
-            return _context.Students.Any(e => e.Id == id);
         }
     }
 }

@@ -44,7 +44,20 @@ namespace SchoolGradebook.Services
         public async Task<Student> GetStudentAsync(int studentId)
         {
             Student student = await context.Students
-                .FindAsync(studentId);
+                .Where(s => s.Id == studentId)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+            return student;
+        }
+        public async Task<Student> GetStudentFullProfileAsync(int studentId)
+        {
+            Student student = await context.Students
+                .Where(s => s.Id == studentId)
+                .Include(s => s.Enrollments)
+                    .ThenInclude(e => e.Subject)
+                        .ThenInclude(subj => subj.Teacher)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
             return student;
         }
         public async Task<Student[]> GetAllStudentsAsync()
@@ -106,6 +119,28 @@ namespace SchoolGradebook.Services
                 .Where(s => s.Subject.Teacher.Id == teacherId)
                 .CountAsync();
             return studentCount;
+        }
+        public async Task<bool> UpdateStudent(Student student)
+        {
+            if (!HasRequiredFields(student))
+            {
+                return false;
+            }
+            if (!ValidationUtils.PersonalIdentifNumberIsValid(student.PersonalIdentifNumber))
+            {
+                return false;
+            }
+            context.Attach(student).State = EntityState.Modified;
+            try
+            {
+                await context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return false;
+            }
+
+            return true;
         }
         //VALIDATIONS
         public static bool HasRequiredFields(Student student)

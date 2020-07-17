@@ -5,7 +5,7 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Upravit</h1>
+<h1>Upravit studenta</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -28,6 +28,11 @@
                 <span asp-validation-for="Student.Birthdate" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Student.PersonalIdentifNumber" class="control-label"></label>
+                <input asp-for="Student.PersonalIdentifNumber" class="form-control" />
+                <span asp-validation-for="Student.PersonalIdentifNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Student.StreetAddress" class="control-label"></label>
                 <input asp-for="Student.StreetAddress" class="form-control" />
                 <span asp-validation-for="Student.StreetAddress" class="text-danger"></span>
@@ -41,11 +46,6 @@
                 <label asp-for="Student.ZipCode" class="control-label"></label>
                 <input asp-for="Student.ZipCode" class="form-control" />
                 <span asp-validation-for="Student.ZipCode" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Student.PersonalIdentifNumber" class="control-label"></label>
-                <input asp-for="Student.PersonalIdentifNumber" class="form-control" />
-                <span asp-validation-for="Student.PersonalIdentifNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Student.Email" class="control-label"></label>

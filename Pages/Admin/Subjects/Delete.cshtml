@@ -4,9 +4,8 @@
 @{
     ViewData["Title"] = "Delete";
 }
-<h3>Opravdu chcete odstranit tento předmět?</h3>
 <div>
-    <h4>Subject</h4>
+    <h1>Odstranit předmět</h1>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -19,7 +18,7 @@
             Učitel
         </dt>
         <dd class="col-sm-10">
-            @Model.SubjectInstance.Teacher.Id
+            @Model.SubjectInstance.Teacher.getFullName()
         </dd>
     </dl>
 

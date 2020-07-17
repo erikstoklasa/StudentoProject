@@ -5,7 +5,7 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Upravit učitele</h1>
+<h1>Upravit vyučujícího</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -28,6 +28,11 @@
                 <span asp-validation-for="Teacher.Birthdate" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Teacher.PersonalIdentifNumber" class="control-label"></label>
+                <input asp-for="Teacher.PersonalIdentifNumber" class="form-control" />
+                <span asp-validation-for="Teacher.PersonalIdentifNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Teacher.StreetAddress" class="control-label"></label>
                 <input asp-for="Teacher.StreetAddress" class="form-control" />
                 <span asp-validation-for="Teacher.StreetAddress" class="text-danger"></span>
@@ -43,11 +48,6 @@
                 <span asp-validation-for="Teacher.ZipCode" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Teacher.PersonalIdentifNumber" class="control-label"></label>
-                <input asp-for="Teacher.PersonalIdentifNumber" class="form-control" />
-                <span asp-validation-for="Teacher.PersonalIdentifNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Teacher.Email" class="control-label"></label>
                 <input asp-for="Teacher.Email" class="form-control" />
                 <span asp-validation-for="Teacher.Email" class="text-danger"></span>
@@ -58,14 +58,14 @@
                 <span asp-validation-for="Teacher.PhoneNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Uložit" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-page="./Index">Back to List</a>
+    <a asp-page="./Index">Zpět</a>
 </div>
 
 @section Scripts {

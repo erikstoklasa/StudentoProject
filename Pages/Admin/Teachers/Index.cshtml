@@ -7,11 +7,14 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Učitelé</h1>
-
+<h1>Vyučující</h1>
 <p>
-    <a asp-page="Create">Přidat nového učitele</a>
+    <a asp-page="Create">Přidat nového vyučujícího</a>
 </p>
+<form class="search-bar">
+    <label for="search">Zadejte jméno nebo příjmení učitele</label>
+    <input class="form-control" id="search">
+</form>
 <table class="table">
     <thead>
         <tr>
@@ -20,10 +23,7 @@
                 Stav
             </th>
             <th>
-                Jméno
-            </th>
-            <th>
-                Příjmení
+                Jméno a příjmení
             </th>
             <th></th>
         </tr>
@@ -49,11 +49,8 @@
                         @("Spárováno")
                     }
                 </td>
-                <td>
-                    @item.FirstName
-                </td>
-                <td>
-                    @item.LastName
+                <td class="search-data">
+                    @item.getFullName()
                 </td>
                 <td>
                     <a asp-page="/HumanCodes/Create"

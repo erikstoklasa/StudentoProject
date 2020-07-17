@@ -4,11 +4,8 @@
 @{
     ViewData["Title"] = "Details";
 }
-
-<h1>Dateil</h1>
-
 <div>
-    <h4>Učitel</h4>
+    <h1>Detail vyučujícího</h1>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -36,6 +33,12 @@
             @Model.Teacher.Birthdate.GetValueOrDefault().ToString("dd. M. yyyy")
         </dd>
         <dt class="col-sm-2">
+            Rodné číslo
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Teacher.PersonalIdentifNumber
+        </dd>
+        <dt class="col-sm-2">
             Ulice
         </dt>
         <dd class="col-sm-10">
@@ -52,12 +55,6 @@
         </dt>
         <dd class="col-sm-10">
             @Model.Teacher.ZipCode
-        </dd>
-        <dt class="col-sm-2">
-            Rodné číslo
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Teacher.PersonalIdentifNumber
         </dd>
         <dt class="col-sm-2">
             Email

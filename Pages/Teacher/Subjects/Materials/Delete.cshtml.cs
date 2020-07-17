@@ -49,7 +49,7 @@ namespace SchoolGradebook.Pages.Teacher.Subjects.Materials
             }
 
             SubjectMaterial = await _context.SubjectMaterials.FindAsync(id);
-            int SubjectInstanceId = SubjectMaterial.SubjectInstanceId;
+            int SubjectInstanceId = SubjectMaterial.SubjectTypeId;
 
             if (SubjectMaterial != null)
             {

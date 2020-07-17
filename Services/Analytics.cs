@@ -163,10 +163,10 @@ namespace SchoolGradebook.Services
             }
             return Math.Round(sum / count, 2);
         }
-        public async Task<SubjectMaterial[]> GetAllSubjectMaterialsAsync(int SubjectInstanceId)
+        public async Task<SubjectMaterial[]> GetAllSubjectMaterialsAsync(int SubjectTypeId)
         {
             return await Context.SubjectMaterials
-                .Where(m => m.SubjectInstanceId == SubjectInstanceId)
+                .Where(m => m.SubjectTypeId == SubjectTypeId)
                 .OrderBy(m => m.Added)
                 .AsNoTracking()
                 .ToArrayAsync();
@@ -175,7 +175,7 @@ namespace SchoolGradebook.Services
         {
             return await Context.SubjectMaterials
                 .Where(m => m.Id == subjectMaterialId)
-                .Include(m => m.Subject)
+                .Include(m => m.SubjectType)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
         }

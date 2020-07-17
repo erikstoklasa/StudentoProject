@@ -33,7 +33,7 @@ namespace SchoolGradebook.Pages.Student.Subjects.Materials
             }
 
             SubjectMaterial = await _context.SubjectMaterials
-                .Include(s => s.Subject).FirstOrDefaultAsync(m => m.Id == id);
+                .Include(s => s.SubjectType).FirstOrDefaultAsync(m => m.Id == id);
 
             if (SubjectMaterial == null)
             {

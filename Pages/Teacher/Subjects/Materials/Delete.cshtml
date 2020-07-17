@@ -19,13 +19,13 @@
             Předmět
         </dt>
         <dd class="col-sm-10">
-            @Model.SubjectMaterial.Subject.Name
+            @Model.SubjectMaterial.SubjectType.Name
         </dd>
     </dl>
 
     <form method="post">
         <input type="hidden" asp-for="SubjectMaterial.Id" />
         <input type="submit" value="Odstranit materiál" class="btn btn-danger" /> |
-        <a asp-page="Subjects/Details" asp-route-id="@Model.SubjectMaterial.SubjectInstanceId">Zpět</a>
+        <a asp-page="Subjects/Details" asp-route-id="@Model.SubjectMaterial.SubjectTypeId">Zpět</a>
     </form>
 </div>

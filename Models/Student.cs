@@ -31,6 +31,9 @@ namespace SchoolGradebook.Models
         [Display(Name = "Telefonní číslo")]
         public String? PhoneNumber { get; set; }
 
+        public int ClassId { set; get; }
+        public int ParentId { set; get; }
+
         public String getFullName() => FirstName + " " + LastName;
 
         public ICollection<Enrollment>? Enrollments { get; set; }

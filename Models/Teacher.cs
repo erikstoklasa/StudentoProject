@@ -32,7 +32,7 @@ namespace SchoolGradebook.Models
         public String? PhoneNumber { get; set; }
         public String getFullName() => FirstName + " " + LastName;
 
-        public ICollection<SubjectInstance>? Subjects { get; set; }
-
+        public ICollection<SubjectInstance>? SubjectInstances { get; set; }
+        public ICollection<SubjectMaterial>? SubjectMaterials { set; get; }
     }
 }

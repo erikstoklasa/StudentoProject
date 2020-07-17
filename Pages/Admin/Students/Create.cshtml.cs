@@ -1,22 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using SchoolGradebook.Models;
-using SchoolGradebook.Data;
+using SchoolGradebook.Services;
+using System.Threading.Tasks;
 
 namespace SchoolGradebook.Pages.Admin.Students
 {
     public class CreateModel : PageModel
     {
-        private readonly SchoolGradebook.Data.SchoolContext _context;
+        private readonly StudentService studentService;
 
-        public CreateModel(SchoolGradebook.Data.SchoolContext context)
+        public CreateModel(StudentService studentService)
         {
-            _context = context;
+            this.studentService = studentService;
         }
 
         public IActionResult OnGet()
@@ -33,13 +28,22 @@ namespace SchoolGradebook.Pages.Admin.Students
         {
             if (!ModelState.IsValid)
             {
+                ViewData["status_type"] = "error";
+                ViewData["status_message"] = "Error, nevložili jste správně všechny požadované údaje.";
                 return Page();
             }
-
-            _context.Students.Add(Student);
-            await _context.SaveChangesAsync();
-
-            return RedirectToPage("./Index");
+            if (await studentService.AddStudentAsync(Student))
+            {
+                ViewData["status_type"] = "success";
+                ViewData["status_message"] = $"{Student.getFullName()} byl přidán do matriky.";
+                return Page();
+            }
+            else
+            {
+                ViewData["status_type"] = "error";
+                ViewData["status_message"] = "Error, nevložili jste správně všechny požadované údaje.";
+                return Page();
+            }
         }
     }
 }

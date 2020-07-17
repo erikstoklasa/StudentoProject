@@ -14,11 +14,17 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
     public class DetailsModel : PageModel
     {
         private readonly Analytics _analytics;
+        private readonly TeacherAccessValidation teacherAccessValidation;
+        private readonly TeacherService teacherService;
+        private readonly StudentService studentService;
 
-        public DetailsModel(IHttpContextAccessor httpContextAccessor, Analytics analytics)
+        public DetailsModel(IHttpContextAccessor httpContextAccessor, Analytics analytics, TeacherAccessValidation teacherAccessValidation, TeacherService teacherService, StudentService studentService)
         {
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             _analytics = analytics;
+            this.teacherAccessValidation = teacherAccessValidation;
+            this.teacherService = teacherService;
+            this.studentService = studentService;
             StudentGrades = new List<Grade[]>();
             SubjectMaterials = new List<SubjectMaterial>();
         }
@@ -32,27 +38,31 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            SubjectMaterials = (await _analytics.GetAllSubjectMaterialsAsync((int)id)).ToList();
             if (id == null)
             {
                 return NotFound();
             }
 
-            Subject = await _analytics.GetSubjectAsync((int)id);
-
-            if (Subject == null || Subject.Teacher.UserAuthId != UserId)
+            int TeacherId = await teacherService.GetTeacherId(UserId);
+            bool teacherHasAccessToSubject = await teacherAccessValidation.HasAccessToSubject(TeacherId, (int)id);
+            if (!teacherHasAccessToSubject)
             {
-                return NotFound();
-                //Subject not found or access not permitted
+                return BadRequest();
             }
 
-            Students = await _analytics.GetAllStudentsBySubjectInstanceIdAsync(Subject.Id);
+            Subject = await _analytics.GetSubjectAsync((int)id);
+            if (Subject == null)
+            {
+                return NotFound();
+            }
+            SubjectMaterials = (await _analytics.GetAllSubjectMaterialsAsync(Subject.Id)).ToList();
+            Students = await studentService.GetAllStudentsBySubjectAsync(Subject.Id);
             StudentAverages = new double[Students.Length];
 
             for (int i = 0; i < Students.Length; i++)
             {
-                StudentAverages[i] = await _analytics.GetSubjectAverageForStudentByStudentIdAsync(Students[i].Id, (int)id);
-                StudentGrades.Add(await _analytics.GetGradesByTeacherUserAuthIdAsync(UserId, (int)id, Students[i].Id));
+                StudentAverages[i] = await _analytics.GetSubjectAverageForStudentByStudentIdAsync(Students[i].Id, Subject.Id);
+                StudentGrades.Add(await _analytics.GetGradesByTeacherUserAuthIdAsync(UserId, Subject.Id, Students[i].Id));
             }
 
             return Page();

@@ -7,16 +7,27 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using SchoolGradebook.Models;
 using SchoolGradebook.Data;
+using Microsoft.AspNetCore.Http;
+using SchoolGradebook.Services;
+using System.Security.Claims;
 
 namespace SchoolGradebook.Pages.Teacher.Grades
 {
     public class DetailsModel : PageModel
     {
         private readonly SchoolGradebook.Data.SchoolContext _context;
+        private readonly TeacherService teacherService;
+        private readonly TeacherAccessValidation teacherAccessValidation;
 
-        public DetailsModel(SchoolGradebook.Data.SchoolContext context)
+        public string UserId { get; set; }
+        public int TeacherId { get; set; }
+
+        public DetailsModel(SchoolContext context, IHttpContextAccessor httpContextAccessor, TeacherService teacherService, TeacherAccessValidation teacherAccessValidation)
         {
             _context = context;
+            this.teacherService = teacherService;
+            this.teacherAccessValidation = teacherAccessValidation;
+            UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
         }
 
         public Grade Grade { get; set; }
@@ -26,6 +37,12 @@ namespace SchoolGradebook.Pages.Teacher.Grades
 
         public async Task<IActionResult> OnGetAsync()
         {
+            TeacherId = await teacherService.GetTeacherId(UserId);
+            bool hasAccessToGrade = await teacherAccessValidation.HasAccessToGrade(TeacherId, gradeId);
+            if (!hasAccessToGrade)
+            {
+                return NotFound();
+            }
 
             Grade = await _context.Grades
                 .Include(g => g.Student)

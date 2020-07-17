@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SchoolGradebook.Data;
 using SchoolGradebook.Models;
+using SchoolGradebook.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,18 +23,29 @@ namespace SchoolGradebook.Pages.Teacher.Grades
 
         [BindProperty(SupportsGet = true)]
         public int SubjectInstanceId { get; set; }
+        private readonly TeacherService teacherService;
+        private readonly TeacherAccessValidation teacherAccessValidation;
+        public int TeacherId { get; set; }
 
-        public CreateModel(SchoolContext context, IHttpContextAccessor httpContextAccessor)
+        public CreateModel(SchoolContext context, IHttpContextAccessor httpContextAccessor, TeacherService teacherService, TeacherAccessValidation teacherAccessValidation)
         {
             _context = context;
+            this.teacherService = teacherService;
+            this.teacherAccessValidation = teacherAccessValidation;
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
         }
 
         [BindProperty(SupportsGet = true)]
         public int StudentId { get; set; }
 
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGet()
         {
+            TeacherId = await teacherService.GetTeacherId(UserId);
+            bool hasAccessToSubject = await teacherAccessValidation.HasAccessToSubject(TeacherId, SubjectInstanceId);
+            if (!hasAccessToSubject)
+            {
+                return Forbid();
+            }
             SubjectInstance s = _context.Subjects
                 .Find(SubjectInstanceId);
             SubjectName = s.Name;
@@ -61,31 +73,21 @@ namespace SchoolGradebook.Pages.Teacher.Grades
 
         public async Task<IActionResult> OnPostAsync()
         {
-            Grade.Added = DateTime.UtcNow;
-            SubjectInstance[] teachersSubjects = _context.Subjects
-                .Where(s => s.Teacher.UserAuthId == UserId)
-                .ToArray();
-            if (teachersSubjects == null)//Teacher has no subjects assigned
+
+            TeacherId = await teacherService.GetTeacherId(UserId);
+            bool hasAccessToSubject = await teacherAccessValidation.HasAccessToSubject(TeacherId, SubjectInstanceId);
+            if (!hasAccessToSubject)
             {
-                return Page();
+                return Forbid();
             }
-            bool teacherCanAdd = false;
-            foreach (SubjectInstance s in teachersSubjects)
-            {
-                if (s.Id == SubjectInstanceId)
-                {
-                    teacherCanAdd = true;
-                }
-            }
-            if (!teacherCanAdd)
-            {
-                return Page();
-            }
+
             if (Grade.Value == null)
             {
                 return Page();
             }
-            //In this state teacher is elegible for adding the grade to the specified subject
+
+            //Validation complete
+            Grade.Added = DateTime.UtcNow;
             Grade.SubjectInstanceId = SubjectInstanceId;
             if (!ModelState.IsValid)
             {

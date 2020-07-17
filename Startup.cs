@@ -31,8 +31,8 @@ namespace SchoolGradebook
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
+                    );
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = false;
@@ -55,6 +55,9 @@ namespace SchoolGradebook
 
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<Analytics>();
+            services.AddTransient<TeacherAccessValidation>();
+            services.AddTransient<StudentService>();
+            services.AddTransient<TeacherService>();
             services.AddRazorPages().AddRazorPagesOptions(options =>
             {
                 options.Conventions.AuthorizeFolder("/HumanCodes", "AdminAndTeacher");

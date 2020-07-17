@@ -12,13 +12,15 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
         public string UserId { get; set; }
         public SubjectInstance[] Subjects { get; set; }
         private readonly Analytics _analytics;
+        private readonly StudentService studentService;
+
         public int[] StudentsCount { get; set; }
 
-        public IndexModel(IHttpContextAccessor httpContextAccessor, Analytics analytics)
+        public IndexModel(IHttpContextAccessor httpContextAccessor, Analytics analytics, StudentService studentService)
         {
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            UserId ??= "";
             _analytics = analytics;
+            this.studentService = studentService;
         }
 
         public async Task OnGetAsync()
@@ -27,7 +29,7 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
             StudentsCount = new int[Subjects.Length];
             for (int i = 0; i < Subjects.Length; i++)
             {
-                StudentsCount[i] = await _analytics.GetStudentsCountInSubjectAsync(Subjects[i].Id);
+                StudentsCount[i] = await studentService.GetStudentCountBySubjectAsync(Subjects[i].Id);
             }
         }
     }

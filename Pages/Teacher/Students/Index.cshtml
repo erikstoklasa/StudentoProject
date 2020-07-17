@@ -7,7 +7,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Studenti</h1>
+<h1>Vaši studenti</h1>
 <table class="table">
     <thead>
         <tr>
@@ -27,7 +27,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Student)
+        @foreach (var item in Model.Students)
         {
             HumanActivationCode c = context.HumanActivationCodes
                 .Where(b => b.TargetId == item.Id)

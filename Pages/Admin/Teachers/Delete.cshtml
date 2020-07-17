@@ -5,11 +5,8 @@
     ViewData["Title"] = "Delete";
 }
 
-<h1>Odstranit učitele</h1>
-
-<h3>Opravdu chcete odstranit tohoto vyučujícího?</h3>
 <div>
-    <h4>Teacher</h4>
+    <h1>Odstranit vyučujícího</h1>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -30,11 +27,53 @@
         <dd class="col-sm-10">
             @Model.Teacher.LastName
         </dd>
+        <dt class="col-sm-2">
+            Datum narození
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Teacher.Birthdate.GetValueOrDefault().ToString("dd. M. yyyy")
+        </dd>
+        <dt class="col-sm-2">
+            Rodné číslo
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Teacher.PersonalIdentifNumber
+        </dd>
+        <dt class="col-sm-2">
+            Ulice
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Teacher.StreetAddress
+        </dd>
+        <dt class="col-sm-2">
+            Město
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Teacher.CityAddress
+        </dd>
+        <dt class="col-sm-2">
+            PSČ
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Teacher.ZipCode
+        </dd>
+        <dt class="col-sm-2">
+            Email
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Teacher.Email
+        </dd>
+        <dt class="col-sm-2">
+            Telefonní číslo
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Teacher.PhoneNumber
+        </dd>
     </dl>
     
     <form method="post">
         <input type="hidden" asp-for="Teacher.Id" />
         <input type="submit" value="Odstranit" class="btn btn-danger" /> |
-        <a asp-page="./Index">Zpětt</a>
+        <a asp-page="./Index">Zpět</a>
     </form>
 </div>

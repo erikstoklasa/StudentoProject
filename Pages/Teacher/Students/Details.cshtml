@@ -33,7 +33,7 @@
             Datum narození
         </dt>
         <dd class="col-sm-10">
-            @Model.Student.Birthdate
+            @Model.Student.Birthdate.GetValueOrDefault().ToString("dd. M. yyyy")
         </dd>
         <dt class="col-sm-2">
             Ulice

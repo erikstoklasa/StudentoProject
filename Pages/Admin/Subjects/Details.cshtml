@@ -7,8 +7,8 @@
 
 <div class="d-flex flex-row h-100 mt-5">
     <div class="d-flex flex-column w-100">
-        <h1>@Model.Subject.Name</h1>
-        <p>@Model.Subject.Teacher.getFullName()</p>
+        <h1>@Model.Subject.SubjectType.Name</h1>
+        <p>@Model.Subject.Teacher.GetFullName()</p>
         @if (Model.Students.Length == 0)
         {
             <p class="alert alert-warning my-5">Zatím v předmětu nejsou žádní studenti 🙁</p>
@@ -30,7 +30,7 @@
 
                         <tr>
                             <td>
-                                <a asp-page="/Admin/Students/Details" asp-route-id="@Model.Students[i].Id">@Model.Students[i].getFullName()</a>
+                                <a asp-page="/Admin/Students/Details" asp-route-id="@Model.Students[i].Id">@Model.Students[i].GetFullName()</a>
                             </td>
                             <td>
                                 <a asp-page="/Admin/Enrollments/Delete" asp-route-id="@Model.Subject.Enrollments.Where(e => e.StudentId == Model.Students[i].Id).FirstOrDefault().Id">Odebrat</a>

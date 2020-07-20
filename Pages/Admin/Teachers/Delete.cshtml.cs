@@ -7,16 +7,17 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using SchoolGradebook.Models;
 using SchoolGradebook.Data;
+using SchoolGradebook.Services;
 
 namespace SchoolGradebook.Pages.Admin.Teachers
 {
     public class DeleteModel : PageModel
     {
-        private readonly SchoolGradebook.Data.SchoolContext _context;
+        private readonly TeacherService teacherService;
 
-        public DeleteModel(SchoolGradebook.Data.SchoolContext context)
+        public DeleteModel(TeacherService teacherService)
         {
-            _context = context;
+            this.teacherService = teacherService;
         }
 
         [BindProperty]
@@ -29,7 +30,7 @@ namespace SchoolGradebook.Pages.Admin.Teachers
                 return NotFound();
             }
 
-            Teacher = await _context.Teachers.FirstOrDefaultAsync(m => m.Id == id);
+            Teacher = await teacherService.GetTeacherAsync((int)id);
 
             if (Teacher == null)
             {
@@ -45,13 +46,7 @@ namespace SchoolGradebook.Pages.Admin.Teachers
                 return NotFound();
             }
 
-            Teacher = await _context.Teachers.FindAsync(id);
-
-            if (Teacher != null)
-            {
-                _context.Teachers.Remove(Teacher);
-                await _context.SaveChangesAsync();
-            }
+            await teacherService.DeleteTeacherAsync((int)id);
 
             return RedirectToPage("./Index");
         }

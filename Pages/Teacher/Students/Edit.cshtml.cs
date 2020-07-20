@@ -76,7 +76,7 @@ namespace SchoolGradebook.Pages.Teacher.Students
                 return BadRequest();
             }
 
-            bool updatedSuccessfully = await studentService.UpdateStudent(Student);
+            bool updatedSuccessfully = await studentService.UpdateStudentAsync(Student);
             if (!updatedSuccessfully)
             {
                 ViewData["status_type"] = "error";

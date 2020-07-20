@@ -12,13 +12,12 @@
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="SubjectInstance.TeacherId" class="control-label">Učitel</label>
-                <select asp-for="SubjectInstance.TeacherId" class ="form-control" asp-items="Model.TeacherSelectList"></select>
+                <label asp-for="SubjectInstance.SubjectTypeId" class="control-label">Balík předmětů</label>
+                <select asp-for="SubjectInstance.SubjectTypeId" class="form-control" asp-items="Model.SubjectTypeSelectList"></select>
             </div>
             <div class="form-group">
-                <label asp-for="SubjectInstance.Name" class="control-label">Název předmětu</label>
-                <input asp-for="SubjectInstance.Name" class="form-control" />
-                <span asp-validation-for="SubjectInstance.Name" class="text-danger"></span>
+                <label asp-for="SubjectInstance.TeacherId" class="control-label">Učitel</label>
+                <select asp-for="SubjectInstance.TeacherId" class="form-control" asp-items="Model.TeacherSelectList"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Vytvořit" class="btn btn-primary" />

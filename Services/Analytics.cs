@@ -32,10 +32,9 @@ namespace SchoolGradebook.Services
         }
         public async Task<SubjectInstance[]> GetAllSubjectsAsync()
         {
-            return await Context.Subjects
+            return await Context.SubjectInstances
                 .Include(s => s.Teacher)
                 .Include(s => s.Enrollments)
-                .OrderBy(s => s.Name)
                 .AsNoTracking()
                 .ToArrayAsync();
         }
@@ -58,7 +57,6 @@ namespace SchoolGradebook.Services
             var enrollments = await Context.Enrollments
                 .Include(s => s.SubjectInstance)
                 .Where(s => s.Student.Id == studentId)
-                .OrderBy(s => s.SubjectInstance.Name)
                 .AsNoTracking()
                 .ToArrayAsync();
             SubjectInstance[] output = new SubjectInstance[enrollments.Length];
@@ -81,9 +79,8 @@ namespace SchoolGradebook.Services
         }
         public async Task<SubjectInstance[]> GetAllSubjectsByTeacherUserAuthAsync(string userId)
         {
-            SubjectInstance[] subjects = await Context.Subjects
+            SubjectInstance[] subjects = await Context.SubjectInstances
                 .Where(s => s.Teacher.UserAuthId == userId)
-                .OrderBy(s => s.Name)
                 .AsNoTracking()
                 .ToArrayAsync();
             return subjects;
@@ -91,7 +88,7 @@ namespace SchoolGradebook.Services
         public async Task<SubjectInstance> GetSubjectAsync(int SubjectInstanceId)
         {
             //Accessing Subjects via Enrollments table => Subject
-            SubjectInstance subject = await Context.Subjects
+            SubjectInstance subject = await Context.SubjectInstances
                 .Where(s => s.Id == SubjectInstanceId)
                 .Include(s => s.Teacher)
                 .Include(s => s.Enrollments)
@@ -116,7 +113,7 @@ namespace SchoolGradebook.Services
         }
         public async Task<int> GetSubjectsCountByTeacherIdAsync(string userId)
         {
-            int countOfSubjects = await Context.Subjects
+            int countOfSubjects = await Context.SubjectInstances
                 .Where(s => s.Teacher.UserAuthId == userId)
                 .CountAsync();
             return countOfSubjects;
@@ -127,7 +124,6 @@ namespace SchoolGradebook.Services
             var enrollments = await Context.Enrollments
                 .Include(s => s.Student)
                 .Where(s => s.SubjectInstance.Id == Id)
-                .OrderBy(s => s.SubjectInstance.Name)
                 .AsNoTracking()
                 .ToArrayAsync();
             Student[] output = new Student[enrollments.Length];
@@ -216,7 +212,6 @@ namespace SchoolGradebook.Services
                 .Include(s => s.SubjectInstance)
                 .Include(s => s.SubjectInstance.Teacher)
                 .Where(s => s.Student.UserAuthId == userId)
-                .OrderBy(s => s.SubjectInstance.Name)
                 .AsNoTracking()
                 .ToArrayAsync();
             SubjectInstance[] output = new SubjectInstance[enrollments.Length];

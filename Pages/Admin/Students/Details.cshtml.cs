@@ -7,16 +7,17 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using SchoolGradebook.Models;
 using SchoolGradebook.Data;
+using SchoolGradebook.Services;
 
 namespace SchoolGradebook.Pages.Admin.Students
 {
     public class DetailsModel : PageModel
     {
-        private readonly SchoolGradebook.Data.SchoolContext _context;
+        private readonly StudentService studentService;
 
-        public DetailsModel(SchoolGradebook.Data.SchoolContext context)
+        public DetailsModel(StudentService studentService)
         {
-            _context = context;
+            this.studentService = studentService;
         }
 
         public Models.Student Student { get; set; }
@@ -28,13 +29,8 @@ namespace SchoolGradebook.Pages.Admin.Students
                 return NotFound();
             }
 
-            Student = await _context.Students
-                .Include(s => s.Enrollments)
-                .ThenInclude(e => e.SubjectInstance)
-                .ThenInclude(d => d.Teacher)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(m => m.Id == id);
-
+            Student = await studentService.GetStudentFullProfileAsync((int)id);
+            
             if (Student == null)
             {
                 return NotFound();

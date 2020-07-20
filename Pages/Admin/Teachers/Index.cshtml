@@ -29,10 +29,10 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Teacher)
+        @foreach (Teacher teacher in Model.Teachers)
         {
             HumanActivationCode c = context.HumanActivationCodes
-                .Where(b => b.TargetId == item.Id)
+                .Where(b => b.TargetId == teacher.Id)
                 .Where(b => b.CodeType == CodeType.Teacher)
                 .FirstOrDefault();
             bool hasActivationCode = c != null;
@@ -44,21 +44,21 @@
                     }
                 </td>
                 <td>
-                    @if (item.UserAuthId != null)
+                    @if (teacher.UserAuthId != null)
                     {
                         @("Spárováno")
                     }
                 </td>
                 <td class="search-data">
-                    @item.getFullName()
+                    @teacher.GetFullName()
                 </td>
                 <td>
                     <a asp-page="/HumanCodes/Create"
-                       asp-route-targetId="@item.Id"
+                       asp-route-targetId="@teacher.Id"
                        asp-route-codeType="@CodeType.Teacher">Vygenerovat nový kód</a> |
-                    <a asp-page="./Edit" asp-route-id="@item.Id">Upravit</a> |
-                    <a asp-page="./Details" asp-route-id="@item.Id">Detaily</a> |
-                    <a asp-page="./Delete" asp-route-id="@item.Id">Odstranit</a>
+                    <a asp-page="./Edit" asp-route-id="@teacher.Id">Upravit</a> |
+                    <a asp-page="./Details" asp-route-id="@teacher.Id">Detaily</a> |
+                    <a asp-page="./Delete" asp-route-id="@teacher.Id">Odstranit</a>
                 </td>
             </tr>
         }

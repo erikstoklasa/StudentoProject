@@ -13,8 +13,8 @@
     @if (Model.SubjectAverage.CompareTo(Double.NaN) == 0)
     {
         <div class="d-flex flex-column">
-            <h1>@Model.Subject.Name</h1>
-            <p>@Model.Subject.Teacher.getFullName()</p>
+            <h1>@Model.Subject.SubjectTypeId</h1>
+            <p>@Model.Subject.Teacher.GetFullName()</p>
             <p class="alert alert-warning my-5">Zatím ti vyučující nepřidal žádné známky 🙁</p>
         </div>
 
@@ -23,8 +23,8 @@
     else //There are some grades to display
     {
         <div class="d-flex flex-column">
-            <h1>@Model.Subject.Name</h1>
-            <p>@Model.Subject.Teacher.getFullName()</p>
+            <h1>@Model.Subject.SubjectTypeId</h1>
+            <p>@Model.Subject.Teacher.GetFullName()</p>
             <p class="text-left mt-5 mb-0">Všechny známky:</p>
             <table class="table table-responsive mr-3">
                 <tbody>

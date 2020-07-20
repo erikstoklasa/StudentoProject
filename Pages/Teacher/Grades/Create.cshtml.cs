@@ -46,9 +46,9 @@ namespace SchoolGradebook.Pages.Teacher.Grades
             {
                 return Forbid();
             }
-            SubjectInstance s = _context.Subjects
+            SubjectInstance s = _context.SubjectInstances
                 .Find(SubjectInstanceId);
-            SubjectName = s.Name;
+            SubjectName = s.SubjectTypeId.ToString();
             Enrollment[] enrollments = _context.Enrollments
                 .Include(s => s.Student)
                 .Where(s => s.SubjectInstanceId == SubjectInstanceId)
@@ -60,7 +60,7 @@ namespace SchoolGradebook.Pages.Teacher.Grades
                 {
                     Students.Add(
                     new SelectListItem(
-                        enrollments[i].Student.getFullName(),
+                        enrollments[i].Student.GetFullName(),
                         enrollments[i].StudentId.ToString())
                     );
                 }

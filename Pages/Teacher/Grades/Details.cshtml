@@ -14,7 +14,7 @@
             Předmět
         </dt>
         <dd class="col-sm-10">
-            @Model.Grade.SubjectInstance.Name
+            @Model.Grade.SubjectInstance.SubjectTypeId
         </dd>
         <dt class="col-sm-2">
             Známka
@@ -32,7 +32,7 @@
             Vyučující
         </dt>
         <dd class="col-sm-10">
-            @Model.Grade.SubjectInstance.Teacher.getFullName()
+            @Model.Grade.SubjectInstance.Teacher.GetFullName()
         </dd>
     </dl>
 </div>

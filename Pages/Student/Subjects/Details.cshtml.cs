@@ -37,7 +37,7 @@ namespace SchoolGradebook.Pages.Student.Subjects
                 return NotFound();
             }
 
-            Subject = await _context.Subjects
+            Subject = await _context.SubjectInstances
                 .Include(s => s.Teacher).FirstOrDefaultAsync(m => m.Id == id);
             SubjectMaterials = await _analytics.GetAllSubjectMaterialsAsync((int)id);
             SubjectAverage = await _analytics.GetSubjectAverageForStudentAsync(UserId, Subject.Id);

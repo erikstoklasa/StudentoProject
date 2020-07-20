@@ -7,23 +7,24 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using SchoolGradebook.Data;
 using SchoolGradebook.Models;
+using SchoolGradebook.Services;
 
 namespace SchoolGradebook.Pages.Admin.Teachers
 {
     public class IndexModel : PageModel
     {
-        private readonly SchoolGradebook.Data.SchoolContext _context;
+        private readonly TeacherService teacherService;
 
-        public IndexModel(SchoolGradebook.Data.SchoolContext context)
+        public IndexModel(TeacherService teacherService)
         {
-            _context = context;
+            this.teacherService = teacherService;
         }
 
-        public IList<Models.Teacher> Teacher { get;set; }
+        public IList<Models.Teacher> Teachers { get;set; }
 
         public async Task OnGetAsync()
         {
-            Teacher = await _context.Teachers.ToListAsync();
+            Teachers = await teacherService.GetAllTeachersAsync();
         }
     }
 }

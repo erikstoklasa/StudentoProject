@@ -9,7 +9,7 @@
 <p>
     <a asp-page="Create">Vytvořit nový</a>
 </p>
-@if (Model.Subjects.Length == 0)
+@if (Model.SubjectInstances.Count == 0)
 {
     <p class="alert alert-warning my-5">Zatím jste nevytvořil žádný předmět 🙁</p>
 }
@@ -35,22 +35,21 @@ else
             </tr>
         </thead>
         <tbody>
-            @for (int i = 0; i < Model.Subjects.Length; i++)
+            @for (int i = 0; i < Model.SubjectInstances.Count; i++)
             {
                 <tr>
                     <td class="search-data">
-                        @Model.Subjects[i].Name
+                        @Model.SubjectInstances[i].GetName()
                     </td>
                     <td>
-                        @Model.Subjects[i].Teacher.getFullName()
+                        @Model.SubjectInstances[i].Teacher.GetFullName()
                     </td>
                     <td>
                         @Model.StudentsCount[i]
                     </td>
                     <td>
-                        <a asp-page="Edit" asp-route-id="@Model.Subjects[i].Id">Upravit</a> |
-                        <a asp-page="Details" asp-route-id="@Model.Subjects[i].Id">Detail</a> |
-                        <a asp-page="Delete" asp-route-id="@Model.Subjects[i].Id">Odstranit</a>
+                        <a asp-page="Details" asp-route-id="@Model.SubjectInstances[i].Id">Detail</a> |
+                        <a asp-page="Delete" asp-route-id="@Model.SubjectInstances[i].Id">Odstranit</a>
                     </td>
                 </tr>
             }

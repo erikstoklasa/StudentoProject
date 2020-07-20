@@ -7,20 +7,24 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using SchoolGradebook.Data;
 using SchoolGradebook.Models;
+using SchoolGradebook.Services;
 
 namespace SchoolGradebook.Pages.Admin.Enrollments
 {
     public class DeleteModel : PageModel
     {
-        private readonly SchoolGradebook.Data.SchoolContext _context;
+        private readonly SchoolContext _context;
+        private readonly SubjectService subjectService;
 
-        public DeleteModel(SchoolGradebook.Data.SchoolContext context)
+        public DeleteModel(SchoolContext context, SubjectService subjectService)
         {
             _context = context;
+            this.subjectService = subjectService;
         }
 
         [BindProperty]
         public Enrollment Enrollment { get; set; }
+        public SubjectInstance Subject { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -31,8 +35,8 @@ namespace SchoolGradebook.Pages.Admin.Enrollments
 
             Enrollment = await _context.Enrollments
                 .Include(e => e.Student)
-                .Include(e => e.SubjectInstance).FirstOrDefaultAsync(m => m.Id == id);
-
+                .FirstOrDefaultAsync(m => m.Id == id);
+            Subject = await subjectService.GetSubjectInstanceAsync(Enrollment.SubjectInstanceId);
             if (Enrollment == null)
             {
                 return NotFound();

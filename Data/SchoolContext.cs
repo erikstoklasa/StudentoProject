@@ -15,17 +15,23 @@ namespace SchoolGradebook.Data
         }
 
         public DbSet<Student> Students { get; set; }
-        public DbSet<SubjectInstance> Subjects { get; set; }
+        public DbSet<SubjectInstance> SubjectInstances { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Grade> Grades { get; set; }
         public DbSet<Enrollment> Enrollments { get; set; }
         public DbSet<HumanActivationCode> HumanActivationCodes { get; set; }
         public DbSet<SubjectMaterial> SubjectMaterials { get; set; }
+        public DbSet<SubjectType> SubjectTypes { get; set; }
+        public DbSet<Admin> Admins { get; set; }
+        public DbSet<Parent> Parents { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Teacher>().ToTable("Teachers");
-            modelBuilder.Entity<SubjectInstance>().ToTable("Subjects");
+            modelBuilder.Entity<SubjectType>().ToTable("SubjectTypes");
+            modelBuilder.Entity<SubjectInstance>().ToTable("SubjectInstances");
+            modelBuilder.Entity<Admin>().ToTable("Admins");
+            modelBuilder.Entity<Parent>().ToTable("Parents");
             modelBuilder.Entity<Student>().ToTable("Students");
             modelBuilder.Entity<Enrollment>().ToTable("Enrollments");
             modelBuilder.Entity<Grade>().ToTable("Grades");

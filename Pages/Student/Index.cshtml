@@ -47,7 +47,7 @@
                                 @grade.Value.ToString()
                             </td>
                             <td>
-                                @grade.SubjectInstance.Name.ToString()
+                                @grade.SubjectInstance.SubjectTypeId.ToString()
                             </td>
                             <td>
                                 @LanguageHelper.getRelativeTime(grade.Added)
@@ -84,8 +84,8 @@
         {
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">@x.Name</h5>
-                    <p class="card-text">@x.Teacher.getFullName()</p>
+                    <h5 class="card-title">@x.SubjectTypeId</h5>
+                    <p class="card-text">@x.Teacher.GetFullName()</p>
                     <p class="card-text">
                         <strong>
                             @((await analytics.GetSubjectAverageForStudentAsync(UserId, x.Id)).CompareTo(Double.NaN) == 0 ?

@@ -13,24 +13,29 @@ namespace SchoolGradebook.Pages.Admin.Subjects
 {
     public class CreateModel : PageModel
     {
-        private readonly SchoolGradebook.Data.SchoolContext _context;
         public List<SelectListItem> TeacherSelectList { get; set; }
-        private readonly Analytics _analytics;
+        public List<SelectListItem> SubjectTypeSelectList { get; set; }
+        private readonly SubjectService subjectService;
+        private readonly TeacherService teacherService;
 
-        public CreateModel(SchoolGradebook.Data.SchoolContext context, Analytics analytics)
+        public CreateModel(SubjectService subjectService, TeacherService teacherService)
         {
-            _context = context;
+            this.subjectService = subjectService;
+            this.teacherService = teacherService;
             TeacherSelectList = new List<SelectListItem>();
-            _analytics = analytics;
+            SubjectTypeSelectList = new List<SelectListItem>();
         }
 
         public async Task<IActionResult> OnGet()
         {
-            foreach (Models.Teacher t in await _analytics.GetAllTeachersAsync())
+            foreach (Models.Teacher t in await teacherService.GetAllTeachersAsync())
             {
-                TeacherSelectList.Add(new SelectListItem() { Text = t.getFullName(), Value = t.Id.ToString() });
+                TeacherSelectList.Add(new SelectListItem() { Text = t.GetFullName(), Value = t.Id.ToString() });
             }
-            //ViewData["TeacherId"] = new SelectList(_context.Teachers, "Id", "LastName");
+            foreach (SubjectType st in await subjectService.GetAllSubjectTypesAsync())
+            {
+                SubjectTypeSelectList.Add(new SelectListItem() { Text = st.Name, Value = st.Id.ToString() });
+            }
             return Page();
         }
 
@@ -45,9 +50,7 @@ namespace SchoolGradebook.Pages.Admin.Subjects
             {
                 return Page();
             }
-
-            _context.Subjects.Add(SubjectInstance);
-            await _context.SaveChangesAsync();
+            await subjectService.AddSubjectInstanceAsync(SubjectInstance);
 
             return RedirectToPage("./Index");
         }

@@ -29,17 +29,17 @@ namespace SchoolGradebook.Pages.Teacher.Grades
             this.teacherService = teacherService;
             this.teacherAccessValidation = teacherAccessValidation;
             List<Models.Student> tempStud = _context.Students.ToList();
-            List<SubjectInstance> tempSubj = _context.Subjects.ToList();
+            List<SubjectInstance> tempSubj = _context.SubjectInstances.ToList();
             Subjects = new List<SelectListItem> {};
             Students = new List<SelectListItem> {};
 
             foreach (Models.Student s in tempStud)
             {
-                Students.Add(new SelectListItem(s.getFullName(), s.Id.ToString()));
+                Students.Add(new SelectListItem(s.GetFullName(), s.Id.ToString()));
             }
             foreach (SubjectInstance s in tempSubj)
             {
-                Subjects.Add(new SelectListItem(s.Name, s.Id.ToString()));
+                Subjects.Add(new SelectListItem(s.SubjectTypeId.ToString(), s.Id.ToString()));
             }
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
 

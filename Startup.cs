@@ -57,6 +57,7 @@ namespace SchoolGradebook
             services.AddTransient<Analytics>();
             services.AddTransient<TeacherAccessValidation>();
             services.AddTransient<StudentService>();
+            services.AddTransient<SubjectService>();
             services.AddTransient<TeacherService>();
             services.AddRazorPages().AddRazorPagesOptions(options =>
             {

@@ -12,12 +12,14 @@ namespace SchoolGradebook.Pages.Admin.Subjects
 {
     public class DetailsModel : PageModel
     {
-        private readonly Analytics _analytics;
+        private readonly StudentService studentService;
+        private readonly SubjectService subjectService;
 
-        public DetailsModel(IHttpContextAccessor httpContextAccessor, Analytics analytics)
+        public DetailsModel(IHttpContextAccessor httpContextAccessor, StudentService studentService, SubjectService subjectService)
         {
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            _analytics = analytics;
+            this.studentService = studentService;
+            this.subjectService = subjectService;
         }
 
         public string UserId { get; private set; }
@@ -31,14 +33,14 @@ namespace SchoolGradebook.Pages.Admin.Subjects
                 return NotFound();
             }
 
-            Subject = await _analytics.GetSubjectAsync((int)id);
+            Subject = await subjectService.GetSubjectInstanceFullAsync((int)id);
 
             if (Subject == null)
             {
                 return NotFound();
             }
 
-            Students = await _analytics.GetAllStudentsBySubjectInstanceIdAsync(Subject.Id);
+            Students = await studentService.GetAllStudentsBySubjectAsync(Subject.Id);
 
             return Page();
         }

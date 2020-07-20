@@ -19,6 +19,24 @@ namespace SchoolGradebook.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("SchoolGradebook.Models.Admin", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AdminLevel")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserAuthId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Admins");
+                });
+
             modelBuilder.Entity("SchoolGradebook.Models.Enrollment", b =>
                 {
                     b.Property<int>("Id")
@@ -94,6 +112,21 @@ namespace SchoolGradebook.Migrations
                     b.ToTable("HumanActivationCodes");
                 });
 
+            modelBuilder.Entity("SchoolGradebook.Models.Parent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("UserAuthId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Parents");
+                });
+
             modelBuilder.Entity("SchoolGradebook.Models.Student", b =>
                 {
                     b.Property<int>("Id")
@@ -107,6 +140,9 @@ namespace SchoolGradebook.Migrations
                     b.Property<string>("CityAddress")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ClassId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
@@ -115,6 +151,9 @@ namespace SchoolGradebook.Migrations
 
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("int");
 
                     b.Property<string>("PersonalIdentifNumber")
                         .HasColumnType("nvarchar(max)");
@@ -133,27 +172,31 @@ namespace SchoolGradebook.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ParentId");
+
                     b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("SchoolGradebook.Models.Subject", b =>
+            modelBuilder.Entity("SchoolGradebook.Models.SubjectInstance", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("SubjectTypeId")
+                        .HasColumnType("int");
 
                     b.Property<int>("TeacherId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("SubjectTypeId");
+
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("Subjects");
+                    b.ToTable("SubjectInstances");
                 });
 
             modelBuilder.Entity("SchoolGradebook.Models.SubjectMaterial", b =>
@@ -172,14 +215,37 @@ namespace SchoolGradebook.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SubjectInstanceId")
+                    b.Property<int>("SubjectTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TeacherId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SubjectInstanceId");
+                    b.HasIndex("SubjectTypeId");
+
+                    b.HasIndex("TeacherId");
 
                     b.ToTable("SubjectMaterials");
+                });
+
+            modelBuilder.Entity("SchoolGradebook.Models.SubjectType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SpecializationName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SubjectTypes");
                 });
 
             modelBuilder.Entity("SchoolGradebook.Models.Teacher", b =>
@@ -232,7 +298,7 @@ namespace SchoolGradebook.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SchoolGradebook.Models.Subject", "Subject")
+                    b.HasOne("SchoolGradebook.Models.SubjectInstance", "SubjectInstance")
                         .WithMany("Enrollments")
                         .HasForeignKey("SubjectInstanceId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -247,17 +313,30 @@ namespace SchoolGradebook.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SchoolGradebook.Models.Subject", "Subject")
+                    b.HasOne("SchoolGradebook.Models.SubjectInstance", "SubjectInstance")
                         .WithMany("Grades")
                         .HasForeignKey("SubjectInstanceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SchoolGradebook.Models.Subject", b =>
+            modelBuilder.Entity("SchoolGradebook.Models.Student", b =>
                 {
+                    b.HasOne("SchoolGradebook.Models.Parent", null)
+                        .WithMany("Students")
+                        .HasForeignKey("ParentId");
+                });
+
+            modelBuilder.Entity("SchoolGradebook.Models.SubjectInstance", b =>
+                {
+                    b.HasOne("SchoolGradebook.Models.SubjectType", null)
+                        .WithMany("SubjectInstances")
+                        .HasForeignKey("SubjectTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("SchoolGradebook.Models.Teacher", "Teacher")
-                        .WithMany("Subjects")
+                        .WithMany("SubjectInstances")
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -265,9 +344,15 @@ namespace SchoolGradebook.Migrations
 
             modelBuilder.Entity("SchoolGradebook.Models.SubjectMaterial", b =>
                 {
-                    b.HasOne("SchoolGradebook.Models.Subject", "Subject")
-                        .WithMany()
-                        .HasForeignKey("SubjectInstanceId")
+                    b.HasOne("SchoolGradebook.Models.SubjectType", "SubjectType")
+                        .WithMany("SubjectMaterials")
+                        .HasForeignKey("SubjectTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SchoolGradebook.Models.Teacher", "Teacher")
+                        .WithMany("SubjectMaterials")
+                        .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

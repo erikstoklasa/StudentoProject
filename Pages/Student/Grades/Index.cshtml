@@ -36,7 +36,7 @@ else
             {
                 <tr>
                     <td>
-                        @item.SubjectInstance.Name
+                        @item.SubjectInstance.SubjectTypeId
                     </td>
                     <td>
                         @item.Value
@@ -45,7 +45,7 @@ else
                         @LanguageHelper.getRelativeTime(item.Added)
                     </td>
                     <td>
-                        @item.SubjectInstance.Teacher.getFullName()
+                        @item.SubjectInstance.Teacher.GetFullName()
                     </td>
                     <td>
                         <a asp-page="Details" asp-route-gradeId="@item.Id">Zobrazit</a>

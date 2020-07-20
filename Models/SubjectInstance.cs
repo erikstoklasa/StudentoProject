@@ -9,10 +9,29 @@ namespace SchoolGradebook.Models
     {
         public int Id { get; set; }
         public int TeacherId { get; set; }
-        public String Name { get; set; }
+        public int SubjectTypeId { get; set; }
+        public string GetName()
+        {
+            SubjectType.Name ??= "";
+            if(Teacher != null)
+            {
+                return $"{SubjectType.Name} - {Teacher.GetInitials()}";
+            }
+            return $"{SubjectType.Name}";
+        }
+        public string GetFullName()
+        {
+            SubjectType.Name ??= "";
+            if (Teacher != null)
+            {
+                return $"{SubjectType.Name} - {Teacher.GetFullName()}";
+            }
+            return $"{SubjectType.Name}";
+        }
 
         public ICollection<Enrollment> Enrollments { get; set; }
         public ICollection<Grade> Grades { get; set; }
         public Teacher Teacher { get; set; }
+        public SubjectType SubjectType { get; set; }
     }
 }

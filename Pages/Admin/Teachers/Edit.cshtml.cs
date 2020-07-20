@@ -1,23 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using SchoolGradebook.Models;
-using SchoolGradebook.Data;
+using SchoolGradebook.Services;
+using System.Threading.Tasks;
 
 namespace SchoolGradebook.Pages.Admin.Teachers
 {
     public class EditModel : PageModel
     {
-        private readonly SchoolGradebook.Data.SchoolContext _context;
+        private readonly TeacherService teacherService;
 
-        public EditModel(SchoolGradebook.Data.SchoolContext context)
+        public EditModel(TeacherService teacherService)
         {
-            _context = context;
+            this.teacherService = teacherService;
         }
 
         [BindProperty]
@@ -30,7 +24,7 @@ namespace SchoolGradebook.Pages.Admin.Teachers
                 return NotFound();
             }
 
-            Teacher = await _context.Teachers.FirstOrDefaultAsync(m => m.Id == id);
+            Teacher = await teacherService.GetTeacherAsync((int)id);
 
             if (Teacher == null)
             {
@@ -43,38 +37,14 @@ namespace SchoolGradebook.Pages.Admin.Teachers
         // more details see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            Models.Teacher t = await _context.Teachers.AsNoTracking().FirstOrDefaultAsync(m => m.Id == Teacher.Id);
+            Models.Teacher t = await teacherService.GetTeacherAsync(Teacher.Id);
             Teacher.UserAuthId = t.UserAuthId;
 
-            if (!ModelState.IsValid)
-            {
-                return Page();
+            if(await teacherService.UpdateTeacherAsync(Teacher)){
+                return RedirectToPage("./Index");
             }
-
-            _context.Attach(Teacher).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TeacherExists(Teacher.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return RedirectToPage("./Index");
-        }
-
-        private bool TeacherExists(int id)
-        {
-            return _context.Teachers.Any(e => e.Id == id);
+            //TODO: Return message to user when the updating doesn't pass
+            return Page();
         }
     }
 }

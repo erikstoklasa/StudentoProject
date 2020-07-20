@@ -7,16 +7,17 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SchoolGradebook.Models;
 using SchoolGradebook.Data;
+using SchoolGradebook.Services;
 
 namespace SchoolGradebook.Pages.Admin.Teachers
 {
     public class CreateModel : PageModel
     {
-        private readonly SchoolGradebook.Data.SchoolContext _context;
+        private readonly TeacherService teacherService;
 
-        public CreateModel(SchoolGradebook.Data.SchoolContext context)
+        public CreateModel(TeacherService teacherService)
         {
-            _context = context;
+            this.teacherService = teacherService;
         }
 
         public IActionResult OnGet()
@@ -35,9 +36,7 @@ namespace SchoolGradebook.Pages.Admin.Teachers
             {
                 return Page();
             }
-
-            _context.Teachers.Add(Teacher);
-            await _context.SaveChangesAsync();
+            await teacherService.AddTeacherAsync(Teacher);
 
             return RedirectToPage("./Index");
         }

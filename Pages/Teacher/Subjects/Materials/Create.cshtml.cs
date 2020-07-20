@@ -46,7 +46,7 @@ namespace SchoolGradebook.Pages.Teacher.Subjects.Materials
                 return NotFound();
             }
 
-            SubjectSelectList.Add(new SelectListItem(s.Name, s.Id.ToString()));
+            SubjectSelectList.Add(new SelectListItem(s.SubjectTypeId.ToString(), s.Id.ToString()));
             return Page();
         }
         public IFormFile FileUpload { get; set; }

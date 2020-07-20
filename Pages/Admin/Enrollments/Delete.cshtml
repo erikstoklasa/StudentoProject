@@ -13,13 +13,13 @@
             Předmět
         </dt>
         <dd class="col-sm-10">
-            @Model.Enrollment.SubjectInstance.Name
+            @Model.Subject.GetFullName()
         </dd>
         <dt class="col-sm-2">
             Student
         </dt>
         <dd class="col-sm-10">
-            @Model.Enrollment.Student.getFullName()
+            @Model.Enrollment.Student.GetFullName()
         </dd>
     </dl>
 

@@ -30,7 +30,19 @@ namespace SchoolGradebook.Models
         public String? Email { get; set; }
         [Display(Name = "Telefonní číslo")]
         public String? PhoneNumber { get; set; }
-        public String getFullName() => FirstName + " " + LastName;
+        public String GetFullName()
+        {
+            FirstName ??= "";
+            LastName ??= "";
+            return $"{FirstName} {LastName}";
+        }
+
+        public String GetInitials()
+        {
+            FirstName ??= "";
+            LastName ??= "";
+            return $"{FirstName.ToUpper().First()}{LastName.ToUpper().First()}";
+        }
 
         public ICollection<SubjectInstance>? SubjectInstances { get; set; }
         public ICollection<SubjectMaterial>? SubjectMaterials { set; get; }

@@ -19,7 +19,7 @@ else
             <div class="card mx-1">
                 <div class="card-body">
                     <a asp-page="Details" asp-route-id="@Model.Subjects[i].Id">
-                        <h5 class="card-title">@Model.Subjects[i].Name</h5>
+                        <h5 class="card-title">@Model.Subjects[i].SubjectTypeId</h5>
                     </a>
                     <p class="card-text">Studentů: @Model.StudentsCount[i]</p>
                     <a class="btn btn-primary" asp-page="/Teacher/Grades/Create" asp-route-SubjectInstanceId="@Model.Subjects[i].Id">Přidat známku</a>

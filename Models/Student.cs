@@ -8,7 +8,7 @@ namespace SchoolGradebook.Models
 {
     public class Student
     {
-        #nullable enable
+#nullable enable
         public int Id { get; set; }
         public string? UserAuthId { get; set; }
         [Display(Name = "Jméno")]
@@ -31,10 +31,22 @@ namespace SchoolGradebook.Models
         [Display(Name = "Telefonní číslo")]
         public String? PhoneNumber { get; set; }
 
-        public int ClassId { set; get; }
-        public int ParentId { set; get; }
+        public int? ClassId { set; get; }
+        public int? ParentId { set; get; }
 
-        public String getFullName() => FirstName + " " + LastName;
+        public String GetFullName()
+        {
+            FirstName ??= "";
+            LastName ??= "";
+            return $"{FirstName} {LastName}";
+        }
+
+        public String GetInitials()
+        {
+            FirstName ??= "";
+            LastName ??= "";
+            return $"{FirstName.ToUpper().First()}{LastName.ToUpper().First()}";
+        }
 
         public ICollection<Enrollment>? Enrollments { get; set; }
         public ICollection<Grade>? Grades { get; set; }

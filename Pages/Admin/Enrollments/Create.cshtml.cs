@@ -1,27 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SchoolGradebook.Data;
 using SchoolGradebook.Models;
 using SchoolGradebook.Services;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SchoolGradebook.Pages.Admin.Enrollments
 {
     public class CreateModel : PageModel
     {
-        private readonly SchoolGradebook.Data.SchoolContext _context;
+        private readonly SchoolContext _context;
         private readonly Analytics _analytics;
+        private readonly SubjectService subjectService;
+        private readonly StudentService studentService;
 
-        public CreateModel(SchoolGradebook.Data.SchoolContext context, Analytics analytics)
+        public CreateModel(SchoolContext context, Analytics analytics, SubjectService subjectService, StudentService studentService)
         {
             _context = context;
             StudentsSelectList = new List<SelectListItem> { };
             SubjectsSelectList = new List<SelectListItem> { };
             _analytics = analytics;
+            this.subjectService = subjectService;
+            this.studentService = studentService;
         }
         public List<SelectListItem> StudentsSelectList { get; private set; }
         public List<SelectListItem> SubjectsSelectList { get; private set; }
@@ -32,17 +35,17 @@ namespace SchoolGradebook.Pages.Admin.Enrollments
         public List<Models.SubjectInstance> StudentSubjects { get; set; }
         public async Task<IActionResult> OnGet()
         {
-            Students = new List<Models.Student>{ await _analytics.GetStudentByIdAsync(StudentId) };
-            Subjects = (await _analytics.GetAllSubjectsAsync()).ToList();
-            StudentSubjects = (await _analytics.GetAllSubjectsByStudentIdAsync(StudentId)).ToList();
+            Students = new List<Models.Student>{ await studentService.GetStudentAsync(StudentId) };
+            Subjects = await subjectService.GetAllSubjectInstancesFullAsync();
+            StudentSubjects = await subjectService.GetAllSubjectInstancesByStudentAsync(StudentId);
 
-            StudentsSelectList.Add(new SelectListItem(Students[0].getFullName(), Students[0].Id.ToString()));
+            StudentsSelectList.Add(new SelectListItem(Students[0].GetFullName(), Students[0].Id.ToString()));
 
             foreach (Models.SubjectInstance sub in Subjects)
             {
                 if (!sub.Enrollments.Where(s => s.StudentId == StudentId).Any())
                 {
-                    SubjectsSelectList.Add(new SelectListItem(sub.Name, sub.Id.ToString()));
+                    SubjectsSelectList.Add(new SelectListItem(sub.GetFullName(), sub.Id.ToString()));
                 }
             }
 

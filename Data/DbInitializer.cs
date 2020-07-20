@@ -18,8 +18,8 @@ namespace SchoolGradebook.Data
 
             string[] lastNames = { "Nováková", "Novák", "Svobodová", "Svoboda", "Novotný", "Novotná", "Dvořáková", "Dvořák", "Černá", "Černý", "Procházková", "Procházka", "Kučerová", "Kučera", "Veselá", "Veselý" };
             DateTime[] dates = { DateTime.Parse("07-09-2019"), DateTime.Parse("10-12-2019"), DateTime.Parse("21-01-2020"), DateTime.Parse("18-02-2020"), DateTime.Parse("05-03-2020"), DateTime.Parse("28-03-2020"), DateTime.Parse("11-04-2020") };
-            const int NUMBER_OF_TEACHERS = 5;
-            const int NUMBER_OF_STUDENTS = 5;
+            const int NUMBER_OF_TEACHERS = 10;
+            const int NUMBER_OF_STUDENTS = 15;
             const int NUMBER_OF_GRADES = 200;
             context.Database.EnsureCreated();
             //Students
@@ -55,23 +55,42 @@ namespace SchoolGradebook.Data
                 }
                 context.SaveChanges();
             }
-
-            //Subjects
-            if (!context.Subjects.Any())
+            //Subject types
+            if (!context.SubjectTypes.Any())
             {
-                var subjects = new SubjectInstance[]
+                var subjectTypes = new SubjectType[]
                     {
-                        new SubjectInstance{TeacherId=3, Name="Matematika"},
-                        new SubjectInstance{TeacherId=3, Name="Fyzika"},
-                        new SubjectInstance{TeacherId=3, Name="Český jazyk"},
-                        new SubjectInstance{TeacherId=3, Name="Chemie"},
-                        new SubjectInstance{TeacherId=3, Name="Anglický jazyk"},
-                        new SubjectInstance{TeacherId=3, Name="Německý jazyk"},
-                        new SubjectInstance{TeacherId=3, Name="Informatika"}
+                        new SubjectType{Name = "Český jazyk", SpecializationName = "Gymnázium"},
+                        new SubjectType{Name = "Anglický jazyk", SpecializationName = "Gymnázium"},
+                        new SubjectType{Name = "Německý jazyk", SpecializationName = "Gymnázium"},
+                        new SubjectType{Name = "Španělský jazyk", SpecializationName = "Gymnázium"},
+                        new SubjectType{Name = "Matematika", SpecializationName = "Gymnázium"},
+                        new SubjectType{Name = "Programování", SpecializationName = "Gymnázium"}
                     };
-                foreach (SubjectInstance d in subjects)
+                foreach (SubjectType d in subjectTypes)
                 {
-                    context.Subjects.Add(d);
+                    context.SubjectTypes.Add(d);
+                }
+                context.SaveChanges();
+            }
+
+            //Subject instances
+            if (!context.SubjectInstances.Any())
+            {
+                var subjectInstances = new SubjectInstance[]
+                    {
+                        new SubjectInstance{TeacherId=3, SubjectTypeId = 1},
+                        new SubjectInstance{TeacherId=3, SubjectTypeId = 2},
+                        new SubjectInstance{TeacherId=3, SubjectTypeId = 3},
+                        new SubjectInstance{TeacherId=3, SubjectTypeId = 4},
+                        new SubjectInstance{TeacherId=3, SubjectTypeId = 5},
+                        new SubjectInstance{TeacherId=4, SubjectTypeId = 1},
+                        new SubjectInstance{TeacherId=4, SubjectTypeId = 2},
+                        new SubjectInstance{TeacherId=1, SubjectTypeId = 1}
+                    };
+                foreach (SubjectInstance d in subjectInstances)
+                {
+                    context.SubjectInstances.Add(d);
                 }
                 context.SaveChanges();
             }

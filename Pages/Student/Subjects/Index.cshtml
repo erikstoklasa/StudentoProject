@@ -16,7 +16,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Subjects[0].Name)
+                @Html.DisplayNameFor(model => model.Subjects[0].SubjectTypeId)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Subjects[0].Teacher)
@@ -31,11 +31,11 @@
             <tr>
                 <td>
                     <a asp-page="./Details" asp-route-id="@item.Id">
-                        @item.Name
+                        @item.SubjectTypeId
                     </a>
                 </td>
                 <td>
-                    @item.Teacher.getFullName()
+                    @item.Teacher.GetFullName()
                 </td>
                 <td>
                     @Html.Raw((await analytics.GetSubjectAverageForStudentAsync(UserId, item.Id)).CompareTo(Double.NaN) == 0 ?

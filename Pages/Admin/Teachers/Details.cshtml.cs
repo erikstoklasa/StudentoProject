@@ -7,16 +7,17 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using SchoolGradebook.Models;
 using SchoolGradebook.Data;
+using SchoolGradebook.Services;
 
 namespace SchoolGradebook.Pages.Admin.Teachers
 {
     public class DetailsModel : PageModel
     {
-        private readonly SchoolGradebook.Data.SchoolContext _context;
+        private readonly TeacherService teacherService;
 
-        public DetailsModel(SchoolGradebook.Data.SchoolContext context)
+        public DetailsModel(TeacherService teacherService)
         {
-            _context = context;
+            this.teacherService = teacherService;
         }
 
         public Models.Teacher Teacher { get; set; }
@@ -28,7 +29,7 @@ namespace SchoolGradebook.Pages.Admin.Teachers
                 return NotFound();
             }
 
-            Teacher = await _context.Teachers.FirstOrDefaultAsync(m => m.Id == id);
+            Teacher = await teacherService.GetTeacherAsync((int)id);
 
             if (Teacher == null)
             {

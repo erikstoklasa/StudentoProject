@@ -35,7 +35,7 @@ namespace SchoolGradebook.Pages.Admin.Students
             if (await studentService.AddStudentAsync(Student))
             {
                 ViewData["status_type"] = "success";
-                ViewData["status_message"] = $"{Student.getFullName()} byl přidán do matriky.";
+                ViewData["status_message"] = $"{Student.GetFullName()} byl přidán do matriky.";
                 return Page();
             }
             else

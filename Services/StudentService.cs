@@ -54,7 +54,10 @@ namespace SchoolGradebook.Services
             Student student = await context.Students
                 .Where(s => s.Id == studentId)
                 .Include(s => s.Enrollments)
-                    .ThenInclude(e => e.Subject)
+                    .ThenInclude(e => e.SubjectInstance)
+                        .ThenInclude(subj => subj.SubjectType)
+                .Include(s => s.Enrollments)
+                    .ThenInclude(e => e.SubjectInstance)
                         .ThenInclude(subj => subj.Teacher)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
@@ -72,8 +75,7 @@ namespace SchoolGradebook.Services
         {
             Enrollment[] enrollments = await context.Enrollments
                 .Include(s => s.Student)
-                .Where(s => s.Subject.Id == subjectId)
-                .OrderBy(s => s.Subject.Name)
+                .Where(s => s.SubjectInstance.Id == subjectId)
                 .AsNoTracking()
                 .ToArrayAsync();
             Student[] students = new Student[enrollments.Length];
@@ -81,13 +83,13 @@ namespace SchoolGradebook.Services
             {
                 students[i] = enrollments[i].Student;
             }
-            return students;
+            return students.OrderBy(s => s.LastName).ToArray();
         }
         public async Task<List<Student>> GetAllStudentsByTeacherAsync(int teacherId)
         {
             List<Enrollment> enrollments = await context.Enrollments
                 .Include(s => s.Student)
-                .Where(s => s.Subject.TeacherId == teacherId)
+                .Where(s => s.SubjectInstance.TeacherId == teacherId)
                 .AsNoTracking()
                 .ToListAsync();
             List<Student> students = new List<Student>();
@@ -100,7 +102,7 @@ namespace SchoolGradebook.Services
                     students.Add(s);
                 }
             }
-            return students.ToList();
+            return students.OrderBy(s => s.LastName).ToList();
         }
         public async Task<int> GetStudentCountAsync()
         {
@@ -109,18 +111,18 @@ namespace SchoolGradebook.Services
         public async Task<int> GetStudentCountBySubjectAsync(int subjectId)
         {
             return await context.Enrollments
-                .Where(s => s.SubjectId == subjectId)
+                .Where(s => s.SubjectInstanceId == subjectId)
                 .AsNoTracking()
                 .CountAsync();
         }
         public async Task<int> GetStudentCountByTeacherAsync(int teacherId)
         {
             int studentCount = await context.Enrollments
-                .Where(s => s.Subject.Teacher.Id == teacherId)
+                .Where(s => s.SubjectInstance.Teacher.Id == teacherId)
                 .CountAsync();
             return studentCount;
         }
-        public async Task<bool> UpdateStudent(Student student)
+        public async Task<bool> UpdateStudentAsync(Student student)
         {
             if (!HasRequiredFields(student))
             {

@@ -1,13 +1,7 @@
 ﻿@page
 @model SchoolGradebook.Pages.Student.Subjects.IndexModel
-@using SchoolGradebook.Services
-@using Microsoft.AspNetCore.Http;
-@using System.Security.Claims;
-@inject Analytics analytics
-@inject IHttpContextAccessor httpContextAccessor
 
 @{
-    string UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
     ViewData["Title"] = "Index";
 }
 
@@ -16,30 +10,28 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Subjects[0].SubjectTypeId)
+                Předmět
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Subjects[0].Teacher)
+                Vyučující
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Subjects)
+        @foreach (var item in Model.SubjectsAndSubjectAverages)
         {
-
             <tr>
                 <td>
-                    <a asp-page="./Details" asp-route-id="@item.Id">
-                        @item.SubjectTypeId
+                    <a asp-page="./Details" asp-route-id="@item.subjectInstance.Id">
+                        @item.subjectInstance.SubjectType.Name
                     </a>
                 </td>
                 <td>
-                    @item.Teacher.GetFullName()
+                    @item.subjectInstance.Teacher.GetFullName()
                 </td>
                 <td>
-                    @Html.Raw((await analytics.GetSubjectAverageForStudentAsync(UserId, item.Id)).CompareTo(Double.NaN) == 0 ?
-                   "Žádné známky" : (await analytics.GetSubjectAverageForStudentAsync(UserId, item.Id)).ToString("f2"))
+                    @item.subjectAverage
                 </td>
             </tr>
         }

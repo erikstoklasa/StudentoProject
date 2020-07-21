@@ -19,6 +19,14 @@ namespace SchoolGradebook.Services
         {
             this.context = context;
         }
+        public async Task<int> GetStudentId(string userAuthId)
+        {
+            Student student = await context.Students
+                .Where(t => t.UserAuthId == userAuthId)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+            return student.Id;
+        }
         public async Task<bool> AddStudentAsync(Student student)
         {
             if (!HasRequiredFields(student))

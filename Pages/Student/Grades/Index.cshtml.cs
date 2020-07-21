@@ -12,22 +12,25 @@ namespace SchoolGradebook.Pages.Student.Grades
     public class IndexModel : PageModel
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly Analytics _analytics;
+        private readonly GradeService gradeService;
+        private readonly StudentService studentService;
+
         public string UserId { get; set; }
         public IList<Grade> Grades { get; set; }
 
-        public IndexModel(IHttpContextAccessor httpContextAccessor, Analytics analytics)
+        public IndexModel(IHttpContextAccessor httpContextAccessor, GradeService gradeService, StudentService studentService)
         {
             _httpContextAccessor = httpContextAccessor;
-            _analytics = analytics;
-
+            this.gradeService = gradeService;
+            this.studentService = studentService;
             UserId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             UserId ??= "";
         }
 
         public async Task OnGetAsync()
         {
-            Grades = await _analytics.GetGradesAsync(UserId);
+            int studentId = await studentService.GetStudentId(UserId);
+            Grades = await gradeService.GetAllGradesByStudentAsync(studentId);
         }
     }
 }

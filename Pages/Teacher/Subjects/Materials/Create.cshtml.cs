@@ -13,40 +13,48 @@ using SchoolGradebook.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace SchoolGradebook.Pages.Teacher.Subjects.Materials
 {
     public class CreateModel : PageModel
     {
-        private readonly SchoolContext _context;
         private readonly IConfiguration _configuration;
-        private readonly Analytics _analytics;
-        public List<SelectListItem> SubjectSelectList { get; set; }
+        private readonly TeacherService teacherService;
+        private readonly SubjectService subjectService;
+        private readonly SubjectMaterialService subjectMaterialService;
 
-        public CreateModel(SchoolContext context, IConfiguration configuration, Analytics analytics)
+        public List<SelectListItem> SubjectSelectList { get; set; }
+        public string UserId { get; set; }
+
+        public CreateModel(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, TeacherService teacherService, SubjectService subjectService, SubjectMaterialService subjectMaterialService)
         {
-            _context = context;
             _configuration = configuration;
             SubjectSelectList = new List<SelectListItem>();
-            _analytics = analytics;
+            this.teacherService = teacherService;
+            this.subjectService = subjectService;
+            this.subjectMaterialService = subjectMaterialService;
+            UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            UserId ??= "";
         }
-
-        public async Task<IActionResult> OnGetAsync(int? SubjectInstanceId)
+        [BindProperty(SupportsGet = true)]
+        public int? SubjectInstanceId { get; set; }
+        public async Task<IActionResult> OnGetAsync()
         {
             if (SubjectInstanceId == null)
             {
                 return NotFound();
             }
 
-            SubjectInstance s = await _analytics.GetSubjectAsync((int)SubjectInstanceId);
+            SubjectInstance s = await subjectService.GetSubjectInstanceAsync((int)SubjectInstanceId);
             
             if (s == null)
             {
                 return NotFound();
             }
 
-            SubjectSelectList.Add(new SelectListItem(s.SubjectTypeId.ToString(), s.Id.ToString()));
+            SubjectSelectList.Add(new SelectListItem(s.SubjectType.Name.ToString(), s.SubjectTypeId.ToString()));
             return Page();
         }
         public IFormFile FileUpload { get; set; }
@@ -76,10 +84,11 @@ namespace SchoolGradebook.Pages.Teacher.Subjects.Materials
                     response = await UploadToAzureBlobStorage(guid, filePath, Path.GetExtension(FileUpload.FileName));
 
                     SubjectMaterial.Id = guid;
+                    SubjectMaterial.TeacherId = await teacherService.GetTeacherId(UserId);
+                    //Validate subject type id access
                     SubjectMaterial.Added = DateTime.UtcNow;
                     SubjectMaterial.FileExt = Path.GetExtension(FileUpload.FileName);
-                    _context.SubjectMaterials.Add(SubjectMaterial);
-                    await _context.SaveChangesAsync();
+                    await subjectMaterialService.AddMaterialAsync(SubjectMaterial);
                 }
                 catch (RequestFailedException e)
                 {

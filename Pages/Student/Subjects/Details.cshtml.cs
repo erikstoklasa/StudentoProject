@@ -15,16 +15,23 @@ namespace SchoolGradebook.Pages.Student.Subjects
 {
     public class DetailsModel : PageModel
     {
-        private readonly SchoolContext _context;
         private readonly Analytics _analytics;
-        public SubjectMaterial[] SubjectMaterials { get; set; }
+        private readonly SubjectService subjectService;
+        private readonly StudentAccessValidation studentAccessValidation;
+        private readonly StudentService studentService;
+        private readonly SubjectMaterialService subjectMaterialService;
+
+        public List<SubjectMaterial> SubjectMaterials { get; set; }
         public double SubjectAverage { get; set; }
 
-        public DetailsModel(SchoolContext context, IHttpContextAccessor httpContextAccessor, Analytics analytics)
+        public DetailsModel(IHttpContextAccessor httpContextAccessor, Analytics analytics, SubjectService subjectService, StudentAccessValidation studentAccessValidation, StudentService studentService, SubjectMaterialService subjectMaterialService)
         {
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            _context = context;
             _analytics = analytics;
+            this.subjectService = subjectService;
+            this.studentAccessValidation = studentAccessValidation;
+            this.studentService = studentService;
+            this.subjectMaterialService = subjectMaterialService;
         }
 
         public string UserId { get; private set; }
@@ -37,19 +44,29 @@ namespace SchoolGradebook.Pages.Student.Subjects
                 return NotFound();
             }
 
-            Subject = await _context.SubjectInstances
-                .Include(s => s.Teacher).FirstOrDefaultAsync(m => m.Id == id);
-            SubjectMaterials = await _analytics.GetAllSubjectMaterialsAsync((int)id);
+            Subject = await subjectService.GetSubjectInstanceAsync((int)id);
+
+            if (Subject == null)
+            {
+                return NotFound();
+            }
+
+            int studentId = await studentService.GetStudentId(UserId);
+            bool studentHasAccessToSubject = studentAccessValidation.HasAccessToSubject(studentId, (int)id);
+            if (!studentHasAccessToSubject)
+            {
+                return BadRequest();
+            }
+
+            SubjectMaterials = await subjectMaterialService.GetAllMaterialsBySubjectInstance((int)id);
+            //SubjectMaterials = await _analytics.GetAllSubjectMaterialsAsync((int)id);
             SubjectAverage = await _analytics.GetSubjectAverageForStudentAsync(UserId, Subject.Id);
 
             double currentAvg = await _analytics.GetSubjectAverageForStudentAsync(UserId, Subject.Id);
             double comparisonAvg = await _analytics.GetSubjectAverageForStudentAsync(UserId, Subject.Id, 365, 30);
             ViewData["ComparisonString"] = LanguageHelper.getAverageComparisonString(currentAvg, comparisonAvg);
 
-            if (Subject == null)
-            {
-                return NotFound();
-            }
+            
             return Page();
         }
     }

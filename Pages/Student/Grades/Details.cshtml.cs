@@ -11,28 +11,37 @@ namespace SchoolGradebook.Pages.Student.Grades
 {
     public class DetailsModel : PageModel
     {
-        private readonly Analytics _analytics;
+        private readonly GradeService gradeService;
+        private readonly StudentAccessValidation studentAccessValidation;
+        private readonly StudentService studentService;
+
         public string UserId { get; set; }
         public Grade Grade { get; set; }
 
         [BindProperty(SupportsGet = true)]
         public int gradeId { get; set; }
 
-        public DetailsModel(Analytics analytics, IHttpContextAccessor httpContextAccessor)
+        public DetailsModel(IHttpContextAccessor httpContextAccessor, GradeService gradeService, StudentAccessValidation studentAccessValidation, StudentService studentService)
         {
-            _analytics = analytics;
-
+            this.gradeService = gradeService;
+            this.studentAccessValidation = studentAccessValidation;
+            this.studentService = studentService;
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             UserId ??= "";
         }
 
         public async Task<IActionResult> OnGetAsync()
         {
-            Grade = await _analytics.GetGradeAsync(UserId, gradeId);
+            int studentId = await studentService.GetStudentId(UserId);
+            bool hasAccessToGrade = await studentAccessValidation.HasAccessToGrade(studentId, gradeId);
+            if (!hasAccessToGrade)
+            {
+                return BadRequest();
+            }
+            Grade = await gradeService.GetGradeAsync(gradeId);
             if (Grade == null)
             {
                 return NotFound();
-                //Not found or access not premitted
             }
             return Page();
         }

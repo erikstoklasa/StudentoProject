@@ -8,10 +8,10 @@ namespace SchoolGradebook.Models
 {
     public class SubjectMaterial
     {
-        [Key]
         public Guid Id { get; set; }
         [Required]
         public int SubjectTypeId { get; set; }
+        [Required]
         public int TeacherId { set; get; }
 
         [Required(ErrorMessage = "Zadejte název materiálu")]

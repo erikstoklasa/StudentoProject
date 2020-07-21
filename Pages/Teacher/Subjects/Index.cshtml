@@ -6,27 +6,27 @@
 }
 
 <h1>Všechny tvé předměty</h1>
-@if (Model.Subjects.Length == 0)
+@if (Model.Subjects.Count == 0)
 {
     <p class="alert alert-warning my-5">Zatím Vám administrátor nepřidělil žádný předmět 🙁</p>
 }
 else
 {
-    <div class="d-flex justify-content-around flex-wrap">
-        @for (int i = 0; i < Model.Subjects.Length; i++)
-        {
+<div class="d-flex justify-content-around flex-wrap">
+    @foreach (var i in Model.SubjectsAndStudentCounts)
+    {
 
-            <div class="card mx-1">
-                <div class="card-body">
-                    <a asp-page="Details" asp-route-id="@Model.Subjects[i].Id">
-                        <h5 class="card-title">@Model.Subjects[i].SubjectTypeId</h5>
-                    </a>
-                    <p class="card-text">Studentů: @Model.StudentsCount[i]</p>
-                    <a class="btn btn-primary" asp-page="/Teacher/Grades/Create" asp-route-SubjectInstanceId="@Model.Subjects[i].Id">Přidat známku</a>
-                </div>
-            </div>
-
-        }
+    <div class="card mx-1">
+        <div class="card-body">
+            <a asp-page="Details" asp-route-id="@i.subjectInstance.Id">
+                <h5 class="card-title">@i.subjectInstance.SubjectType.Name</h5>
+            </a>
+            <p class="card-text">Studentů: @i.studentCount</p>
+            <a class="btn btn-primary" asp-page="/Teacher/Grades/Create" asp-route-SubjectInstanceId="@i.subjectInstance.Id">Přidat známku</a>
+        </div>
     </div>
+
+    }
+</div>
 
 }

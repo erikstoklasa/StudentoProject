@@ -25,13 +25,18 @@ namespace SchoolGradebook.Pages.Teacher.Grades
         public int SubjectInstanceId { get; set; }
         private readonly TeacherService teacherService;
         private readonly TeacherAccessValidation teacherAccessValidation;
+        private readonly GradeService gradeService;
+        private readonly SubjectService subjectService;
+
         public int TeacherId { get; set; }
 
-        public CreateModel(SchoolContext context, IHttpContextAccessor httpContextAccessor, TeacherService teacherService, TeacherAccessValidation teacherAccessValidation)
+        public CreateModel(SchoolContext context, IHttpContextAccessor httpContextAccessor, TeacherService teacherService, TeacherAccessValidation teacherAccessValidation, GradeService gradeService, SubjectService subjectService)
         {
             _context = context;
             this.teacherService = teacherService;
             this.teacherAccessValidation = teacherAccessValidation;
+            this.gradeService = gradeService;
+            this.subjectService = subjectService;
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
         }
 
@@ -46,9 +51,8 @@ namespace SchoolGradebook.Pages.Teacher.Grades
             {
                 return Forbid();
             }
-            SubjectInstance s = _context.SubjectInstances
-                .Find(SubjectInstanceId);
-            SubjectName = s.SubjectTypeId.ToString();
+            SubjectInstance s = await subjectService.GetSubjectInstanceAsync(SubjectInstanceId);
+            SubjectName = s.SubjectType.Name;
             Enrollment[] enrollments = _context.Enrollments
                 .Include(s => s.Student)
                 .Where(s => s.SubjectInstanceId == SubjectInstanceId)
@@ -94,8 +98,7 @@ namespace SchoolGradebook.Pages.Teacher.Grades
                 return Page();
             }
 
-            _context.Grades.Add(Grade);
-            await _context.SaveChangesAsync();
+            await gradeService.AddGradeAsync(Grade);
 
             return LocalRedirect($"~/Teacher/Subjects/Details?id={ SubjectInstanceId }");
         }

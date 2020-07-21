@@ -17,24 +17,32 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
         private readonly TeacherAccessValidation teacherAccessValidation;
         private readonly TeacherService teacherService;
         private readonly StudentService studentService;
+        private readonly SubjectService subjectService;
+        private readonly SubjectMaterialService subjectMaterialService;
+        private readonly GradeService gradeService;
 
-        public DetailsModel(IHttpContextAccessor httpContextAccessor, Analytics analytics, TeacherAccessValidation teacherAccessValidation, TeacherService teacherService, StudentService studentService)
+        public DetailsModel(IHttpContextAccessor httpContextAccessor, Analytics analytics, TeacherAccessValidation teacherAccessValidation, TeacherService teacherService, StudentService studentService, SubjectService subjectService, SubjectMaterialService subjectMaterialService, GradeService gradeService)
         {
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             _analytics = analytics;
             this.teacherAccessValidation = teacherAccessValidation;
             this.teacherService = teacherService;
             this.studentService = studentService;
-            StudentGrades = new List<Grade[]>();
+            this.subjectService = subjectService;
+            this.subjectMaterialService = subjectMaterialService;
+            this.gradeService = gradeService;
+            StudentGrades = new List<List<Grade>>();
             SubjectMaterials = new List<SubjectMaterial>();
+            StudentAverages = new List<double>();
         }
 
         public string UserId { get; private set; }
         public SubjectInstance Subject { get; set; }
         public Models.Student[] Students { get; set; }
-        public double[] StudentAverages { get; set; }
-        public List<Grade[]> StudentGrades { get; set; }
+        public List<double> StudentAverages { get; set; }
+        public List<List<Grade>> StudentGrades { get; set; }
         public List<SubjectMaterial> SubjectMaterials { get; set; }
+        public List<(Models.Student student, double studentAverage, List<Grade> studentGrades)> StudentsAndAverageAndGrades;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -50,21 +58,23 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
                 return BadRequest();
             }
 
-            Subject = await _analytics.GetSubjectAsync((int)id);
+            Subject = await subjectService.GetSubjectInstanceAsync((int)id);
             if (Subject == null)
             {
                 return NotFound();
             }
-            SubjectMaterials = (await _analytics.GetAllSubjectMaterialsAsync(Subject.Id)).ToList();
+            SubjectMaterials = await subjectMaterialService.GetAllMaterialsBySubjectInstance(Subject.Id);
             Students = await studentService.GetAllStudentsBySubjectAsync(Subject.Id);
-            StudentAverages = new double[Students.Length];
 
-            for (int i = 0; i < Students.Length; i++)
+            foreach (Models.Student s in Students)
             {
-                StudentAverages[i] = await _analytics.GetSubjectAverageForStudentByStudentIdAsync(Students[i].Id, Subject.Id);
-                StudentGrades.Add(await _analytics.GetGradesByTeacherUserAuthIdAsync(UserId, Subject.Id, Students[i].Id));
+                StudentAverages.Add(await _analytics.GetSubjectAverageForStudentByStudentIdAsync(s.Id, Subject.Id));
+                StudentGrades.Add(await gradeService.GetAllGradesByStudentSubjectInstance(s.Id, Subject.Id));
             }
-
+            StudentsAndAverageAndGrades = Enumerable
+                .Range(0, Students.Length)
+                .Select(i => Tuple.Create(Students[i], StudentAverages[i], StudentGrades[i]).ToValueTuple())
+                .ToList();
             return Page();
         }
     }

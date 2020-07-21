@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using MimeTypes;
 using SchoolGradebook.Models;
+using SchoolGradebook.Services;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -14,13 +15,13 @@ namespace SchoolGradebook.Pages.Teacher.Subjects.Materials
 {
     public class DetailsModel : PageModel
     {
-        private readonly SchoolGradebook.Data.SchoolContext _context;
         private readonly IConfiguration _configuration;
+        private readonly SubjectMaterialService subjectMaterialService;
 
-        public DetailsModel(SchoolGradebook.Data.SchoolContext context, IConfiguration configuration)
+        public DetailsModel(IConfiguration configuration, SubjectMaterialService subjectMaterialService)
         {
-            _context = context;
             _configuration = configuration;
+            this.subjectMaterialService = subjectMaterialService;
         }
 
         public SubjectMaterial SubjectMaterial { get; set; }
@@ -32,8 +33,7 @@ namespace SchoolGradebook.Pages.Teacher.Subjects.Materials
                 return NotFound();
             }
 
-            SubjectMaterial = await _context.SubjectMaterials
-                .Include(s => s.SubjectType).FirstOrDefaultAsync(m => m.Id == id);
+            SubjectMaterial = await subjectMaterialService.GetMaterialAsync((Guid)id);
 
             if (SubjectMaterial == null)
             {

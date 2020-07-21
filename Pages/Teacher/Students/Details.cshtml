@@ -95,11 +95,10 @@
                 {
                     <tr>
                         <td>
-                            @Html.DisplayFor(modelItem => item.SubjectInstance.SubjectTypeId)
+                            @item.SubjectInstance.SubjectType.Name
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.SubjectInstance.Teacher.FirstName)
-                            @Html.DisplayFor(modelItem => item.SubjectInstance.Teacher.LastName)
+                            @item.SubjectInstance.Teacher.GetFullName()
                         </td>
                     </tr>
                 }

@@ -93,6 +93,15 @@ namespace SchoolGradebook.Services
             }
             return students.OrderBy(s => s.LastName).ToArray();
         }
+        public async Task<List<Student>> GetAllStudentsByClassAsync(int classId)
+        {
+            List<Student> students = await context.Students
+                .Where(s => s.ClassId == classId)
+                .AsNoTracking()
+                .OrderBy(s => s.LastName)
+                .ToListAsync();
+            return students;
+        }
         public async Task<List<Student>> GetAllStudentsByTeacherAsync(int teacherId)
         {
             List<Enrollment> enrollments = await context.Enrollments
@@ -140,6 +149,22 @@ namespace SchoolGradebook.Services
             {
                 return false;
             }
+            context.Attach(student).State = EntityState.Modified;
+            try
+            {
+                await context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return false;
+            }
+
+            return true;
+        }
+        public async Task<bool> AddStudentToClassAsync(int studentId, int classId)
+        {
+            Student student = await GetStudentAsync(studentId);
+            student.ClassId = classId;
             context.Attach(student).State = EntityState.Modified;
             try
             {

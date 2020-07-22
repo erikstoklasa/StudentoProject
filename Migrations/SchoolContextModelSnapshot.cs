@@ -15,7 +15,7 @@ namespace SchoolGradebook.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.5")
+                .HasAnnotation("ProductVersion", "3.1.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -35,6 +35,29 @@ namespace SchoolGradebook.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Admins");
+                });
+
+            modelBuilder.Entity("SchoolGradebook.Models.Class", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<short>("Grade")
+                        .HasColumnType("smallint");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("TeacherId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TeacherId");
+
+                    b.ToTable("Classes");
                 });
 
             modelBuilder.Entity("SchoolGradebook.Models.Enrollment", b =>
@@ -172,6 +195,8 @@ namespace SchoolGradebook.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ClassId");
+
                     b.HasIndex("ParentId");
 
                     b.ToTable("Students");
@@ -290,6 +315,13 @@ namespace SchoolGradebook.Migrations
                     b.ToTable("Teachers");
                 });
 
+            modelBuilder.Entity("SchoolGradebook.Models.Class", b =>
+                {
+                    b.HasOne("SchoolGradebook.Models.Teacher", "Teacher")
+                        .WithMany()
+                        .HasForeignKey("TeacherId");
+                });
+
             modelBuilder.Entity("SchoolGradebook.Models.Enrollment", b =>
                 {
                     b.HasOne("SchoolGradebook.Models.Student", "Student")
@@ -322,6 +354,10 @@ namespace SchoolGradebook.Migrations
 
             modelBuilder.Entity("SchoolGradebook.Models.Student", b =>
                 {
+                    b.HasOne("SchoolGradebook.Models.Class", null)
+                        .WithMany("Students")
+                        .HasForeignKey("ClassId");
+
                     b.HasOne("SchoolGradebook.Models.Parent", null)
                         .WithMany("Students")
                         .HasForeignKey("ParentId");
@@ -329,7 +365,7 @@ namespace SchoolGradebook.Migrations
 
             modelBuilder.Entity("SchoolGradebook.Models.SubjectInstance", b =>
                 {
-                    b.HasOne("SchoolGradebook.Models.SubjectType", null)
+                    b.HasOne("SchoolGradebook.Models.SubjectType", "SubjectType")
                         .WithMany("SubjectInstances")
                         .HasForeignKey("SubjectTypeId")
                         .OnDelete(DeleteBehavior.Cascade)

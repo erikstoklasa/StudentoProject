@@ -1,0 +1,37 @@
+﻿@page
+@model SchoolGradebook.Pages.Teacher.Classes.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Třídy</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Třída
+            </th>
+            <th>
+                Vyučující
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Classes) {
+        <tr>
+            <td>
+                @item.GetName()
+            </td>
+            <td>
+                @item.Teacher.GetFullName()
+            </td>
+            <td>
+                <a asp-page="./Details" asp-route-id="@item.Id">Zobrazit</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

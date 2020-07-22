@@ -13,16 +13,14 @@ namespace SchoolGradebook.Pages.Admin.Enrollments
     public class CreateModel : PageModel
     {
         private readonly SchoolContext _context;
-        private readonly Analytics _analytics;
         private readonly SubjectService subjectService;
         private readonly StudentService studentService;
 
-        public CreateModel(SchoolContext context, Analytics analytics, SubjectService subjectService, StudentService studentService)
+        public CreateModel(SchoolContext context, SubjectService subjectService, StudentService studentService)
         {
             _context = context;
             StudentsSelectList = new List<SelectListItem> { };
             SubjectsSelectList = new List<SelectListItem> { };
-            _analytics = analytics;
             this.subjectService = subjectService;
             this.studentService = studentService;
         }
@@ -35,7 +33,7 @@ namespace SchoolGradebook.Pages.Admin.Enrollments
         public List<Models.SubjectInstance> StudentSubjects { get; set; }
         public async Task<IActionResult> OnGet()
         {
-            Students = new List<Models.Student>{ await studentService.GetStudentAsync(StudentId) };
+            Students = new List<Models.Student> { await studentService.GetStudentAsync(StudentId) };
             Subjects = await subjectService.GetAllSubjectInstancesFullAsync();
             StudentSubjects = await subjectService.GetAllSubjectInstancesByStudentAsync(StudentId);
 

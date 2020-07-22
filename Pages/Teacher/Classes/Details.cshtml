@@ -1,0 +1,41 @@
+﻿@page
+@model SchoolGradebook.Pages.Admin.Classes.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div>
+    <h1>Detail</h1>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Třída
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Class.GetName()
+        </dd>
+        <dt class="col-sm-2">
+            Vyučující
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Class.Teacher.GetFullName()
+        </dd>
+    </dl>
+    <table class="table">
+        <h3>Studenti ve třídě</h3>
+        <tbody>
+            @foreach (Models.Student student in Model.Students)
+            {
+                <tr>
+                    <td>
+                        @student.GetFullName()
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div>
+    <a asp-page="./Index">Zpět</a>
+</div>

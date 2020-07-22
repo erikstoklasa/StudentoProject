@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SchoolGradebook.Data;
+using SchoolGradebook.Models;
 using SchoolGradebook.Services;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -15,20 +18,25 @@ namespace SchoolGradebook.Pages.Teacher.Students
         private readonly TeacherAccessValidation teacherAccessValidation;
         private readonly TeacherService teacherService;
         private readonly StudentService studentService;
+        private readonly ClassService classService;
 
         public string UserId { get; set; }
         public int TeacherId { get; set; }
 
-        public EditModel(IHttpContextAccessor httpContextAccessor, TeacherAccessValidation teacherAccessValidation, TeacherService teacherService, StudentService studentService)
+        public EditModel(IHttpContextAccessor httpContextAccessor, TeacherAccessValidation teacherAccessValidation, TeacherService teacherService, StudentService studentService, ClassService classService)
         {
             this.teacherAccessValidation = teacherAccessValidation;
             this.teacherService = teacherService;
             this.studentService = studentService;
+            this.classService = classService;
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ClassesList = new List<SelectListItem>();
         }
 
         [BindProperty]
         public Models.Student Student { get; set; }
+        public List<SelectListItem> ClassesList { get; set; }
+        public List<Class> Classes { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -48,6 +56,11 @@ namespace SchoolGradebook.Pages.Teacher.Students
             if (!teacherHasAccessToStudent)
             {
                 return BadRequest();
+            }
+            Classes = await classService.GetAllClasses();
+            foreach (Models.Class c in Classes)
+            {
+                ClassesList.Add(new SelectListItem(c.GetName(), c.Id.ToString()));
             }
             return Page();
         }

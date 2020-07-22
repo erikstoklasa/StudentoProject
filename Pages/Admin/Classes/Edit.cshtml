@@ -1,0 +1,39 @@
+﻿@page
+@model SchoolGradebook.Pages.Admin.Classes.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Upravit třídu</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Class.Id" />
+            <div class="form-group">
+                <label asp-for="Class.Grade" class="control-label">Ročník</label>
+                <input asp-for="Class.Grade" class="form-control" />
+                <span asp-validation-for="Class.Grade" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Class.Name" class="control-label">Označení (např. A, nebo B)</label>
+                <input asp-for="Class.Name" class="form-control" />
+                <span asp-validation-for="Class.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Class.TeacherId" class="control-label">Vyučující</label>
+                <select asp-for="Class.TeacherId" class="form-control" asp-items="Model.TeachersList"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Uložit" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Zpět</a>
+</div>
+

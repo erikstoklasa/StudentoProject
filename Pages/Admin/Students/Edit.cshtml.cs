@@ -8,20 +8,26 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SchoolGradebook.Models;
 using SchoolGradebook.Data;
+using SchoolGradebook.Services;
 
 namespace SchoolGradebook.Pages.Admin.Students
 {
     public class EditModel : PageModel
     {
-        private readonly SchoolGradebook.Data.SchoolContext _context;
+        private readonly ClassService classService;
+        private readonly StudentService studentService;
 
-        public EditModel(SchoolGradebook.Data.SchoolContext context)
+        public EditModel(ClassService classService, StudentService studentService)
         {
-            _context = context;
+            this.classService = classService;
+            this.studentService = studentService;
+            ClassesList = new List<SelectListItem>();
         }
 
         [BindProperty]
         public Models.Student Student { get; set; }
+        public List<SelectListItem> ClassesList { get; set; }
+        public List<Class> Classes { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -30,10 +36,15 @@ namespace SchoolGradebook.Pages.Admin.Students
                 return NotFound();
             }
 
-            Student = await _context.Students.FirstOrDefaultAsync(m => m.Id == id);
+            Student = await studentService.GetStudentAsync((int)id);
             if (Student == null)
             {
                 return NotFound();
+            }
+            Classes = await classService.GetAllClasses();
+            foreach (Models.Class c in Classes)
+            {
+                ClassesList.Add(new SelectListItem(c.GetName(), c.Id.ToString()));
             }
             return Page();
         }
@@ -42,7 +53,7 @@ namespace SchoolGradebook.Pages.Admin.Students
         // more details see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            Models.Student s = await _context.Students.AsNoTracking().FirstOrDefaultAsync(m => m.Id == Student.Id);
+            Models.Student s = await studentService.GetStudentAsync((int)Student.Id);
             Student.UserAuthId = s.UserAuthId;
 
             if (!ModelState.IsValid)
@@ -50,30 +61,9 @@ namespace SchoolGradebook.Pages.Admin.Students
                 return Page();
             }
 
-            _context.Attach(Student).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!StudentExists(Student.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await studentService.UpdateStudentAsync(s);
 
             return RedirectToPage("./Index");
-        }
-
-        private bool StudentExists(int id)
-        {
-            return _context.Students.Any(e => e.Id == id);
         }
     }
 }

@@ -1,0 +1,31 @@
+﻿@page
+@model SchoolGradebook.Pages.ErrorPageModel
+
+@{
+    ViewData["Title"] = "Error @Model.ErrorStatusCode";
+}
+
+<h1 class="text-danger">Něco se pokazilo 🙁</h1>
+<p>Zkontrolujte si prosím zadanou URL adresu, a pokud problém přetrvává kontaktujte administrátora.</p>
+<h3>Typ chyby</h3>
+<p>
+    <code>
+        @Model.ErrorStatusCode
+    </code>
+</p>
+@if (Model.ShowRequestId)
+{
+    <h3>Request ID</h3>
+    <p>
+        <code>@Model.RequestId</code>
+    </p>
+}
+
+@if (Model.ShowOriginalURL)
+{
+    <h3>URL adresa</h3>
+    <p>
+        <code>@Model.OriginalURL</code>
+    </p>
+}
+

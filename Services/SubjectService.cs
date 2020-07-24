@@ -52,6 +52,14 @@ namespace SchoolGradebook.Services
                 .FirstOrDefaultAsync();
             return subjectInstance;
         }
+        public async Task<SubjectInstance> GetSubjectInstanceByTeacherAndSubjectTypeAsync(int teacherId, int subjectTypeId)
+        {
+            SubjectInstance subjectInstance = await context.SubjectInstances
+                .Where(s => s.TeacherId == teacherId && s.SubjectTypeId == subjectTypeId)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+            return subjectInstance;
+        }
         public async Task<SubjectInstance> GetSubjectInstanceFullAsync(int subjectInstanceId)
         {
             SubjectInstance subjectInstance = await context.SubjectInstances

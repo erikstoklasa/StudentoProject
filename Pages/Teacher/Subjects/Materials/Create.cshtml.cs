@@ -99,7 +99,7 @@ namespace SchoolGradebook.Pages.Teacher.Subjects.Materials
                     ViewData["status"] = "OK";
                 }
             }
-            return LocalRedirect($"~/Teacher/Subjects/Details?id={ SubjectMaterial.SubjectTypeId }");
+            return LocalRedirect($"~/Teacher/Subjects/Details?id={ SubjectInstanceId }");
         }
         public async Task<Response<BlobContentInfo>> UploadToAzureBlobStorage(Guid id, string filePath, string fileExt)
         {

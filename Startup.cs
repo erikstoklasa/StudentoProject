@@ -14,7 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using SchoolGradebook.Services;
-
+using Microsoft.AspNetCore.Http;
 
 namespace SchoolGradebook
 {
@@ -41,7 +41,12 @@ namespace SchoolGradebook
             })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = new PathString("/Identity/Account/Login");
+                options.AccessDeniedPath = new PathString("/Identity/Account/AccessDenied");
+                options.LogoutPath = new PathString("/Identity/Account/Logout");
+            });
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("OnlyAdmin", policy => policy.RequireRole("admin"));
@@ -77,6 +82,7 @@ namespace SchoolGradebook
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager)
         {
+            app.UseStatusCodePagesWithReExecute("/ErrorPage", "?code={0}");
             app.UseRouting();
             if (env.IsDevelopment())
             {
@@ -89,7 +95,7 @@ namespace SchoolGradebook
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

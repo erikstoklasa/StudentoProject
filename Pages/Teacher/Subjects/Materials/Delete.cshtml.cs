@@ -15,14 +15,19 @@ namespace SchoolGradebook.Pages.Teacher.Subjects.Materials
         private readonly SubjectMaterialService subjectMaterialService;
         private readonly TeacherAccessValidation teacherAccessValidation;
         private readonly TeacherService teacherService;
+        private readonly SubjectService subjectService;
+
         public int TeacherId { get; set; }
         public string UserId { get; set; }
+        [BindProperty]
+        public int? SubjectInstanceId { get; set; }
 
-        public DeleteModel(SubjectMaterialService subjectMaterialService, TeacherAccessValidation teacherAccessValidation, TeacherService teacherService, IHttpContextAccessor httpContextAccessor)
+        public DeleteModel(SubjectMaterialService subjectMaterialService, TeacherAccessValidation teacherAccessValidation, TeacherService teacherService, IHttpContextAccessor httpContextAccessor, SubjectService subjectService)
         {
             this.subjectMaterialService = subjectMaterialService;
             this.teacherAccessValidation = teacherAccessValidation;
             this.teacherService = teacherService;
+            this.subjectService = subjectService;
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             UserId ??= "";
         }
@@ -44,7 +49,7 @@ namespace SchoolGradebook.Pages.Teacher.Subjects.Materials
                 return BadRequest();
             }
             SubjectMaterial = await subjectMaterialService.GetMaterialAsync((Guid)id);
-
+            SubjectInstanceId = (await subjectService.GetSubjectInstanceByTeacherAndSubjectTypeAsync(TeacherId, SubjectMaterial.SubjectTypeId)).Id;
             if (SubjectMaterial == null)
             {
                 return NotFound();
@@ -65,7 +70,7 @@ namespace SchoolGradebook.Pages.Teacher.Subjects.Materials
                 return BadRequest();
             }
             await subjectMaterialService.DeleteMaterialAsync((Guid)id);
-            return LocalRedirect($"~/Teacher/Subjects/Index");
+            return LocalRedirect($"~/Teacher/Subjects/Details?id={SubjectInstanceId}");
         }
     }
 }

@@ -21,6 +21,15 @@ namespace SchoolGradebook.Services
             SubjectInstance subject = await context.SubjectInstances.FindAsync(subjectId);
             return subject.TeacherId == teacherId;
         }
+        public async Task<bool> HasAccessToSubjectType(int teacherId, int subjectTypeId)
+        {
+            SubjectType subjectType = await context.SubjectTypes
+                .Where(st => st.Id == subjectTypeId)
+                .Include(st => st.SubjectInstances)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+            return subjectType.SubjectInstances.Where(si => si.TeacherId == teacherId).Any();
+        }
         public async Task<bool> HasAccessToGrade(int teacherId, int gradeId)
         {
             Grade grade = await context.Grades.FindAsync(gradeId);
@@ -33,7 +42,7 @@ namespace SchoolGradebook.Services
         public async Task<bool> HasAccessToSubjectMaterial(int teacherId, Guid subjectMaterialId)
         {
             SubjectMaterial subjectMaterial = await context.SubjectMaterials.FindAsync(subjectMaterialId);
-            return await HasAccessToSubject(teacherId, subjectMaterial.SubjectTypeId);
+            return await HasAccessToSubjectType(teacherId, subjectMaterial.SubjectTypeId);
         }
     }
 }

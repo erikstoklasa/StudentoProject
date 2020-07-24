@@ -11,6 +11,7 @@
     <div class="col-md-4">
         <form method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="SubjectInstanceId" />
             <div class="form-group">
                 <label asp-for="SubjectMaterial.SubjectTypeId" class="control-label">Předmět</label>
                 <select asp-for="SubjectMaterial.SubjectTypeId" class="form-control" asp-items="Model.SubjectSelectList"></select>
@@ -35,6 +36,6 @@
 </div>
 
 <div>
-    <a asp-page="/Teacher/Subjects/Details" asp-route-id="@Model.SubjectSelectList[0].Value">Zpět</a>
+    <a asp-page="/Teacher/Subjects/Details" asp-route-id="@Model.SubjectInstanceId">Zpět</a>
 </div>
 

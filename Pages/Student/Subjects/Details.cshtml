@@ -4,9 +4,12 @@
 @using SchoolGradebook.Services;
 @using SchoolGradebook.Models;
 @inject Analytics analytics
+@using System.Globalization;
+@using MimeTypes;
 
 @{
     ViewData["Title"] = "Details";
+    System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("cs-CZ");
 }
 
 <div class="main-container">
@@ -14,8 +17,7 @@
     {
         <div class="d-flex flex-column">
             <h1>@Model.Subject.SubjectType.Name</h1>
-            <p>@Model.Subject.Teacher.GetFullName()</p>
-            <p class="alert alert-warning my-5">Zatím ti vyučující nepřidal žádné známky 🙁</p>
+            <h4>@Model.Subject.Teacher.GetFullName()</h4>
         </div>
 
 
@@ -24,53 +26,77 @@
     {
         <div class="d-flex flex-column">
             <h1>@Model.Subject.SubjectType.Name</h1>
-            <p>@Model.Subject.Teacher.GetFullName()</p>
-            <p class="text-left mt-5 mb-0">Všechny známky:</p>
-            <table class="table table-responsive mr-3">
-                <tbody>
-                    @foreach (Grade x in await analytics.GetGradesByUserAuthAsync(Model.UserId, Model.Subject.Id))
-                    {
-                        <tr>
-                            <td>
-                                @x.Value.ToString()
-                            </td>
-                            <td>
-                                @x.Name
-                            </td>
-                            <td>
-                                @LanguageHelper.getRelativeTime(x.Added)
-                            </td>
-                            <td>
-                                <a asp-page="/Student/Grades/Details" asp-route-gradeId="@x.Id">Zobrazit známku</a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+            <h4>@Model.Subject.Teacher.GetFullName()</h4>
         </div>
-        <div class="d-flex flex-column w-50">
+        <div class="d-flex flex-column">
             <h3 class="text-left" style="font-weight: 400;">
                 Průměr: <strong>
                     @(Model.SubjectAverage.ToString("f2"))
                 </strong>
             </h3>
             @Html.Raw(ViewData["ComparisonString"])
-            <div class="d-flex flex-row flex-wrap">
-                @foreach (SchoolGradebook.Models.SubjectMaterial subjectMaterial in Model.SubjectMaterials)
+        </div>
+    }
+</div>
+<div class="main-container">
+    <div class="d-flex flex-column">
+        <p class="table-heading">Známky</p>
+        @if (Model.SubjectAverage.CompareTo(Double.NaN) == 0)
+        {
+            <p class="alert alert-warning my-1">Zatím ti vyučující nepřidal žádné známky 🙁</p>
+        }
+        else
+        {
+            <div class="table table-responsive table-white">
+                @foreach (Grade x in await analytics.GetGradesByUserAuthAsync(Model.UserId, Model.Subject.Id))
                 {
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">@subjectMaterial.Name</h5>
-                            <h6 class="card-subtitle mb-3 text-muted">@subjectMaterial.Added.ToLocalTime().ToString("d. MMMM yyyy HH:mm")</h6>
-                            <a class="card-link" asp-page="Materials/Details" asp-route-id="@subjectMaterial.Id">Stáhnout</a>
+                    <div class="row-custom">
+                        <div class="cell-group">
+                            <div class="grade cell">
+                                @x.Value.ToString()
+                            </div>
+                            <div class="cell">
+                                <a asp-page="/Student/Grades/Details" asp-route-gradeId="@x.Id">
+                                    @LanguageHelper.getShorterString(x.Name, 25)
+                                </a>
+                            </div>
+                        </div>
+                        <div class="cell">
+                            @LanguageHelper.getRelativeTime(x.Added)
                         </div>
                     </div>
                 }
             </div>
+        }
+    </div>
+    <div class="d-flex flex-column">
+        <div class="d-flex flex-row flex-wrap">
+            <p class="table-heading">Materiály</p>
+            @if (Model.SubjectMaterials.Count > 0)
+            {
+                <div class="table table-responsive table-white">
+                    @foreach (SchoolGradebook.Models.SubjectMaterial subjectMaterial in Model.SubjectMaterials)
+                    {
+                        <div class="row-custom">
+                            <div class="cell-group">
+                                <img class="cell" src="~/images/icons/@(MimeTypeMap.GetExtension(MimeTypeMap.GetMimeType(subjectMaterial.FileExt)).Substring(1)).png" />
+                                <div class="cell"><span>@subjectMaterial.Name</span></div>
+                            </div>
+                            <div class="cell text-muted"><span>@subjectMaterial.Added.ToLocalTime().ToString("d. MMMM")</span></div>
+                            <div class="cell"><a class="btn btn-primary" asp-page="Materials/Details" asp-route-id="@subjectMaterial.Id">Otevřít</a></div>
+                        </div>
+
+                    }
+                </div>
+            }
+            else
+            {
+                <p class="alert alert-info my-1 w-100">Zatím ti vyučující nepřidal žádné materiály 🙁</p>
+            }
         </div>
-    }
+    </div>
 </div>
 
 <div>
-    <a asp-page="./Index">Všechny předměty</a>
+    <a asp-page="/Student/Index">Všechny předměty</a>
 </div>

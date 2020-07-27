@@ -2,52 +2,18 @@
 @model SchoolGradebook.Pages.Student.IndexModel
 @using  SchoolGradebook.Services
 @using  SchoolGradebook.Models
+@using MimeTypes;
+@inject SubjectMaterialService subjectMaterialService;
 @{
     ViewData["Title"] = "Domů";
+
 }
 <div class="text-center">
     <div class="main-container">
-        <div class="d-flex flex-row">
-            <table class="table mr-3">
-                <thead>
-                    <tr>
-                        <th>
-                            Známka
-                        </th>
-                        <th>
-                            Předmět
-                        </th>
-                        <th>
-                            Datum
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var grade in Model.RecentGrades)
-                    {
-                        <tr>
-                            <td>
-                                @grade.Value.ToString()
-                            </td>
-                            <td>
-                                @grade.SubjectInstance.GetFullName()
-                            </td>
-                            <td>
-                                @LanguageHelper.getRelativeTime(grade.Added)
-                            </td>
-                            <td>
-                                <a asp-page="Grades/Details" asp-route-gradeId="@grade.Id">Zobrazit</a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
         <div class="d-flex flex-column">
-            <div class="ml-3 text-left mb-4">
+            <div class="my-4 text-left">
                 <h1 style="font-weight: 400;">
-                    Ahoj <strong>@LanguageHelper.Sklonuj(Model.StudentFirstName),</strong><br>jsi <strong>skvělý</strong> student!
+                    Ahoj <strong>@LanguageHelper.Sklonuj(Model.StudentFirstName)!</strong>
                 </h1>
                 <h3 class="mt-5" style="font-weight: 400;">
                     Celkový průměr: <strong>
@@ -57,21 +23,60 @@
                 @Html.Raw(ViewData["ComparisonString"])
             </div>
         </div>
+        <div class="d-flex flex-column">
+            <p class="table-heading mt-0">Nové známky</p>
+            <div class="table table-responsive table-white table-condensed">
+                @foreach (var grade in Model.RecentGrades)
+                {
+                    <div class="row-custom">
+                        <div class="cell-group">
+                            <div class="grade cell">
+                                @grade.Value.ToString()
+                            </div>
+                            <div class="cell">
+                                <a asp-page="/Student/Grades/Details" asp-route-gradeId="@grade.Id">
+                                    @LanguageHelper.getShorterString(grade.Name, 25)
+                                </a>
+                            </div>
+                        </div>
+                        <div class="cell">
+                            @LanguageHelper.getRelativeTime(grade.Added)
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
     </div>
-    <p class="text-left">Všechny předměty:</p>
+    <p class="table-heading">Předměty</p>
     <div class="subject-container">
         @foreach (var x in Model.SubjectsAndSubjectAverages)
         {
+            SubjectMaterial subjectMaterial = (await subjectMaterialService.GetAllMaterialsBySubjectInstance(x.subjectInstance.Id, 1)).FirstOrDefault();
+
             <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">@x.subjectInstance.SubjectType.Name</h5>
-                    <p class="card-text">@x.subjectInstance.Teacher.GetFullName()</p>
-                    <p class="card-text">
-                        <strong>@x.subjectAverage</strong>
-                    </p>
-                    <a class="btn btn-primary" asp-page="Subjects/Details" asp-route-Id="@x.subjectInstance.Id">Zobrazit předmět</a>
-                </div>
+                <a asp-page="Subjects/Details" asp-route-Id="@x.subjectInstance.Id">
+                    <div class="card-body">
+                        <div>
+                            <h5 class="card-title">@x.subjectInstance.SubjectType.Name</h5>
+                            <p class="card-subtitle">@x.subjectInstance.Teacher.GetFullName()</p>
+                        </div>
+                        <div class="card-avg">
+                            @x.subjectAverage
+                        </div>
+                    </div>
+                </a>
+                @if (subjectMaterial != null)
+                {<a asp-page="Subjects/Materials/Details" asp-route-Id="@subjectMaterial.Id">
+                        <div class="card-body p-0 pb-1">
+                            <div class="row-custom">
+                                <img class="cell" src="~/images/icons/@(MimeTypeMap.GetExtension(MimeTypeMap.GetMimeType(subjectMaterial.FileExt)).Substring(1)).png" />
+                                <div class="cell"><span>@(subjectMaterial.Name)</span></div>
+                            </div>
+                        </div>
+                    </a>
+                }
             </div>
+
         }
     </div>
 </div>

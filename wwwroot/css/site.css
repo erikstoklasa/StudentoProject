@@ -4,9 +4,14 @@ for details on configuring this project to bundle and minify static web assets. 
 /*Studento style adaptation*/
 .btn-primary {
     background-color: #feb23c !important;
-    border-color: #feb23c !important;
+    border: 2px solid #feb23c !important;
     color: #1a0504 !important;
 }
+
+    .btn-primary:hover {
+        background-color: #fff !important;
+        border-color: #feb23c !important;
+    }
 
 .btn {
     padding: 0.6rem 1rem;
@@ -34,14 +39,67 @@ h2 {
     margin: 0 auto;
 }
 
-.main-logo {
+.table-heading {
+    color: #707070;
+    margin-top: 2rem;
+    text-align: start;
+}
+
+.table-white {
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16);
+    border-radius: 0.25rem;
     background: #fff;
-    border-radius: 3px;
-    padding: 8px 5px;
+    padding: 1rem 0;
+}
+
+.row-custom {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.table-condensed .cell {
+    height: 50px;
+    line-height: 30px;
+}
+.table-condensed img.cell {
+    height: 50px;
+}
+.cell {
+    vertical-align: middle !important;
+    padding: 10px 15px;
+    display: flex;
+    align-content: center;
+    height:60px;
+    line-height:40px;
+}
+
+    .cell:nth-child(2) {
+        width: calc(100vw - 15rem);
+    }
+
+    .cell:first-child {
+        padding-left: 30px;
+    }
+.cell-group{
+    display:flex;
+    flex-direction: row;
+}
+img.cell {
+    height: 60px;
+}
+
+.grade {
+    font-weight: bold;
+}
+
+.main-logo {
+    font-size: 1.3rem;
+    padding: 6px;
 }
 
     .main-logo:hover {
-        background: #f6f6f6;
+        background: rgba(0,0,0,0.10);
+        border-radius: 3px;
     }
 
 .vertical-separator {
@@ -55,10 +113,13 @@ h2 {
 .main-container {
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: space-between;
+    margin-top: 3rem;
 }
+
+
 .nav-item .btn {
-    padding: 0.5rem 0; 
+    padding: 0.5rem 0;
     width: auto;
 }
 
@@ -69,17 +130,16 @@ a.navbar-brand {
 }
 
 .subject-container {
-    justify-content: space-evenly;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
 }
 
     .subject-container .card {
-        flex-grow: 0.3;
+        flex-grow: 0;
     }
 
-.search-bar{
+.search-bar {
     max-width: 20rem;
     margin: 2rem 0;
 }
@@ -90,7 +150,39 @@ a {
 /*Cards*/
 .card {
     margin: 1rem 1rem 0 0;
-    width: 14rem;
+    width: 20rem;
+    min-height: 10rem;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16);
+    border: none;
+    flex-grow: 0.5;
+    text-align: start;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card-avg {
+    padding-left: 1rem;
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+a .card {
+    color: #1a0504 !important;
+}
+.card a {
+    color: #1a0504 !important;
+}
+
+a:hover {
+    text-decoration: none !important;
+}
+
+.card-title {
+    font-size: 1.5rem;
 }
 /*Tables*/
 .table td, .table th {
@@ -119,15 +211,57 @@ html {
     html {
         font-size: 16px;
     }
+
+    .container {
+        max-width: initial;
+    }
+}
+
+@media (min-width: 960px) {
+
+    .container {
+        max-width: 960px !important;
+    }
+}
+
+@media (min-width: 1120px) {
+
+    .container {
+        max-width: 1120px !important;
+    }
 }
 
 @media (min-width: 576px) {
+    .container {
+        max-width: initial;
+    }
+
     .btn {
         padding: .375rem .75rem;
         width: auto;
     }
 
     .main-container {
+        flex-direction: row;
+    }
+
+    .cell:nth-child(2) {
+        width: auto;
+    }
+
+    .main-container > div {
+        width: 50%;
+    }
+
+        .main-container > div:nth-child(2) {
+            padding-left: 50px;
+        }
+
+    .cell:last-child {
+        padding-right: 30px;
+    }
+
+    .card-body {
         flex-direction: row;
     }
 }
@@ -160,6 +294,7 @@ body {
     /* Margin bottom by footer height */
     margin-bottom: 60px;
     font-family: 'Open Sans', sans-serif;
+    background-color: rgba(0,0,0,0.06);
 }
 
 .footer {

@@ -25,17 +25,35 @@ namespace SchoolGradebook.Services
                 .FirstOrDefaultAsync();
             return subjectMaterial;
         }
-        public async Task<List<SubjectMaterial>> GetAllMaterialsBySubjectInstance(int subjectInstanceId)
+        public async Task<List<SubjectMaterial>> GetAllMaterialsBySubjectInstance(int subjectInstanceId, int take = 0)
         {
-            int subjectTypeId = await context.SubjectInstances
+            if(take <= 0)
+            {
+                int subjectTypeId = await context.SubjectInstances
                 .Where(s => s.Id == subjectInstanceId)
                 .Select(s => s.SubjectTypeId)
                 .FirstOrDefaultAsync();
-            List<SubjectMaterial> subjectMaterials = await context.SubjectMaterials
-                .Where(sm => sm.SubjectTypeId == subjectTypeId)
-                .AsNoTracking()
-                .ToListAsync();
-            return subjectMaterials;
+                List<SubjectMaterial> subjectMaterials = await context.SubjectMaterials
+                    .Where(sm => sm.SubjectTypeId == subjectTypeId)
+                    .AsNoTracking()
+                    .OrderByDescending(sm => sm.Added)
+                    .ToListAsync();
+                return subjectMaterials;
+            } else
+            {
+                int subjectTypeId = await context.SubjectInstances
+                .Where(s => s.Id == subjectInstanceId)
+                .Select(s => s.SubjectTypeId)
+                .FirstOrDefaultAsync();
+                List<SubjectMaterial> subjectMaterials = await context.SubjectMaterials
+                    .Where(sm => sm.SubjectTypeId == subjectTypeId)
+                    .AsNoTracking()
+                    .OrderByDescending(sm => sm.Added)
+                    .Take(take)
+                    .ToListAsync();
+                return subjectMaterials;
+            }
+            
         }
         public async Task<bool> AddMaterialAsync(SubjectMaterial subjectMaterial)
         {

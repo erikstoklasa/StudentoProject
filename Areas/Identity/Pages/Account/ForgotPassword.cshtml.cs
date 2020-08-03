@@ -58,8 +58,8 @@ namespace SchoolGradebook.Areas.Identity.Pages.Account
 
                 await _emailSender.SendEmailAsync(
                     Input.Email,
-                    "Reset Password",
-                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    "Obnova hesla",
+                    $"Prosím obnovte si své heslo <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>kliknutím zde</a>.");
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }

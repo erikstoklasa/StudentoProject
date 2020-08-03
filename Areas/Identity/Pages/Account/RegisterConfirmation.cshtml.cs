@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using System.Text.Encodings.Web;
 
 namespace SchoolGradebook.Areas.Identity.Pages.Account
 {
@@ -23,9 +24,7 @@ namespace SchoolGradebook.Areas.Identity.Pages.Account
 
         public string Email { get; set; }
 
-        public bool DisplayConfirmAccountLink { get; set; }
-
-        public string EmailConfirmationUrl { get; set; }
+        private string EmailConfirmationUrl;
 
         public async Task<IActionResult> OnGetAsync(string email)
         {
@@ -41,19 +40,16 @@ namespace SchoolGradebook.Areas.Identity.Pages.Account
             }
 
             Email = email;
-            // Once you add a real email sender, you should remove this code that lets you confirm the account
-            DisplayConfirmAccountLink = true;
-            if (DisplayConfirmAccountLink)
-            {
-                var userId = await _userManager.GetUserIdAsync(user);
-                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                EmailConfirmationUrl = Url.Page(
-                    "/Account/ConfirmEmail",
-                    pageHandler: null,
-                    values: new { area = "Identity", userId = userId, code = code },
-                    protocol: Request.Scheme);
-            }
+            
+            var userId = await _userManager.GetUserIdAsync(user);
+            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+            EmailConfirmationUrl = Url.Page(
+                "/Account/ConfirmEmail",
+                pageHandler: null,
+                values: new { area = "Identity", userId, code },
+                protocol: Request.Scheme);
+            await _sender.SendEmailAsync(email, "Ověření emailové adresy", $"Pro dokončení registrace na Studento si prosím svůj účet <a href=\"{HtmlEncoder.Default.Encode(EmailConfirmationUrl)}\">ověřte zde.</a>");
 
             return Page();
         }

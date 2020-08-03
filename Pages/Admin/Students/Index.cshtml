@@ -30,7 +30,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Student)
+        @foreach (var item in Model.Students)
         {
             HumanActivationCode c = context.HumanActivationCodes
                 .Where(b => b.TargetId == item.Id)

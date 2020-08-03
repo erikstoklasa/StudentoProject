@@ -79,7 +79,6 @@ namespace SchoolGradebook.Pages.Admin.Import
             };
             msg.AddContent(MimeType.Html, content);
             msg.AddTo(emailTo, "Admin");
-            //SendGridMessage msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlMessage);
             SendGrid.Response r = await client.SendEmailAsync(msg);
             return r;
         }

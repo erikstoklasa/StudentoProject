@@ -11,21 +11,32 @@ namespace SchoolGradebook.Services
 {
     public class EmailSender : IEmailSender
     {
-        private readonly IConfiguration _configuration;
-
         public EmailSender(IConfiguration configuration)
         {
-            _configuration = configuration;
+            Configuration = configuration;
         }
-        public async Task SendEmailAsync(string emailTo, string subject, string htmlMessage)
+
+        public IConfiguration Configuration { get; }
+
+        public Task SendEmailAsync(string email, string subject, string message)
         {
-            string apiKey = _configuration.GetConnectionString("SEND_GRID_KEY");
-            SendGridClient client = new SendGridClient(apiKey);
-            EmailAddress from = new EmailAddress("test@studento.cz", "Sender");
-            EmailAddress to = new EmailAddress(emailTo, "Example User");
-            string plainTextContent = "and easy to do anywhere, even with C#";
-            SendGridMessage msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlMessage);
-            Response response = await client.SendEmailAsync(msg);
+            return Execute(Configuration.GetConnectionString("SEND_GRID_KEY"), subject, message, email);
+        }
+
+        public Task Execute(string apiKey, string subject, string message, string email)
+        {
+            var client = new SendGridClient(apiKey);
+            var msg = new SendGridMessage()
+            {
+                From = new EmailAddress("mailer@studento.cz"),
+                Subject = subject,
+                PlainTextContent = message,
+                HtmlContent = message
+            };
+            msg.AddTo(new EmailAddress(email));
+            msg.SetClickTracking(false, false);
+
+            return client.SendEmailAsync(msg);
         }
     }
 }

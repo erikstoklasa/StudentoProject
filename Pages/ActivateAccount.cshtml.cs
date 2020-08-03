@@ -20,7 +20,7 @@ namespace SchoolGradebook.Pages
         private readonly SignInManager<IdentityUser> SignInManager;
         private string UserId { get; set; }
 
-        public ActivateAccountModel(SchoolContext context, IHttpContextAccessor httpContextAccessor, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager) 
+        public ActivateAccountModel(SchoolContext context, IHttpContextAccessor httpContextAccessor, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
         {
             _context = context;
             UsersManager = userManager;
@@ -37,6 +37,10 @@ namespace SchoolGradebook.Pages
             */
             HumanActivationCode code = await _context.HumanActivationCodes
                     .Where(g => g.HumanCode == humanCode).FirstOrDefaultAsync();
+            if (code == null)
+            {
+                return Page();
+            }
             int targetId = code.TargetId; //Student Or Teacher id
             CodeType codeType = code.CodeType;
 
@@ -46,10 +50,6 @@ namespace SchoolGradebook.Pages
                 if (student == null)
                 {
                     return Page();
-                }
-                if(student.UserAuthId != null)
-                {
-                    return Page(); //UserAuthId is already set
                 }
                 //Updating User Auth id
                 student.UserAuthId = UserId;

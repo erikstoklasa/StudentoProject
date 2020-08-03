@@ -25,6 +25,10 @@ namespace SchoolGradebook.Services
                 .Where(t => t.UserAuthId == userAuthId)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
+            if (student == null) //Has role student but no assigned userAuthId - can happen after db resets
+            {
+                return -1;
+            }
             return student.Id;
         }
         public async Task<bool> AddStudentAsync(Student student)

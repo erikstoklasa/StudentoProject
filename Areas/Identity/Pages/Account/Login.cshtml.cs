@@ -21,7 +21,7 @@ namespace SchoolGradebook.Areas.Identity.Pages.Account
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, 
+        public LoginModel(SignInManager<IdentityUser> signInManager,
             ILogger<LoginModel> logger,
             UserManager<IdentityUser> userManager)
         {
@@ -62,7 +62,7 @@ namespace SchoolGradebook.Areas.Identity.Pages.Account
                 ModelState.AddModelError(string.Empty, ErrorMessage);
             }
 
-            returnUrl = returnUrl ?? Url.Content("~/");
+            returnUrl ??= Url.Content("~/");
 
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
@@ -74,7 +74,7 @@ namespace SchoolGradebook.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl = returnUrl ?? Url.Content("~/");
+            returnUrl ??= Url.Content("~/");
 
             if (ModelState.IsValid)
             {
@@ -95,9 +95,17 @@ namespace SchoolGradebook.Areas.Identity.Pages.Account
                     _logger.LogWarning("User account locked out.");
                     return RedirectToPage("./Lockout");
                 }
-                else
+                else //User not allowed
                 {
-                    ModelState.AddModelError(string.Empty, "Špatné heslo, nebo emailová adresa");
+                    var user = await _userManager.FindByEmailAsync(Input.Email);
+                    if (user.EmailConfirmed == false)
+                    {
+                        ModelState.AddModelError(string.Empty, "Nemáte ověřenou emailovou adresu, podívejte se prosím na svůj email.");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Špatné heslo, nebo emailová adresa.");
+                    }
                     return Page();
                 }
             }

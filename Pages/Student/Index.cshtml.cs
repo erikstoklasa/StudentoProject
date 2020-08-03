@@ -37,12 +37,16 @@ namespace SchoolGradebook.Pages.Student
             SubjectAverages = new List<string>();
             System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("cs-CZ");
         }
-        public async Task OnGet()
+        public async Task<IActionResult> OnGet()
         {
             int studentId = await studentService.GetStudentId(UserId);
-            StudentFirstName = (await studentService.GetStudentAsync(studentId)).FirstName;
-            RecentGrades = await gradeService.GetAllGradesByStudentAsync(studentId, 0, 3);
-            Subjects = await subjectService.GetAllSubjectInstancesByStudentAsync(studentId);
+            if(studentId == -1)
+            {
+                return LocalRedirect("/ActivateAccount");
+            }
+            StudentFirstName = (await studentService.GetStudentAsync((int)studentId)).FirstName;
+            RecentGrades = await gradeService.GetAllGradesByStudentAsync((int)studentId, 0, 3);
+            Subjects = await subjectService.GetAllSubjectInstancesByStudentAsync((int)studentId);
             foreach (SubjectInstance si in Subjects)
             {
                 //Update analytics method to use only studentId instead of UserID
@@ -57,6 +61,7 @@ namespace SchoolGradebook.Pages.Student
 
             double comparisonAvg = await _analytics.GetTotalAverageAsync(UserId, 365, 30);
             ViewData["ComparisonString"] = LanguageHelper.getAverageComparisonString(currentAvg, comparisonAvg);
+            return Page();
         }
     }
 }

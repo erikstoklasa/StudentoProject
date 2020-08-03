@@ -28,13 +28,18 @@ namespace SchoolGradebook.Pages.Teacher
             this.studentService = studentService;
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
         }
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
             StudentCount = await _analytics.GetStudentsCountByTeacherUserAuthIdAsync(UserId);
             SubjectCount = await _analytics.GetSubjectsCountByTeacherIdAsync(UserId);
 
             int teacherId = await teacherService.GetTeacherId(UserId);
+            if(teacherId == -1)
+            {
+                return LocalRedirect("/ActivateAccount");
+            }
             UniqueStudentCount = (await studentService.GetAllStudentsByTeacherAsync(teacherId)).Count;
+            return Page();
         }
     }
 }

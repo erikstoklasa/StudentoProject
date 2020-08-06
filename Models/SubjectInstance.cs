@@ -10,6 +10,8 @@ namespace SchoolGradebook.Models
         public int Id { get; set; }
         public int TeacherId { get; set; }
         public int SubjectTypeId { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
         public string GetName()
         {
             SubjectType.Name ??= "";

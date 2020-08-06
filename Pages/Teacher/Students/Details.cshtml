@@ -1,22 +1,14 @@
 ﻿@page
 @model SchoolGradebook.Pages.Teacher.Students.DetailsModel
-
 @{
     ViewData["Title"] = "Details";
 }
 
-<h1>Detail</h1>
+<h1>Detail studenta</h1>
 
 <div>
-    <h4>Student</h4>
     <hr />
     <dl class="row">
-        <dt class="col-sm-2">
-            UserAuthId
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Student.UserAuthId
-        </dd>
         <dt class="col-sm-2">
             Jméno
         </dt>
@@ -36,17 +28,34 @@
             @Model.Student.Birthdate.GetValueOrDefault().ToString("dd. M. yyyy")
         </dd>
         <dt class="col-sm-2">
+            Místo narození
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Student.PlaceOfBirth
+        </dd>
+        <dt class="col-sm-2">
             Rodné číslo
         </dt>
         <dd class="col-sm-10">
             @Model.Student.PersonalIdentifNumber
         </dd>
         <dt class="col-sm-2">
+            Číslo občanského průkazu
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Student.IdentifCardNumber
+        </dd>
+        <dt class="col-sm-2">
+            Číslo pojišťovny
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Student.InsuranceCompany
+        </dd>
+        <dt class="col-sm-2">
             Ulice
         </dt>
         <dd class="col-sm-10">
             @Model.Student.StreetAddress
-
         </dd>
         <dt class="col-sm-2">
             Město
@@ -59,12 +68,6 @@
         </dt>
         <dd class="col-sm-10">
             @Model.Student.ZipCode
-        </dd>
-        <dt class="col-sm-2">
-            Rodné číslo
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Student.PersonalIdentifNumber
         </dd>
         <dt class="col-sm-2">
             Email
@@ -81,29 +84,40 @@
 
 
 
+        @if (Model.Student.Enrollments.Count == 0)
+        {
 
-        <dt class="col-sm-2">
-            Přiřazen k:
-        </dt>
-        <dd class="col-sm-10">
-            <table class="table">
-                <tr>
-                    <th>Předmět</th>
-                    <th>Učitel</th>
-                </tr>
-                @foreach (var item in Model.Student.Enrollments)
-                {
+            <p class="alert alert-warning my-5">Student namá přiřazený žádný předmět 🙁</p>
+
+        }
+        else
+        {
+
+            <dt class="col-sm-2">
+                Přiřazen k:
+            </dt>
+
+            <dd class="col-sm-10">
+                <table class="table">
                     <tr>
-                        <td>
-                            @item.SubjectInstance.SubjectType.Name
-                        </td>
-                        <td>
-                            @item.SubjectInstance.Teacher.GetFullName()
-                        </td>
+                        <th>Předmět</th>
+                        <th>Učitel</th>
                     </tr>
-                }
-            </table>
-        </dd>
+                    @foreach (var item in Model.Student.Enrollments)
+                    {
+                        <tr>
+                            <td>
+                                @item.SubjectInstance.SubjectType.Name
+                            </td>
+                            <td>
+                                @item.SubjectInstance.Teacher.GetFullName()
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </dd>
+
+        }
     </dl>
 </div>
 <div>

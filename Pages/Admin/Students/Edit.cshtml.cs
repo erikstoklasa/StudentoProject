@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using SchoolGradebook.Models;
-using SchoolGradebook.Data;
 using SchoolGradebook.Services;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SchoolGradebook.Pages.Admin.Students
 {
@@ -42,7 +38,7 @@ namespace SchoolGradebook.Pages.Admin.Students
                 return NotFound();
             }
             Classes = await classService.GetAllClasses();
-            foreach (Models.Class c in Classes)
+            foreach (Class c in Classes)
             {
                 ClassesList.Add(new SelectListItem(c.GetName(), c.Id.ToString()));
             }
@@ -61,9 +57,17 @@ namespace SchoolGradebook.Pages.Admin.Students
                 return Page();
             }
 
-            await studentService.UpdateStudentAsync(s);
+            if(await studentService.UpdateStudentAsync(Student))
+            {
+                ViewData["status_type"] = "success";
+                ViewData["status_message"] = $"Student {Student.GetFullName()} byl upraven";
+            } else
+            {
+                ViewData["status_type"] = "error";
+                ViewData["status_message"] = "Nevyplnili jste všechny nutné údaje správně";
+            }
 
-            return RedirectToPage("./Index");
+            return Page();
         }
     }
 }

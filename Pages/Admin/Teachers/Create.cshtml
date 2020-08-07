@@ -28,7 +28,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Teacher.PlaceOfBirth" class="control-label"></label>
-                <input asp-for="Teacher.PlaceOfBirth" class="form-control"/>
+                <input asp-for="Teacher.PlaceOfBirth" class="form-control" />
                 <span asp-validation-for="Teacher.PlaceOfBirth" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -37,13 +37,33 @@
                 <span asp-validation-for="Teacher.PersonalIdentifNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Teacher.StartDate" class="control-label"></label>
+                <input asp-for="Teacher.StartDate" class="form-control" type="date" />
+                <span asp-validation-for="Teacher.StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Teacher.EducationLevel" class="control-label"></label>
+                <input asp-for="Teacher.EducationLevel" class="form-control" />
+                <span asp-validation-for="Teacher.EducationLevel" class="text-danger"></span>
+            </div>
+            <label class="control-label">Aprobace</label>
+            <div class="form-group">
+                <select class="approbationsSelect" name="Approbations" multiple="multiple">
+                    @foreach (var subjectType in Model.SubjectTypes)
+                    {
+                        <option value="@subjectType.Id">@subjectType.Name</option>
+                    }
+                </select>
+            </div>
+
+            <div class="form-group">
                 <label asp-for="Teacher.IdentifCardNumber" class="control-label"></label>
-                <input asp-for="Teacher.IdentifCardNumber" class="form-control"/>
+                <input asp-for="Teacher.IdentifCardNumber" class="form-control" />
                 <span asp-validation-for="Teacher.IdentifCardNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Teacher.InsuranceCompany" class="control-label"></label>
-                <input asp-for="Teacher.InsuranceCompany" class="form-control"/>
+                <input asp-for="Teacher.InsuranceCompany" class="form-control" />
                 <span asp-validation-for="Teacher.InsuranceCompany" class="text-danger"></span>
             </div>
             <div class="form-group">

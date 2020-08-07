@@ -9,12 +9,6 @@
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            UserAuthId
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Teacher.UserAuthId
-        </dd>
-        <dt class="col-sm-2">
             Jméno
         </dt>
         <dd class="col-sm-10">
@@ -43,6 +37,30 @@
         </dt>
         <dd class="col-sm-10">
             @Model.Teacher.PersonalIdentifNumber
+        </dd>
+        <dt class="col-sm-2">
+            Datum nástupu
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Teacher.StartDate.GetValueOrDefault().ToString("dd. M. yyyy") @($"(roků: {((DateTime.Now - Model.Teacher.StartDate).Value.TotalDays / 365.25):f0})")
+        </dd>
+        <dt class="col-sm-2">
+            Dosažené vzdělání
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Teacher.EducationLevel
+        </dd>
+        <dt class="col-sm-2">
+            Aprobace
+        </dt>
+        <dd class="col-sm-10">
+            <ul class="pt-3">
+                @foreach (var a in Model.Approbations)
+                {
+                    <li>@a.SubjectType.Name</li>
+
+                }
+            </ul>
         </dd>
         <dt class="col-sm-2">
             Číslo občanského průkazu

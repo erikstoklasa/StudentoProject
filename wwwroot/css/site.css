@@ -57,20 +57,23 @@ h2 {
     flex-direction: row;
     justify-content: space-between;
 }
+
 .table-condensed .cell {
     height: 50px;
     line-height: 30px;
 }
+
 .table-condensed img.cell {
     height: 50px;
 }
+
 .cell {
     vertical-align: middle !important;
     padding: 10px 15px;
     display: flex;
     align-content: center;
-    height:60px;
-    line-height:40px;
+    height: 60px;
+    line-height: 40px;
 }
 
     .cell:nth-child(2) {
@@ -80,10 +83,12 @@ h2 {
     .cell:first-child {
         padding-left: 30px;
     }
-.cell-group{
-    display:flex;
+
+.cell-group {
+    display: flex;
     flex-direction: row;
 }
+
 img.cell {
     height: 60px;
 }
@@ -173,6 +178,7 @@ a {
 a .card {
     color: #1a0504 !important;
 }
+
 .card a {
     color: #1a0504 !important;
 }
@@ -282,7 +288,11 @@ button.accept-policy {
     font-size: 1rem;
     line-height: inherit;
 }
+/*Select 2*/
 
+.select2-results__option--selected {
+    display: none;
+}
 /* Sticky footer styles
 -------------------------------------------------- */
 html {

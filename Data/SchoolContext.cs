@@ -25,7 +25,7 @@ namespace SchoolGradebook.Data
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Parent> Parents { get; set; }
         public DbSet<Class> Classes { get; set; }
-        public DbSet<Class> Approbations { get; set; }
+        public DbSet<Approbation> Approbations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

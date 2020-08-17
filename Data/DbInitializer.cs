@@ -118,18 +118,58 @@ namespace SchoolGradebook.Data
                 context.SaveChanges();
             }
 
+            //Classes
+            if(!context.Classes.Any())
+            {
+                var classes = new Class[]
+                {
+                    new Class{Grade=3,Name="B",TeacherId=1,IsPrivate=true}
+                };
+
+                foreach (Class c in classes)
+                    context.Classes.Add(c);
+
+                context.SaveChanges();
+            }
+
+            //StudentGroups
+            if(!context.StudentGroups.Any())
+            {
+                var groups = new StudentGroup[]
+                {
+                    new StudentGroup{Name="Skupina1",IsPrivate=false, TeacherId=1}
+                };
+
+                foreach (StudentGroup group in groups)
+                    context.StudentGroups.Add(group);
+                context.SaveChanges();
+            }
+
+            //StudentGroupEnrollments
+            if (!context.StudentGroupEnrollments.Any())
+            {
+                var entrollments = new StudentGroupEnrollment[]
+                {
+                    new StudentGroupEnrollment{StudentId=1, StudentGroupId=1}
+                };
+
+                foreach (StudentGroupEnrollment enrollment in entrollments)
+                    context.StudentGroupEnrollments.Add(enrollment);
+                context.SaveChanges();
+            }
+
             //Enrollments
             if (!context.Enrollments.Any())
             {
                 var enrollments = new Enrollment[]
                     {
-                    new Enrollment{StudentId=1, SubjectInstanceId=1},
-                    new Enrollment{StudentId=1, SubjectInstanceId=2},
-                    new Enrollment{StudentId=1, SubjectInstanceId=3},
-                    new Enrollment{StudentId=1, SubjectInstanceId=4},
-                    new Enrollment{StudentId=1, SubjectInstanceId=5},
-                    new Enrollment{StudentId=1, SubjectInstanceId=6},
-                    new Enrollment{StudentId=1, SubjectInstanceId=7}
+                    new Enrollment{StudentGroupId=1, SubjectInstanceId=1},
+                    new Enrollment{StudentGroupId=1, SubjectInstanceId=2},
+                    new Enrollment{StudentGroupId=1, SubjectInstanceId=3},
+                    new Enrollment{StudentGroupId=1, SubjectInstanceId=4},
+                    new Enrollment{StudentGroupId=1, SubjectInstanceId=5},
+                    new Enrollment{StudentGroupId=1, SubjectInstanceId=6},
+                    new Enrollment{StudentGroupId=1, SubjectInstanceId=7}
                     };
                 foreach (Enrollment c in enrollments)
                 {

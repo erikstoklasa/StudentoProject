@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using SchoolGradebook.Data;
 using SchoolGradebook.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace SchoolGradebook.Services
@@ -53,18 +55,19 @@ namespace SchoolGradebook.Services
         }
         public async Task<SubjectInstance[]> GetAllSubjectsByStudentIdAsync(int studentId)
         {
-            //Accessing Subjects via Enrollments table => Subject
-            var enrollments = await Context.Enrollments
-                .Include(s => s.SubjectInstance)
-                .Where(s => s.Student.Id == studentId)
-                .AsNoTracking()
-                .ToArrayAsync();
-            SubjectInstance[] output = new SubjectInstance[enrollments.Length];
-            for (int i = 0; i < enrollments.Length; i++)
+            Student student = Context.Students.Find(studentId);
+
+            List<SubjectInstance> instances = new List<SubjectInstance>();
+            foreach(StudentGroup group in student.GroupEnrollments)
             {
-                output[i] = enrollments[i].SubjectInstance;
+                foreach(Enrollment enrollment in await Context.Enrollments.Include(e => e.StudentGroup.Id == group.Id).ToArrayAsync())
+                {
+                    if(enrollment != null)
+                        instances.Add(enrollment.SubjectInstance);
+                }
             }
-            return output;
+
+            return instances.ToArray();
         }
         //Teacher
         public async Task<Grade[]> GetGradesByTeacherUserAuthIdAsync(string userId, int SubjectInstanceId, int studentId)
@@ -182,19 +185,18 @@ namespace SchoolGradebook.Services
             int minGradeDayAge = 0,
             int decimalPlaces = 2)
         {
-            var enrollments = await Context.Enrollments
-                .Include(s => s.SubjectInstance)
-                .Where(s => s.Student.UserAuthId == userId)
-                .AsNoTracking()
-                .ToArrayAsync();
+            Student student = Context.Students.Where(s => s.UserAuthId == userId).FirstOrDefault();
+
+            List<SubjectInstance> subjectInstances = await Context.GetService<SubjectService>().GetAllSubjectInstancesByStudentAsync(student.Id);
+
             double totalASumOfAverages = 0.0;
             int countOfSubjectsWithGrades = 0;
             double currentSubjectAvg = 0;
-            //Iterating only through student's subjects
-            for (int i = 0; i < enrollments.Length; i++)
+            //Iterating only through student's subject instances
+            foreach(SubjectInstance subjectInstance in subjectInstances)
             {
                 //Getting averages of every subject that the student has
-                currentSubjectAvg = await GetSubjectAverageForStudentAsync(userId, enrollments[i].SubjectInstance.Id, maxGradeDayAge, minGradeDayAge, 5);
+                currentSubjectAvg = await GetSubjectAverageForStudentAsync(userId, subjectInstance.Id, maxGradeDayAge, minGradeDayAge, 5);
                 if (currentSubjectAvg.CompareTo(Double.NaN) != 0) // getSubjectAverageForStudent returns 0 if student has no grades or is not enrolled in the subject
                 {
                     countOfSubjectsWithGrades++;

@@ -19,10 +19,12 @@ namespace SchoolGradebook.Services
         
         public bool HasAccessToSubject(int studentId, int subjectInstanceId)
         {
-            bool enrollmentWithPassedValuesExists = context.Enrollments
-                .Where(e => e.StudentId == studentId && e.SubjectInstanceId == subjectInstanceId)
-                .Any();
-            return enrollmentWithPassedValuesExists;
+            foreach(StudentGroupEnrollment group in context.StudentGroupEnrollments.Where(e => e.StudentId == studentId).AsEnumerable())
+            {
+                if (context.Enrollments.Where(e => e.StudentGroupId == group.Id && e.SubjectInstanceId == subjectInstanceId).Any())
+                    return true;
+            }
+            return false;
         }
         public async Task<bool> HasAccessToGrade(int studentId, int gradeId)
         {

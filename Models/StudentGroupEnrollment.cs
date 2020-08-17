@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 
 namespace SchoolGradebook.Models
 {
-    public class Enrollment
+    public class StudentGroupEnrollment
     {
         public int Id { get; set; }
         public int StudentGroupId { get; set; }
-        public int SubjectInstanceId { get; set; }
+        public int StudentId { get; set; }
 
-        public SubjectInstance SubjectInstance { get; set; }
+        public Student Student { get; set; }
         public StudentGroup StudentGroup { get; set; }
     }
 }

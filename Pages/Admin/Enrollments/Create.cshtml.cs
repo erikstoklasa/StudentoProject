@@ -40,12 +40,9 @@ namespace SchoolGradebook.Pages.Admin.Enrollments
             StudentsSelectList.Add(new SelectListItem(Students[0].GetFullName(), Students[0].Id.ToString()));
 
             foreach (Models.SubjectInstance sub in Subjects)
-            {
-                if (!sub.Enrollments.Where(s => s.StudentId == StudentId).Any())
-                {
-                    SubjectsSelectList.Add(new SelectListItem(sub.GetFullName(), sub.Id.ToString()));
-                }
-            }
+                foreach(Enrollment enrollment in sub.Enrollments)
+                    if(!enrollment.StudentGroup.Students.Where(s => s.Id == StudentId).Any())
+                        SubjectsSelectList.Add(new SelectListItem(sub.GetFullName(), sub.Id.ToString()));
 
             return Page();
         }

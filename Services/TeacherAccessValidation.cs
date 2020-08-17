@@ -37,7 +37,7 @@ namespace SchoolGradebook.Services
         }
         public async Task<bool> HasAccessToStudent(int teacherId, int studentId)
         {
-            return await context.Enrollments.Where(e => e.StudentId == studentId && e.SubjectInstance.TeacherId == teacherId).AnyAsync();
+            return await context.StudentGroups.Where(g => g.Students.Where(s => s.Id == studentId).Any() && g.TeacherId == teacherId).AnyAsync();
         }
         public async Task<bool> HasAccessToSubjectMaterial(int teacherId, Guid subjectMaterialId)
         {

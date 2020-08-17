@@ -65,12 +65,10 @@ namespace SchoolGradebook.Services
         {
             Student student = await context.Students
                 .Where(s => s.Id == studentId)
-                .Include(s => s.Enrollments)
-                    .ThenInclude(e => e.SubjectInstance)
-                        .ThenInclude(subj => subj.SubjectType)
-                .Include(s => s.Enrollments)
-                    .ThenInclude(e => e.SubjectInstance)
-                        .ThenInclude(subj => subj.Teacher)
+                .Include(s => s.GroupEnrollments)
+                    .ThenInclude(g => g.Enrollments)
+                        .ThenInclude(subj => subj.SubjectInstance)
+                            .ThenInclude(subj => subj.Teacher)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
             return student;
@@ -83,18 +81,23 @@ namespace SchoolGradebook.Services
                 .ToArrayAsync();
             return students;
         }
-        public async Task<Student[]> GetAllStudentsBySubjectAsync(int subjectId)
+        public async Task<Student[]> GetAllStudentsBySubjectInstanceAsync(int subjectId)
         {
             Enrollment[] enrollments = await context.Enrollments
-                .Include(s => s.Student)
                 .Where(s => s.SubjectInstance.Id == subjectId)
+                .Include(e => e.StudentGroup)
+                    .ThenInclude(g => g.Students)
                 .AsNoTracking()
                 .ToArrayAsync();
-            Student[] students = new Student[enrollments.Length];
-            for (int i = 0; i < enrollments.Length; i++)
+            List<Student> students = new List<Student>();
+            foreach(Enrollment enrollment in enrollments)
             {
-                students[i] = enrollments[i].Student;
+                foreach(Student student in enrollment.StudentGroup.Students)
+                {
+                    students.Add(student);
+                }
             }
+            
             return students.OrderBy(s => s.LastName).ToArray();
         }
         public async Task<List<Student>> GetAllStudentsByClassAsync(int classId)
@@ -109,18 +112,20 @@ namespace SchoolGradebook.Services
         public async Task<List<Student>> GetAllStudentsByTeacherAsync(int teacherId)
         {
             List<Enrollment> enrollments = await context.Enrollments
-                .Include(s => s.Student)
                 .Where(s => s.SubjectInstance.TeacherId == teacherId)
+                .Include(s => s.StudentGroup)
+                    .ThenInclude(g => g.Students)
                 .AsNoTracking()
                 .ToListAsync();
             List<Student> students = new List<Student>();
             foreach (Enrollment e in enrollments)
             {
-                Student s = e.Student;
-                s.Enrollments = null;
-                if (!students.Where(stud => stud.Id == s.Id).Any())
+                foreach (Student s in e.StudentGroup.Students)
                 {
-                    students.Add(s);
+                    if (!students.Where(stud => stud.Id == s.Id).Any())
+                    {
+                        students.Add(s);
+                    }
                 }
             }
             return students.OrderBy(s => s.LastName).ToList();

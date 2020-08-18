@@ -37,10 +37,10 @@ namespace SchoolGradebook.Pages.Admin.Enrollments
                 .Include(e => e.Student)
                 .FirstOrDefaultAsync(m => m.Id == id);
             Subject = await subjectService.GetSubjectInstanceAsync(Enrollment.SubjectInstanceId);
+
             if (Enrollment == null)
-            {
                 return NotFound();
-            }
+
             return Page();
         }
 

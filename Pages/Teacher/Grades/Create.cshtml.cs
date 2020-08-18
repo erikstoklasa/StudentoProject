@@ -27,16 +27,18 @@ namespace SchoolGradebook.Pages.Teacher.Grades
         private readonly TeacherAccessValidation teacherAccessValidation;
         private readonly GradeService gradeService;
         private readonly SubjectService subjectService;
+        private readonly StudentService studentService;
 
         public int TeacherId { get; set; }
 
-        public CreateModel(SchoolContext context, IHttpContextAccessor httpContextAccessor, TeacherService teacherService, TeacherAccessValidation teacherAccessValidation, GradeService gradeService, SubjectService subjectService)
+        public CreateModel(SchoolContext context, IHttpContextAccessor httpContextAccessor, TeacherService teacherService, TeacherAccessValidation teacherAccessValidation, GradeService gradeService, SubjectService subjectService, StudentService studentService)
         {
             _context = context;
             this.teacherService = teacherService;
             this.teacherAccessValidation = teacherAccessValidation;
             this.gradeService = gradeService;
             this.subjectService = subjectService;
+            this.studentService = studentService;
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
         }
 
@@ -51,24 +53,22 @@ namespace SchoolGradebook.Pages.Teacher.Grades
             {
                 return Forbid();
             }
+
             SubjectInstance s = await subjectService.GetSubjectInstanceAsync(SubjectInstanceId);
             SubjectName = s.SubjectType.Name;
-            Enrollment[] enrollments = _context.Enrollments
-                .Include(s => s.Student)
-                .Where(s => s.SubjectInstanceId == SubjectInstanceId)
-                .ToArray();
-            Students = new List<SelectListItem> { };
-            for (int i = 0; i < enrollments.Length; i++)
+
+            foreach(Models.Student student in await studentService.GetAllStudentsBySubjectInstanceAsync(SubjectInstanceId))
             {
-                if (enrollments[i].StudentId == StudentId || StudentId == 0)
+                if(student.Id == StudentId || StudentId == 0)
                 {
                     Students.Add(
                     new SelectListItem(
-                        enrollments[i].Student.GetFullName(),
-                        enrollments[i].StudentId.ToString())
+                        s.GetFullName(),
+                        s.Id.ToString())
                     );
                 }
             }
+
             return Page();
         }
 

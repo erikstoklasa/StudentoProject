@@ -48,7 +48,7 @@ namespace SchoolGradebook.Models
             return $"{FirstName.ToUpper().First()}{LastName.ToUpper().First()}";
         }
 
-        public ICollection<Enrollment>? Enrollments { get; set; }
+        public ICollection<StudentGroup>? GroupEnrollments { get; set; }
         public ICollection<Grade>? Grades { get; set; }
     }
 }

@@ -48,7 +48,7 @@ namespace SchoolGradebook.Pages.Teacher.Grades
         [BindProperty]
         public Grade Grade { get; set; }
         [BindProperty]
-        public int gradeId { get; set; }
+        public int? gradeId { get; set; }
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -57,7 +57,7 @@ namespace SchoolGradebook.Pages.Teacher.Grades
                 return NotFound();
             }
             int teahcerId = await teacherService.GetTeacherId(UserId);
-            bool hasAccessToGrade = await teacherAccessValidation.HasAccessToGrade(teahcerId, gradeId);
+            bool hasAccessToGrade = await teacherAccessValidation.HasAccessToGrade(teahcerId, gradeId.Value);
             if (!hasAccessToGrade)
             {
                 return NotFound();

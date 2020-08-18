@@ -19,10 +19,12 @@ namespace SchoolGradebook.Services
         
         public bool HasAccessToSubject(int studentId, int subjectInstanceId)
         {
-            bool enrollmentWithPassedValuesExists = context.Enrollments
-                .Where(e => e.StudentId == studentId && e.SubjectInstanceId == subjectInstanceId)
-                .Any();
-            return enrollmentWithPassedValuesExists;
+            foreach(StudentGroupEnrollment group in context.StudentGroupEnrollments.Where(e => e.StudentId == studentId).AsEnumerable())
+            {
+                if (context.Enrollments.Where(e => e.StudentGroupId == group.Id && e.SubjectInstanceId == subjectInstanceId).Any())
+                    return true;
+            }
+            return false;
         }
         public async Task<bool> HasAccessToGrade(int studentId, int gradeId)
         {
@@ -33,19 +35,14 @@ namespace SchoolGradebook.Services
         }
         public async Task<bool> HasAccessToSubjectMaterial(int studentId, Guid subjectMaterialId)
         {
-            List<Enrollment> enrollments = await context.Enrollments
-                .Where(e => e.StudentId == studentId)
-                .Include(e => e.SubjectInstance)
-                .AsNoTracking()
-                .ToListAsync();
+            List<SubjectInstance> instances = await new SubjectService(context).GetAllSubjectInstancesByStudentAsync(studentId);
+
             SubjectMaterial subjectMaterial = await context.SubjectMaterials
                 .Where(sm => sm.Id == subjectMaterialId)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
-            bool studentHasAccessToMaterial = enrollments
-                .Where(e => e.SubjectInstance.SubjectTypeId == subjectMaterial.SubjectTypeId)
-                .Any();
-            return studentHasAccessToMaterial;
+
+            return instances.Where(i => i.SubjectTypeId == subjectMaterial.SubjectTypeId).Any();
         }
     }
 }

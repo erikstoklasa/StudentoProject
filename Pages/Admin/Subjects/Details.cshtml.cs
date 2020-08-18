@@ -40,7 +40,7 @@ namespace SchoolGradebook.Pages.Admin.Subjects
                 return NotFound();
             }
 
-            Students = await studentService.GetAllStudentsBySubjectAsync(Subject.Id);
+            Students = await studentService.GetAllStudentsBySubjectInstanceAsync(Subject.Id);
 
             return Page();
         }

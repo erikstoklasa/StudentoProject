@@ -64,7 +64,7 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
                 return NotFound();
             }
             SubjectMaterials = await subjectMaterialService.GetAllMaterialsBySubjectInstance(Subject.Id);
-            Students = await studentService.GetAllStudentsBySubjectAsync(Subject.Id);
+            Students = await studentService.GetAllStudentsBySubjectInstanceAsync(Subject.Id);
 
             foreach (Models.Student s in Students)
             {

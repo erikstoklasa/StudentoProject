@@ -11,6 +11,6 @@ namespace SchoolGradebook.Models
         public int Id { get; set; }
         public string? UserAuthId { get; set; }
         
-        public ICollection<Student> Students { set; get; }
+        public ICollection<Student>? Students { set; get; }
     }
 }

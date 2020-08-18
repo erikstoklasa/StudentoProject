@@ -123,7 +123,7 @@ namespace SchoolGradebook.Data
             {
                 var classes = new Class[]
                 {
-                    new Class{Grade=3,Name="B",TeacherId=1,IsPrivate=true}
+                    new Class{Grade=3,Name="B",TeacherId=1}
                 };
 
                 foreach (Class c in classes)
@@ -137,7 +137,7 @@ namespace SchoolGradebook.Data
             {
                 var groups = new StudentGroup[]
                 {
-                    new StudentGroup{Name="Skupina1",IsPrivate=false, TeacherId=1}
+                    new StudentGroup{Name="Skupina1"}
                 };
 
                 foreach (StudentGroup group in groups)

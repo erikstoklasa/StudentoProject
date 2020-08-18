@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using SchoolGradebook.Data;
 using SchoolGradebook.Models;
 using System;
@@ -37,7 +38,9 @@ namespace SchoolGradebook.Services
         }
         public async Task<bool> HasAccessToStudent(int teacherId, int studentId)
         {
-            return await context.StudentGroups.Where(g => g.Students.Where(s => s.Id == studentId).Any() && g.TeacherId == teacherId).AnyAsync();
+            List<SubjectInstance> instances = await context.GetService<SubjectService>().GetAllSubjectInstancesByStudentAsync(studentId);
+
+            return instances.Where(i => i.TeacherId == teacherId).Any();
         }
         public async Task<bool> HasAccessToSubjectMaterial(int teacherId, Guid subjectMaterialId)
         {

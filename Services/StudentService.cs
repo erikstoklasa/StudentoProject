@@ -86,17 +86,16 @@ namespace SchoolGradebook.Services
             Enrollment[] enrollments = await context.Enrollments
                 .Where(s => s.SubjectInstance.Id == subjectId)
                 .Include(e => e.StudentGroup)
-                    .ThenInclude(g => g.Students)
+                    .ThenInclude(g => g.StudentGroupEnrollments)
+                        .ThenInclude(ge => ge.Student)
                 .AsNoTracking()
                 .ToArrayAsync();
+
             List<Student> students = new List<Student>();
+
             foreach(Enrollment enrollment in enrollments)
-            {
-                foreach(Student student in enrollment.StudentGroup.Students)
-                {
-                    students.Add(student);
-                }
-            }
+                foreach(StudentGroupEnrollment groupEnrollment in enrollment.StudentGroup.StudentGroupEnrollments)
+                    students.Add(groupEnrollment.Student);
             
             return students.OrderBy(s => s.LastName).ToArray();
         }
@@ -114,20 +113,18 @@ namespace SchoolGradebook.Services
             List<Enrollment> enrollments = await context.Enrollments
                 .Where(s => s.SubjectInstance.TeacherId == teacherId)
                 .Include(s => s.StudentGroup)
-                    .ThenInclude(g => g.Students)
+                    .ThenInclude(g => g.StudentGroupEnrollments)
+                        .ThenInclude(ge => ge.Student)
                 .AsNoTracking()
                 .ToListAsync();
+
             List<Student> students = new List<Student>();
+
             foreach (Enrollment e in enrollments)
-            {
-                foreach (Student s in e.StudentGroup.Students)
-                {
-                    if (!students.Where(stud => stud.Id == s.Id).Any())
-                    {
-                        students.Add(s);
-                    }
-                }
-            }
+                foreach (StudentGroupEnrollment groupEnrollment in e.StudentGroup.StudentGroupEnrollments)
+                    if (!students.Where(stud => stud.Id == groupEnrollment.StudentId).Any())
+                        students.Add(groupEnrollment.Student);
+
             return students.OrderBy(s => s.LastName).ToList();
         }
         public async Task<int> GetStudentCountAsync()

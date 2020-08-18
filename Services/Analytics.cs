@@ -203,10 +203,10 @@ namespace SchoolGradebook.Services
             int minGradeDayAge = 0,
             int decimalPlaces = 2)
         {
-            //Accessing all grades in a subject via Enrollments table => Subject => Grades
+            
             var enrollment = await Context.Enrollments
                 .Where(
-                    e => e.StudentGroup.Students.Where(s => s.UserAuthId == userId).Any()
+                    e => e.StudentGroup.StudentGroupEnrollments.Where(e => e.Student.UserAuthId == userId).Any()
                     && e.SubjectInstanceId == SubjectInstanceId
                     )
                 .Include(s => s.SubjectInstance)

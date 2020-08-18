@@ -10,12 +10,11 @@ namespace SchoolGradebook.Models
     {
         public int Id { set; get; }
         public String Name { set; get; }
-        public bool IsPrivate { set; get; }
-        public int TeacherId { set; get; }
-        public Teacher Teacher { set; get; }
+        public int? ClassId { set; get; }
 
-        public ICollection<Student> Students { set; get; }
+        public ICollection<StudentGroupEnrollment> StudentGroupEnrollments { set; get; }
         public ICollection<Enrollment> Enrollments { set; get; }
+        public Class Class { set; get; }
 
         public virtual string GetName() => Name;
     }

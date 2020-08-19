@@ -9,36 +9,31 @@
     System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("cs-CZ");
 }
 
-<div class="d-flex flex-row h-100 mt-5">
-    <div class="d-flex flex-column w-100">
+<div class="main-container">
+    <div class="d-flex flex-column">
         <h1>@Model.Subject.SubjectType.Name</h1>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        Jméno
-                    </th>
-                    <th>
-                        Průměr
-                    </th>
-                    <th>
-                        Známky
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
+        <h5>Skupina A1 (Vyplňit dynamicky)</h5>
+        <h6>28 studentů (Vyplňit dynamicky)</h6>
+        <div class="my-4 d-flex flex-row justify-content-between align-content-center">
+            <p class="text-muted">Studenti</p>
+            <div>
+                <a asp-page="" asp-page-handler="print" asp-route-id="@Model.Subject.Id" class="btn btn-outline-primary"><img src="~/images/print.svg" alt="Vytisknout" height="20px" class="btn-icon" />Tisk výpisu</a>
+                <a asp-page="./Grades" class="btn btn-primary">Známky</a>
+            </div>
+        </div>
+        <table class="table table-responsive table-white">
             <tbody>
                 @foreach (var i in Model.StudentsAndAverageAndGrades)
                 {
 
-                    <tr>
-                        <td>
+                    <tr class="">
+                        <td class="">
                             <a asp-page="/Teacher/Students/Details" asp-route-id="@i.student.Id">@i.student.GetFullName()</a>
                         </td>
-                        <td>
-                            @($"{i.studentAverage:f2}")
+                        <td class="">
+                            <strong>@($"{i.studentAverage:f2}")</strong>
                         </td>
-                        <td>
+                        <td class="">
                             @for (int y = 0; y < i.studentGrades.Count; y++)
                             {
                                 @i.studentGrades[y].Value
@@ -48,7 +43,7 @@
                                 }
                             }
                         </td>
-                        <td>
+                        <td class="">
                             <a asp-page="/Teacher/Grades/Create" asp-route-SubjectInstanceId="@Model.Subject.Id" asp-route-StudentId="@i.student.Id">Přidat známku</a>
                         </td>
                     </tr>
@@ -56,38 +51,38 @@
             </tbody>
         </table>
         <!--Place for files-->
-        <div class="d-flex flex-column flex-wrap">
-            <h3>Materiály</h3>
-            <div class="my-4">
-                <a class="btn btn-primary" asp-page="Materials/Create" asp-route-SubjectInstanceId="@Model.Subject.Id">Přidat studijní materiál</a>
-            </div>
-
-            @if (Model.SubjectMaterials.Count > 0)
-            {
-                <div class="table table-responsive table-white">
-                    @foreach (SchoolGradebook.Models.SubjectMaterial subjectMaterial in Model.SubjectMaterials)
-                    {
-                        <div class="row-custom">
-                            <div class="cell-group">
-                                <img class="cell" src="~/images/icons/@(MimeTypeMap.GetExtension(MimeTypeMap.GetMimeType(subjectMaterial.FileExt)).Substring(1)).png" />
-                                <div class="cell"><span>@subjectMaterial.Name</span></div>
-                            </div>
-                            <div class="cell text-muted"><span>@subjectMaterial.Added.ToLocalTime().ToString("d. MMMM")</span></div>
-                            <div class="cell-group">
-                                <div class="cell"><a class="btn btn-primary" asp-page="Materials/Details" asp-route-id="@subjectMaterial.Id">Otevřít</a></div>
-                                <div class="cell"><a class="btn btn-outline-danger" asp-page="Materials/Delete" asp-route-id="@subjectMaterial.Id">Odstranit</a></div>
-                            </div>
-                        </div>
-
-                    }
-                </div>
-            }
-            else
-            {
-                <p class="alert alert-info my-5">Zatím nebyly přidány žádné materiály 🙁</p>
-            }
-        </div>
     </div>
+    <div class="d-flex flex-column flex-wrap">
+        <div class="my-4 d-flex flex-row justify-content-between align-content-center">
+            <p class="text-muted">Materiály</p>
+            <a class="btn btn-primary" asp-page="Materials/Create" asp-route-SubjectInstanceId="@Model.Subject.Id"><img src="~/images/add.svg" alt="Vytisknout" height="18px" class="btn-icon" />Přidat materiál</a>
+        </div>
+
+        @if (Model.SubjectMaterials.Count > 0)
+        {
+            <div class="table table-responsive table-white">
+                @foreach (SchoolGradebook.Models.SubjectMaterial subjectMaterial in Model.SubjectMaterials)
+                {
+                    <div class="row-custom">
+                        <div class="cell-group">
+                            <img class="cell" src="~/images/icons/@(MimeTypeMap.GetExtension(MimeTypeMap.GetMimeType(subjectMaterial.FileExt)).Substring(1)).png" />
+                            <div class="cell"><span>@subjectMaterial.Name</span></div>
+                        </div>
+                        <div class="cell-group">
+                            <div class="cell"><a class="btn btn-outline-primary" asp-page="Materials/Details" asp-route-id="@subjectMaterial.Id">Otevřít</a></div>
+                            <div class="cell"><a class="btn btn-outline-danger" asp-page="Materials/Delete" asp-route-id="@subjectMaterial.Id">Odstranit</a></div>
+                        </div>
+                    </div>
+
+                }
+            </div>
+        }
+        else
+        {
+            <p class="alert alert-info my-5">Zatím nebyly přidány žádné materiály 🙁</p>
+        }
+    </div>
+
 </div>
 
 <div>

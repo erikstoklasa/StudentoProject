@@ -13,9 +13,27 @@ for details on configuring this project to bundle and minify static web assets. 
         border-color: #feb23c !important;
     }
 
+.btn-outline-primary {
+    color: #000;
+    background-color: #fff;
+    border: 2px solid #feb23c !important;
+}
+
+    .btn-outline-primary:hover {
+        color: #000;
+        background-color: #feb23c;
+        border-color: #feb23c;
+    }
+
 .btn {
     padding: 0.6rem 1rem;
+    margin: 0 0.4rem;
     width: 100%;
+}
+
+.btn-icon {
+    padding-right: 15px;
+    vertical-align: sub;
 }
 
 .bg-primary {
@@ -51,6 +69,15 @@ h2 {
     background: #fff;
     padding: 1rem 0;
 }
+
+    .table-white .btn {
+        margin: 0;
+    }
+
+    .table-white tbody {
+        width: 100%;
+        display: table;
+    }
 
 .row-custom {
     display: flex;
@@ -89,12 +116,8 @@ h2 {
     flex-direction: row;
 }
 
-img.cell {
-    height: 60px;
-}
-
-.grade {
-    font-weight: bold;
+td img {
+    height: 40px;
 }
 
 .main-logo {
@@ -151,7 +174,9 @@ a.navbar-brand {
 /* Provide sufficient contrast against white background */
 a {
     color: #0366d6;
+    padding: 5px 10px;
 }
+
 /*Cards*/
 .card {
     margin: 1rem 1rem 0 0;
@@ -185,6 +210,12 @@ a .card {
 
 a:hover {
     text-decoration: none !important;
+    background: rgba(0,0,0,0.10);
+    border-radius: 4px;
+}
+
+.no-bcg-onhover:hover {
+    background: transparent !important;
 }
 
 .card-title {
@@ -194,7 +225,15 @@ a:hover {
 .table td, .table th {
     border-top: none;
     text-align: left;
-    padding: 0.45rem;
+    vertical-align: middle;
+}
+
+.table td:first-child{
+    padding-left: 2rem;
+}
+
+.table tr {
+    width: 100%;
 }
 
 .table thead th {

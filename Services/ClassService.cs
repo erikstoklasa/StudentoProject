@@ -21,8 +21,7 @@ namespace SchoolGradebook.Services
             Class classOut = await context.Classes
                 .Where(s => s.Id == classId)
                 .Include(s=>s.Teacher)
-                .Include(s=>s.StudentGroupEnrollments)
-                    .ThenInclude(e => e.Student)
+                .Include(s=>s.Students)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
             return classOut;

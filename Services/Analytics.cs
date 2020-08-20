@@ -60,7 +60,7 @@ namespace SchoolGradebook.Services
             List<SubjectInstance> instances = new List<SubjectInstance>();
             foreach(StudentGroup group in student.GroupEnrollments)
             {
-                foreach(Enrollment enrollment in await Context.Enrollments.Include(e => e.StudentGroup.Id == group.Id).ToArrayAsync())
+                foreach(SubjectInstanceEnrollment enrollment in await Context.Enrollments.Include(e => e.StudentGroup.Id == group.Id).ToArrayAsync())
                 {
                     if(enrollment != null)
                         instances.Add(enrollment.SubjectInstance);

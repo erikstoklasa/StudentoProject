@@ -23,7 +23,7 @@ namespace SchoolGradebook.Pages.Admin.Enrollments
         }
 
         [BindProperty]
-        public Enrollment Enrollment { get; set; }
+        public SubjectInstanceEnrollment Enrollment { get; set; }
         public SubjectInstance Subject { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)

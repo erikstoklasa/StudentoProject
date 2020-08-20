@@ -13,7 +13,7 @@ namespace SchoolGradebook.Models
         public int? ClassId { set; get; }
 
         public ICollection<StudentGroupEnrollment> StudentGroupEnrollments { set; get; }
-        public ICollection<Enrollment> Enrollments { set; get; }
+        public ICollection<SubjectInstanceEnrollment> Enrollments { set; get; }
         public Class Class { set; get; }
 
         public virtual string GetName() => Name;

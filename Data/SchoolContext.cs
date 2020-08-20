@@ -18,7 +18,7 @@ namespace SchoolGradebook.Data
         public DbSet<SubjectInstance> SubjectInstances { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Grade> Grades { get; set; }
-        public DbSet<Enrollment> Enrollments { get; set; }
+        public DbSet<SubjectInstanceEnrollment> Enrollments { get; set; }
         public DbSet<HumanActivationCode> HumanActivationCodes { get; set; }
         public DbSet<SubjectMaterial> SubjectMaterials { get; set; }
         public DbSet<SubjectType> SubjectTypes { get; set; }
@@ -27,6 +27,10 @@ namespace SchoolGradebook.Data
         public DbSet<Class> Classes { get; set; }
         public DbSet<StudentGroup> StudentGroups { set; get; }
         public DbSet<StudentGroupEnrollment> StudentGroupEnrollments { set; get; }
+        public DbSet<TimeFrame> TimeFrames { set; get; }
+        public DbSet<Room> Rooms { set; get; }
+        public DbSet<LessonRecord> LessonRecords { set; get; }
+        public DbSet<AttendanceRecord> AttendanceRecords { set; get; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -37,13 +41,17 @@ namespace SchoolGradebook.Data
             modelBuilder.Entity<Admin>().ToTable("Admins");
             modelBuilder.Entity<Parent>().ToTable("Parents");
             modelBuilder.Entity<Student>().ToTable("Students");
-            modelBuilder.Entity<Enrollment>().ToTable("Enrollments");
+            modelBuilder.Entity<SubjectInstanceEnrollment>().ToTable("Enrollments");
             modelBuilder.Entity<Grade>().ToTable("Grades");
             modelBuilder.Entity<HumanActivationCode>().ToTable("HumanActivationCodes");
             modelBuilder.Entity<SubjectMaterial>().ToTable("SubjectMaterials");
             modelBuilder.Entity<Class>().ToTable("Classes");
             modelBuilder.Entity<StudentGroup>().ToTable("StudentGroups");
             modelBuilder.Entity<StudentGroupEnrollment>().ToTable("StudentGroupEnrollments");
+            modelBuilder.Entity<TimeFrame>().ToTable("TimeFrames");
+            modelBuilder.Entity<Room>().ToTable("Rooms");
+            modelBuilder.Entity<LessonRecord>().ToTable("LessonRecords");
+            modelBuilder.Entity<AttendanceRecord>().ToTable("AttendanceRecords");
         }
     }
 }

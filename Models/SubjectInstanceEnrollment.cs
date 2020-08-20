@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace SchoolGradebook.Models
 {
-    public class Enrollment
+    public class SubjectInstanceEnrollment
     {
         public int Id { get; set; }
         public int StudentGroupId { get; set; }

@@ -46,7 +46,7 @@ namespace SchoolGradebook.Pages.Admin.Enrollments
         }
 
         [BindProperty]
-        public Enrollment Enrollment { get; set; }
+        public SubjectInstanceEnrollment Enrollment { get; set; }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://aka.ms/RazorPagesCRUD.

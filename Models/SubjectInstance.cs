@@ -31,8 +31,9 @@ namespace SchoolGradebook.Models
             return $"{SubjectType.Name}";
         }
 
-        public ICollection<Enrollment> Enrollments { get; set; }
+        public ICollection<SubjectInstanceEnrollment> Enrollments { get; set; }
         public ICollection<Grade> Grades { get; set; }
+        public ICollection<TimeFrame> TimeFrames { set; get; }
         public Teacher Teacher { get; set; }
         public SubjectType SubjectType { get; set; }
     }

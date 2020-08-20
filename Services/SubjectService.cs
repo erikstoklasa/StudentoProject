@@ -98,8 +98,8 @@ namespace SchoolGradebook.Services
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
 
-            List<SubjectInstance> subjectInstances = new List<SubjectInstance>();
-            List<Enrollment> enrollments = new List<Enrollment>();
+            var subjectInstances = new List<SubjectInstance>();
+            var enrollments = new List<SubjectInstanceEnrollment>();
             foreach (var sge in student.StudentGroupEnrollments)
             {
                 enrollments = await context.Enrollments

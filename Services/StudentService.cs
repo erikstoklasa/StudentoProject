@@ -84,7 +84,7 @@ namespace SchoolGradebook.Services
         }
         public async Task<Student[]> GetAllStudentsBySubjectInstanceAsync(int subjectId)
         {
-            Enrollment[] enrollments = await context.Enrollments
+            SubjectInstanceEnrollment[] enrollments = await context.Enrollments
                 .Where(s => s.SubjectInstance.Id == subjectId)
                 .Include(e => e.StudentGroup)
                     .ThenInclude(g => g.StudentGroupEnrollments)
@@ -94,8 +94,8 @@ namespace SchoolGradebook.Services
 
             List<Student> students = new List<Student>();
 
-            foreach (Enrollment enrollment in enrollments)
-                foreach (StudentGroupEnrollment groupEnrollment in enrollment.StudentGroup.StudentGroupEnrollments)
+            foreach(SubjectInstanceEnrollment enrollment in enrollments)
+                foreach(StudentGroupEnrollment groupEnrollment in enrollment.StudentGroup.StudentGroupEnrollments)
                     students.Add(groupEnrollment.Student);
 
             return students.OrderBy(s => s.LastName).ToArray();
@@ -111,7 +111,7 @@ namespace SchoolGradebook.Services
         }
         public async Task<List<Student>> GetAllStudentsByTeacherAsync(int teacherId)
         {
-            List<Enrollment> enrollments = await context.Enrollments
+            List<SubjectInstanceEnrollment> enrollments = await context.Enrollments
                 .Where(s => s.SubjectInstance.TeacherId == teacherId)
                 .Include(s => s.StudentGroup)
                     .ThenInclude(g => g.StudentGroupEnrollments)
@@ -121,7 +121,7 @@ namespace SchoolGradebook.Services
 
             List<Student> students = new List<Student>();
 
-            foreach (Enrollment e in enrollments)
+            foreach (SubjectInstanceEnrollment e in enrollments)
                 foreach (StudentGroupEnrollment groupEnrollment in e.StudentGroup.StudentGroupEnrollments)
                     if (!students.Where(stud => stud.Id == groupEnrollment.StudentId).Any())
                         students.Add(groupEnrollment.Student);

@@ -29,7 +29,7 @@ namespace SchoolGradebook.Data
 
                 for (int i = 0; i < NUMBER_OF_STUDENTS; i++)
                 {
-                    students.Add(new Student { FirstName = firstNames[r.Next(firstNames.Length)], LastName = lastNames[r.Next(lastNames.Length)] });
+                    students.Add(new Student { FirstName = firstNames[r.Next(firstNames.Length)], LastName = lastNames[r.Next(lastNames.Length)], ClassId=1 });
                 }
                 foreach (Student a in students)
                 {
@@ -118,12 +118,31 @@ namespace SchoolGradebook.Data
                 context.SaveChanges();
             }
 
+            // Rooms
+            if (!context.Classes.Any())
+            {
+                var rooms = new Room[]
+                {
+                    new Room{Name="101"},
+                    new Room{Name="102"},
+                    new Room{Name="103"},
+                    new Room{Name="104"},
+                    new Room{Name="105"}
+                };
+
+                foreach (Room room in rooms)
+                    context.Rooms.Add(room);
+
+                context.SaveChanges();
+            }
+
             //Classes
-            if(!context.Classes.Any())
+            if (!context.Classes.Any())
             {
                 var classes = new Class[]
                 {
-                    new Class{Grade=3,Name="B",TeacherId=1}
+                    new Class{Grade=3,Name="B",TeacherId=1,BaseRoomId=1},
+                    new Class{Grade=2,Name="C",TeacherId=2,BaseRoomId=2}
                 };
 
                 foreach (Class c in classes)
@@ -131,6 +150,9 @@ namespace SchoolGradebook.Data
 
                 context.SaveChanges();
             }
+
+            //TimeFrames
+
 
             //StudentGroups
             if(!context.StudentGroups.Any())
@@ -161,17 +183,17 @@ namespace SchoolGradebook.Data
             //Enrollments
             if (!context.Enrollments.Any())
             {
-                var enrollments = new Enrollment[]
+                var enrollments = new SubjectInstanceEnrollment[]
                     {
-                    new Enrollment{StudentGroupId=1, SubjectInstanceId=1},
-                    new Enrollment{StudentGroupId=1, SubjectInstanceId=2},
-                    new Enrollment{StudentGroupId=1, SubjectInstanceId=3},
-                    new Enrollment{StudentGroupId=1, SubjectInstanceId=4},
-                    new Enrollment{StudentGroupId=1, SubjectInstanceId=5},
-                    new Enrollment{StudentGroupId=1, SubjectInstanceId=6},
-                    new Enrollment{StudentGroupId=1, SubjectInstanceId=7}
+                    new SubjectInstanceEnrollment{StudentGroupId=1, SubjectInstanceId=1},
+                    new SubjectInstanceEnrollment{StudentGroupId=1, SubjectInstanceId=2},
+                    new SubjectInstanceEnrollment{StudentGroupId=1, SubjectInstanceId=3},
+                    new SubjectInstanceEnrollment{StudentGroupId=1, SubjectInstanceId=4},
+                    new SubjectInstanceEnrollment{StudentGroupId=1, SubjectInstanceId=5},
+                    new SubjectInstanceEnrollment{StudentGroupId=1, SubjectInstanceId=6},
+                    new SubjectInstanceEnrollment{StudentGroupId=1, SubjectInstanceId=7}
                     };
-                foreach (Enrollment c in enrollments)
+                foreach (SubjectInstanceEnrollment c in enrollments)
                 {
                     context.Enrollments.Add(c);
                 }

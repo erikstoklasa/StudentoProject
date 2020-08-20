@@ -60,6 +60,7 @@ namespace SchoolGradebook.Services
                 .FindAsync(studentId);
             return student;
         }
+
         //Teacher
         public async Task<Grade[]> GetGradesByTeacherUserAuthIdAsync(string userId, int SubjectInstanceId, int studentId)
         {

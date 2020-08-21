@@ -43,30 +43,32 @@
         <p class="table-heading">Známky</p>
         @if (Model.SubjectAverage.CompareTo(Double.NaN) == 0)
         {
-            <p class="alert alert-warning my-1">Zatím ti vyučující nepřidal žádné známky 🙁</p>
+            <p class="alert alert-info my-1">Zatím ti vyučující nepřidal žádné známky 🙁</p>
         }
         else
         {
-            <div class="table table-responsive table-white">
-                @foreach (Grade x in await analytics.GetGradesByUserAuthAsync(Model.UserId, Model.Subject.Id))
-                {
-                    <div class="row-custom">
-                        <div class="cell-group">
-                            <div class="grade cell">
-                                @x.Value.ToString()
-                            </div>
-                            <div class="cell">
+            <table class="table table-responsive table-white">
+                <tbody>
+                    @foreach (Grade x in await analytics.GetGradesByUserAuthAsync(Model.UserId, Model.Subject.Id))
+                    {
+                        <tr>
+                            <td>
+                                <strong>
+                                    @x.Value.ToString()
+                                </strong>
+                            </td>
+                            <td>
                                 <a asp-page="/Student/Grades/Details" asp-route-gradeId="@x.Id">
                                     @LanguageHelper.getShorterString(x.Name, 25)
                                 </a>
-                            </div>
-                        </div>
-                        <div class="cell">
-                            @LanguageHelper.getRelativeTime(x.Added)
-                        </div>
-                    </div>
-                }
-            </div>
+                            </td>
+                            <td>
+                                @LanguageHelper.getRelativeTime(x.Added)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         }
     </div>
     <div class="d-flex flex-column">
@@ -74,20 +76,22 @@
             <p class="table-heading">Materiály</p>
             @if (Model.SubjectMaterials.Count > 0)
             {
-                <div class="table table-responsive table-white">
-                    @foreach (SchoolGradebook.Models.SubjectMaterial subjectMaterial in Model.SubjectMaterials)
-                    {
-                        <div class="row-custom">
-                            <div class="cell-group">
-                                <img class="cell" src="~/images/icons/@(MimeTypeMap.GetExtension(MimeTypeMap.GetMimeType(subjectMaterial.FileExt)).Substring(1)).png" />
-                                <div class="cell"><span>@subjectMaterial.Name</span></div>
-                            </div>
-                            <div class="cell text-muted"><span>@subjectMaterial.Added.ToLocalTime().ToString("d. MMMM")</span></div>
-                            <div class="cell"><a class="btn btn-primary" asp-page="Materials/Details" asp-route-id="@subjectMaterial.Id">Otevřít</a></div>
-                        </div>
+                <table class="table table-responsive table-white">
+                    <tbody>
+                        @foreach (SchoolGradebook.Models.SubjectMaterial subjectMaterial in Model.SubjectMaterials)
+                        {
+                            <tr>
+                                <td>
+                                    <img src="~/images/icons/@(MimeTypeMap.GetExtension(MimeTypeMap.GetMimeType(subjectMaterial.FileExt)).Substring(1)).png" />
+                                </td>
+                                <td>@subjectMaterial.Name</td>
+                                <td class="text-muted">@subjectMaterial.Added.ToLocalTime().ToString("d. MMMM")</td>
+                                <td><a class="btn btn-primary" asp-page="Materials/Details" asp-route-id="@subjectMaterial.Id">Otevřít</a></td>
+                            </tr>
 
-                    }
-                </div>
+                        }
+                    </tbody>
+                </table>
             }
             else
             {

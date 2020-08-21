@@ -25,26 +25,28 @@
         </div>
         <div class="d-flex flex-column">
             <p class="table-heading mt-0">Nové známky</p>
-            <div class="table table-responsive table-white table-condensed">
-                @foreach (var grade in Model.RecentGrades)
-                {
-                    <div class="row-custom">
-                        <div class="cell-group">
-                            <div class="grade cell">
-                                @grade.Value.ToString()
-                            </div>
-                            <div class="cell">
+            <table class="table table-responsive table-white table-condensed">
+                <tbody>
+                    @foreach (var grade in Model.RecentGrades)
+                    {
+                        <tr>
+                            <td>
+                                <strong>
+                                    @grade.Value.ToString()
+                                </strong>
+                            </td>
+                            <td>
                                 <a asp-page="/Student/Grades/Details" asp-route-gradeId="@grade.Id">
                                     @LanguageHelper.getShorterString(grade.Name, 25)
                                 </a>
-                            </div>
-                        </div>
-                        <div class="cell">
-                            @LanguageHelper.getRelativeTime(grade.Added)
-                        </div>
-                    </div>
-                }
-            </div>
+                            </td>
+                            <td>
+                                @LanguageHelper.getRelativeTime(grade.Added)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
     <p class="table-heading">Předměty</p>
@@ -54,7 +56,7 @@
             SubjectMaterial subjectMaterial = (await subjectMaterialService.GetAllMaterialsBySubjectInstance(x.subjectInstance.Id, 1)).FirstOrDefault();
 
             <div class="card">
-                <a asp-page="Subjects/Details" asp-route-Id="@x.subjectInstance.Id">
+                <a class="no-bcg-onhover" asp-page="Subjects/Details" asp-route-Id="@x.subjectInstance.Id">
                     <div class="card-body">
                         <div>
                             <h5 class="card-title">@x.subjectInstance.SubjectType.Name</h5>
@@ -66,7 +68,8 @@
                     </div>
                 </a>
                 @if (subjectMaterial != null)
-                {<a asp-page="Subjects/Materials/Details" asp-route-Id="@subjectMaterial.Id">
+                {
+                    <a class="no-bcg-onhover" asp-page="Subjects/Materials/Details" asp-route-Id="@subjectMaterial.Id">
                         <div class="card-body p-0 pb-1">
                             <div class="row-custom">
                                 <img class="cell" src="~/images/icons/@(MimeTypeMap.GetExtension(MimeTypeMap.GetMimeType(subjectMaterial.FileExt)).Substring(1)).png" />

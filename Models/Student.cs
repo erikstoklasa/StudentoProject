@@ -19,6 +19,12 @@ namespace SchoolGradebook.Models
         public DateTime? Birthdate { get; set; }
         [Display(Name = "Rodné číslo")]
         public String? PersonalIdentifNumber { get; set; }
+        [Display(Name = "Místo narození")]
+        public String? PlaceOfBirth { get; set; }
+        [Display(Name = "Číslo občanského průkazu")]
+        public String? IdentifCardNumber { get; set; }
+        [Display(Name = "Pojišťovna")]
+        public String? InsuranceCompany { get; set; }
         //Address
         [Display(Name = "Ulice a čp.")]
         public String? StreetAddress { get; set; }

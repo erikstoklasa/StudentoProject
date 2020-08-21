@@ -14,17 +14,25 @@ namespace SchoolGradebook.Pages.Admin.Teachers
     public class CreateModel : PageModel
     {
         private readonly TeacherService teacherService;
+        private readonly SubjectService subjectService;
+        private readonly ApprobationService approbationService;
 
-        public CreateModel(TeacherService teacherService)
+        public CreateModel(TeacherService teacherService, SubjectService subjectService, ApprobationService approbationService)
         {
             this.teacherService = teacherService;
+            this.subjectService = subjectService;
+            this.approbationService = approbationService;
+            Approbations = new List<int>();
         }
 
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGetAsync()
         {
+            SubjectTypes = await subjectService.GetAllSubjectTypesAsync();
             return Page();
         }
-
+        public List<SubjectType> SubjectTypes { get; set; }
+        [BindProperty]
+        public List<int> Approbations { get; set; }
         [BindProperty]
         public Models.Teacher Teacher { get; set; }
 
@@ -36,8 +44,7 @@ namespace SchoolGradebook.Pages.Admin.Teachers
             {
                 return Page();
             }
-            await teacherService.AddTeacherAsync(Teacher);
-
+            await teacherService.AddTeacherAsync(Teacher, Approbations);
             return RedirectToPage("./Index");
         }
     }

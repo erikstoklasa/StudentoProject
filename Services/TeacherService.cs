@@ -2,6 +2,7 @@
 using SchoolGradebook.Data;
 using SchoolGradebook.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,8 +16,9 @@ namespace SchoolGradebook.Services
         {
             this.context = context;
         }
-        public async Task<bool> AddTeacherAsync(Teacher teacher)
+        public async Task<bool> AddTeacherAsync(Teacher teacher, List<int> approbations)
         {
+            //approbations list represents SubjectType Ids for which the teacher has access to teach
             if (!HasRequiredFields(teacher))
             {
                 return false;
@@ -28,6 +30,11 @@ namespace SchoolGradebook.Services
             try
             {
                 await context.Teachers.AddAsync(teacher);
+                await context.SaveChangesAsync();
+                foreach(var a in approbations)
+                {
+                    await context.Approbations.AddAsync(new Approbation { TeacherId = teacher.Id, SubjectTypeId = a });
+                }
                 await context.SaveChangesAsync();
             }
             catch (Exception)
@@ -81,7 +88,7 @@ namespace SchoolGradebook.Services
             }
             return false;
         }
-        public async Task<bool> UpdateTeacherAsync(Teacher teacher)
+        public async Task<bool> UpdateTeacherAsync(Teacher teacher, List<int> newApprobations)
         {
             if (!HasRequiredFields(teacher))
             {
@@ -92,8 +99,29 @@ namespace SchoolGradebook.Services
                 return false;
             }
             context.Attach(teacher).State = EntityState.Modified;
+            List<Approbation> oldApprobations = await context.Approbations
+                .Where(a => a.TeacherId == teacher.Id)
+                .AsNoTracking()
+                .ToListAsync();
             try
             {
+                //If not exists and want to add
+                foreach(int i in newApprobations)
+                {
+                    if(!oldApprobations.Where(a => a.SubjectTypeId == i).Any())
+                    {
+                        await context.Approbations.AddAsync(new Approbation { SubjectTypeId = i, TeacherId = teacher.Id});
+                    }
+                }
+                //If not exists but want to remove
+                foreach (var a in oldApprobations)
+                {
+                    if(!newApprobations.Where(app => app == a.SubjectTypeId).Any())
+                    {
+                        Approbation toRemove = await context.Approbations.Where(app => app.SubjectTypeId == a.SubjectTypeId).FirstOrDefaultAsync();
+                        context.Approbations.Remove(toRemove);
+                    }
+                }
                 await context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)

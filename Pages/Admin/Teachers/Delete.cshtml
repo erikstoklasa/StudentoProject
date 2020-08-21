@@ -34,10 +34,28 @@
             @Model.Teacher.Birthdate.GetValueOrDefault().ToString("dd. M. yyyy")
         </dd>
         <dt class="col-sm-2">
+            Místo narození
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Teacher.PlaceOfBirth
+        </dd>
+        <dt class="col-sm-2">
             Rodné číslo
         </dt>
         <dd class="col-sm-10">
             @Model.Teacher.PersonalIdentifNumber
+        </dd>
+        <dt class="col-sm-2">
+            Číslo občanského průkazu
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Teacher.IdentifCardNumber
+        </dd>
+        <dt class="col-sm-2">
+            Číslo pojišťovny
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Teacher.InsuranceCompany
         </dd>
         <dt class="col-sm-2">
             Ulice

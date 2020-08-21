@@ -2,7 +2,7 @@
 @model SchoolGradebook.Pages.ErrorPageModel
 
 @{
-    ViewData["Title"] = "Error @Model.ErrorStatusCode";
+    ViewData["Title"] = $"Error {Model.ErrorStatusCode}";
 }
 
 <h1 class="text-danger">Něco se pokazilo 🙁</h1>

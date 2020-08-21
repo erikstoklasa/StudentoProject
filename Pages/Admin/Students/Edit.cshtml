@@ -9,6 +9,14 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
+        @if ((string)ViewData["status_type"] == "success")
+        {
+            <div class="alert alert-success">@(ViewData["status_message"])</div>
+        }
+        else if ((string)ViewData["status_type"] == "error")
+        {
+            <div class="alert alert-danger">@(ViewData["status_message"])</div>
+        }
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Student.Id" />
@@ -32,9 +40,24 @@
                 <span asp-validation-for="Student.Birthdate" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Student.PlaceOfBirth" class="control-label"></label>
+                <input asp-for="Student.PlaceOfBirth" class="form-control" />
+                <span asp-validation-for="Student.PlaceOfBirth" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Student.PersonalIdentifNumber" class="control-label"></label>
                 <input asp-for="Student.PersonalIdentifNumber" class="form-control" />
                 <span asp-validation-for="Student.PersonalIdentifNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Student.IdentifCardNumber" class="control-label"></label>
+                <input asp-for="Student.IdentifCardNumber" class="form-control" />
+                <span asp-validation-for="Student.IdentifCardNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Student.InsuranceCompany" class="control-label"></label>
+                <input asp-for="Student.InsuranceCompany" class="form-control" />
+                <span asp-validation-for="Student.InsuranceCompany" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Student.StreetAddress" class="control-label"></label>

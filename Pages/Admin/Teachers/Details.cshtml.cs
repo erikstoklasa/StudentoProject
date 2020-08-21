@@ -14,14 +14,16 @@ namespace SchoolGradebook.Pages.Admin.Teachers
     public class DetailsModel : PageModel
     {
         private readonly TeacherService teacherService;
+        private readonly ApprobationService approbationService;
 
-        public DetailsModel(TeacherService teacherService)
+        public DetailsModel(TeacherService teacherService, ApprobationService approbationService)
         {
             this.teacherService = teacherService;
+            this.approbationService = approbationService;
         }
 
         public Models.Teacher Teacher { get; set; }
-
+        public List<Approbation> Approbations { get; set; }
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
@@ -35,6 +37,9 @@ namespace SchoolGradebook.Pages.Admin.Teachers
             {
                 return NotFound();
             }
+
+            Approbations = await approbationService.GetAllApprobations(Teacher.Id);
+
             return Page();
         }
     }

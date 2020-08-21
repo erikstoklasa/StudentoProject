@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using SchoolGradebook.Models;
 using SchoolGradebook.Services;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SchoolGradebook.Pages.Admin.Teachers
@@ -8,14 +10,22 @@ namespace SchoolGradebook.Pages.Admin.Teachers
     public class EditModel : PageModel
     {
         private readonly TeacherService teacherService;
+        private readonly ApprobationService approbationService;
+        private readonly SubjectService subjectService;
 
-        public EditModel(TeacherService teacherService)
+        public EditModel(TeacherService teacherService, ApprobationService approbationService, SubjectService subjectService)
         {
             this.teacherService = teacherService;
+            this.approbationService = approbationService;
+            this.subjectService = subjectService;
+            Approbations = new List<int>();
         }
 
         [BindProperty]
         public Models.Teacher Teacher { get; set; }
+        [BindProperty]
+        public List<int> Approbations { get; set; }
+        public List<SubjectType> AllSubjectTypes { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -30,6 +40,12 @@ namespace SchoolGradebook.Pages.Admin.Teachers
             {
                 return NotFound();
             }
+            AllSubjectTypes = await subjectService.GetAllSubjectTypesAsync();
+            List<Approbation> apprs = await approbationService.GetAllApprobations((int)id);
+            foreach(var a in apprs)
+            {
+                Approbations.Add(a.SubjectTypeId);
+            }
             return Page();
         }
 
@@ -40,7 +56,8 @@ namespace SchoolGradebook.Pages.Admin.Teachers
             Models.Teacher t = await teacherService.GetTeacherAsync(Teacher.Id);
             Teacher.UserAuthId = t.UserAuthId;
 
-            if(await teacherService.UpdateTeacherAsync(Teacher)){
+            if (await teacherService.UpdateTeacherAsync(Teacher, Approbations))
+            {
                 return RedirectToPage("./Index");
             }
             //TODO: Return message to user when the updating doesn't pass

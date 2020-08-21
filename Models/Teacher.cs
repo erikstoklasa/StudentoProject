@@ -8,7 +8,7 @@ namespace SchoolGradebook.Models
 {
     public class Teacher
     {
-        #nullable enable
+#nullable enable
         public int Id { get; set; }
         public string? UserAuthId { get; set; }
         [Display(Name = "Jméno")]
@@ -19,6 +19,16 @@ namespace SchoolGradebook.Models
         public DateTime? Birthdate { get; set; }
         [Display(Name = "Rodné číslo")]
         public String? PersonalIdentifNumber { get; set; }
+        [Display(Name = "Místo narození")]
+        public String? PlaceOfBirth { get; set; }
+        [Display(Name = "Datum nástupu")]
+        public DateTime? StartDate { get; set; }
+        [Display(Name = "Pojišťovna")]
+        public String? InsuranceCompany { get; set; }
+        [Display(Name = "Číslo občanského průkazu")]
+        public String? IdentifCardNumber { get; set; }
+        [Display(Name = "Dosažené vzdělání")]
+        public String? EducationLevel { get; set; }
         //Address
         [Display(Name = "Ulice a čp.")]
         public String? StreetAddress { get; set; }

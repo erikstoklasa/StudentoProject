@@ -28,6 +28,7 @@ namespace SchoolGradebook.Data
         public DbSet<StudentGroup> StudentGroups { set; get; }
         public DbSet<StudentGroupEnrollment> StudentGroupEnrollments { set; get; }
 
+        public DbSet<Approbation> Approbations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -42,6 +43,7 @@ namespace SchoolGradebook.Data
             modelBuilder.Entity<HumanActivationCode>().ToTable("HumanActivationCodes");
             modelBuilder.Entity<SubjectMaterial>().ToTable("SubjectMaterials");
             modelBuilder.Entity<Class>().ToTable("Classes");
+            modelBuilder.Entity<Approbation>().ToTable("Approbations");
             modelBuilder.Entity<StudentGroup>().ToTable("StudentGroups");
             modelBuilder.Entity<StudentGroupEnrollment>().ToTable("StudentGroupEnrollments");
         }

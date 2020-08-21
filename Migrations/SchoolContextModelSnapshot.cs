@@ -37,6 +37,28 @@ namespace SchoolGradebook.Migrations
                     b.ToTable("Admins");
                 });
 
+            modelBuilder.Entity("SchoolGradebook.Models.Approbation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("SubjectTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TeacherId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SubjectTypeId");
+
+                    b.HasIndex("TeacherId");
+
+                    b.ToTable("Approbations");
+                });
+
             modelBuilder.Entity("SchoolGradebook.Models.Class", b =>
                 {
                     b.Property<int>("Id")
@@ -172,6 +194,12 @@ namespace SchoolGradebook.Migrations
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("IdentifCardNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("InsuranceCompany")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
@@ -182,6 +210,9 @@ namespace SchoolGradebook.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PlaceOfBirth")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("StreetAddress")
@@ -255,6 +286,12 @@ namespace SchoolGradebook.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("SubjectTypeId")
                         .HasColumnType("int");
@@ -333,10 +370,19 @@ namespace SchoolGradebook.Migrations
                     b.Property<string>("CityAddress")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("EducationLevel")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IdentifCardNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("InsuranceCompany")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
@@ -347,6 +393,12 @@ namespace SchoolGradebook.Migrations
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PlaceOfBirth")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("StreetAddress")
                         .HasColumnType("nvarchar(max)");
@@ -360,6 +412,21 @@ namespace SchoolGradebook.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Teachers");
+                });
+
+            modelBuilder.Entity("SchoolGradebook.Models.Approbation", b =>
+                {
+                    b.HasOne("SchoolGradebook.Models.SubjectType", "SubjectType")
+                        .WithMany()
+                        .HasForeignKey("SubjectTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SchoolGradebook.Models.Teacher", "Teacher")
+                        .WithMany()
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("SchoolGradebook.Models.Class", b =>

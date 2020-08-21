@@ -19,10 +19,9 @@ else
             <div class="card mx-1 flex-column">
                 <div class="card-body">
                     <div>
-                        <a asp-page="Details" asp-route-id="@i.subjectInstance.Id">
-                            <h5 class="card-title">@i.subjectInstance.SubjectType.Name</h5>
-                        </a>
-                        <p class="card-text">Studentů: @i.studentCount</p>
+
+                        <h5 class="card-title"><a asp-page="Details" asp-route-id="@i.subjectInstance.Id">@i.subjectInstance.SubjectType.Name</a></h5>
+                        <p class="card-text pl-2">Studentů: @i.studentCount</p>
                         <a class="btn btn-primary" asp-page="/Teacher/Grades/Create" asp-route-SubjectInstanceId="@i.subjectInstance.Id">Přidat známku</a>
                     </div>
                 </div>

@@ -2,12 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using SchoolGradebook.Data;
 using SchoolGradebook.Models;
 using SchoolGradebook.Services;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -58,7 +55,7 @@ namespace SchoolGradebook.Pages.Teacher.Students
                 return BadRequest();
             }
             Classes = await classService.GetAllClasses();
-            foreach (Models.Class c in Classes)
+            foreach (Class c in Classes)
             {
                 ClassesList.Add(new SelectListItem(c.GetName(), c.Id.ToString()));
             }

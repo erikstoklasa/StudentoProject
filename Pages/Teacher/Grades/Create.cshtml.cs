@@ -16,7 +16,6 @@ namespace SchoolGradebook.Pages.Teacher.Grades
 {
     public class CreateModel : PageModel
     {
-        private readonly SchoolContext _context;
         public List<SelectListItem> Students { get; private set; }
         private string UserId { get; set; }
         public string SubjectName { get; set; }
@@ -31,15 +30,15 @@ namespace SchoolGradebook.Pages.Teacher.Grades
 
         public int TeacherId { get; set; }
 
-        public CreateModel(SchoolContext context, IHttpContextAccessor httpContextAccessor, TeacherService teacherService, TeacherAccessValidation teacherAccessValidation, GradeService gradeService, SubjectService subjectService, StudentService studentService)
+        public CreateModel(IHttpContextAccessor httpContextAccessor, TeacherService teacherService, TeacherAccessValidation teacherAccessValidation, GradeService gradeService, SubjectService subjectService, StudentService studentService)
         {
-            _context = context;
             this.teacherService = teacherService;
             this.teacherAccessValidation = teacherAccessValidation;
             this.gradeService = gradeService;
             this.subjectService = subjectService;
             this.studentService = studentService;
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            Students = new List<SelectListItem>();
         }
 
         [BindProperty(SupportsGet = true)]

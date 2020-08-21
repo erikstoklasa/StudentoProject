@@ -92,19 +92,30 @@ namespace SchoolGradebook.Services
         }
         public async Task<List<SubjectInstance>> GetAllSubjectInstancesByStudentAsync(int studentId)
         {
-            Student student = context.Students.Find(studentId);
+            Student student = await context.Students
+                .Where(s => s.Id == studentId)
+                .Include(s => s.StudentGroupEnrollments)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
 
-            List<SubjectInstance> instances = new List<SubjectInstance>();
-            foreach (StudentGroup group in student.GroupEnrollments)
+            List<SubjectInstance> subjectInstances = new List<SubjectInstance>();
+            List<Enrollment> enrollments = new List<Enrollment>();
+            foreach (var sge in student.StudentGroupEnrollments)
             {
-                foreach (Enrollment enrollment in await context.Enrollments.Include(e => e.StudentGroup.Id == group.Id).ToArrayAsync())
+                enrollments = await context.Enrollments
+                    .Where(e => e.StudentGroupId == sge.StudentGroupId)
+                    .Include(e => e.SubjectInstance)
+                    .Include(e => e.SubjectInstance.Teacher)
+                    .Include(e => e.SubjectInstance.SubjectType)
+                    .AsNoTracking()
+                    .ToListAsync();
+                foreach (var e in enrollments)
                 {
-                    if (enrollment != null)
-                        instances.Add(enrollment.SubjectInstance);
+                    subjectInstances.Add(e.SubjectInstance);
                 }
             }
 
-            return instances;
+            return subjectInstances;
         }
         public async Task<List<SubjectInstance>> GetAllSubjectInstancesByTeacherAsync(int teacherId)
         {

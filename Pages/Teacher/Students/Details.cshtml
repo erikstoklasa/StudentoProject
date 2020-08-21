@@ -91,14 +91,14 @@
                     <th>Předmět</th>
                     <th>Učitel</th>
                 </tr>
-                @foreach (var item in Model.Student.Enrollments)
+                @foreach (var item in Model.SubjectInstances)
                 {
                     <tr>
                         <td>
-                            @item.SubjectInstance.SubjectType.Name
+                            @item.SubjectType.Name
                         </td>
                         <td>
-                            @item.SubjectInstance.Teacher.GetFullName()
+                            @item.Teacher.GetFullName()
                         </td>
                     </tr>
                 }

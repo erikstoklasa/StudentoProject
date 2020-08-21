@@ -33,7 +33,7 @@
                                 <a asp-page="/Admin/Students/Details" asp-route-id="@Model.Students[i].Id">@Model.Students[i].GetFullName()</a>
                             </td>
                             <td>
-                                <a asp-page="/Admin/Enrollments/Delete" asp-route-id="@Model.Subject.Enrollments.Where(e => e.StudentId == Model.Students[i].Id).FirstOrDefault().Id">Odebrat</a>
+                                @*<a asp-page="/Admin/Enrollments/Delete" asp-route-id="@Model.Subject.Enrollments.Where(e => e.StudentId == Model.Students[i].Id).FirstOrDefault().Id">Odebrat</a>*@
                             </td>
                         </tr>
                     }

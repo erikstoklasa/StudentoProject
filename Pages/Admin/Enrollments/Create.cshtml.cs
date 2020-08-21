@@ -1,66 +1,86 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SchoolGradebook.Data;
 using SchoolGradebook.Models;
 using SchoolGradebook.Services;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SchoolGradebook.Pages.Admin.Enrollments
 {
     public class CreateModel : PageModel
     {
-        private readonly SchoolContext _context;
-        private readonly SubjectService subjectService;
         private readonly StudentService studentService;
+        private readonly StudentGroupService studentGroupService;
 
-        public CreateModel(SchoolContext context, SubjectService subjectService, StudentService studentService)
+        public CreateModel(StudentService studentService, StudentGroupService studentGroupService)
         {
-            _context = context;
-            StudentsSelectList = new List<SelectListItem> { };
-            SubjectsSelectList = new List<SelectListItem> { };
-            this.subjectService = subjectService;
+            Students = new List<SelectListItem>();
+            StudentGroups = new List<SelectListItem>();
             this.studentService = studentService;
+            this.studentGroupService = studentGroupService;
         }
-        public List<SelectListItem> StudentsSelectList { get; private set; }
-        public List<SelectListItem> SubjectsSelectList { get; private set; }
+
+        public List<SelectListItem> Students { get; set; }
+        public List<SelectListItem> StudentGroups { get; set; }
         [BindProperty(SupportsGet = true)]
         public int StudentId { get; set; }
-        public List<Models.Student> Students { get; set; }
-        public List<Models.SubjectInstance> Subjects { get; set; }
-        public List<Models.SubjectInstance> StudentSubjects { get; set; }
-        public async Task<IActionResult> OnGet()
+
+        public async Task<IActionResult> OnGetAsync()
         {
-            Students = new List<Models.Student> { await studentService.GetStudentAsync(StudentId) };
-            Subjects = await subjectService.GetAllSubjectInstancesFullAsync();
-            StudentSubjects = await subjectService.GetAllSubjectInstancesByStudentAsync(StudentId);
+            if ((!Url.IsLocalUrl(HttpUtility.UrlDecode(ReturnUrl))) || ReturnUrl == null)
+            {
+                ReturnUrl = Url.Content("~/Admin/Students");
+            }
+            ViewData["ReturnUrl"] = ReturnUrl;
+            if (StudentId != 0)
+            {
+                var s = await studentService.GetStudentFullProfileAsync(StudentId);
+                string className = s.Class != null ? s.Class.GetName() : "";
+                Students.Add(new SelectListItem(text: $"{s.GetFullName()} - {className}", value: s.Id.ToString()));
+            }
+            else
+            {
+                foreach (var s in await studentService.GetAllStudentsAsync())
+                {
+                    string className = s.Class != null ? s.Class.GetName() : "";
+                    Students.Add(new SelectListItem(text: $"{s.GetFullName()} - {className}", value: s.Id.ToString()));
+                }
+            }
+            foreach (var g in await studentGroupService.GetAllGroupsAsync())
+            {
+                List<StudentGroupEnrollment> studentGroupEnrollments = await studentGroupService.GetAllGroupEnrollmentsByStudentAsync(StudentId);
+                if (!studentGroupEnrollments.Where(sge => sge.StudentGroupId == g.Id).Any())
+                {
+                    StudentGroups.Add(new SelectListItem(text: g.Name, value: g.Id.ToString()));
+                }
 
-            StudentsSelectList.Add(new SelectListItem(Students[0].GetFullName(), Students[0].Id.ToString()));
-
-            foreach(SubjectInstance sub in StudentSubjects)
-                SubjectsSelectList.Add(new SelectListItem(sub.GetFullName(), sub.Id.ToString()));
-
+            }
             return Page();
         }
 
         [BindProperty]
-        public Enrollment Enrollment { get; set; }
+        public StudentGroupEnrollment StudentGroupEnrollment { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public string ReturnUrl { get; set; }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
+            ReturnUrl ??= Url.Content("~/Admin/Students");
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            _context.Enrollments.Add(Enrollment);
-            await _context.SaveChangesAsync();
+            await studentGroupService.AddStudentToGroup(StudentGroupEnrollment.StudentId, StudentGroupEnrollment.StudentGroupId);
 
-            return LocalRedirect($"~/Admin/Students/Details?id={StudentId}");
+            return LocalRedirect(ReturnUrl);
         }
     }
 }

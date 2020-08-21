@@ -1,31 +1,5 @@
 ﻿@page
 @model SchoolGradebook.Pages.Admin.Enrollments.DeleteModel
-
 @{
     ViewData["Title"] = "Delete";
 }
-
-<h1>Odstranit studenta z předmětu</h1>
-
-<div>
-    <dl class="row">
-        <dt class="col-sm-2">
-            Předmět
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Subject.GetFullName()
-        </dd>
-        <dt class="col-sm-2">
-            Student
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Enrollment.Student.GetFullName()
-        </dd>
-    </dl>
-
-    <form method="post">
-        <input type="hidden" asp-for="Enrollment.Id" />
-        <input type="submit" value="Odstranit studenta z předmětu" class="btn btn-danger" /> |
-        <a asp-area="Admin" asp-page="/Students/Details" asp-route-id="@Model.Enrollment.StudentId">Zpět</a>
-    </form>
-</div>

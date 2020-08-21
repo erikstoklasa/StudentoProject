@@ -72,7 +72,7 @@
 
 
 
-        @if (Model.Student.Enrollments.Count == 0)
+        @if (Model.Student.StudentGroupEnrollments.Count == 0)
         {
 
             <p class="alert alert-warning my-5">Student namá přiřazený žádný předmět 🙁</p>
@@ -88,21 +88,17 @@
             <dd class="col-sm-10">
                 <table class="table">
                     <tr>
-                        <th>Předmět</th>
-                        <th>Učitel</th>
+                        <th>Skupina</th>
                         <th></th>
                     </tr>
-                    @foreach (var item in Model.Student.Enrollments)
+                    @foreach (var item in Model.Student.StudentGroupEnrollments)
                     {
                         <tr>
                             <td>
-                                @item.SubjectInstance.SubjectType.Name
+                                @item.StudentGroup.Name
                             </td>
                             <td>
-                                @item.SubjectInstance.Teacher.GetFullName()
-                            </td>
-                            <td>
-                                <a asp-page="/Admin/Enrollments/Delete" asp-route-id="@item.Id">Odebrat</a>
+                                <a asp-page="/Admin/Enrollments/Delete" asp-route-id="@item.Id" asp-route-ReturnUrl="@Url.Content($"~/Admin/Students/Details/?id={Model.Student.Id}")">Odebrat</a>
                             </td>
                         </tr>
                     }
@@ -111,7 +107,7 @@
 
         }
     </dl>
-    <a asp-page="/Admin/Enrollments/Create" asp-route-StudentId="@Model.Student.Id">Přidat studentovi předmět</a>
+    <a asp-page="/Admin/Enrollments/Create" asp-route-StudentId="@Model.Student.Id" asp-route-ReturnUrl="@Url.Content($"~/Admin/Students/Details/?id={Model.Student.Id}")">Přidat studenta do skupiny</a>
 </div>
 <div>
     <a asp-page="./Edit" asp-route-id="@Model.Student.Id">Upravit</a> |

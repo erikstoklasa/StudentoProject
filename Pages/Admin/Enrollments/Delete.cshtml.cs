@@ -13,53 +13,27 @@ namespace SchoolGradebook.Pages.Admin.Enrollments
 {
     public class DeleteModel : PageModel
     {
-        private readonly SchoolContext _context;
-        private readonly SubjectService subjectService;
+        private readonly StudentGroupService studentGroupService;
 
-        public DeleteModel(SchoolContext context, SubjectService subjectService)
+        public DeleteModel(StudentGroupService studentGroupService)
         {
-            _context = context;
-            this.subjectService = subjectService;
+            this.studentGroupService = studentGroupService;
         }
 
-        [BindProperty]
-        public Enrollment Enrollment { get; set; }
-        public SubjectInstance Subject { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public string ReturnUrl { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
+            ReturnUrl ??= Url.Content("~/Admin/Students");
             if (id == null)
             {
                 return NotFound();
             }
 
-            Enrollment = await _context.Enrollments
-                .Include(e => e.Student)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            Subject = await subjectService.GetSubjectInstanceAsync(Enrollment.SubjectInstanceId);
+            await studentGroupService.RemoveStudentGroupEnrollment((int)id);
 
-            if (Enrollment == null)
-                return NotFound();
-
-            return Page();
-        }
-
-        public async Task<IActionResult> OnPostAsync(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            Enrollment = await _context.Enrollments.FindAsync(id);
-
-            if (Enrollment != null)
-            {
-                _context.Enrollments.Remove(Enrollment);
-                await _context.SaveChangesAsync();
-            }
-
-            return LocalRedirect($"~/Admin/Students/Details?id={Enrollment.StudentId}");
+            return LocalRedirect(ReturnUrl);
         }
     }
 }

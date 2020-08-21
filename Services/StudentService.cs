@@ -65,17 +65,18 @@ namespace SchoolGradebook.Services
         {
             Student student = await context.Students
                 .Where(s => s.Id == studentId)
-                .Include(s => s.GroupEnrollments)
-                    .ThenInclude(g => g.Enrollments)
-                        .ThenInclude(subj => subj.SubjectInstance)
-                            .ThenInclude(subj => subj.Teacher)
+                .Include(s => s.StudentGroupEnrollments)
+                    .ThenInclude(sge => sge.StudentGroup)
+                .Include(s => s.Class)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
+
             return student;
         }
         public async Task<Student[]> GetAllStudentsAsync()
         {
             Student[] students = await context.Students
+                .Include(s => s.Class)
                 .AsNoTracking()
                 .OrderBy(s => s.LastName)
                 .ToArrayAsync();
@@ -93,10 +94,10 @@ namespace SchoolGradebook.Services
 
             List<Student> students = new List<Student>();
 
-            foreach(Enrollment enrollment in enrollments)
-                foreach(StudentGroupEnrollment groupEnrollment in enrollment.StudentGroup.StudentGroupEnrollments)
+            foreach (Enrollment enrollment in enrollments)
+                foreach (StudentGroupEnrollment groupEnrollment in enrollment.StudentGroup.StudentGroupEnrollments)
                     students.Add(groupEnrollment.Student);
-            
+
             return students.OrderBy(s => s.LastName).ToArray();
         }
         public async Task<List<Student>> GetAllStudentsByClassAsync(int classId)

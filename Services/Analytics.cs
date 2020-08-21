@@ -53,22 +53,6 @@ namespace SchoolGradebook.Services
                 .FindAsync(studentId);
             return student;
         }
-        public async Task<SubjectInstance[]> GetAllSubjectsByStudentIdAsync(int studentId)
-        {
-            Student student = Context.Students.Find(studentId);
-
-            List<SubjectInstance> instances = new List<SubjectInstance>();
-            foreach(StudentGroup group in student.GroupEnrollments)
-            {
-                foreach(Enrollment enrollment in await Context.Enrollments.Include(e => e.StudentGroup.Id == group.Id).ToArrayAsync())
-                {
-                    if(enrollment != null)
-                        instances.Add(enrollment.SubjectInstance);
-                }
-            }
-
-            return instances.ToArray();
-        }
         //Teacher
         public async Task<Grade[]> GetGradesByTeacherUserAuthIdAsync(string userId, int SubjectInstanceId, int studentId)
         {

@@ -61,7 +61,7 @@ namespace SchoolGradebook.Pages.Admin.Students
                 return Page();
             }
 
-            await studentService.UpdateStudentAsync(s);
+            await studentService.UpdateStudentAsync(Student);
 
             return RedirectToPage("./Index");
         }

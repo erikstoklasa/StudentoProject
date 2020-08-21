@@ -2,32 +2,31 @@
 @model SchoolGradebook.Pages.Admin.Enrollments.CreateModel
 
 @{
-    ViewData["Title"] = "Přiřadit setudenta k předmětu";
+    ViewData["Title"] = "Create";
 }
 
-<h1>Přiřadit setudenta k předmětu</h1>
-
+<h4>Přidat studenta do skupiny</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Enrollment.StudentId" class="control-label">Student</label>
-                <select asp-for="Enrollment.StudentId" class ="form-control" asp-items="Model.StudentsSelectList"></select>
+                <label asp-for="StudentGroupEnrollment.StudentGroupId" class="control-label">Skupina</label>
+                <select asp-for="StudentGroupEnrollment.StudentGroupId" class ="form-control" asp-items="Model.StudentGroups"></select>
             </div>
             <div class="form-group">
-                <label asp-for="Enrollment.SubjectInstanceId" class="control-label">Předmět</label>
-                <select asp-for="Enrollment.SubjectInstanceId" class ="form-control" asp-items="Model.SubjectsSelectList"></select>
+                <label asp-for="StudentGroupEnrollment.StudentId" class="control-label">Student</label>
+                <select asp-for="StudentGroupEnrollment.StudentId" class ="form-control" asp-items="Model.Students"></select>
             </div>
             <div class="form-group">
-                <input type="submit" value="Přiřadit studenta k předmětu" class="btn btn-primary" />
+                <input type="submit" value="Přidat" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-page="/Admin/Students/Details" asp-route-id="@Model.StudentId">Zpět</a>
+    <a href="@ViewData["ReturnUrl"]">Zpět</a>
 </div>
 

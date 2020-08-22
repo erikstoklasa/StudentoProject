@@ -66,29 +66,30 @@ namespace SchoolGradebook.Services
             
             return grades;
         }
-        public async Task<bool> AddGradeAsync(Grade grade)
+        public async Task AddGradeAsync(Grade grade, bool saveChanges = true)
         {
             if (!HasRequiredFields(grade))
-            {
-                return false;
-            }
-            //Grading scale is relative to the country of school
-            if (grade.Value <= 0 && grade.Value > 5)
-            {
-                return false;
-            }
-            try
-            {
-                await context.Grades.AddAsync(grade);
-                await context.SaveChangesAsync();
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+                throw new ArgumentNullException("Grade must have a Name.");
 
-            return true;
+            //Grading scale is relative to the country of school
+            if (grade.Value <= 0 || grade.Value > 5)
+                throw new ArgumentOutOfRangeException("Grade must be grater than 0 but less than 5.");
+            
+            await context.Grades.AddAsync(grade);
+
+            if(saveChanges)
+                await context.SaveChangesAsync();
         }
+
+        public async Task AddGradesAsync(IEnumerable<Grade> grades)
+        {
+            foreach (var grade in grades)
+            {
+                await AddGradeAsync(grade, false);
+            }
+            await context.SaveChangesAsync();
+        }
+
         //VALIDATIONS
         public static bool HasRequiredFields(Grade grade)
         {

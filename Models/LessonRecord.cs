@@ -16,6 +16,7 @@ namespace SchoolGradebook.Models
 
         public SubjectInstance SubstitutionSubjectInstance { set; get; }
         public Teacher SubstitutionTeacher { set; get; }
+        public TimeFrame TimeFrame { set; get; }
         public ICollection<AttendanceRecord> Attendance { set; get; }
     }
 }

@@ -62,6 +62,9 @@ namespace SchoolGradebook
             services.AddTransient<StudentAccessValidation>();
             services.AddTransient<SubjectMaterialService>();
             services.AddTransient<ClassService>();
+            services.AddTransient<LessonRecordService>();
+            services.AddTransient<TimeFrameService>();
+            services.AddTransient<RoomService>();
             services.AddRazorPages().AddRazorPagesOptions(options =>
             {
                 options.Conventions.AuthorizeFolder("/HumanCodes", "AdminAndTeacher");

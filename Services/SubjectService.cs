@@ -152,6 +152,13 @@ namespace SchoolGradebook.Services
             }
             return false;
         }
+
+        public async Task<SubjectInstance[]> GetSubjectInstancesByGroupId(int groupId)
+            => await context.SubjectInstances
+                    .Where(si => si.Enrollments.Where(e => e.StudentGroupId == groupId).Any())
+                    .AsNoTracking()
+                    .ToArrayAsync();
+
         //Subject Types
         public async Task<List<SubjectType>> GetAllSubjectTypesAsync()
         {

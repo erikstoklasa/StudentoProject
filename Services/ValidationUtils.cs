@@ -13,9 +13,7 @@ namespace SchoolGradebook.Services
             {
                 return false;
             }
-            number = number.Trim();
-
-            number = RemoveSlashIfExists(number);
+            number = number.Trim().Replace("/", string.Empty);
 
             Int64 convertedNumber;
             try
@@ -31,17 +29,6 @@ namespace SchoolGradebook.Services
                 return false;
             }
             return true;
-        }
-
-        private static string RemoveSlashIfExists(string number)
-        {
-            int indexOfSlash = number.IndexOf('/');
-            if (indexOfSlash >= 0)
-            {
-                number = number.Remove(indexOfSlash, 1);
-            }
-
-            return number;
         }
     }
 }

@@ -135,6 +135,34 @@ td img {
     width: 2px;
     background: #1a0504;
 }
+/*Timetable*/
+.timetable {
+    background: white;
+    border-radius: 5px;
+    overflow-x: auto;
+}
+
+    .timetable .row {
+        margin: 0;
+        flex-wrap: nowrap;
+    }
+
+.timeframe {
+    padding: 1rem;
+    margin: 0.5rem;
+    background: #E2E2E2;
+    border-radius: 5px;
+    font-size: 11px;
+    width: 6.4rem;
+    flex-shrink: 0;
+}
+
+.timeframe-day {
+    padding: 15px;
+    margin: auto 0;
+    width: 6rem;
+    flex-shrink: 0;
+}
 /*p, li, oi, dt, dl {
     font-family: 'Prata', serif;
 }*/
@@ -228,9 +256,9 @@ a:hover {
     vertical-align: middle;
 }
 
-.table td:first-child{
-    padding-left: 2rem;
-}
+    .table td:first-child {
+        padding-left: 2rem;
+    }
 
 .table tr {
     width: 100%;

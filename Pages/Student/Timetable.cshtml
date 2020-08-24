@@ -1,0 +1,36 @@
+﻿@page
+@model SchoolGradebook.Pages.Student.TimetableModel
+@using SchoolGradebook.Services
+@{
+    ViewData["Title"] = "Rozvrh hodin";
+    string[] days = { "Pondělí", "Úterý", "Středa", "Čtvrtek", "Pátek" };
+}
+<div class="timetable">
+    @for (int i = 0; i < Model.TimeFramesByDay.Length; i++)
+    {
+        <div class="row">
+            <div class="timeframe-day">@days[i]</div>
+
+            @foreach (var tf in Model.TimeFramesByDay[i])
+            {
+                if (tf.SubjectInstanceId != null)
+                {
+                    <div class="timeframe">
+                        @tf.Start.ToString("h:mm") - @tf.End.ToString("h:mm")<br>
+                        <strong>@LanguageHelper.getShorterString(tf.SubjectInstance.SubjectType.Name, 7)</strong>
+                        <br>
+                        @tf.Room.Name
+                    </div>
+                }
+                else
+                {
+                    <div class="timeframe">
+                        @tf.Start.ToString("h:mm") - @tf.End.ToString("h:mm")<br>
+                        Volná h.
+                    </div>
+                }
+
+            }
+        </div>
+    }
+</div>

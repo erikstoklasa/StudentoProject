@@ -155,8 +155,16 @@ namespace SchoolGradebook.Data
                 context.SaveChanges();
             }
             //TimeFrames
-
-
+            if (!context.TimeFrames.Any())
+            {
+                List<TimeFrame> timeFrames = new List<TimeFrame>();
+                for (int i = 0; i < 20; i++)
+                {
+                    timeFrames.Add(new TimeFrame() { DayOfWeek = (DayOfWeek)r.Next(1, 6), Reccurance = 7, RoomId = 1, SubjectInstanceId = r.Next(1, 8), Start = DateTime.Parse("01/01/0001 8:30:00 AM"), End = DateTime.Parse("01/01/0001 9:15:00 AM") });
+                }
+                context.TimeFrames.AddRange(timeFrames);
+                context.SaveChanges();
+            }
             //StudentGroups
             if (!context.StudentGroups.Any())
             {

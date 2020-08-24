@@ -18,6 +18,7 @@ namespace SchoolGradebook.Pages.Student
         private readonly StudentService studentService;
         private readonly Analytics _analytics;
         private readonly GradeService gradeService;
+        private readonly TimetableManager timetableManager;
 
         public string StudentFirstName { get; set; }
         public string UserId { get; private set; }
@@ -40,7 +41,7 @@ namespace SchoolGradebook.Pages.Student
         public async Task<IActionResult> OnGet()
         {
             int studentId = await studentService.GetStudentId(UserId);
-            if(studentId == -1)
+            if (studentId == -1)
             {
                 return LocalRedirect("/ActivateAccount");
             }

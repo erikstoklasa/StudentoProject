@@ -59,12 +59,43 @@ namespace SchoolGradebook.Migrations
                     b.ToTable("Approbations");
                 });
 
+            modelBuilder.Entity("SchoolGradebook.Models.AttendanceRecord", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("LessonRecordId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Reason")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LessonRecordId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("AttendanceRecords");
+                });
+
             modelBuilder.Entity("SchoolGradebook.Models.Class", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BaseRoomId")
+                        .HasColumnType("int");
 
                     b.Property<short>("Grade")
                         .HasColumnType("smallint");
@@ -77,31 +108,11 @@ namespace SchoolGradebook.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BaseRoomId");
+
                     b.HasIndex("TeacherId");
 
                     b.ToTable("Classes");
-                });
-
-            modelBuilder.Entity("SchoolGradebook.Models.Enrollment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("StudentGroupId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SubjectInstanceId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("StudentGroupId");
-
-                    b.HasIndex("SubjectInstanceId");
-
-                    b.ToTable("Enrollments");
                 });
 
             modelBuilder.Entity("SchoolGradebook.Models.Grade", b =>
@@ -157,6 +168,39 @@ namespace SchoolGradebook.Migrations
                     b.ToTable("HumanActivationCodes");
                 });
 
+            modelBuilder.Entity("SchoolGradebook.Models.LessonRecord", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Canceled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("SubstitutionSubjectInstanceId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SubstitutionTeacherId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TimeFrameId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SubstitutionSubjectInstanceId");
+
+                    b.HasIndex("SubstitutionTeacherId");
+
+                    b.HasIndex("TimeFrameId");
+
+                    b.ToTable("LessonRecords");
+                });
+
             modelBuilder.Entity("SchoolGradebook.Models.Parent", b =>
                 {
                     b.Property<int>("Id")
@@ -170,6 +214,21 @@ namespace SchoolGradebook.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Parents");
+                });
+
+            modelBuilder.Entity("SchoolGradebook.Models.Room", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Rooms");
                 });
 
             modelBuilder.Entity("SchoolGradebook.Models.Student", b =>
@@ -308,6 +367,28 @@ namespace SchoolGradebook.Migrations
                     b.ToTable("SubjectInstances");
                 });
 
+            modelBuilder.Entity("SchoolGradebook.Models.SubjectInstanceEnrollment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("StudentGroupId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubjectInstanceId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudentGroupId");
+
+                    b.HasIndex("SubjectInstanceId");
+
+                    b.ToTable("Enrollments");
+                });
+
             modelBuilder.Entity("SchoolGradebook.Models.SubjectMaterial", b =>
                 {
                     b.Property<Guid>("Id")
@@ -414,6 +495,40 @@ namespace SchoolGradebook.Migrations
                     b.ToTable("Teachers");
                 });
 
+            modelBuilder.Entity("SchoolGradebook.Models.TimeFrame", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("DayOfWeek")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("End")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Reccurance")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("RoomId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Start")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("SubjectInstanceId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoomId");
+
+                    b.HasIndex("SubjectInstanceId");
+
+                    b.ToTable("TimeFrames");
+                });
+
             modelBuilder.Entity("SchoolGradebook.Models.Approbation", b =>
                 {
                     b.HasOne("SchoolGradebook.Models.SubjectType", "SubjectType")
@@ -429,26 +544,32 @@ namespace SchoolGradebook.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SchoolGradebook.Models.Class", b =>
+            modelBuilder.Entity("SchoolGradebook.Models.AttendanceRecord", b =>
                 {
-                    b.HasOne("SchoolGradebook.Models.Teacher", "Teacher")
+                    b.HasOne("SchoolGradebook.Models.LessonRecord", "LessonRecord")
+                        .WithMany("Attendance")
+                        .HasForeignKey("LessonRecordId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SchoolGradebook.Models.Student", "Student")
                         .WithMany()
-                        .HasForeignKey("TeacherId")
+                        .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SchoolGradebook.Models.Enrollment", b =>
+            modelBuilder.Entity("SchoolGradebook.Models.Class", b =>
                 {
-                    b.HasOne("SchoolGradebook.Models.StudentGroup", "StudentGroup")
-                        .WithMany("Enrollments")
-                        .HasForeignKey("StudentGroupId")
+                    b.HasOne("SchoolGradebook.Models.Room", "BaseRoom")
+                        .WithMany()
+                        .HasForeignKey("BaseRoomId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SchoolGradebook.Models.SubjectInstance", "SubjectInstance")
-                        .WithMany("Enrollments")
-                        .HasForeignKey("SubjectInstanceId")
+                    b.HasOne("SchoolGradebook.Models.Teacher", "Teacher")
+                        .WithMany()
+                        .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -468,10 +589,27 @@ namespace SchoolGradebook.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("SchoolGradebook.Models.LessonRecord", b =>
+                {
+                    b.HasOne("SchoolGradebook.Models.SubjectInstance", "SubstitutionSubjectInstance")
+                        .WithMany()
+                        .HasForeignKey("SubstitutionSubjectInstanceId");
+
+                    b.HasOne("SchoolGradebook.Models.Teacher", "SubstitutionTeacher")
+                        .WithMany()
+                        .HasForeignKey("SubstitutionTeacherId");
+
+                    b.HasOne("SchoolGradebook.Models.TimeFrame", "TimeFrame")
+                        .WithMany()
+                        .HasForeignKey("TimeFrameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("SchoolGradebook.Models.Student", b =>
                 {
                     b.HasOne("SchoolGradebook.Models.Class", "Class")
-                        .WithMany()
+                        .WithMany("Students")
                         .HasForeignKey("ClassId");
 
                     b.HasOne("SchoolGradebook.Models.Parent", null)
@@ -520,6 +658,21 @@ namespace SchoolGradebook.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("SchoolGradebook.Models.SubjectInstanceEnrollment", b =>
+                {
+                    b.HasOne("SchoolGradebook.Models.StudentGroup", "StudentGroup")
+                        .WithMany("Enrollments")
+                        .HasForeignKey("StudentGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SchoolGradebook.Models.SubjectInstance", "SubjectInstance")
+                        .WithMany("Enrollments")
+                        .HasForeignKey("SubjectInstanceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("SchoolGradebook.Models.SubjectMaterial", b =>
                 {
                     b.HasOne("SchoolGradebook.Models.SubjectType", "SubjectType")
@@ -533,6 +686,17 @@ namespace SchoolGradebook.Migrations
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("SchoolGradebook.Models.TimeFrame", b =>
+                {
+                    b.HasOne("SchoolGradebook.Models.Room", "Room")
+                        .WithMany("TimeFrames")
+                        .HasForeignKey("RoomId");
+
+                    b.HasOne("SchoolGradebook.Models.SubjectInstance", "SubjectInstance")
+                        .WithMany("TimeFrames")
+                        .HasForeignKey("SubjectInstanceId");
                 });
 #pragma warning restore 612, 618
         }

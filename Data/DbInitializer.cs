@@ -21,22 +21,12 @@ namespace SchoolGradebook.Data
             const int NUMBER_OF_TEACHERS = 10;
             const int NUMBER_OF_STUDENTS = 15;
             const int NUMBER_OF_GRADES = 200;
-            context.Database.EnsureCreated();
-            //Students
-            if (!context.Students.Any())
-            {
-                List<Student> students = new List<Student>();
+            const int NUMBER_OF_CLASSES = 20;
+            string[] classesNames = { "A", "B", "C", "D" };
+            int classesPerYear = classesNames.Length;
 
-                for (int i = 0; i < NUMBER_OF_STUDENTS; i++)
-                {
-                    students.Add(new Student { FirstName = firstNames[r.Next(firstNames.Length)], LastName = lastNames[r.Next(lastNames.Length)], ClassId=1 });
-                }
-                foreach (Student a in students)
-                {
-                    context.Students.Add(a);
-                }
-                context.SaveChanges();
-            }
+            context.Database.EnsureCreated();
+
 
 
             //Teachers
@@ -95,28 +85,7 @@ namespace SchoolGradebook.Data
                 context.SaveChanges();
             }
 
-            //Grades
-            if (!context.Grades.Any())
-            {
-                List<Grade> grades = new List<Grade>();
-                for (int i = 0; i < NUMBER_OF_GRADES; i++)
-                {
-                    grades.Add(
-                        new Grade
-                        {
-                            Value = r.Next(1, 6),
-                            Name = "Domácí úkol - prezentace",
-                            StudentId = r.Next(1, NUMBER_OF_STUDENTS + 1),
-                            SubjectInstanceId = r.Next(1, 8),
-                            Added = dates[r.Next(dates.Length)]
-                        });
-                }
-                foreach (Grade e in grades)
-                {
-                    context.Grades.Add(e);
-                }
-                context.SaveChanges();
-            }
+
 
             // Rooms
             if (!context.Classes.Any())
@@ -135,31 +104,66 @@ namespace SchoolGradebook.Data
 
                 context.SaveChanges();
             }
-
             //Classes
             if (!context.Classes.Any())
             {
-                var classes = new Class[]
+                List<Class> classes = new List<Class>();
+                short years = (short)(NUMBER_OF_CLASSES / classesPerYear);
+                for (int i = 1; i <= years; i++)
                 {
-                    new Class{Grade=3,Name="B",TeacherId=1,BaseRoomId=1},
-                    new Class{Grade=2,Name="C",TeacherId=2,BaseRoomId=2}
-                };
+                    for (int y = 0; y < classesPerYear; y++)
+                    {
+                        classes.Add(new Class() { Grade = (short)i, Name = classesNames[y], BaseRoomId = 1, TeacherId = 1 });
+                    }
 
-                foreach (Class c in classes)
-                    context.Classes.Add(c);
-
+                }
+                context.Classes.AddRange(classes);
                 context.SaveChanges();
             }
+            //Students
+            if (!context.Students.Any())
+            {
+                List<Student> students = new List<Student>();
 
+                for (int i = 0; i < NUMBER_OF_STUDENTS; i++)
+                {
+                    students.Add(new Student { FirstName = firstNames[r.Next(firstNames.Length)], LastName = lastNames[r.Next(lastNames.Length)], ClassId = 1 });
+                }
+                foreach (Student a in students)
+                {
+                    context.Students.Add(a);
+                }
+                context.SaveChanges();
+            }
+            //Grades
+            if (!context.Grades.Any())
+            {
+                List<Grade> grades = new List<Grade>();
+                for (int i = 0; i < NUMBER_OF_GRADES; i++)
+                {
+                    grades.Add(
+                        new Grade
+                        {
+                            Value = r.Next(1, 6),
+                            Name = "Domácí úkol - prezentace",
+                            StudentId = r.Next(1, NUMBER_OF_STUDENTS),
+                            SubjectInstanceId = r.Next(1, 8),
+                            Added = dates[r.Next(dates.Length)]
+                        });
+                }
+                context.Grades.AddRange(grades);
+                context.SaveChanges();
+            }
             //TimeFrames
 
 
             //StudentGroups
-            if(!context.StudentGroups.Any())
+            if (!context.StudentGroups.Any())
             {
                 var groups = new StudentGroup[]
                 {
-                    new StudentGroup{Name="Skupina1"}
+                    new StudentGroup{Name="Skupina1"},
+                    new StudentGroup{Name="Skupina2"}
                 };
 
                 foreach (StudentGroup group in groups)

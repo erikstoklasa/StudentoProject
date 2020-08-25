@@ -157,6 +157,10 @@ td img {
     flex-shrink: 0;
 }
 
+    .timeframe strong {
+        font-size: 13px;
+    }
+
 .timeframe-day {
     padding: 15px;
     margin: auto 0;

@@ -31,7 +31,7 @@ namespace SchoolGradebook.Data
         public DbSet<Room> Rooms { set; get; }
         public DbSet<LessonRecord> LessonRecords { set; get; }
         public DbSet<AttendanceRecord> AttendanceRecords { set; get; }
-
+        public DbSet<TimetableRecord> TimetableRecords { set; get; }
         public DbSet<Approbation> Approbations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -54,6 +54,7 @@ namespace SchoolGradebook.Data
             modelBuilder.Entity<Room>().ToTable("Rooms");
             modelBuilder.Entity<LessonRecord>().ToTable("LessonRecords");
             modelBuilder.Entity<AttendanceRecord>().ToTable("AttendanceRecords");
+            modelBuilder.Entity<TimetableRecord>().ToTable("TimetableRecords").HasIndex(tr => tr.TimeFrameId).IsUnique(false);
         }
     }
 }

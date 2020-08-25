@@ -20,12 +20,10 @@ namespace SchoolGradebook.Pages.Student
 
         public string UserId { get; set; }
         public int StudentId { get; set; }
-        public TimetableModel(IHttpContextAccessor httpContextAccessor, TimetableManager timetableManager, StudentService studentService, SubjectService subjectService, RoomService roomService)
+        public TimetableModel(IHttpContextAccessor httpContextAccessor, TimetableManager timetableManager, StudentService studentService)
         {
             this.timetableManager = timetableManager;
             this.studentService = studentService;
-            this.subjectService = subjectService;
-            this.roomService = roomService;
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             TimeFramesByDay = new List<TimeFrame>[5];
             for (int i = 0; i < TimeFramesByDay.Length; i++)
@@ -39,19 +37,10 @@ namespace SchoolGradebook.Pages.Student
         {
             StudentId = await studentService.GetStudentId(UserId);
             Timetable = await timetableManager.GetTimetableForStudent(StudentId, 1);
-            Timetable.TimeFrames = Timetable.TimeFrames.OrderBy(tf => tf.Start.TimeOfDay).ToList();
             TimeFrame tf;
             for (int i = 0; i < Timetable.TimeFrames.Count; i++)
             {
                 tf = Timetable.TimeFrames[i];
-                if (tf.RoomId != null)
-                {
-                    tf.Room = await roomService.GetRoomById((int)tf.RoomId);
-                }
-                if (tf.SubjectInstanceId != null)
-                {
-                    tf.SubjectInstance = await subjectService.GetSubjectInstanceAsync((int)tf.SubjectInstanceId);
-                }
                 TimeFramesByDay[(int)tf.DayOfWeek - 1].Add(tf);
             }
         }

@@ -13,20 +13,19 @@
 
             @foreach (var tf in Model.TimeFramesByDay[i])
             {
-                if (tf.SubjectInstanceId != null)
+                if (tf.TimetableRecord != null)
                 {
                     <div class="timeframe">
                         @tf.Start.ToString("h:mm") - @tf.End.ToString("h:mm")<br>
-                        <strong>@LanguageHelper.getShorterString(tf.SubjectInstance.SubjectType.Name, 7)</strong>
+                        <strong>@LanguageHelper.getShorterString(tf.TimetableRecord.SubjectInstance.SubjectType.Name, 7)</strong>
                         <br>
-                        @tf.Room.Name
+                        @tf.TimetableRecord.Room.Name
                     </div>
                 }
                 else
                 {
                     <div class="timeframe">
-                        @tf.Start.ToString("h:mm") - @tf.End.ToString("h:mm")<br>
-                        Volná h.
+                        @tf.Start.ToString("h:mm") - @tf.End.ToString("h:mm")
                     </div>
                 }
 

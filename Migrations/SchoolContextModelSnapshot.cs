@@ -508,9 +508,6 @@ namespace SchoolGradebook.Migrations
                     b.Property<DateTime>("End")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Reccurance")
-                        .HasColumnType("int");
-
                     b.Property<int?>("RoomId")
                         .HasColumnType("int");
 
@@ -527,6 +524,36 @@ namespace SchoolGradebook.Migrations
                     b.HasIndex("SubjectInstanceId");
 
                     b.ToTable("TimeFrames");
+                });
+
+            modelBuilder.Entity("SchoolGradebook.Models.TimetableRecord", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Reccurance")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("RoomId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SubjectInstanceId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TimeFrameId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoomId");
+
+                    b.HasIndex("SubjectInstanceId");
+
+                    b.HasIndex("TimeFrameId");
+
+                    b.ToTable("TimetableRecords");
                 });
 
             modelBuilder.Entity("SchoolGradebook.Models.Approbation", b =>
@@ -690,13 +717,28 @@ namespace SchoolGradebook.Migrations
 
             modelBuilder.Entity("SchoolGradebook.Models.TimeFrame", b =>
                 {
-                    b.HasOne("SchoolGradebook.Models.Room", "Room")
+                    b.HasOne("SchoolGradebook.Models.Room", null)
                         .WithMany("TimeFrames")
                         .HasForeignKey("RoomId");
 
-                    b.HasOne("SchoolGradebook.Models.SubjectInstance", "SubjectInstance")
+                    b.HasOne("SchoolGradebook.Models.SubjectInstance", null)
                         .WithMany("TimeFrames")
                         .HasForeignKey("SubjectInstanceId");
+                });
+
+            modelBuilder.Entity("SchoolGradebook.Models.TimetableRecord", b =>
+                {
+                    b.HasOne("SchoolGradebook.Models.Room", "Room")
+                        .WithMany()
+                        .HasForeignKey("RoomId");
+
+                    b.HasOne("SchoolGradebook.Models.SubjectInstance", "SubjectInstance")
+                        .WithMany()
+                        .HasForeignKey("SubjectInstanceId");
+
+                    b.HasOne("SchoolGradebook.Models.TimeFrame", "TimeFrame")
+                        .WithOne("TimetableRecord")
+                        .HasForeignKey("SchoolGradebook.Models.TimetableRecord", "TimeFrameId");
                 });
 #pragma warning restore 612, 618
         }

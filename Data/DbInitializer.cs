@@ -158,11 +158,28 @@ namespace SchoolGradebook.Data
             if (!context.TimeFrames.Any())
             {
                 List<TimeFrame> timeFrames = new List<TimeFrame>();
-                for (int i = 0; i < 20; i++)
+                for (int i = 1; i <= 5; i++)
                 {
-                    timeFrames.Add(new TimeFrame() { DayOfWeek = (DayOfWeek)r.Next(1, 6), Reccurance = 7, RoomId = 1, SubjectInstanceId = r.Next(1, 8), Start = DateTime.Parse("01/01/0001 8:30:00 AM"), End = DateTime.Parse("01/01/0001 9:15:00 AM") });
+                    timeFrames.Add(new TimeFrame() { DayOfWeek = (DayOfWeek)i, Start = DateTime.Parse("08:30:00"), End = DateTime.Parse("09:15:00") });
+                    timeFrames.Add(new TimeFrame() { DayOfWeek = (DayOfWeek)i, Start = DateTime.Parse("09:30:00"), End = DateTime.Parse("10:15:00") });
+                    timeFrames.Add(new TimeFrame() { DayOfWeek = (DayOfWeek)i, Start = DateTime.Parse("10:30:00"), End = DateTime.Parse("11:15:00") });
+                    timeFrames.Add(new TimeFrame() { DayOfWeek = (DayOfWeek)i, Start = DateTime.Parse("11:30:00"), End = DateTime.Parse("12:15:00") });
+                    timeFrames.Add(new TimeFrame() { DayOfWeek = (DayOfWeek)i, Start = DateTime.Parse("12:30:00"), End = DateTime.Parse("13:15:00") });
+                    timeFrames.Add(new TimeFrame() { DayOfWeek = (DayOfWeek)i, Start = DateTime.Parse("13:30:00"), End = DateTime.Parse("14:15:00") });
+                    timeFrames.Add(new TimeFrame() { DayOfWeek = (DayOfWeek)i, Start = DateTime.Parse("14:30:00"), End = DateTime.Parse("15:15:00") });
                 }
                 context.TimeFrames.AddRange(timeFrames);
+                context.SaveChanges();
+            }
+            //TimetableRecords
+            if (!context.TimetableRecords.Any())
+            {
+                List<TimetableRecord> timetableRecords = new List<TimetableRecord>();
+                for (int i = 0; i < 20; i++)
+                {
+                    timetableRecords.Add(new TimetableRecord() { SubjectInstanceId = r.Next(1,8), RoomId = r.Next(1,4), Reccurance = 7, TimeFrameId = r.Next(1,36) });
+                }
+                context.TimetableRecords.AddRange(timetableRecords);
                 context.SaveChanges();
             }
             //StudentGroups

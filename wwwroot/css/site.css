@@ -161,6 +161,10 @@ td img {
         font-size: 13px;
     }
 
+.timeframe-blank {
+    background: transparent;
+}
+
 .timeframe-day {
     padding: 15px;
     margin: auto 0;

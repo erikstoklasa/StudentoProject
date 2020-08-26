@@ -36,7 +36,7 @@ namespace SchoolGradebook.Pages.Student
         public async Task OnGetAsync()
         {
             StudentId = await studentService.GetStudentId(UserId);
-            Timetable = await timetableManager.GetTimetableForStudent(StudentId, 1);
+            Timetable = await timetableManager.GetTimetableForStudent(StudentId, 0);
             TimeFrame tf;
             for (int i = 0; i < Timetable.TimeFrames.Count; i++)
             {

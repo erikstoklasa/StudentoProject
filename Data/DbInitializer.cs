@@ -177,7 +177,7 @@ namespace SchoolGradebook.Data
                 List<TimetableRecord> timetableRecords = new List<TimetableRecord>();
                 for (int i = 0; i < 20; i++)
                 {
-                    timetableRecords.Add(new TimetableRecord() { SubjectInstanceId = r.Next(1,8), RoomId = r.Next(1,4), Reccurance = 7, TimeFrameId = r.Next(1,36) });
+                    timetableRecords.Add(new TimetableRecord() { SubjectInstanceId = r.Next(1, 8), RoomId = r.Next(1, 4), Recurrence = 1, TimeFrameId = r.Next(1, 36) });
                 }
                 context.TimetableRecords.AddRange(timetableRecords);
                 context.SaveChanges();
@@ -233,9 +233,8 @@ namespace SchoolGradebook.Data
             {
                 var humanActivationCodes = new HumanActivationCode[]
                 {
-                new HumanActivationCode{TargetId=2, HumanCode="000000", CodeType = CodeType.Teacher},
-                new HumanActivationCode{TargetId=3, HumanCode="111111", CodeType = CodeType.Student},
-                new HumanActivationCode{TargetId=4, HumanCode="000111", CodeType = CodeType.Student}
+                new HumanActivationCode{TargetId=1, HumanCode="000000", CodeType = CodeType.Teacher},
+                new HumanActivationCode{TargetId=1, HumanCode="111111", CodeType = CodeType.Student}
 
                 };
                 foreach (HumanActivationCode d in humanActivationCodes)

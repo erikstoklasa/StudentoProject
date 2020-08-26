@@ -533,7 +533,10 @@ namespace SchoolGradebook.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("Reccurance")
+                    b.Property<int>("Recurrence")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RecurrenceStart")
                         .HasColumnType("int");
 
                     b.Property<int?>("RoomId")

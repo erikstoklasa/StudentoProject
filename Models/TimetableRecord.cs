@@ -10,7 +10,8 @@ namespace SchoolGradebook.Models
     {
         public int Id { set; get; }
         public int? SubjectInstanceId { set; get; }
-        public ushort Reccurance { set; get; }
+        public ushort Recurrence { set; get; }
+        public ushort RecurrenceStart { set; get; }
         public int? RoomId { set; get; }
         public int? TimeFrameId { set; get; }
 

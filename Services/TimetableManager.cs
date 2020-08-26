@@ -22,7 +22,7 @@ namespace SchoolGradebook.Services
             this.subjectService = subjectService;
             this.roomService = roomService;
         }
-        public async Task<Timetable> GetTimetableForStudent(int studentId, int week)
+        public async Task<Timetable> GetTimetableForStudent(int studentId, int week = 0)
         {
             List<TimeFrame> timeFrames = (await timeFrameService.GetAllTimeFrames()).OrderBy(tf => tf.Start.TimeOfDay).ToList();
             List<TimetableRecord> timetableRecords = await timetableRecordService.GetTimetableRecordsByStudentId(studentId);
@@ -30,7 +30,7 @@ namespace SchoolGradebook.Services
             foreach (var tf in timeFrames)
             {
                 var tr = timetableRecords.FirstOrDefault(tr => tr.TimeFrameId == tf.Id);
-                if (tr != null)
+                if (tr != null && (week - tr.RecurrenceStart) >= 0 && (week - tr.RecurrenceStart) % tr.Recurrence == 0)
                 {
                     tf.TimetableRecord = tr;
                     if (tf.TimetableRecord.SubjectInstanceId != null)

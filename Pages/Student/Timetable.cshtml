@@ -5,11 +5,11 @@
     ViewData["Title"] = "Rozvrh hodin";
     string[] days = { "Pondělí", "Úterý", "Středa", "Čtvrtek", "Pátek" };
 }
-<div class="timetable">
-    <h4 class="text-center pt-3">Týden @DateTime.Parse("31/08/2020").AddDays(Model.Timetable.Week * 7).ToShortDateString() - @DateTime.Parse("31/08/2020").AddDays((Model.Timetable.Week + 1) * 7).ToShortDateString()</h4>
+<h4 class="text-center pt-3">Týden @DateTime.Parse("31/08/2020").AddDays(Model.Timetable.Week * 7).ToShortDateString() - @DateTime.Parse("31/08/2020").AddDays((Model.Timetable.Week + 1) * 7).ToShortDateString()</h4>
+<div class="timetable box-shadow">
     @for (int i = 0; i < Model.TimeFramesByDay.Length; i++)
     {
-        <div class="row">
+        <div class="tt-day-group">
             <div class="timeframe-day">@days[i]</div>
 
             @foreach (var tf in Model.TimeFramesByDay[i])
@@ -18,7 +18,7 @@
                 {
                     <div class="timeframe">
                         @tf.Start.ToString("h:mm") - @tf.End.ToString("h:mm")<br>
-                        <strong>@LanguageHelper.getShorterString(tf.TimetableRecord.SubjectInstance.SubjectType.Name, 7)</strong>
+                        <strong>@LanguageHelper.getShorterString(tf.TimetableRecord.SubjectInstance.SubjectType.Name, 99)</strong>
                         <br>
                         @tf.TimetableRecord.Room.Name<br>
                     </div>

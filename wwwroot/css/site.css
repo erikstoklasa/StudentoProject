@@ -67,7 +67,7 @@ h2 {
     box-shadow: 0 3px 6px rgba(0,0,0,0.16);
     border-radius: 0.25rem;
     background: #fff;
-    padding: 1rem 0;
+    padding: 0.5rem;
 }
 
     .table-white .btn {
@@ -82,7 +82,8 @@ h2 {
 .row-custom {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: start;
+    width: 100%;
 }
 
 .table-condensed .cell {
@@ -99,16 +100,12 @@ h2 {
     padding: 10px 15px;
     display: flex;
     align-content: center;
-    height: 60px;
-    line-height: 40px;
+    height: 50px;
+    line-height: 30px;
 }
 
     .cell:nth-child(2) {
         width: calc(100vw - 15rem);
-    }
-
-    .cell:first-child {
-        padding-left: 30px;
     }
 
 .cell-group {
@@ -117,7 +114,7 @@ h2 {
 }
 
 td img {
-    height: 40px;
+    height: 35px;
 }
 
 .main-logo {
@@ -140,6 +137,9 @@ td img {
     background: white;
     border-radius: 5px;
     overflow-x: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
 }
 
     .timetable .row {
@@ -147,18 +147,22 @@ td img {
         flex-wrap: nowrap;
     }
 
+.tt-day-group {
+    width: 100%;
+}
+
 .timeframe {
-    padding: 1rem;
-    margin: 0.5rem;
+    padding: 0.5rem;
+    margin: 0.2rem;
     background: #E2E2E2;
     border-radius: 5px;
-    font-size: 11px;
-    width: 6.4rem;
+    font-size: 8px;
     flex-shrink: 0;
+    height: 4rem;
 }
 
     .timeframe strong {
-        font-size: 13px;
+        font-size: 10px;
     }
 
 .timeframe-blank {
@@ -166,10 +170,10 @@ td img {
 }
 
 .timeframe-day {
-    padding: 15px;
-    margin: auto 0;
-    width: 6rem;
+    padding: 10px 0;
+    margin: 0 auto;
     flex-shrink: 0;
+    text-align: center;
 }
 /*p, li, oi, dt, dl {
     font-family: 'Prata', serif;
@@ -178,7 +182,6 @@ td img {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    margin-top: 3rem;
 }
 
 
@@ -199,9 +202,7 @@ a.navbar-brand {
     flex-wrap: wrap;
 }
 
-    .subject-container .card {
-        flex-grow: 0;
-    }
+
 
 .search-bar {
     max-width: 20rem;
@@ -216,8 +217,7 @@ a {
 /*Cards*/
 .card {
     margin: 1rem 1rem 0 0;
-    width: 20rem;
-    min-height: 10rem;
+    width: 100%;
     box-shadow: 0 3px 6px rgba(0,0,0,0.16);
     border: none;
     flex-grow: 0.5;
@@ -230,8 +230,11 @@ a {
     justify-content: space-between;
 }
 
+    .card-body .row-custom {
+        border-top: 1px solid #cecece;
+    }
+
 .card-avg {
-    padding-left: 1rem;
     font-size: 1.3rem;
     font-weight: bold;
 }
@@ -252,6 +255,11 @@ a:hover {
 
 .no-bcg-onhover:hover {
     background: transparent !important;
+    padding: 0 !important;
+}
+
+.no-bcg-onhover {
+    padding: 0 !important;
 }
 
 .card-title {
@@ -264,12 +272,12 @@ a:hover {
     vertical-align: middle;
 }
 
-    .table td:first-child {
-        padding-left: 2rem;
-    }
-
 .table tr {
     width: 100%;
+}
+
+.table td {
+    padding: 0.5rem;
 }
 
 .table thead th {
@@ -296,12 +304,36 @@ html {
     .container {
         max-width: initial;
     }
+
+    .main-container > div:nth-child(2) {
+        padding-left: 0 !important;
+    }
+
+    .table td {
+        padding: 0.75rem;
+    }
+
+    .timeframe {
+        font-size: 10px;
+    }
 }
 
 @media (min-width: 960px) {
 
     .container {
         max-width: 960px !important;
+    }
+
+    .main-container > div {
+        width: 50%;
+    }
+
+    .subject-container .card {
+        width: 20rem;
+    }
+
+    .table-white {
+        padding: 1rem 0.5rem;
     }
 }
 
@@ -313,6 +345,7 @@ html {
 }
 
 @media (min-width: 576px) {
+
     .container {
         max-width: initial;
     }
@@ -330,21 +363,41 @@ html {
         width: auto;
     }
 
-    .main-container > div {
-        width: 50%;
+    .main-container > div:nth-child(2) {
+        padding-left: 50px !important;
     }
-
-        .main-container > div:nth-child(2) {
-            padding-left: 50px;
-        }
 
     .cell:last-child {
         padding-right: 30px;
     }
 
+    .table td:first-child {
+        padding-left: 2rem;
+    }
+
+    .subject-container .card {
+        flex-grow: 0;
+        width: 18rem;
+        min-height: 10rem;
+    }
+
+    .table-white {
+        padding: 1rem 0;
+    }
+
+    .timeframe strong {
+        font-size: 13px;
+    }
+}
+
+@media(min-width:370px) {
     .card-body {
         flex-direction: row;
     }
+}
+
+.main-container > div:nth-child(2) {
+    padding-left: 0;
 }
 
 .border-top {
@@ -359,9 +412,19 @@ html {
     box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }
 
+.container {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
 button.accept-policy {
     font-size: 1rem;
     line-height: inherit;
+}
+/*Navbar*/
+.navbar-light .navbar-toggler {
+    border: none;
+    background: #fff;
 }
 /*Select 2*/
 

@@ -9,7 +9,9 @@ namespace SchoolGradebook.Models
     {
         public int Id { set; get; }
         public string Name { set; get; }
+        public int SchoolId { get; set; }
 
         public ICollection<TimeFrame> TimeFrames { set; get; }
+        public School School { get; set; }
     }
 }

@@ -13,7 +13,9 @@ namespace SchoolGradebook.Models
         public DayOfWeek DayOfWeek { set; get; }
         public DateTime Start { set; get; }
         public DateTime End { set; get; }
+        public int SchoolId { get; set; }
 
         public TimetableRecord? TimetableRecord { get; set; } //Possible attachment
+        public School? School { get; set; }
     }
 }

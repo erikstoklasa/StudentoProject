@@ -33,9 +33,11 @@ namespace SchoolGradebook.Data
         public DbSet<AttendanceRecord> AttendanceRecords { set; get; }
         public DbSet<TimetableRecord> TimetableRecords { set; get; }
         public DbSet<Approbation> Approbations { get; set; }
+        public DbSet<School> Schools { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<School>().ToTable("Schools");
             modelBuilder.Entity<Teacher>().ToTable("Teachers");
             modelBuilder.Entity<SubjectType>().ToTable("SubjectTypes");
             modelBuilder.Entity<SubjectInstance>().ToTable("SubjectInstances");
@@ -55,6 +57,11 @@ namespace SchoolGradebook.Data
             modelBuilder.Entity<LessonRecord>().ToTable("LessonRecords");
             modelBuilder.Entity<AttendanceRecord>().ToTable("AttendanceRecords");
             modelBuilder.Entity<TimetableRecord>().ToTable("TimetableRecords").HasIndex(tr => tr.TimeFrameId).IsUnique(false);
+
+            foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            {
+                relationship.DeleteBehavior = DeleteBehavior.Restrict;
+            }
         }
     }
 }

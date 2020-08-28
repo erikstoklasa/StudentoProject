@@ -18,7 +18,6 @@ namespace SchoolGradebook.Pages.Student
         private readonly StudentService studentService;
         private readonly Analytics _analytics;
         private readonly GradeService gradeService;
-        private readonly TimetableManager timetableManager;
 
         public string StudentFirstName { get; set; }
         public string UserId { get; private set; }

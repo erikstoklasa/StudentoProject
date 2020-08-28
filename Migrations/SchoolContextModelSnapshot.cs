@@ -29,10 +29,15 @@ namespace SchoolGradebook.Migrations
                     b.Property<int>("AdminLevel")
                         .HasColumnType("int");
 
+                    b.Property<int>("SchoolId")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserAuthId")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SchoolId");
 
                     b.ToTable("Admins");
                 });
@@ -103,12 +108,17 @@ namespace SchoolGradebook.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("SchoolId")
+                        .HasColumnType("int");
+
                     b.Property<int>("TeacherId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BaseRoomId");
+
+                    b.HasIndex("SchoolId");
 
                     b.HasIndex("TeacherId");
 
@@ -226,9 +236,50 @@ namespace SchoolGradebook.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("SchoolId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("SchoolId");
+
                     b.ToTable("Rooms");
+                });
+
+            modelBuilder.Entity("SchoolGradebook.Models.School", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CityAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OrganizationIdentifNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StreetAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Website")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ZipCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Schools");
                 });
 
             modelBuilder.Entity("SchoolGradebook.Models.Student", b =>
@@ -274,6 +325,9 @@ namespace SchoolGradebook.Migrations
                     b.Property<string>("PlaceOfBirth")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("SchoolId")
+                        .HasColumnType("int");
+
                     b.Property<string>("StreetAddress")
                         .HasColumnType("nvarchar(max)");
 
@@ -288,6 +342,8 @@ namespace SchoolGradebook.Migrations
                     b.HasIndex("ClassId");
 
                     b.HasIndex("ParentId");
+
+                    b.HasIndex("SchoolId");
 
                     b.ToTable("Students");
                 });
@@ -305,9 +361,14 @@ namespace SchoolGradebook.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("SchoolId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ClassId");
+
+                    b.HasIndex("SchoolId");
 
                     b.ToTable("StudentGroups");
                 });
@@ -430,10 +491,15 @@ namespace SchoolGradebook.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("SchoolId")
+                        .HasColumnType("int");
+
                     b.Property<string>("SpecializationName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SchoolId");
 
                     b.ToTable("SubjectTypes");
                 });
@@ -478,6 +544,9 @@ namespace SchoolGradebook.Migrations
                     b.Property<string>("PlaceOfBirth")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("SchoolId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("datetime2");
 
@@ -491,6 +560,8 @@ namespace SchoolGradebook.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SchoolId");
 
                     b.ToTable("Teachers");
                 });
@@ -511,6 +582,9 @@ namespace SchoolGradebook.Migrations
                     b.Property<int?>("RoomId")
                         .HasColumnType("int");
 
+                    b.Property<int>("SchoolId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Start")
                         .HasColumnType("datetime2");
 
@@ -520,6 +594,8 @@ namespace SchoolGradebook.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("RoomId");
+
+                    b.HasIndex("SchoolId");
 
                     b.HasIndex("SubjectInstanceId");
 
@@ -559,18 +635,27 @@ namespace SchoolGradebook.Migrations
                     b.ToTable("TimetableRecords");
                 });
 
+            modelBuilder.Entity("SchoolGradebook.Models.Admin", b =>
+                {
+                    b.HasOne("SchoolGradebook.Models.School", "School")
+                        .WithMany()
+                        .HasForeignKey("SchoolId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("SchoolGradebook.Models.Approbation", b =>
                 {
                     b.HasOne("SchoolGradebook.Models.SubjectType", "SubjectType")
                         .WithMany()
                         .HasForeignKey("SubjectTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("SchoolGradebook.Models.Teacher", "Teacher")
-                        .WithMany()
+                        .WithMany("Approbations")
                         .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -579,13 +664,13 @@ namespace SchoolGradebook.Migrations
                     b.HasOne("SchoolGradebook.Models.LessonRecord", "LessonRecord")
                         .WithMany("Attendance")
                         .HasForeignKey("LessonRecordId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("SchoolGradebook.Models.Student", "Student")
                         .WithMany()
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -594,13 +679,19 @@ namespace SchoolGradebook.Migrations
                     b.HasOne("SchoolGradebook.Models.Room", "BaseRoom")
                         .WithMany()
                         .HasForeignKey("BaseRoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SchoolGradebook.Models.School", "School")
+                        .WithMany()
+                        .HasForeignKey("SchoolId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("SchoolGradebook.Models.Teacher", "Teacher")
                         .WithMany()
                         .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -609,13 +700,13 @@ namespace SchoolGradebook.Migrations
                     b.HasOne("SchoolGradebook.Models.Student", "Student")
                         .WithMany("Grades")
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("SchoolGradebook.Models.SubjectInstance", "SubjectInstance")
                         .WithMany("Grades")
                         .HasForeignKey("SubjectInstanceId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -623,16 +714,27 @@ namespace SchoolGradebook.Migrations
                 {
                     b.HasOne("SchoolGradebook.Models.SubjectInstance", "SubstitutionSubjectInstance")
                         .WithMany()
-                        .HasForeignKey("SubstitutionSubjectInstanceId");
+                        .HasForeignKey("SubstitutionSubjectInstanceId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("SchoolGradebook.Models.Teacher", "SubstitutionTeacher")
                         .WithMany()
-                        .HasForeignKey("SubstitutionTeacherId");
+                        .HasForeignKey("SubstitutionTeacherId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("SchoolGradebook.Models.TimeFrame", "TimeFrame")
                         .WithMany()
                         .HasForeignKey("TimeFrameId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SchoolGradebook.Models.Room", b =>
+                {
+                    b.HasOne("SchoolGradebook.Models.School", "School")
+                        .WithMany()
+                        .HasForeignKey("SchoolId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -640,36 +742,52 @@ namespace SchoolGradebook.Migrations
                 {
                     b.HasOne("SchoolGradebook.Models.Class", "Class")
                         .WithMany("Students")
-                        .HasForeignKey("ClassId");
+                        .HasForeignKey("ClassId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("SchoolGradebook.Models.Parent", null)
                         .WithMany("Students")
-                        .HasForeignKey("ParentId");
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("SchoolGradebook.Models.School", "School")
+                        .WithMany()
+                        .HasForeignKey("SchoolId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("SchoolGradebook.Models.StudentGroup", b =>
                 {
                     b.HasOne("SchoolGradebook.Models.Class", "Class")
                         .WithMany()
-                        .HasForeignKey("ClassId");
+                        .HasForeignKey("ClassId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("SchoolGradebook.Models.School", "School")
+                        .WithMany()
+                        .HasForeignKey("SchoolId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("SchoolGradebook.Models.StudentGroupEnrollment", b =>
                 {
                     b.HasOne("SchoolGradebook.Models.Class", null)
                         .WithMany("StudentGroupEnrollments")
-                        .HasForeignKey("ClassId");
+                        .HasForeignKey("ClassId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("SchoolGradebook.Models.StudentGroup", "StudentGroup")
                         .WithMany("StudentGroupEnrollments")
                         .HasForeignKey("StudentGroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("SchoolGradebook.Models.Student", "Student")
                         .WithMany("StudentGroupEnrollments")
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -678,13 +796,13 @@ namespace SchoolGradebook.Migrations
                     b.HasOne("SchoolGradebook.Models.SubjectType", "SubjectType")
                         .WithMany("SubjectInstances")
                         .HasForeignKey("SubjectTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("SchoolGradebook.Models.Teacher", "Teacher")
                         .WithMany("SubjectInstances")
                         .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -693,13 +811,13 @@ namespace SchoolGradebook.Migrations
                     b.HasOne("SchoolGradebook.Models.StudentGroup", "StudentGroup")
                         .WithMany("Enrollments")
                         .HasForeignKey("StudentGroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("SchoolGradebook.Models.SubjectInstance", "SubjectInstance")
                         .WithMany("Enrollments")
                         .HasForeignKey("SubjectInstanceId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -708,40 +826,68 @@ namespace SchoolGradebook.Migrations
                     b.HasOne("SchoolGradebook.Models.SubjectType", "SubjectType")
                         .WithMany("SubjectMaterials")
                         .HasForeignKey("SubjectTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("SchoolGradebook.Models.Teacher", "Teacher")
                         .WithMany("SubjectMaterials")
                         .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("SchoolGradebook.Models.SubjectType", b =>
+                {
+                    b.HasOne("SchoolGradebook.Models.School", "School")
+                        .WithMany()
+                        .HasForeignKey("SchoolId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SchoolGradebook.Models.Teacher", b =>
+                {
+                    b.HasOne("SchoolGradebook.Models.School", "School")
+                        .WithMany()
+                        .HasForeignKey("SchoolId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("SchoolGradebook.Models.TimeFrame", b =>
                 {
                     b.HasOne("SchoolGradebook.Models.Room", null)
                         .WithMany("TimeFrames")
-                        .HasForeignKey("RoomId");
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("SchoolGradebook.Models.School", "School")
+                        .WithMany()
+                        .HasForeignKey("SchoolId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("SchoolGradebook.Models.SubjectInstance", null)
                         .WithMany("TimeFrames")
-                        .HasForeignKey("SubjectInstanceId");
+                        .HasForeignKey("SubjectInstanceId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("SchoolGradebook.Models.TimetableRecord", b =>
                 {
                     b.HasOne("SchoolGradebook.Models.Room", "Room")
                         .WithMany()
-                        .HasForeignKey("RoomId");
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("SchoolGradebook.Models.SubjectInstance", "SubjectInstance")
                         .WithMany()
-                        .HasForeignKey("SubjectInstanceId");
+                        .HasForeignKey("SubjectInstanceId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("SchoolGradebook.Models.TimeFrame", "TimeFrame")
                         .WithOne("TimetableRecord")
-                        .HasForeignKey("SchoolGradebook.Models.TimetableRecord", "TimeFrameId");
+                        .HasForeignKey("SchoolGradebook.Models.TimetableRecord", "TimeFrameId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
         }

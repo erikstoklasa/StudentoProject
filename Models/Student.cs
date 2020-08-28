@@ -39,6 +39,7 @@ namespace SchoolGradebook.Models
 
         public int? ClassId { set; get; }
         public int? ParentId { set; get; }
+        public int SchoolId { get; set; }
 
         public String GetFullName()
         {
@@ -57,5 +58,6 @@ namespace SchoolGradebook.Models
         public ICollection<StudentGroupEnrollment>? StudentGroupEnrollments { get; set; }
         public ICollection<Grade>? Grades { get; set; }
         public Class? Class { get; set; }
+        public School? School { get; set; }
     }
 }

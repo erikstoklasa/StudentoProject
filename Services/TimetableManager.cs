@@ -9,15 +9,13 @@ namespace SchoolGradebook.Services
     public class TimetableManager
     {
         private readonly TimeFrameService timeFrameService;
-        private readonly LessonRecordService lessonRecordService;
         private readonly TimetableRecordService timetableRecordService;
         private readonly SubjectService subjectService;
         private readonly RoomService roomService;
 
-        public TimetableManager(TimeFrameService timeFrameService, LessonRecordService lessonRecordService, TimetableRecordService timetableRecordService, SubjectService subjectService, RoomService roomService)
+        public TimetableManager(TimeFrameService timeFrameService, TimetableRecordService timetableRecordService, SubjectService subjectService, RoomService roomService)
         {
             this.timeFrameService = timeFrameService;
-            this.lessonRecordService = lessonRecordService;
             this.timetableRecordService = timetableRecordService;
             this.subjectService = subjectService;
             this.roomService = roomService;

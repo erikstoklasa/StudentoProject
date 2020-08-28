@@ -11,8 +11,10 @@ namespace SchoolGradebook.Models
         public int Id { set; get; }
         public String Name { set; get; }
         public String SpecializationName { set; get; }
+        public int SchoolId { get; set; }
 
         public ICollection<SubjectMaterial> SubjectMaterials { set; get; }
         public ICollection<SubjectInstance> SubjectInstances { set; get; }
+        public School School { get; set; }
     }
 }

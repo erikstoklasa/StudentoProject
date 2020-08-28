@@ -15,9 +15,6 @@ namespace SchoolGradebook.Pages.Student
     {
         private readonly TimetableManager timetableManager;
         private readonly StudentService studentService;
-        private readonly SubjectService subjectService;
-        private readonly RoomService roomService;
-
         public string UserId { get; set; }
         public int StudentId { get; set; }
         public TimetableModel(IHttpContextAccessor httpContextAccessor, TimetableManager timetableManager, StudentService studentService)

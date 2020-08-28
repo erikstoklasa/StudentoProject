@@ -40,6 +40,7 @@ namespace SchoolGradebook.Models
         public String? Email { get; set; }
         [Display(Name = "Telefonní číslo")]
         public String? PhoneNumber { get; set; }
+        public int? SchoolId { get; set; }
         public String GetFullName()
         {
             FirstName ??= "";
@@ -55,6 +56,8 @@ namespace SchoolGradebook.Models
         }
 
         public ICollection<SubjectInstance>? SubjectInstances { get; set; }
+        public ICollection<Approbation>? Approbations { set; get; }
         public ICollection<SubjectMaterial>? SubjectMaterials { set; get; }
+        public School? School { get; set; }
     }
 }

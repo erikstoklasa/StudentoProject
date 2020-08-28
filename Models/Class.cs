@@ -12,11 +12,13 @@ namespace SchoolGradebook.Models
         public string Name { set; get; } //např. A pro 2. A
         public int TeacherId { set; get; }
         public int BaseRoomId { set; get; }
+        public int SchoolId { get; set; }
 
         public Teacher Teacher { set; get; }
         public string GetName() => $"{Grade}.{Name}";
         public ICollection<StudentGroupEnrollment> StudentGroupEnrollments { get; set; }
         public Room BaseRoom { set; get; }
         public ICollection<Student> Students { set; get; }
+        public School School { get; set; }
     }
 }

@@ -27,7 +27,17 @@ namespace SchoolGradebook.Data
 
             context.Database.EnsureCreated();
 
+            //Schools
+            if (!context.Schools.Any())
+            {
+                List<School> schools = new List<School>
+                {
+                    new School() { Name = "Gymnázium Jana Keplera", CityAddress = "Praha 6", StreetAddress = "Parléřova 117", Email = "gjk@jk.cz", OrganizationIdentifNumber = "123456789", PhoneNumber = "123456789", Website = "https://gjk.cz", ZipCode = "16000" }
+                };
 
+                context.Schools.AddRange(schools);
+                context.SaveChanges();
+            }
 
             //Teachers
             if (!context.Teachers.Any())
@@ -36,7 +46,7 @@ namespace SchoolGradebook.Data
 
                 for (int i = 0; i < NUMBER_OF_TEACHERS; i++)
                 {
-                    teachers.Add(new Teacher { FirstName = firstNames[r.Next(firstNames.Length)], LastName = lastNames[r.Next(lastNames.Length)] });
+                    teachers.Add(new Teacher { FirstName = firstNames[r.Next(firstNames.Length)], LastName = lastNames[r.Next(lastNames.Length)], SchoolId = 1 });
                 }
 
                 foreach (Teacher b in teachers)
@@ -50,12 +60,12 @@ namespace SchoolGradebook.Data
             {
                 var subjectTypes = new SubjectType[]
                     {
-                        new SubjectType{Name = "Český jazyk", SpecializationName = "Gymnázium"},
-                        new SubjectType{Name = "Anglický jazyk", SpecializationName = "Gymnázium"},
-                        new SubjectType{Name = "Německý jazyk", SpecializationName = "Gymnázium"},
-                        new SubjectType{Name = "Španělský jazyk", SpecializationName = "Gymnázium"},
-                        new SubjectType{Name = "Matematika", SpecializationName = "Gymnázium"},
-                        new SubjectType{Name = "Programování", SpecializationName = "Gymnázium"}
+                        new SubjectType{Name = "Český jazyk", SpecializationName = "Gymnázium", SchoolId=1},
+                        new SubjectType{Name = "Anglický jazyk", SpecializationName = "Gymnázium", SchoolId=1},
+                        new SubjectType{Name = "Německý jazyk", SpecializationName = "Gymnázium", SchoolId=1},
+                        new SubjectType{Name = "Španělský jazyk", SpecializationName = "Gymnázium", SchoolId=1},
+                        new SubjectType{Name = "Matematika", SpecializationName = "Gymnázium", SchoolId=1},
+                        new SubjectType{Name = "Programování", SpecializationName = "Gymnázium", SchoolId=1}
                     };
                 foreach (SubjectType d in subjectTypes)
                 {
@@ -69,13 +79,13 @@ namespace SchoolGradebook.Data
             {
                 var subjectInstances = new SubjectInstance[]
                     {
-                        new SubjectInstance{TeacherId=3, SubjectTypeId = 1},
+                        new SubjectInstance{TeacherId=3, SubjectTypeId = 2},
                         new SubjectInstance{TeacherId=3, SubjectTypeId = 2},
                         new SubjectInstance{TeacherId=3, SubjectTypeId = 3},
                         new SubjectInstance{TeacherId=3, SubjectTypeId = 4},
                         new SubjectInstance{TeacherId=3, SubjectTypeId = 5},
-                        new SubjectInstance{TeacherId=4, SubjectTypeId = 1},
-                        new SubjectInstance{TeacherId=4, SubjectTypeId = 2},
+                        new SubjectInstance{TeacherId=4, SubjectTypeId = 5},
+                        new SubjectInstance{TeacherId=4, SubjectTypeId = 6},
                         new SubjectInstance{TeacherId=1, SubjectTypeId = 1}
                     };
                 foreach (SubjectInstance d in subjectInstances)
@@ -92,11 +102,11 @@ namespace SchoolGradebook.Data
             {
                 var rooms = new Room[]
                 {
-                    new Room{Name="101"},
-                    new Room{Name="102"},
-                    new Room{Name="103"},
-                    new Room{Name="104"},
-                    new Room{Name="105"}
+                    new Room{Name="101", SchoolId=1},
+                    new Room{Name="102", SchoolId=1},
+                    new Room{Name="103", SchoolId=1},
+                    new Room{Name="104", SchoolId=1},
+                    new Room{Name="105", SchoolId=1}
                 };
 
                 foreach (Room room in rooms)
@@ -113,7 +123,7 @@ namespace SchoolGradebook.Data
                 {
                     for (int y = 0; y < classesPerYear; y++)
                     {
-                        classes.Add(new Class() { Grade = (short)i, Name = classesNames[y], BaseRoomId = 1, TeacherId = 1 });
+                        classes.Add(new Class() { Grade = (short)i, Name = classesNames[y], BaseRoomId = 1, TeacherId = 1, SchoolId = 1 });
                     }
 
                 }
@@ -127,7 +137,7 @@ namespace SchoolGradebook.Data
 
                 for (int i = 0; i < NUMBER_OF_STUDENTS; i++)
                 {
-                    students.Add(new Student { FirstName = firstNames[r.Next(firstNames.Length)], LastName = lastNames[r.Next(lastNames.Length)], ClassId = 1 });
+                    students.Add(new Student { FirstName = firstNames[r.Next(firstNames.Length)], LastName = lastNames[r.Next(lastNames.Length)], ClassId = 1, SchoolId = 1 });
                 }
                 foreach (Student a in students)
                 {
@@ -160,13 +170,13 @@ namespace SchoolGradebook.Data
                 List<TimeFrame> timeFrames = new List<TimeFrame>();
                 for (int i = 1; i <= 5; i++)
                 {
-                    timeFrames.Add(new TimeFrame() { DayOfWeek = (DayOfWeek)i, Start = DateTime.Parse("08:30:00"), End = DateTime.Parse("09:15:00") });
-                    timeFrames.Add(new TimeFrame() { DayOfWeek = (DayOfWeek)i, Start = DateTime.Parse("09:30:00"), End = DateTime.Parse("10:15:00") });
-                    timeFrames.Add(new TimeFrame() { DayOfWeek = (DayOfWeek)i, Start = DateTime.Parse("10:30:00"), End = DateTime.Parse("11:15:00") });
-                    timeFrames.Add(new TimeFrame() { DayOfWeek = (DayOfWeek)i, Start = DateTime.Parse("11:30:00"), End = DateTime.Parse("12:15:00") });
-                    timeFrames.Add(new TimeFrame() { DayOfWeek = (DayOfWeek)i, Start = DateTime.Parse("12:30:00"), End = DateTime.Parse("13:15:00") });
-                    timeFrames.Add(new TimeFrame() { DayOfWeek = (DayOfWeek)i, Start = DateTime.Parse("13:30:00"), End = DateTime.Parse("14:15:00") });
-                    timeFrames.Add(new TimeFrame() { DayOfWeek = (DayOfWeek)i, Start = DateTime.Parse("14:30:00"), End = DateTime.Parse("15:15:00") });
+                    timeFrames.Add(new TimeFrame() { DayOfWeek = (DayOfWeek)i, Start = DateTime.Parse("08:30:00"), End = DateTime.Parse("09:15:00"), SchoolId = 1 });
+                    timeFrames.Add(new TimeFrame() { DayOfWeek = (DayOfWeek)i, Start = DateTime.Parse("09:30:00"), End = DateTime.Parse("10:15:00"), SchoolId = 1 });
+                    timeFrames.Add(new TimeFrame() { DayOfWeek = (DayOfWeek)i, Start = DateTime.Parse("10:30:00"), End = DateTime.Parse("11:15:00"), SchoolId = 1 });
+                    timeFrames.Add(new TimeFrame() { DayOfWeek = (DayOfWeek)i, Start = DateTime.Parse("11:30:00"), End = DateTime.Parse("12:15:00"), SchoolId = 1 });
+                    timeFrames.Add(new TimeFrame() { DayOfWeek = (DayOfWeek)i, Start = DateTime.Parse("12:30:00"), End = DateTime.Parse("13:15:00"), SchoolId = 1 });
+                    timeFrames.Add(new TimeFrame() { DayOfWeek = (DayOfWeek)i, Start = DateTime.Parse("13:30:00"), End = DateTime.Parse("14:15:00"), SchoolId = 1 });
+                    timeFrames.Add(new TimeFrame() { DayOfWeek = (DayOfWeek)i, Start = DateTime.Parse("14:30:00"), End = DateTime.Parse("15:15:00"), SchoolId = 1 });
                 }
                 context.TimeFrames.AddRange(timeFrames);
                 context.SaveChanges();
@@ -187,8 +197,8 @@ namespace SchoolGradebook.Data
             {
                 var groups = new StudentGroup[]
                 {
-                    new StudentGroup{Name="Skupina1"},
-                    new StudentGroup{Name="Skupina2"}
+                    new StudentGroup{Name="Skupina1", SchoolId=1},
+                    new StudentGroup{Name="Skupina2", SchoolId=1}
                 };
 
                 foreach (StudentGroup group in groups)

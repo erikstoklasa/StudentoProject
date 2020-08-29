@@ -6,7 +6,10 @@
 }
 
 <h1>Třídy</h1>
-
+<form class="search-bar">
+    <label for="search">Zadejte třídu</label>
+    <input class="form-control" id="search">
+</form>
 <table class="table">
     <thead>
         <tr>
@@ -19,19 +22,20 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>
-@foreach (var item in Model.Classes) {
-        <tr>
-            <td>
-                @item.GetName()
-            </td>
-            <td>
-                @item.Teacher.GetFullName()
-            </td>
-            <td>
-                <a asp-page="./Details" asp-route-id="@item.Id">Zobrazit</a>
-            </td>
-        </tr>
-}
+    <tbody class="table-white">
+        @foreach (var item in Model.Classes)
+        {
+            <tr>
+                <td class="search-data">
+                    @item.GetName()
+                </td>
+                <td>
+                    @item.Teacher.GetFullName()
+                </td>
+                <td>
+                    <a asp-page="./Details" asp-route-id="@item.Id">Zobrazit</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

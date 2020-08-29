@@ -7,15 +7,16 @@
 @{
     ViewData["Title"] = "Details";
     System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("cs-CZ");
+
 }
 
 <div class="main-container">
     <div class="d-flex flex-column">
         <h1>@Model.Subject.SubjectType.Name</h1>
-        <h5>Skupina A1 (Vyplňit dynamicky)</h5>
-        <h6>28 studentů (Vyplňit dynamicky)</h6>
-        <div class="my-4 d-flex flex-row justify-content-between align-content-center">
-            <p class="text-muted">Studenti</p>
+        <h5>@String.Join(" + ", Model.StudentGroupNames) </h5>
+        <h6>Počet studentů: @Model.Students.Length</h6>
+        <div class="table-heading-group">
+            <p class="table-heading">Studenti</p>
             <div>
                 <a asp-page="" asp-page-handler="print" asp-route-id="@Model.Subject.Id" class="btn btn-outline-primary"><img src="~/images/print.svg" alt="Vytisknout" height="20px" class="btn-icon" />Tisk výpisu</a>
                 <a asp-page="./Grades" class="btn btn-primary">Známky</a>
@@ -26,14 +27,14 @@
                 @foreach (var i in Model.StudentsAndAverageAndGrades)
                 {
 
-                    <tr class="">
-                        <td class="">
+                    <tr>
+                        <td>
                             <a asp-page="/Teacher/Students/Details" asp-route-id="@i.student.Id">@i.student.GetFullName()</a>
                         </td>
-                        <td class="">
+                        <td>
                             <strong>@($"{i.studentAverage:f2}")</strong>
                         </td>
-                        <td class="">
+                        <td>
                             @for (int y = 0; y < i.studentGrades.Count; y++)
                             {
                                 @i.studentGrades[y].Value
@@ -43,7 +44,7 @@
                                 }
                             }
                         </td>
-                        <td class="">
+                        <td>
                             <a asp-page="/Teacher/Grades/Create" asp-route-SubjectInstanceId="@Model.Subject.Id" asp-route-StudentId="@i.student.Id">Přidat známku</a>
                         </td>
                     </tr>
@@ -53,8 +54,8 @@
         <!--Place for files-->
     </div>
     <div class="d-flex flex-column flex-wrap">
-        <div class="my-4 d-flex flex-row justify-content-between align-content-center">
-            <p class="text-muted">Materiály</p>
+        <div class="table-heading-group">
+            <p class="table-heading">Materiály</p>
             <a class="btn btn-primary" asp-page="Materials/Create" asp-route-SubjectInstanceId="@Model.Subject.Id"><img src="~/images/add.svg" alt="Vytisknout" height="18px" class="btn-icon" />Přidat materiál</a>
         </div>
 
@@ -86,5 +87,5 @@
 </div>
 
 <div>
-    <a asp-page="Index">Všechny předměty</a>
+    <a asp-page="/Teacher/Index">Všechny předměty</a>
 </div>

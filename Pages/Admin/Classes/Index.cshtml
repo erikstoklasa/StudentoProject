@@ -10,6 +10,10 @@
 <p>
     <a asp-page="Create">Vytvřit novou třídu</a>
 </p>
+<form class="search-bar">
+    <label for="search">Zadejte třídu</label>
+    <input class="form-control" id="search">
+</form>
 <table class="table">
     <thead>
         <tr>
@@ -22,21 +26,22 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>
-@foreach (var item in Model.Classes) {
-        <tr>
-            <td>
-                @item.GetName()
-            </td>
-            <td>
-                @item.Teacher.GetFullName()
-            </td>
-            <td>
-                <a asp-page="./Details" asp-route-id="@item.Id">Zobrazit</a> |
-                <a asp-page="./Edit" asp-route-id="@item.Id">Upravit</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Odstranit</a>
-            </td>
-        </tr>
-}
+    <tbody class="table-white">
+        @foreach (var item in Model.Classes)
+        {
+            <tr>
+                <td class="search-data">
+                    @item.GetName()
+                </td>
+                <td>
+                    @item.Teacher.GetFullName()
+                </td>
+                <td>
+                    <a asp-page="./Details" asp-route-id="@item.Id">Zobrazit</a> |
+                    <a asp-page="./Edit" asp-route-id="@item.Id">Upravit</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.Id">Odstranit</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

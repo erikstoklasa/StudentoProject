@@ -30,8 +30,9 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
         private readonly SubjectService subjectService;
         private readonly SubjectMaterialService subjectMaterialService;
         private readonly GradeService gradeService;
+        private readonly StudentGroupService studentGroupService;
 
-        public DetailsModel(IHttpContextAccessor httpContextAccessor, Analytics analytics, TeacherAccessValidation teacherAccessValidation, TeacherService teacherService, StudentService studentService, SubjectService subjectService, SubjectMaterialService subjectMaterialService, GradeService gradeService)
+        public DetailsModel(IHttpContextAccessor httpContextAccessor, Analytics analytics, TeacherAccessValidation teacherAccessValidation, TeacherService teacherService, StudentService studentService, SubjectService subjectService, SubjectMaterialService subjectMaterialService, GradeService gradeService, StudentGroupService studentGroupService)
         {
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             _analytics = analytics;
@@ -41,17 +42,21 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
             this.subjectService = subjectService;
             this.subjectMaterialService = subjectMaterialService;
             this.gradeService = gradeService;
+            this.studentGroupService = studentGroupService;
             StudentGrades = new List<List<Grade>>();
             SubjectMaterials = new List<SubjectMaterial>();
             StudentAverages = new List<double>();
             System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("cs-CZ");
+            StudentGroupNames = new List<string>();
         }
 
         public string UserId { get; private set; }
         public SubjectInstance Subject { get; set; }
         public Models.Student[] Students { get; set; }
+        public List<StudentGroup> StudentGroups { get; set; }
         public List<double> StudentAverages { get; set; }
         public List<List<Grade>> StudentGrades { get; set; }
+        public List<string> StudentGroupNames { get; set; }
         public List<SubjectMaterial> SubjectMaterials { get; set; }
         public List<(Models.Student student, double studentAverage, List<Grade> studentGrades)> StudentsAndAverageAndGrades;
 
@@ -86,6 +91,11 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
                 .Range(0, Students.Length)
                 .Select(i => Tuple.Create(Students[i], StudentAverages[i], StudentGrades[i]).ToValueTuple())
                 .ToList();
+            StudentGroups = await studentGroupService.GetAllGroupsBySubjectInstanceAsync((int)id);
+            foreach (var studentGroup in StudentGroups)
+            {
+                StudentGroupNames.Add(studentGroup.Name);
+            }
             return Page();
         }
         public async Task<IActionResult> OnGetPrintAsync(int? id)
@@ -114,13 +124,11 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
                 .Range(0, Students.Length)
                 .Select(i => Tuple.Create(Students[i], StudentAverages[i], StudentGrades[i]).ToValueTuple())
                 .ToList();
-
-
-
-
-
-
-
+            StudentGroups = await studentGroupService.GetAllGroupsBySubjectInstanceAsync((int)id);
+            foreach (var studentGroup in StudentGroups)
+            {
+                StudentGroupNames.Add(studentGroup.Name);
+            }
 
 
             using MemoryStream stream = new MemoryStream();
@@ -131,6 +139,7 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
             //picture.ScaleToFit(100,150);
             //doc.Add(new Paragraph().Add(picture).SetHorizontalAlignment(HorizontalAlignment.RIGHT));
             doc.Add(new Paragraph(Subject.GetFullName()).SetFont(defaultFont));
+            doc.Add(new Paragraph(String.Join(" + ", StudentGroupNames)).SetFont(defaultFont));
             doc.Add(new Paragraph($"Počet studentů: {Students.Length}").SetFont(defaultFont));
             Text t = new Text($"Aktuální k: {DateTime.UtcNow.ToLocalTime()}").SetFont(defaultFont);
             t.SetFontSize(10);
@@ -159,7 +168,7 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
 
             doc.Add(table);
             doc.Close();
-            return File(stream.ToArray(), "application/pdf", "Vypis.pdf");
+            return File(stream.ToArray(), "application/pdf", $"{Subject.GetFullName()} (výpis známek).pdf");
         }
     }
 }

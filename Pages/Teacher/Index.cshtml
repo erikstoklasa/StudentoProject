@@ -4,15 +4,28 @@
     ViewData["Title"] = "Domů";
 }
 
-<div class="text-center">
-        <div class="d-flex justify-content-around">
-            <div>
-                <p>Počet vašich studentů (unikátních)</p>
-                <h2>@Model.StudentCount (@Model.UniqueStudentCount)</h2>
+<h1>Všechny předměty</h1>
+@if (Model.Subjects.Count == 0)
+{
+    <p class="alert alert-warning my-5">Zatím Vám administrátor nepřidělil žádný předmět 🙁</p>
+}
+else
+{
+    <div class="subject-container">
+        @foreach (var i in Model.SubjectsAndStudentCounts)
+        {
+
+            <div class="card mx-1 flex-column">
+                <div class="card-body">
+                    <div class="w-100">
+                        <h5 class="card-title"><a asp-page="Details" asp-route-id="@i.subjectInstance.Id">@i.subjectInstance.SubjectType.Name</a></h5>
+                        <p class="card-text pl-lg-2">Studentů: @i.studentCount</p>
+                        <a class="btn btn-primary" asp-page="/Teacher/Grades/Create" asp-route-SubjectInstanceId="@i.subjectInstance.Id">Přidat známku</a>
+                    </div>
+                </div>
             </div>
-            <div>
-                <p>Počet vašich předmětů</p>
-                <h2>@Model.SubjectCount</h2>
-            </div>
-        </div>
-</div>
+
+        }
+    </div>
+
+}

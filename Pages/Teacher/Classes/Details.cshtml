@@ -6,30 +6,17 @@
 }
 
 <div>
-    <h1>Detail</h1>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            Třída
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Class.GetName()
-        </dd>
-        <dt class="col-sm-2">
-            Vyučující
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Class.Teacher.GetFullName()
-        </dd>
-    </dl>
-    <table class="table">
-        <h3>Studenti ve třídě</h3>
+    <h1>@Model.Class.GetName()</h1>
+    <h5>Třídní vyučující: @Model.Class.Teacher.GetFullName()</h5>
+    <h6>Počet studentů: @Model.Students.Count</h6>
+    <p class="text-muted">Studenti ve třídě</p>
+    <table class="table table-white">
         <tbody>
-            @foreach (Models.Student student in Model.Students)
+            @foreach (var student in Model.Students)
             {
                 <tr>
                     <td>
-                        @student.GetFullName()
+                        <a asp-page="/Teacher/Students/Details" asp-route-id="@student.Id">@student.GetFullName()</a>
                     </td>
                 </tr>
             }

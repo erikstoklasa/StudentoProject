@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using SchoolGradebook.Services;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -28,7 +29,7 @@ namespace SchoolGradebook.Pages.Teacher.Students
         public async Task<IActionResult> OnGetAsync()
         {
             int teacherId = await teacherService.GetTeacherId(UserId);
-            Students = await studentService.GetAllStudentsByTeacherAsync(teacherId);
+            Students = (await studentService.GetAllStudentsAsync()).ToList();
             return Page();
         }
     }

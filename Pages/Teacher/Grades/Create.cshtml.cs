@@ -56,14 +56,14 @@ namespace SchoolGradebook.Pages.Teacher.Grades
             SubjectInstance s = await subjectService.GetSubjectInstanceAsync(SubjectInstanceId);
             SubjectName = s.SubjectType.Name;
 
-            foreach(Models.Student student in await studentService.GetAllStudentsBySubjectInstanceAsync(SubjectInstanceId))
+            foreach(var student in await studentService.GetAllStudentsBySubjectInstanceAsync(SubjectInstanceId))
             {
                 if(student.Id == StudentId || StudentId == 0)
                 {
                     Students.Add(
                     new SelectListItem(
-                        s.GetFullName(),
-                        s.Id.ToString())
+                        student.GetFullName(),
+                        student.Id.ToString())
                     );
                 }
             }

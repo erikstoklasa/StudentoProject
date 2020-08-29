@@ -26,8 +26,7 @@ for details on configuring this project to bundle and minify static web assets. 
     }
 
 .btn {
-    padding: 0.6rem 1rem;
-    margin: 0 0.4rem;
+    padding: 0.4rem 0.7rem;
     width: 100%;
 }
 
@@ -59,9 +58,21 @@ h2 {
 
 .table-heading {
     color: #707070;
-    margin-top: 2rem;
+    margin: auto 0;
     text-align: start;
 }
+
+.table-heading-group {
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    flex-direction: column;
+    margin: 1rem 0;
+}
+
+    .table-heading-group a {
+        margin: 1rem 0 0;
+    }
 
 .table-white {
     box-shadow: 0 3px 6px rgba(0,0,0,0.16);
@@ -82,7 +93,7 @@ h2 {
 .row-custom {
     display: flex;
     flex-direction: row;
-    justify-content: start;
+    justify-content: space-between;
     width: 100%;
 }
 
@@ -96,17 +107,10 @@ h2 {
 }
 
 .cell {
-    vertical-align: middle !important;
-    padding: 10px 15px;
-    display: flex;
-    align-content: center;
+    padding: 5px 10px;
     height: 50px;
     line-height: 30px;
 }
-
-    .cell:nth-child(2) {
-        width: calc(100vw - 15rem);
-    }
 
 .cell-group {
     display: flex;
@@ -206,12 +210,12 @@ a.navbar-brand {
 
 .search-bar {
     max-width: 20rem;
-    margin: 2rem 0;
+    margin: 1rem 0;
 }
 /* Provide sufficient contrast against white background */
 a {
     color: #0366d6;
-    padding: 5px 10px;
+    padding: 0;
 }
 
 /*Cards*/
@@ -335,6 +339,18 @@ html {
     .table-white {
         padding: 1rem 0.5rem;
     }
+
+    a {
+        padding: 5px 10px;
+    }
+
+    .main-container {
+        flex-direction: row;
+    }
+
+        .main-container > div:nth-child(2) {
+            padding-left: 50px !important;
+        }
 }
 
 @media (min-width: 1120px) {
@@ -351,20 +367,11 @@ html {
     }
 
     .btn {
-        padding: .375rem .75rem;
         width: auto;
-    }
-
-    .main-container {
-        flex-direction: row;
     }
 
     .cell:nth-child(2) {
         width: auto;
-    }
-
-    .main-container > div:nth-child(2) {
-        padding-left: 50px !important;
     }
 
     .cell:last-child {
@@ -388,16 +395,20 @@ html {
     .timeframe strong {
         font-size: 13px;
     }
+
+    .table-heading-group {
+        flex-direction: row;
+    }
+
+        .table-heading-group a {
+            margin: 0;
+        }
 }
 
 @media(min-width:370px) {
     .card-body {
         flex-direction: row;
     }
-}
-
-.main-container > div:nth-child(2) {
-    padding-left: 0;
 }
 
 .border-top {

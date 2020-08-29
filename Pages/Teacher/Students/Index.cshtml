@@ -7,56 +7,34 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Vaši studenti</h1>
+<h1>Studenti</h1>
+<form class="search-bar">
+    <label for="search">Zadejte jméno nebo příjmení studenta</label>
+    <input class="form-control" id="search">
+</form>
 <table class="table">
     <thead>
         <tr>
             <th>
-                Aktivační kód
+                Třída
             </th>
             <th>
-                Stav
-            </th>
-            <th>
-                Jméno
-            </th>
-            <th>
-                Příjmení
+                Jméno a příjmení
             </th>
             <th></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody class="table-white">
         @foreach (var item in Model.Students)
         {
-            HumanActivationCode c = context.HumanActivationCodes
-                .Where(b => b.TargetId == item.Id)
-                .Where(b => b.CodeType == CodeType.Student)
-                .FirstOrDefault();
-            bool hasActivationCode = c != null;
             <tr>
                 <td>
-                    @if (hasActivationCode)
-                    {
-                        @c.HumanCode
-                    }
+                    @item.Class.GetName()
+                </td>
+                <td class="search-data">
+                    @item.GetFullName()
                 </td>
                 <td>
-                    @if (item.UserAuthId != null)
-                    {
-                        @("Spárováno");
-                    }
-                </td>
-                <td>
-                    @item.FirstName
-                </td>
-                <td>
-                    @item.LastName
-                </td>
-                <td>
-                    <a asp-page="/HumanCodes/Create"
-                       asp-route-targetId="@item.Id"
-                       asp-route-codeType="@CodeType.Student">Vygenerovat nový kód</a> |
                     <a asp-page="Edit" asp-route-id="@item.Id">Upravit</a> |
                     <a asp-page="Details" asp-route-id="@item.Id">Detaily</a>
                 </td>

@@ -46,6 +46,16 @@ namespace SchoolGradebook.Services
         {
             return await context.StudentGroupEnrollments.Where(sge => sge.StudentId == studentId).AsNoTracking().ToListAsync();
         }
+        public async Task<List<StudentGroup>> GetAllGroupsBySubjectInstanceAsync(int subjectInstanceId)
+        {
+            var enrollments = await context.Enrollments.Where(e => e.SubjectInstanceId == subjectInstanceId).Include(e => e.StudentGroup).AsNoTracking().ToListAsync();
+            var studentGroups = new List<StudentGroup>();
+            foreach (var e in enrollments)
+            {
+                studentGroups.Add(e.StudentGroup);
+            }
+            return studentGroups;
+        }
         public async Task<StudentGroupEnrollment> GetGroupEnrollmentAsync(int id)
         {
             return await context.StudentGroupEnrollments.Where(sge => sge.Id == id).AsNoTracking().FirstOrDefaultAsync();

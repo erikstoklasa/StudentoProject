@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using SchoolGradebook.Models;
 using SchoolGradebook.Services;
 
 namespace SchoolGradebook.Pages.Teacher
@@ -15,18 +16,24 @@ namespace SchoolGradebook.Pages.Teacher
         private readonly Analytics _analytics;
         private readonly TeacherService teacherService;
         private readonly StudentService studentService;
+        private readonly SubjectService subjectService;
 
         public int StudentCount { get; set; }
         public int UniqueStudentCount { get; set; }
         public int SubjectCount { get; set; }
         private string UserId { get; set; }
+        public List<int> StudentsCount { get; set; }
+        public IEnumerable<(SubjectInstance subjectInstance, int studentCount)> SubjectsAndStudentCounts;
+        public List<SubjectInstance> Subjects { get; set; }
 
-        public IndexModel(Analytics analytics, IHttpContextAccessor httpContextAccessor, TeacherService teacherService, StudentService studentService)
+        public IndexModel(Analytics analytics, IHttpContextAccessor httpContextAccessor, TeacherService teacherService, StudentService studentService, SubjectService subjectService)
         {
             _analytics = analytics;
             this.teacherService = teacherService;
             this.studentService = studentService;
+            this.subjectService = subjectService;
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            StudentsCount = new List<int>();
         }
         public async Task<IActionResult> OnGetAsync()
         {
@@ -34,7 +41,15 @@ namespace SchoolGradebook.Pages.Teacher
             SubjectCount = await _analytics.GetSubjectsCountByTeacherIdAsync(UserId);
 
             int teacherId = await teacherService.GetTeacherId(UserId);
-            if(teacherId == -1)
+
+            Subjects = await subjectService.GetAllSubjectInstancesByTeacherAsync(teacherId);
+
+            foreach (SubjectInstance si in Subjects)
+            {
+                StudentsCount.Add(await studentService.GetStudentCountBySubjectAsync(si.Id));
+            }
+            SubjectsAndStudentCounts = Subjects.Zip(StudentsCount, (si, sc) => (si, sc));
+            if (teacherId == -1)
             {
                 return LocalRedirect("/ActivateAccount");
             }

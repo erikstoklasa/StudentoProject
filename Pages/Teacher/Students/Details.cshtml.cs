@@ -47,11 +47,11 @@ namespace SchoolGradebook.Pages.Teacher.Students
             }
             SubjectInstances = await subjectService.GetAllSubjectInstancesByStudentAsync((int)id);
             TeacherId = await teacherService.GetTeacherId(UserId);
-            bool hasAccessToStudent = await teacherAccessValidation.HasAccessToStudent(TeacherId, Student.Id);
-            if (!hasAccessToStudent)
-            {
-                return BadRequest();
-            }
+            //bool hasaccesstostudent = await teacheraccessvalidation.hasaccesstostudent(teacherid, student.id);
+            //if (!hasaccesstostudent)
+            //{
+            //    return badrequest();
+            //}
 
             return Page();
         }

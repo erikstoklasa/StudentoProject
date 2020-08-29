@@ -20,11 +20,11 @@ namespace SchoolGradebook.Pages.Admin.Students
             this.studentService = studentService;
         }
 
-        public IList<Models.Student> Students { get;set; }
+        public List<Models.Student> Students { get;set; }
 
         public async Task OnGetAsync()
         {
-            Students = await studentService.GetAllStudentsAsync();
+            Students = (await studentService.GetAllStudentsAsync()).ToList();
         }
     }
 }

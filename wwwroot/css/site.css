@@ -20,9 +20,6 @@ for details on configuring this project to bundle and minify static web assets. 
 
 
 /*Studento style adaptation*/
-a.nav-link.text-dark:hover {
-    color: #555 !important;
-}
 
 .btn-primary {
     background-color: #feb23c !important;

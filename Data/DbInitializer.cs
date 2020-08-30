@@ -31,6 +31,7 @@ namespace SchoolGradebook.Data
             if (!context.Schools.Any())
             {
                 List<School> schools = new List<School>
+
                 {
                     new School() { Name = "Gymnázium Jana Keplera", CityAddress = "Praha 6", StreetAddress = "Parléřova 117", Email = "gjk@jk.cz", OrganizationIdentifNumber = "123456789", PhoneNumber = "123456789", Website = "https://gjk.cz", ZipCode = "16000" }
                 };

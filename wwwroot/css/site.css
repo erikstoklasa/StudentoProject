@@ -1,6 +1,24 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
+
+/* Grading */
+.add-grades-container {
+    width: 100%;
+}
+
+.add-grades-container .row {
+    padding: .3em 0;
+    flex-wrap: nowrap;
+}
+
+.add-grades-container input[type=number] {
+    width: 3em;
+    text-align: center;
+    appearance: textfield;
+}
+
+
 /*Studento style adaptation*/
 a.nav-link.text-dark:hover {
     color: #555 !important;

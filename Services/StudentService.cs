@@ -1,6 +1,7 @@
 ﻿using EllipticCurve.Utils;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Internal;
 using SchoolGradebook.Data;
 using SchoolGradebook.Models;
@@ -134,10 +135,20 @@ namespace SchoolGradebook.Services
         }
         public async Task<int> GetStudentCountBySubjectAsync(int subjectId)
         {
-            return await context.Enrollments
-                .Where(s => s.SubjectInstanceId == subjectId)
-                .AsNoTracking()
-                .CountAsync();
+            int count = 0;
+            SubjectInstanceEnrollment[] enrollments = await context.Enrollments
+              .Where(s => s.SubjectInstance.Id == subjectId)
+              .Include(e => e.StudentGroup)
+                 .ThenInclude(g => g.StudentGroupEnrollments)
+                    .ThenInclude(ge => ge.Student)
+            .AsNoTracking()
+            .ToArrayAsync();
+
+            foreach (SubjectInstanceEnrollment enrollment in enrollments)
+                foreach (StudentGroupEnrollment groupEnrollment in enrollment.StudentGroup.StudentGroupEnrollments)
+                    count++;
+
+            return count;
         }
         public async Task<int> GetStudentCountByTeacherAsync(int teacherId)
         {

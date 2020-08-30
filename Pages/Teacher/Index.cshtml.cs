@@ -18,7 +18,6 @@ namespace SchoolGradebook.Pages.Teacher
         private readonly StudentService studentService;
         private readonly SubjectService subjectService;
 
-        public int StudentCount { get; set; }
         public int UniqueStudentCount { get; set; }
         public int SubjectCount { get; set; }
         private string UserId { get; set; }
@@ -37,7 +36,6 @@ namespace SchoolGradebook.Pages.Teacher
         }
         public async Task<IActionResult> OnGetAsync()
         {
-            StudentCount = await _analytics.GetStudentsCountByTeacherUserAuthIdAsync(UserId);
             SubjectCount = await _analytics.GetSubjectsCountByTeacherIdAsync(UserId);
 
             int teacherId = await teacherService.GetTeacherId(UserId);

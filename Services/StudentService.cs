@@ -97,7 +97,8 @@ namespace SchoolGradebook.Services
 
             foreach(SubjectInstanceEnrollment enrollment in enrollments)
                 foreach(StudentGroupEnrollment groupEnrollment in enrollment.StudentGroup.StudentGroupEnrollments)
-                    students.Add(groupEnrollment.Student);
+                    if(!students.Contains(groupEnrollment.Student))
+                        students.Add(groupEnrollment.Student);
 
             return students.OrderBy(s => s.LastName).ToArray();
         }
@@ -135,27 +136,39 @@ namespace SchoolGradebook.Services
         }
         public async Task<int> GetStudentCountBySubjectAsync(int subjectId)
         {
-            int count = 0;
             SubjectInstanceEnrollment[] enrollments = await context.Enrollments
               .Where(s => s.SubjectInstance.Id == subjectId)
               .Include(e => e.StudentGroup)
                  .ThenInclude(g => g.StudentGroupEnrollments)
-                    .ThenInclude(ge => ge.Student)
             .AsNoTracking()
             .ToArrayAsync();
 
+            List<int> studentIds = new List<int>(40);
+
             foreach (SubjectInstanceEnrollment enrollment in enrollments)
                 foreach (StudentGroupEnrollment groupEnrollment in enrollment.StudentGroup.StudentGroupEnrollments)
-                    count++;
+                    if (!studentIds.Contains(groupEnrollment.StudentId))
+                        studentIds.Add(groupEnrollment.StudentId);
 
-            return count;
+            return studentIds.Count;
         }
         public async Task<int> GetStudentCountByTeacherAsync(int teacherId)
         {
-            int studentCount = await context.Enrollments
-                .Where(s => s.SubjectInstance.Teacher.Id == teacherId)
-                .CountAsync();
-            return studentCount;
+            SubjectInstanceEnrollment[] enrollments = await context.Enrollments
+              .Where(s => s.SubjectInstance.TeacherId == teacherId)
+              .Include(e => e.StudentGroup)
+                 .ThenInclude(g => g.StudentGroupEnrollments)
+            .AsNoTracking()
+            .ToArrayAsync();
+
+            List<int> studentIds = new List<int>(40);
+
+            foreach (SubjectInstanceEnrollment enrollment in enrollments)
+                foreach (StudentGroupEnrollment groupEnrollment in enrollment.StudentGroup.StudentGroupEnrollments)
+                    if (!studentIds.Contains(groupEnrollment.StudentId))
+                        studentIds.Add(groupEnrollment.StudentId);
+
+            return studentIds.Count;
         }
         public async Task<bool> UpdateStudentAsync(Student student)
         {

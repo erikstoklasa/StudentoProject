@@ -2,6 +2,7 @@
 @model IndexModel
 @{
     ViewData["Title"] = "Domů";
+    Layout = "_LayoutBorderless";
 }
 <div class="text-center">
     @if (
@@ -16,29 +17,33 @@ User.Identity.IsAuthenticated
     else
     {
         <div class="landing-page">
-            <div class="text-left" style="max-width: 800px; margin: 0 auto;">
-                <h1 class="font-weight-bold" style="font-size: 3rem;">Moderní škola<br>je za dveřmi</h1>
-                <div class="row">
-                    <img class="main-image" src="~/images/girl.png" alt="Cartoon girl holding a book">
-                </div>
-                <a href="https://me902364.typeform.com/to/f7yRqd5T" class="btn-lg btn-primary">Vyzkoušet testovací verzi</a>
-
-                <div class="d-flex flex-column justify-content-start pt-5">
-                    <h2 class="pb-2">Co už umíme</h2>
-                    <ul style="list-style-type: none; line-height: 2; padding-left: 0; font-size: 1.2rem;">
-                        <li>✅ Školní matrika</li>
-                        <li>✅ Oline žákovská</li>
-                        <li>✅ Studijní materiály od učitelů</li>
-                    </ul>
-                </div>
-                <div class="d-flex flex-column justify-content-start pt-5">
-                    <h2 class="pb-2">Na co se můžete těšit</h2>
-                    <ul style="list-style-type: none; line-height: 2; padding-left: 0; font-size: 1.2rem;">
-                        <li>🔵 Generování pololetního vysvědčení</li>
-                        <li>🔵 Více typů rolí (ředitel, rodič)</li>
-                    </ul>
-                </div>
+            <div class="px-3">
+                <h1>Moderní škola<br>je za dveřmi</h1>
+                <a href="https://me902364.typeform.com/to/f7yRqd5T" class="btn-lg btn-primary box-shadow">Vyzkoušet testovací verzi</a>
             </div>
+            <div class="flex-row">
+                <img class="main-image" src="~/images/girl.png" alt="Cartoon girl holding a book">
+            </div>
+
+        </div>
+        <div class="background-yellow">
+            <div class="info-section">
+                <div class="px-3">
+                    <h2>Studento je intuitivní</h2>
+                    <p>Vše, co potřebujete máte vždy po ruce. Studenti své známky a studijní materiály, učitelé své podklady k výuce, správci školní matriku a ředitelé důkladnou analýzu všeho, co se šustne ve škole.</p>
+                </div>
+                <img src="/images/landingPage-analysis.png" alt="Studento Analysis" height="154" />
+            </div>
+        </div>
+        <div class="info-section-left background-black">
+
+        </div>
+        <div class="info-section">
+            <div class="px-3">
+                <h2 class="text-light">Dozvíte se vše, co normálně nevidíte</h2>
+                <p class="text-light">Analyzujte výkon Vašich studentů, podívejte se na nejvýkonnější studenty. Studento poskytuje široké možnosti analýzy dat na škole, díky tomu se můžete rozhodovat jako vedení moderních firem.</p>
+            </div>
+            <img src="/images/landingPage-chart.png" alt="Studento Analysis" height="220" />
         </div>
     }
 </div>

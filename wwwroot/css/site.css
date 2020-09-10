@@ -105,7 +105,7 @@ h2 {
 
 .table-heading {
     color: #707070;
-    margin: auto 0;
+    margin: 1rem 0;
     text-align: start;
 }
 
@@ -198,6 +198,11 @@ td img {
         flex-wrap: nowrap;
     }
 
+.tt-width-5 {
+    width: 5rem;
+    flex-grow: 1;
+}
+
 .tt-day-group {
     width: 100%;
 }
@@ -267,7 +272,7 @@ a {
 
 /*Cards*/
 .card {
-    margin: 1rem 1rem 0 0;
+    margin: 0 0.5rem 0.5rem 0;
     width: 100%;
     box-shadow: 0 3px 6px rgba(0,0,0,0.16);
     border: none;
@@ -453,7 +458,7 @@ html {
     }
 
     .timeframe strong {
-        font-size: 13px;
+        font-size: 12px;
     }
 
     .table-heading-group {
@@ -483,7 +488,7 @@ html {
             padding-bottom: 0;
         }
 
-    footer {
+    footer .container {
         flex-direction: row !important;
     }
 }
@@ -555,25 +560,32 @@ html {
 
 body {
     /* Margin bottom by footer height */
-    margin-bottom: 150px;
+    margin-bottom: 175px;
     font-family: 'Open Sans', sans-serif;
     background-color: rgba(0,0,0,0.06);
 }
 
 footer {
-    display: flex;
     width: 100%;
     position: absolute;
     bottom: 0;
-    justify-content: space-between;
-    align-content: center;
     margin: 0 auto;
-    height: 150px;
-    flex-direction: column;
+    height: 175px;
     padding: 2rem;
 }
 
-    footer div {
+    footer .container div {
         display: flex;
         flex-direction: column;
     }
+
+    footer .container {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+        width: inherit;
+    }
+
+        footer .container div * {
+            padding: 0.5rem 1rem;
+        }

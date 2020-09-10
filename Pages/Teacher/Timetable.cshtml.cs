@@ -9,18 +9,18 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using SchoolGradebook.Models;
 using SchoolGradebook.Services;
 
-namespace SchoolGradebook.Pages.Student
+namespace SchoolGradebook.Pages.Teacher
 {
     public class TimetableModel : PageModel
     {
         private readonly TimetableManager timetableManager;
-        private readonly StudentService studentService;
+        private readonly TeacherService teacherService;
         public string UserId { get; set; }
-        public int StudentId { get; set; }
-        public TimetableModel(IHttpContextAccessor httpContextAccessor, TimetableManager timetableManager, StudentService studentService)
+        public int TeacherId { get; set; }
+        public TimetableModel(IHttpContextAccessor httpContextAccessor, TimetableManager timetableManager, TeacherService teacherService)
         {
             this.timetableManager = timetableManager;
-            this.studentService = studentService;
+            this.teacherService = teacherService;
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             TimeFramesByDay = new List<TimeFrame>[5];
             for (int i = 0; i < TimeFramesByDay.Length; i++)
@@ -29,16 +29,19 @@ namespace SchoolGradebook.Pages.Student
             }
         }
         public Timetable Timetable { get; set; }
-        public DateTime TermStart { get; set; }
         public List<TimeFrame>[] TimeFramesByDay { get; set; }
+        public List<StudentGroup> StudentGroups { get; set; }
         [BindProperty(SupportsGet = true)]
         public bool? DisplayModeRow { get; set; }
+        public DateTime TermStart { get; set; }
         public async Task OnGetAsync()
         {
-            StudentId = await studentService.GetStudentId(UserId);
+            TeacherId = await teacherService.GetTeacherId(UserId);
+
             TermStart = DateTime.Parse("01/09/2020");
             int weekInTerm = (DateTime.Now.DayOfYear - (TermStart.DayOfYear - (int)TermStart.DayOfWeek)) / 7;
-            Timetable = await timetableManager.GetTimetableForStudent(StudentId, weekInTerm);
+
+            Timetable = await timetableManager.GetTimetableForTeacher(TeacherId, weekInTerm);
             TimeFrame tf;
             for (int i = 0; i < Timetable.TimeFrames.Count; i++)
             {

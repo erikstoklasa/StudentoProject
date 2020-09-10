@@ -1,0 +1,52 @@
+﻿<header>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light mb-3">
+        <div class="container">
+            <a class="navbar-brand text-dark main-logo" asp-page="/Index">Studento</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                <partial name="_LoginPartial" />
+                <ul class="navbar-nav flex-grow-1 justify-content-center">
+                    @if (User.IsInRole("teacher"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-page="/Teacher/Index">Předměty</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-page="/Teacher/Students/Index">Studenti</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-page="/Teacher/Classes/Index">Třídy</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-page="/Teacher/Timetable">Rozvrh hodin</a>
+                        </li>
+                    }
+                    @if (User.IsInRole("student"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-page="/Student/Timetable">Rozvrh</a>
+                        </li>
+                    }
+                    @if (User.IsInRole("admin"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-page="/Admin/Students/Index">Studenti</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-page="/Admin/Teachers/Index">Vyučující</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-page="/Admin/Subjects/Index">Předměty</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-page="/Admin/Classes/Index">Třídy</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>

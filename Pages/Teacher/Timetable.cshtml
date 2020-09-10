@@ -1,5 +1,5 @@
 ﻿@page
-@model SchoolGradebook.Pages.Student.TimetableModel
+@model SchoolGradebook.Pages.Teacher.TimetableModel
 @using SchoolGradebook.Services
 @using System.Globalization;
 @{
@@ -28,8 +28,12 @@
                         <div class="timeframe">
                             @tf.Start.ToString("h:mm") - @tf.End.ToString("h:mm")<br>
                             <strong>
-                                @(LanguageHelper.getShorterString(si.GetName(), 99))
+                                @(LanguageHelper.getShorterString(si.SubjectType.Name, 99))
                             </strong><br>
+                            @foreach (var enrollment in si.Enrollments)
+                            {
+                                @(enrollment.StudentGroup.GetName() + ",")
+                            }
                             @tf.TimetableRecord.Room.Name<br>
                         </div>
                     }
@@ -61,8 +65,12 @@ else
                         <div class="timeframe tt-width-5">
                             @tf.Start.ToString("h:mm") - @tf.End.ToString("h:mm")<br>
                             <strong>
-                                @(LanguageHelper.getShorterString(si.GetName(), 99))
+                                @(LanguageHelper.getShorterString(si.SubjectType.Name, 99))
                             </strong><br>
+                            @foreach (var enrollment in si.Enrollments)
+                            {
+                                @(enrollment.StudentGroup.GetName() + ",")
+                            }
                             @tf.TimetableRecord.Room.Name<br>
                         </div>
                     }
@@ -78,3 +86,4 @@ else
         }
     </div>
 }
+

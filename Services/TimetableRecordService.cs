@@ -46,6 +46,10 @@ namespace SchoolGradebook.Services
             }
             return output;
         }
+        public async Task<TimetableRecord[]> GetTimetableRecordsByTeacher(int id)
+        {
+            return await context.TimetableRecords.Where(tr => tr.SubjectInstance.TeacherId == id).Include(tr => tr.SubjectInstance.Enrollments).AsNoTracking().ToArrayAsync();
+        }
 
         public async Task<TimetableRecord> GetTimetableRecordById(int id)
             => await context.TimetableRecords.Where(t => t.Id == id).AsNoTracking().FirstOrDefaultAsync();

@@ -31,10 +31,12 @@
     else if (User.IsInRole("admin"))
     {
         fullName = "Administrátor";
+        schoolName = "Doplnit název školy";
     }
     else
     {
         fullName = "Neaktivovaný";
+        schoolName = "Žádná škola";
     }
 }
 
@@ -42,7 +44,7 @@
     @if (SignInManager.IsSignedIn(User))
     {
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage" style="line-height: 1;">
                 @(fullName)<br>
                 <span class="text-muted">@(schoolName)</span>
             </a>

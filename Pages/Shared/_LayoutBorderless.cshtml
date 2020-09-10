@@ -25,87 +25,15 @@
     </script>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light mb-3">
-            <div class="container">
-                <a class="navbar-brand text-dark main-logo" asp-page="/Index">Studento</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <partial name="_LoginPartial" />
-                    <ul class="navbar-nav flex-grow-1 justify-content-center">
-                        @if (User.IsInRole("teacher"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-page="/Teacher/Index">Předměty</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-page="/Teacher/Students/Index">Studenti</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-page="/Teacher/Classes/Index">Třídy</a>
-                            </li>
-                        }
-                        @if (User.IsInRole("student"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-page="/Student/Timetable">Rozvrh</a>
-                            </li>
-                        }
-                        @if (User.IsInRole("admin"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-page="/Admin/Students/Index">Studenti</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-page="/Admin/Teachers/Index">Vyučující</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-page="/Admin/Subjects/Index">Předměty</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-page="/Admin/Classes/Index">Třídy</a>
-                            </li>
-                        }
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <main role="main" class="pb-3">
-        @RenderBody()
-    </main>
+    <partial name="_NavigationPartial">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+        <partial name="_FooterPartial" />
 
-    <footer class="border-top">
-        <div>
-            <a class="text-muted" asp-page="/Privacy">Ochrana osobních údajů</a>
-            <a class="text-muted" asp-page="/Privacy">O nás</a>
-        </div>
-        <div>
-            <span>Studento &copy; 2020</span>
-        </div>
-        <div>
-            <span>info@studento.cz</span>
-            <span>800 123 456</span>
-        </div>
-    </footer>
-
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('.approbationsSelect').select2({
-                dropdownAutoWidth: true,
-                width: '100%'
-            });
-        });
-    </script>
-
-    @RenderSection("Scripts", required: false)
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        @RenderSection("Scripts", required: false)
 </body>
 </html>

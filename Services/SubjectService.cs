@@ -48,6 +48,8 @@ namespace SchoolGradebook.Services
                 .Where(s => s.Id == subjectInstanceId)
                 .Include(s => s.SubjectType)
                 .Include(s => s.Teacher)
+                .Include(s => s.Enrollments)
+                    .ThenInclude(e => e.StudentGroup)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
             return subjectInstance;

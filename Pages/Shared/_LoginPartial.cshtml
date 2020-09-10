@@ -2,57 +2,69 @@
 @using Microsoft.AspNetCore.Http;
 @using System.Security.Claims;
 @using SchoolGradebook.Models;
+@using SchoolGradebook.Services;
 
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 @inject SchoolContext context
 @inject IHttpContextAccessor httpContextAccessor
+@inject SchoolService schoolService
 @{
     string UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
     UserId = UserId == null ? "" : UserId;
     string fullName;
+    string schoolName = "";
     if (User.IsInRole("student"))
     {
         Student s = context.Students
                     .Where(g => g.UserAuthId == UserId).FirstOrDefault();
         fullName = s == null ? "" : s.GetFullName();
-    } else if (User.IsInRole("teacher"))
+        schoolName = (await schoolService.GetSchoolById(s.SchoolId)).Name;
+    }
+    else if (User.IsInRole("teacher"))
     {
         Teacher t = context.Teachers
                     .Where(g => g.UserAuthId == UserId).FirstOrDefault();
         fullName = t == null ? "" : t.GetFullName();
+        schoolName = (await schoolService.GetSchoolById((int)t.SchoolId)).Name;
     }
     else if (User.IsInRole("admin"))
     {
         fullName = "Administrátor";
+        schoolName = "Doplnit název školy";
     }
     else
     {
         fullName = "Neaktivovaný";
+        schoolName = "Žádná škola";
     }
 }
 
-    <ul class="navbar-nav">
-        @if (SignInManager.IsSignedIn(User))
-        {
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@Html.Raw(fullName)</a>
-            </li>
-            <span class="vertical-separator"></span>
-            <li class="nav-item">
-                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
-                    <button type="submit" class="nav-link btn btn-link text-dark">Odhlásit se</button>
-                </form>
-            </li>
-        }
-        else
-        {
+<ul class="navbar-nav navbar-yellow">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage" style="line-height: 1;">
+                @(fullName)<br>
+                <span class="text-muted">@(schoolName)</span>
+            </a>
+
+        </li>
+        <li class="nav-item">
+            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                <button type="submit" class="nav-link btn btn-link text-dark">Odhlásit se</button>
+            </form>
+        </li>
+    }
+    else
+    {
+        <div>
             <li class="nav-item">
                 <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Registrace</a>
             </li>
-            <span class="vertical-separator"></span>
             <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Přihlaš se</a>
+                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Přihlásit se</a>
             </li>
-        }
-    </ul>
+        </div>
+    }
+</ul>

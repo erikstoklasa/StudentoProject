@@ -66,18 +66,65 @@ h2 {
     font-weight: 600;
 }
 
-.main-image {
-    height: 400px;
-}
-
-.landing-page {
-    max-width: 720px;
+.landing-page .main-image {
+    width: 200px;
     margin: 0 auto;
 }
 
+.background-yellow {
+    background: #FEC368;
+}
+
+.background-black {
+    background: #272727;
+}
+
+.info-section {
+    padding: 4rem 0;
+    max-width: 850px;
+    margin: 2rem auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: start;
+}
+
+.info-section-left {
+    position: absolute;
+    height: 320px;
+    width: 100%;
+    z-index: -1;
+}
+
+.info-section img {
+    margin: 0 auto;
+}
+
+.landing-page {
+    max-width: 850px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: space-between;
+}
+
+    .landing-page div {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        padding: 0;
+    }
+
+    .landing-page h1 {
+        font-size: 2.5rem;
+        font-weight: bold;
+        text-align: start;
+        padding-bottom: 1rem;
+    }
+
 .table-heading {
     color: #707070;
-    margin: auto 0;
+    margin: 1rem 0;
     text-align: start;
 }
 
@@ -170,6 +217,11 @@ td img {
         flex-wrap: nowrap;
     }
 
+.tt-width-5 {
+    width: 5rem;
+    flex-grow: 1;
+}
+
 .tt-day-group {
     width: 100%;
 }
@@ -239,7 +291,7 @@ a {
 
 /*Cards*/
 .card {
-    margin: 1rem 1rem 0 0;
+    margin: 0 0.5rem 0.5rem 0;
     width: 100%;
     box-shadow: 0 3px 6px rgba(0,0,0,0.16);
     border: none;
@@ -339,6 +391,19 @@ html {
     .timeframe {
         font-size: 10px;
     }
+
+    .info-section {
+        flex-direction: row;
+        padding: 4rem 2rem;
+        margin: 5rem auto;
+    }
+
+    .info-section-left {
+        border-radius: 0 10px 10px 0;
+        padding: 4rem 2rem 4rem calc(((100vw - 850px) / 2) + 18px) !important;
+        margin: 0;
+        width: 70vw;
+    }
 }
 
 @media (min-width: 960px) {
@@ -412,7 +477,7 @@ html {
     }
 
     .timeframe strong {
-        font-size: 13px;
+        font-size: 12px;
     }
 
     .table-heading-group {
@@ -422,6 +487,29 @@ html {
         .table-heading-group a {
             margin: 0;
         }
+
+    .landing-page {
+        flex-direction: row;
+        padding: 4rem 2rem;
+    }
+
+        .landing-page .main-image {
+            width: 200px;
+            margin: 0 auto;
+        }
+
+        .landing-page div {
+            height: 400px;
+        }
+
+        .landing-page h1 {
+            font-size: 3rem;
+            padding-bottom: 0;
+        }
+
+    footer .container {
+        flex-direction: row !important;
+    }
 }
 
 @media(min-width:370px) {
@@ -439,7 +527,7 @@ html {
 }
 
 .box-shadow {
-    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16);
 }
 
 .container {
@@ -456,6 +544,27 @@ button.accept-policy {
     border: none;
     background: #fff;
 }
+
+.navbar-yellow {
+    background: #feb23c;
+    border-radius: 0 0 1rem 1rem;
+    padding: 1rem 2rem;
+}
+
+    .navbar-yellow div {
+        display: flex;
+        width: 15rem;
+        justify-content: space-around;
+    }
+
+.nav-item .text-muted {
+    font-size: 10px;
+    color: #383838 !important;
+}
+
+.navbar {
+    padding: 0;
+}
 /*Select 2*/
 
 .select2-results__option--selected {
@@ -470,15 +579,32 @@ html {
 
 body {
     /* Margin bottom by footer height */
-    margin-bottom: 60px;
+    margin-bottom: 175px;
     font-family: 'Open Sans', sans-serif;
     background-color: rgba(0,0,0,0.06);
 }
 
-.footer {
+footer {
+    width: 100%;
     position: absolute;
     bottom: 0;
-    width: 100%;
-    white-space: nowrap;
-    line-height: 60px; /* Vertically center the text there */
+    margin: 0 auto;
+    height: 175px;
+    padding: 2rem;
 }
+
+    footer .container div {
+        display: flex;
+        flex-direction: column;
+    }
+
+    footer .container {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+        width: inherit;
+    }
+
+        footer .container div * {
+            padding: 0.5rem 1rem;
+        }

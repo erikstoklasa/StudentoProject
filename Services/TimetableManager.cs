@@ -43,6 +43,29 @@ namespace SchoolGradebook.Services
             }
             return new Timetable() { TimeFrames = timeFrames, UserId = studentId, Week = week };
         }
+        public async Task<Timetable> GetTimetableForTeacher(int teacherId, int week = 0)
+        {
+            List<TimeFrame> timeFrames = (await timeFrameService.GetAllTimeFrames()).OrderBy(tf => tf.Start.TimeOfDay).ToList();
+            List<TimetableRecord> timetableRecords = (await timetableRecordService.GetTimetableRecordsByTeacher(teacherId)).ToList();
+            //Attaching timetableRecordProperties
+            foreach (var tf in timeFrames)
+            {
+                var tr = timetableRecords.FirstOrDefault(tr => tr.TimeFrameId == tf.Id);
+                if (tr != null && (week - tr.RecurrenceStart) >= 0 && (week - tr.RecurrenceStart) % tr.Recurrence == 0)
+                {
+                    tf.TimetableRecord = tr;
+                    if (tf.TimetableRecord.SubjectInstanceId != null)
+                    {
+                        tf.TimetableRecord.SubjectInstance = await subjectService.GetSubjectInstanceAsync((int)tf.TimetableRecord.SubjectInstanceId);
+                    }
+                    if (tf.TimetableRecord.RoomId != null)
+                    {
+                        tf.TimetableRecord.Room = await roomService.GetRoomById((int)tf.TimetableRecord.RoomId);
+                    }
+                }
+            }
+            return new Timetable() { TimeFrames = timeFrames, UserId = teacherId, Week = week };
+        }
     }
     public class Timetable
     {

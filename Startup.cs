@@ -70,6 +70,7 @@ namespace SchoolGradebook
             services.AddTransient<TimetableManager>();
             services.AddTransient<TimetableRecordService>();
             services.AddTransient<SchoolService>();
+            services.AddTransient<AdminService>();
 
             services.AddRazorPages().AddRazorPagesOptions(options =>
             {
@@ -98,7 +99,7 @@ namespace SchoolGradebook
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -112,16 +113,6 @@ namespace SchoolGradebook
             roleManager.CreateAsync(new IdentityRole("admin")).Wait();
             roleManager.CreateAsync(new IdentityRole("teacher")).Wait();
             roleManager.CreateAsync(new IdentityRole("student")).Wait();
-            IdentityUser user;
-            if (userManager.FindByEmailAsync("admin@studento.cz").Result != null)
-            {
-                user = userManager.FindByEmailAsync("admin@studento.cz").Result;
-                userManager.AddToRoleAsync(user, "admin").Wait();
-            }
-
-
-
-
         }
     }
 }

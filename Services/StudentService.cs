@@ -62,6 +62,14 @@ namespace SchoolGradebook.Services
                 .FirstOrDefaultAsync();
             return student;
         }
+        public async Task<Student> GetStudentByEmailAsync(string email)
+        {
+            Student student = await context.Students
+                .Where(s => s.Email == email)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+            return student;
+        }
         public async Task<Student> GetStudentFullProfileAsync(int studentId)
         {
             Student student = await context.Students

@@ -17,18 +17,25 @@ namespace SchoolGradebook.Pages.Admin
         public int StudentCount { get; set; }
         public int TeacherCount { get; set; }
         private readonly Analytics _analytics;
+        private readonly AdminService adminService;
 
-        public IndexModel(IHttpContextAccessor httpContextAccessor, Analytics analytics)
+        public IndexModel(IHttpContextAccessor httpContextAccessor, Analytics analytics, AdminService adminService)
         {
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             UserId ??= "";
             _analytics = analytics;
+            this.adminService = adminService;
         }
-        public async Task OnGet()
+        public async Task<IActionResult> OnGetAsync()
         {
+            if (!await adminService.IsAdminSufficientLevel(await adminService.GetAdminId(UserId), 1))
+            {
+                return Forbid();
+            }
             TeacherCount = await _analytics.GetTeachersCountAsync();
             StudentCount = await _analytics.GetStudentsCountAsync();
-            StudentToTeacherRatio = (double) StudentCount / TeacherCount;
+            StudentToTeacherRatio = (double)StudentCount / TeacherCount;
+            return Page();
         }
     }
 }

@@ -64,6 +64,14 @@ namespace SchoolGradebook.Services
                 .FirstOrDefaultAsync();
             return teacher;
         }
+        public async Task<Teacher> GetTeacherByEmailAsync(string email)
+        {
+            Teacher teacher = await context.Teachers
+                .Where(s => s.Email == email)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+            return teacher;
+        }
         public async Task<Teacher[]> GetAllTeachersAsync()
         {
             Teacher[] teacher = await context.Teachers

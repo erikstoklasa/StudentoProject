@@ -18,6 +18,7 @@ namespace SchoolGradebook.Data
 
             string[] lastNames = { "Nováková", "Novák", "Svobodová", "Svoboda", "Novotný", "Novotná", "Dvořáková", "Dvořák", "Černá", "Černý", "Procházková", "Procházka", "Kučerová", "Kučera", "Veselá", "Veselý" };
             DateTime[] dates = { DateTime.Parse("07-09-2019"), DateTime.Parse("10-12-2019"), DateTime.Parse("21-01-2020"), DateTime.Parse("18-02-2020"), DateTime.Parse("05-03-2020"), DateTime.Parse("28-03-2020"), DateTime.Parse("11-04-2020") };
+            DateTime[] birthdays = { DateTime.Parse("07-09-2002"), DateTime.Parse("10-12-2002"), DateTime.Parse("21-01-2002"), DateTime.Parse("18-02-2002"), DateTime.Parse("05-03-2002"), DateTime.Parse("28-03-2002"), DateTime.Parse("11-04-2002") };
             const int NUMBER_OF_TEACHERS = 10;
             const int NUMBER_OF_STUDENTS = 15;
             const int NUMBER_OF_GRADES = 200;
@@ -138,7 +139,7 @@ namespace SchoolGradebook.Data
 
                 for (int i = 0; i < NUMBER_OF_STUDENTS; i++)
                 {
-                    students.Add(new Student { FirstName = firstNames[r.Next(firstNames.Length)], LastName = lastNames[r.Next(lastNames.Length)], ClassId = 1, SchoolId = 1 });
+                    students.Add(new Student { FirstName = firstNames[r.Next(firstNames.Length)], LastName = lastNames[r.Next(lastNames.Length)], ClassId = 1, SchoolId = 1, Birthdate = birthdays[r.Next(birthdays.Length)], PersonalIdentifNumber = "11"});
                 }
                 foreach (Student a in students)
                 {

@@ -19,7 +19,15 @@
         Student s = context.Students
                     .Where(g => g.UserAuthId == UserId).FirstOrDefault();
         fullName = s == null ? "" : s.GetFullName();
-        schoolName = (await schoolService.GetSchoolById(s.SchoolId)).Name;
+        School school = await schoolService.GetSchoolById(s.SchoolId);
+        if (school != null)
+        {
+            schoolName = school.Name;
+        }
+        else
+        {
+            schoolName = "";
+        }
     }
     else if (User.IsInRole("teacher"))
     {

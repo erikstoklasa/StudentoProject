@@ -3,7 +3,6 @@
 
 @using SchoolGradebook.Services;
 @using SchoolGradebook.Models;
-@inject Analytics analytics
 @using System.Globalization;
 @using MimeTypes;
 
@@ -49,7 +48,7 @@
         {
             <table class="table table-responsive table-white">
                 <tbody>
-                    @foreach (Grade x in await analytics.GetGradesByUserAuthAsync(Model.UserId, Model.Subject.Id))
+                    @foreach (Grade x in Model.Grades)
                     {
                         <tr>
                             <td>

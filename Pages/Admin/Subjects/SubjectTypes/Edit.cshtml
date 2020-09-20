@@ -5,9 +5,7 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
-
-<h4>SubjectType</h4>
+<h1>Upravit předmět</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -15,23 +13,23 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="SubjectType.Id" />
             <div class="form-group">
-                <label asp-for="SubjectType.Name" class="control-label"></label>
+                <label asp-for="SubjectType.Name" class="control-label">Název předmětu</label>
                 <input asp-for="SubjectType.Name" class="form-control" />
                 <span asp-validation-for="SubjectType.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SubjectType.SpecializationName" class="control-label"></label>
+                <label asp-for="SubjectType.SpecializationName" class="control-label">Název oboru</label>
                 <input asp-for="SubjectType.SpecializationName" class="form-control" />
                 <span asp-validation-for="SubjectType.SpecializationName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Uložit" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-page="./Index">Back to List</a>
+    <a asp-page="./Index">Zpět</a>
 </div>
 

@@ -2,10 +2,10 @@
 @model SchoolGradebook.Pages.Admin.Subjects.CreateModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Zapsat vyučujícímu předmět";
 }
 
-<h1>Vytvořit předmět</h1>
+<h1>Zapsat vyučujícímu předmět</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -20,7 +20,7 @@
                 <select asp-for="SubjectInstance.TeacherId" class="form-control" asp-items="Model.TeacherSelectList"></select>
             </div>
             <div class="form-group">
-                <input type="submit" value="Vytvořit" class="btn btn-primary" />
+                <input type="submit" value="Zapsat vyučujícímu předmět" class="btn btn-primary" />
             </div>
         </form>
     </div>

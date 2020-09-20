@@ -2,35 +2,33 @@
 @model SchoolGradebook.Pages.Admin.Subjects.SubjectTypes.CreateModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Vytvořit předmět";
 }
 
-<h1>Create</h1>
-
-<h4>SubjectType</h4>
+<h1>Vytvořit předmět</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="SubjectType.Name" class="control-label"></label>
+                <label asp-for="SubjectType.Name" class="control-label">Název předmětu</label>
                 <input asp-for="SubjectType.Name" class="form-control" />
                 <span asp-validation-for="SubjectType.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SubjectType.SpecializationName" class="control-label"></label>
+                <label asp-for="SubjectType.SpecializationName" class="control-label">Název oboru</label>
                 <input asp-for="SubjectType.SpecializationName" class="form-control" />
                 <span asp-validation-for="SubjectType.SpecializationName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Vytvořit" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-page="Index">Back to List</a>
+    <a asp-page="Index">Zpět</a>
 </div>
 

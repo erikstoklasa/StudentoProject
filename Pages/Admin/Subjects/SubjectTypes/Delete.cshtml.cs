@@ -32,6 +32,11 @@ namespace SchoolGradebook.Pages.Admin.Subjects.SubjectTypes
 
             SubjectType = await subjectService.GetSubjectTypeAsync((int)id);
 
+            if (SubjectType == null)
+            {
+                return NotFound();
+            }
+
             return Page();
         }
 

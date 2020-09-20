@@ -5,30 +5,29 @@
     ViewData["Title"] = "Delete";
 }
 
-<h1>Delete</h1>
+<h1>Odstranit předmět</h1>
 
-<h3>Are you sure you want to delete this?</h3>
+<p class="alert alert-danger">Pozor, odstraníte tím i všechny předměty, které jste zapsali vyučujícím</p>
 <div>
-    <h4>SubjectType</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.SubjectType.Name)
+            Název předmětu
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.SubjectType.Name)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.SubjectType.SpecializationName)
+            Název oboru
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.SubjectType.SpecializationName)
         </dd>
     </dl>
-    
+
     <form method="post">
         <input type="hidden" asp-for="SubjectType.Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-page="./Index">Back to List</a>
+        <input type="submit" value="Odstranit" class="btn btn-danger" /> |
+        <a asp-page="./Index">Zpět</a>
     </form>
 </div>

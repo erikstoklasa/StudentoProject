@@ -180,6 +180,38 @@ namespace SchoolGradebook.Services
                 .ToListAsync();
             return subjectTypes;
         }
-        //VALIDATIONS
+        public async Task AddSubjectTypeAsync(SubjectType st)
+        {
+            await context.SubjectTypes.AddAsync(st);
+            await context.SaveChangesAsync();
+        }
+        public async Task<SubjectType> GetSubjectTypeAsync(int id)
+        {
+            SubjectType subjectType = await context.SubjectTypes
+                .Where(st => st.Id == id)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+            return subjectType;
+        }
+        public async Task UpdateSubjectTypeAsync(SubjectType st)
+        {
+            context.Attach(st).State = EntityState.Modified;
+            try
+            {
+                await context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException) { }
+        }
+        public async Task DeleteSubjectTypeAsync(int id)
+        {
+            SubjectType st = await context.SubjectTypes
+                .Where(st => st.Id == id)
+                .FirstOrDefaultAsync();
+            if (st != null)
+            {
+                context.SubjectTypes.Remove(st);
+                await context.SaveChangesAsync();
+            }
+        }
     }
 }

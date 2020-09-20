@@ -1,19 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.EntityFrameworkCore;
-using SchoolGradebook.Data;
-using SchoolGradebook.Models;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace SchoolGradebook.Pages
 {
@@ -21,7 +11,6 @@ namespace SchoolGradebook.Pages
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> SignInManager;
-        private readonly IEmailSender emailSender;
 
         [BindProperty]
         public string Password { get; set; }
@@ -30,12 +19,10 @@ namespace SchoolGradebook.Pages
         [BindProperty(SupportsGet = true)]
         public string Code { get; set; }
 
-        public FirstPasswordReset(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IEmailSender emailSender)
+        public FirstPasswordReset(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
         {
             _userManager = userManager;
             SignInManager = signInManager;
-            this.emailSender = emailSender;
-
         }
         public IActionResult OnGet()
         {

@@ -1,23 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SchoolGradebook.Data;
 using SchoolGradebook.Models;
+using SchoolGradebook.Services;
 
 namespace SchoolGradebook.Pages.Admin.Subjects.SubjectTypes
 {
     public class EditModel : PageModel
     {
-        private readonly SchoolGradebook.Data.SchoolContext _context;
+        private readonly SubjectService subjectService;
+        private readonly AdminService adminService;
+        public string UserId { get; set; }
 
-        public EditModel(SchoolGradebook.Data.SchoolContext context)
+        public EditModel(SubjectService subjectService, IHttpContextAccessor httpContextAccessor, AdminService adminService)
         {
-            _context = context;
+            this.subjectService = subjectService;
+            this.adminService = adminService;
+            UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            UserId ??= "";
         }
 
         [BindProperty]
@@ -30,7 +38,7 @@ namespace SchoolGradebook.Pages.Admin.Subjects.SubjectTypes
                 return NotFound();
             }
 
-            SubjectType = await _context.SubjectTypes.FirstOrDefaultAsync(m => m.Id == id);
+            SubjectType = await subjectService.GetSubjectTypeAsync((int)id);
 
             if (SubjectType == null)
             {
@@ -48,30 +56,13 @@ namespace SchoolGradebook.Pages.Admin.Subjects.SubjectTypes
                 return Page();
             }
 
-            _context.Attach(SubjectType).State = EntityState.Modified;
+            int adminId = await adminService.GetAdminId(UserId);
+            Models.Admin admin = await adminService.GetAdminById(adminId);
+            SubjectType.SchoolId = admin.SchoolId;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!SubjectTypeExists(SubjectType.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await subjectService.UpdateSubjectTypeAsync(SubjectType);
 
             return RedirectToPage("./Index");
-        }
-
-        private bool SubjectTypeExists(int id)
-        {
-            return _context.SubjectTypes.Any(e => e.Id == id);
         }
     }
 }

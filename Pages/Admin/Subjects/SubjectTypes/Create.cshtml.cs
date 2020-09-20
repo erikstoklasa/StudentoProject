@@ -7,16 +7,25 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SchoolGradebook.Data;
 using SchoolGradebook.Models;
+using SchoolGradebook.Services;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace SchoolGradebook.Pages.Admin.Subjects.SubjectTypes
 {
     public class CreateModel : PageModel
     {
-        private readonly SchoolGradebook.Data.SchoolContext _context;
+        private readonly SubjectService subjectService;
+        private readonly AdminService adminService;
 
-        public CreateModel(SchoolGradebook.Data.SchoolContext context)
+        public string UserId { get; set; }
+
+        public CreateModel(SubjectService subjectService, IHttpContextAccessor httpContextAccessor, AdminService adminService)
         {
-            _context = context;
+            this.subjectService = subjectService;
+            this.adminService = adminService;
+            UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            UserId ??= "";
         }
 
         public IActionResult OnGet()
@@ -36,8 +45,11 @@ namespace SchoolGradebook.Pages.Admin.Subjects.SubjectTypes
                 return Page();
             }
 
-            _context.SubjectTypes.Add(SubjectType);
-            await _context.SaveChangesAsync();
+            int adminId = await adminService.GetAdminId(UserId);
+            Models.Admin admin = await adminService.GetAdminById(adminId);
+            SubjectType.SchoolId = admin.SchoolId;
+
+            await subjectService.AddSubjectTypeAsync(SubjectType);
 
             return RedirectToPage("./Index");
         }

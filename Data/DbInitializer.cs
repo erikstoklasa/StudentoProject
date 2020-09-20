@@ -48,7 +48,7 @@ namespace SchoolGradebook.Data
 
                 for (int i = 0; i < NUMBER_OF_TEACHERS; i++)
                 {
-                    teachers.Add(new Teacher { FirstName = firstNames[r.Next(firstNames.Length)], LastName = lastNames[r.Next(lastNames.Length)], SchoolId = 1 });
+                    teachers.Add(new Teacher { FirstName = firstNames[r.Next(firstNames.Length)], LastName = lastNames[r.Next(lastNames.Length)], SchoolId = 1, Birthdate = birthdays[r.Next(birthdays.Length)], PersonalIdentifNumber = "11" });
                 }
 
                 foreach (Teacher b in teachers)
@@ -139,7 +139,7 @@ namespace SchoolGradebook.Data
 
                 for (int i = 0; i < NUMBER_OF_STUDENTS; i++)
                 {
-                    students.Add(new Student { FirstName = firstNames[r.Next(firstNames.Length)], LastName = lastNames[r.Next(lastNames.Length)], ClassId = 1, SchoolId = 1, Birthdate = birthdays[r.Next(birthdays.Length)], PersonalIdentifNumber = "11"});
+                    students.Add(new Student { FirstName = firstNames[r.Next(firstNames.Length)], LastName = lastNames[r.Next(lastNames.Length)], ClassId = 1, SchoolId = 1, Birthdate = birthdays[r.Next(birthdays.Length)], PersonalIdentifNumber = "11" });
                 }
                 foreach (Student a in students)
                 {

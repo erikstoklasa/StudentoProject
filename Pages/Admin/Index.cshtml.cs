@@ -28,7 +28,18 @@ namespace SchoolGradebook.Pages.Admin
         }
         public async Task<IActionResult> OnGetAsync()
         {
-            if (!await adminService.IsAdminSufficientLevel(await adminService.GetAdminId(UserId), 1))
+            bool adminIsSufficientLevel = false;
+            try
+            {
+                int adminId = await adminService.GetAdminId(UserId);
+                adminIsSufficientLevel = await adminService.IsAdminSufficientLevel(adminId, 1);
+            }
+            catch
+            {
+                return Forbid();
+            }
+
+            if (!adminIsSufficientLevel)
             {
                 return Forbid();
             }

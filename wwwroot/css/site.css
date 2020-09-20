@@ -7,16 +7,16 @@ for details on configuring this project to bundle and minify static web assets. 
     width: 100%;
 }
 
-.add-grades-container .row {
-    padding: .3em 0;
-    flex-wrap: nowrap;
-}
+    .add-grades-container .row {
+        padding: .3em 0;
+        flex-wrap: nowrap;
+    }
 
-.add-grades-container input[type=number] {
-    width: 3em;
-    text-align: center;
-    appearance: textfield;
-}
+    .add-grades-container input[type=number] {
+        width: 3em;
+        text-align: center;
+        appearance: textfield;
+    }
 
 
 /*Studento style adaptation*/
@@ -202,6 +202,17 @@ td img {
     width: 2px;
     background: #1a0504;
 }
+
+.side-pane {
+    display: flex;
+    flex-direction: column;
+    width: 12rem;
+    height: 15rem;
+    background: white;
+    padding: 1rem;
+    justify-content: space-around;
+    border-radius: 5px;
+}
 /*Timetable*/
 .timetable {
     background: white;
@@ -363,6 +374,11 @@ a:hover {
     color: #fff;
     background-color: #1b6ec2;
     border-color: #1861ac;
+}
+
+.table-dense td {
+    padding: 0.5rem !important;
+    padding-left: 0 !important;
 }
 
 /* Sticky footer styles

@@ -77,6 +77,7 @@ namespace SchoolGradebook.Services
                 .Include(s => s.StudentGroupEnrollments)
                     .ThenInclude(sge => sge.StudentGroup)
                 .Include(s => s.Class)
+                .Include(s => s.Class.Teacher)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
 

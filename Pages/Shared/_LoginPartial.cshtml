@@ -5,41 +5,66 @@
 @using SchoolGradebook.Services;
 
 @inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
-@inject SchoolContext context
 @inject IHttpContextAccessor httpContextAccessor
 @inject SchoolService schoolService
+@inject StudentService studentService
+@inject TeacherService  teacherService
+@inject AdminService adminService
 @{
     string UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-    UserId = UserId == null ? "" : UserId;
-    string fullName;
+    UserId ??= "";
+    string fullName = "";
     string schoolName = "";
     if (User.IsInRole("student"))
     {
-        Student s = context.Students
-                    .Where(g => g.UserAuthId == UserId).FirstOrDefault();
-        fullName = s == null ? "" : s.GetFullName();
-        School school = await schoolService.GetSchoolById(s.SchoolId);
-        if (school != null)
+        int? studentId = await studentService.GetStudentId(UserId);
+        if (studentId != null)
         {
-            schoolName = school.Name;
-        }
-        else
-        {
-            schoolName = "";
+            Student s = await studentService.GetStudentAsync((int)studentId);
+            if (s != null)
+            {
+                fullName = s.GetFullName();
+                School school = await schoolService.GetSchoolById(s.SchoolId);
+                if (school != null)
+                {
+                    schoolName = school.Name;
+                }
+            }
         }
     }
     else if (User.IsInRole("teacher"))
     {
-        Teacher t = context.Teachers
-                    .Where(g => g.UserAuthId == UserId).FirstOrDefault();
-        fullName = t == null ? "" : t.GetFullName();
-        schoolName = (await schoolService.GetSchoolById((int)t.SchoolId)).Name;
+        int? teacherId = await teacherService.GetTeacherId(UserId);
+        if (teacherId != null)
+        {
+            Teacher t = await teacherService.GetTeacherAsync((int)teacherId);
+            if (t != null)
+            {
+                fullName = t.GetFullName();
+                School school = await schoolService.GetSchoolById((int)t.SchoolId);
+                if (school != null)
+                {
+                    schoolName = school.Name;
+                }
+            }
+        }
     }
     else if (User.IsInRole("admin"))
     {
+        int? adminId = await adminService.GetAdminId(UserId);
         fullName = "Administrátor";
-        schoolName = "Doplnit název školy";
+        if (adminId != null)
+        {
+            Admin a = await adminService.GetAdminById((int)adminId);
+            if (a != null)
+            {
+                School school = await schoolService.GetSchoolById((int)a.SchoolId);
+                if (school != null)
+                {
+                    schoolName = school.Name;
+                }
+            }
+        }
     }
     else
     {

@@ -42,7 +42,7 @@
             Datum nástupu
         </dt>
         <dd class="col-sm-10">
-            @Model.Teacher.StartDate.GetValueOrDefault().ToString("dd. M. yyyy") @($"(roků: {((DateTime.Now - Model.Teacher.StartDate).Value.TotalDays / 365.25):f0})")
+            @Model.Teacher.StartDate.GetValueOrDefault().ToString("dd. M. yyyy") @($"(roků: {((DateTime.Now - Model.Teacher.StartDate).GetValueOrDefault().TotalDays / 365.25):f0})")
         </dd>
         <dt class="col-sm-2">
             Dosažené vzdělání

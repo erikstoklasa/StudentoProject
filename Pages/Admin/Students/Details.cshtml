@@ -2,132 +2,97 @@
 @model SchoolGradebook.Pages.Admin.Students.DetailsModel
 @{
     ViewData["Title"] = "Details";
+    int studentAge = (DateTime.Now - Model.Student.Birthdate.GetValueOrDefault()).Days / 365;
 }
 
-<h1>Detail studenta</h1>
-
-<div>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            Třída
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Student.Class.GetName()
-        </dd>
-        <dt class="col-sm-2">
-            Jméno
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Student.FirstName
-        </dd>
-        <dt class="col-sm-2">
-            Příjmení
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Student.LastName
-        </dd>
-        <dt class="col-sm-2">
-            Datum narození
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Student.Birthdate.GetValueOrDefault().ToString("dd. M. yyyy")
-        </dd>
-        <dt class="col-sm-2">
-            Místo narození
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Student.PlaceOfBirth
-        </dd>
-        <dt class="col-sm-2">
-            Rodné číslo
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Student.PersonalIdentifNumber
-        </dd>
-        <dt class="col-sm-2">
-            Číslo občanského průkazu
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Student.IdentifCardNumber
-        </dd>
-        <dt class="col-sm-2">
-            Číslo pojišťovny
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Student.InsuranceCompany
-        </dd>
-        <dt class="col-sm-2">
-            Ulice
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Student.StreetAddress
-        </dd>
-        <dt class="col-sm-2">
-            Město
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Student.CityAddress
-        </dd>
-        <dt class="col-sm-2">
-            PSČ
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Student.ZipCode
-        </dd>
-        <dt class="col-sm-2">
-            Email
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Student.Email
-        </dd>
-        <dt class="col-sm-2">
-            Telefonní číslo
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Student.PhoneNumber
-        </dd>
-
-
-
-        @if (Model.Student.StudentGroupEnrollments.Count == 0)
-        {
-
-            <p class="alert alert-warning my-5">Student namá přiřazený žádný předmět 🙁</p>
-
-        }
-        else
-        {
-
-            <dt class="col-sm-2">
-                Přiřazen k:
-            </dt>
-
-            <dd class="col-sm-10">
-                <table class="table">
-                    <tr>
-                        <th>Skupina</th>
-                        <th></th>
-                    </tr>
-                    @foreach (var item in Model.Student.StudentGroupEnrollments)
-                    {
+<div class="d-flex">
+    <div class="side-pane box-shadow">
+        <a class="btn btn-primary" asp-page="./Index"><img src="~/images/back.png" alt="Přidat" height="18px" class="btn-icon" />Zpět</a>
+        <a class="btn btn-outline-primary" asp-page="./Edit" asp-route-id="@Model.Student.Id"><img src="~/images/edit.png" alt="Upravit" height="18px" class="btn-icon" />Upravit</a>
+        <a class="btn btn-outline-primary" asp-page="./Details" asp-page-handler="print" asp-route-id="@Model.Student.Id"><img src="~/images/print.svg" alt="Vytisknout" height="20px" class="btn-icon" />Tisk výpisu</a>
+    </div>
+    <div class="d-flex flex-column flex-grow-1 ml-5">
+        <div class="d-flex flex-column">
+            <h1>@Model.Student.GetFullName()</h1>
+            <h4>@($"{Model.Student.Class.GetName()} - {Model.Student.Class.Teacher.GetFullName()}")</h4>
+        </div>
+        <div class="d-flex flex-row">
+            <div class="mr-3 d-flex flex-row flex-grow-1">
+                <div class="d-flex flex-column">
+                    <p class="table-heading">Základní údaje</p>
+                    <table class="table table-dense">
                         <tr>
-                            <td>
-                                @item.StudentGroup.Name
-                            </td>
-                            <td>
-                                <a asp-page="/Admin/Enrollments/Delete" asp-route-id="@item.Id" asp-route-ReturnUrl="@Url.Content($"~/Admin/Students/Details/?id={Model.Student.Id}")">Odebrat</a>
-                            </td>
+                            <td>Věk:</td>
+                            <td>@(studentAge) let</td>
                         </tr>
-                    }
+                        <tr>
+                            <td>Datum narození:</td>
+                            <td>@Model.Student.Birthdate.GetValueOrDefault().ToString("d. M. yyyy")</td>
+                        </tr>
+                        <tr>
+                            <td>Email:</td>
+                            <td>@Model.Student.Email</td>
+                        </tr>
+                        <tr>
+                            <td>Telefoní číslo:</td>
+                            <td>@Model.Student.PhoneNumber</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="flex-grow-1">
+                <p class="table-heading">Detailní údaje</p>
+                <table class="table table-dense">
+                    <tr>
+                        <td>Rodné číslo:</td>
+                        <td>@(Model.Student.PersonalIdentifNumber)</td>
+                    </tr>
+                    <tr>
+                        <td>Místo narození:</td>
+                        <td>@Model.Student.PlaceOfBirth</td>
+                    </tr>
+                    <tr>
+                        <td>Číslo občanského průkazu:</td>
+                        <td>@Model.Student.IdentifCardNumber</td>
+                    </tr>
+                    <tr>
+                        <td>Pojišťovna:</td>
+                        <td>@Model.Student.InsuranceCompany</td>
+                    </tr>
+                    <tr>
+                        <td>Trvalé bydliště:</td>
+                        <td>@($"{Model.Student.StreetAddress}, {Model.Student.ZipCode} {Model.Student.CityAddress}")</td>
+                    </tr>
                 </table>
-            </dd>
+                @if (Model.Student.StudentGroupEnrollments.Count == 0)
+                {
 
-        }
-    </dl>
-    <a asp-page="/Admin/Enrollments/Create" asp-route-StudentId="@Model.Student.Id" asp-route-ReturnUrl="@Url.Content($"~/Admin/Students/Details/?id={Model.Student.Id}")">Přidat studenta do skupiny</a>
+                    <p class="alert alert-warning my-5">Student/ka namá přiřazený žádný předmět 🙁</p>
+
+                }
+                else
+                {
+                    <p class="table-heading">Přiřazen/a do skupin</p>
+                    <table class="table table-dense">
+                        @foreach (var item in Model.Student.StudentGroupEnrollments)
+                        {
+                            <tr>
+                                <td>
+                                    @item.StudentGroup.Name
+                                </td>
+                                <td>
+                                    <a class="btn btn-outline-danger" asp-page="/Admin/Enrollments/Delete" asp-route-id="@item.Id" asp-route-ReturnUrl="@Url.Content($"~/Admin/Students/Details/?id={Model.Student.Id}")">Odebrat</a>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                }
+                <a class="btn btn-outline-primary" asp-page="/Admin/Enrollments/Create" asp-route-StudentId="@Model.Student.Id" asp-route-ReturnUrl="@Url.Content($"~/Admin/Students/Details/?id={Model.Student.Id}")"><img src="~/images/add.svg" alt="Přidat" height="18px" class="btn-icon" />Přidat studenta do skupiny</a>
+            </div>
+        </div>
+    </div>
+    
 </div>
 <div>
-    <a asp-page="./Edit" asp-route-id="@Model.Student.Id">Upravit</a> |
-    <a asp-page="./Index">Zpět</a>
+
 </div>

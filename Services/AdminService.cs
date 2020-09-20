@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 using SchoolGradebook.Data;
 using SchoolGradebook.Models;
 using System;
@@ -15,7 +16,14 @@ namespace SchoolGradebook.Services
         public AdminService(SchoolContext context)
             => this.context = context;
         public async Task<int> GetAdminId(string userAuthId)
-            => (await GetAdmins(a => a.UserAuthId == userAuthId))[0].Id;
+        {
+            Admin a = await context.Admins.Where(a => a.UserAuthId == userAuthId).AsNoTracking().FirstOrDefaultAsync();
+            if (a == null)
+            {
+                throw new Exception("Admin not found by supplied userAuthId");
+            }
+            return a.Id;
+        }
 
         public async Task<Admin[]> GetAllAdmmins()
             => await context.Admins.AsNoTracking().AsNoTracking().ToArrayAsync();

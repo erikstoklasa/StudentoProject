@@ -11,18 +11,23 @@ namespace SchoolGradebook.Services
     public class StudentAccessValidation
     {
         private readonly SchoolContext context;
+        private readonly SubjectService subjectService;
 
-        public StudentAccessValidation(SchoolContext context)
+        public StudentAccessValidation(SchoolContext context, SubjectService subjectService)
         {
             this.context = context;
+            this.subjectService = subjectService;
         }
-        
-        public bool HasAccessToSubject(int studentId, int subjectInstanceId)
+
+        public async Task<bool> HasAccessToSubject(int studentId, int subjectInstanceId)
         {
-            foreach(StudentGroupEnrollment group in context.StudentGroupEnrollments.Where(e => e.StudentId == studentId).AsEnumerable())
+            List<StudentGroupEnrollment> studentGroupEnrollments = await context.StudentGroupEnrollments.Where(e => e.StudentId == studentId).AsNoTracking().ToListAsync();
+            foreach (StudentGroupEnrollment sge in studentGroupEnrollments)
             {
-                if (context.Enrollments.Where(e => e.StudentGroupId == group.Id && e.SubjectInstanceId == subjectInstanceId).Any())
+                if (await context.Enrollments.Where(e => e.StudentGroupId == sge.Id && e.SubjectInstanceId == subjectInstanceId).AnyAsync())
+                {
                     return true;
+                }
             }
             return false;
         }
@@ -35,7 +40,7 @@ namespace SchoolGradebook.Services
         }
         public async Task<bool> HasAccessToSubjectMaterial(int studentId, Guid subjectMaterialId)
         {
-            List<SubjectInstance> instances = await new SubjectService(context).GetAllSubjectInstancesByStudentAsync(studentId);
+            List<SubjectInstance> instances = await subjectService.GetAllSubjectInstancesByStudentAsync(studentId);
 
             SubjectMaterial subjectMaterial = await context.SubjectMaterials
                 .Where(sm => sm.Id == subjectMaterialId)

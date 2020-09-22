@@ -27,6 +27,10 @@
                 <select asp-for="Class.TeacherId" class="form-control" asp-items="Model.TeachersList"></select>
             </div>
             <div class="form-group">
+                <label asp-for="Class.BaseRoomId" class="control-label">Kmenová učebna</label>
+                <select asp-for="Class.BaseRoomId" class="form-control" asp-items="Model.RoomsList"></select>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Uložit" class="btn btn-primary" />
             </div>
         </form>

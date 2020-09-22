@@ -2,12 +2,10 @@
 @model SchoolGradebook.Pages.Admin.Classes.CreateModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Vytvořit třídu";
 }
 
-<h1>Create</h1>
-
-<h4>Class</h4>
+<h1>Vytvořit třídu</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -25,16 +23,20 @@
             </div>
             <div class="form-group">
                 <label asp-for="Class.TeacherId" class="control-label">Vyučující</label>
-                <select asp-for="Class.TeacherId" class ="form-control" asp-items="Model.TeachersList"></select>
+                <select asp-for="Class.TeacherId" class="form-control" asp-items="Model.TeachersList"></select>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <label asp-for="Class.BaseRoomId" class="control-label">Kmenová učebna</label>
+                <select asp-for="Class.BaseRoomId" class="form-control" asp-items="Model.RoomsList"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Vytvořit třídu" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-page="Index">Back to List</a>
+    <a asp-page="Index">Zpět</a>
 </div>
 

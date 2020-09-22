@@ -26,7 +26,7 @@ namespace SchoolGradebook.Services
                                                                                                         .ToListAsync();
             foreach (StudentGroupEnrollment sge in studentGroupEnrollments)
             {
-                if (await context.Enrollments.Where(e => e.StudentGroupId == sge.Id && e.SubjectInstanceId == subjectInstanceId).AnyAsync())
+                if (await context.Enrollments.Where(e => e.StudentGroupId == sge.StudentGroupId && e.SubjectInstanceId == subjectInstanceId).AnyAsync())
                 {
                     return true;
                 }

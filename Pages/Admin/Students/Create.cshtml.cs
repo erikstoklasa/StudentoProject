@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SchoolGradebook.Services;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace SchoolGradebook.Pages.Admin.Students
@@ -11,12 +13,18 @@ namespace SchoolGradebook.Pages.Admin.Students
     {
         private readonly StudentService studentService;
         private readonly ClassService classService;
+        private readonly AdminService adminService;
 
-        public CreateModel(StudentService studentService, ClassService classService)
+        public string UserId { get; set; }
+
+        public CreateModel(StudentService studentService, ClassService classService, IHttpContextAccessor httpContextAccessor, AdminService adminService)
         {
             this.studentService = studentService;
             this.classService = classService;
+            this.adminService = adminService;
             ClassesList = new List<SelectListItem>();
+            UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            UserId ??= "";
         }
 
         public async Task<IActionResult> OnGet()
@@ -34,10 +42,10 @@ namespace SchoolGradebook.Pages.Admin.Students
         public List<SelectListItem> ClassesList { get; set; }
         public List<Models.Class> Classes { get; set; }
 
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
+            int adminId = await adminService.GetAdminId(UserId);
+            Student.SchoolId = (await adminService.GetAdminById(adminId)).SchoolId;
             if (!ModelState.IsValid)
             {
                 ViewData["status_type"] = "error";

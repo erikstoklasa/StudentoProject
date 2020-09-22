@@ -67,10 +67,10 @@ namespace SchoolGradebook.Pages.Student.Subjects
             {
                 return Forbid();
             }
-            bool studentHasAccessToSubject = await studentAccessValidation.HasAccessToSubject((int)studentId, (int)id);
+            bool studentHasAccessToSubject = await studentAccessValidation.HasAccessToSubject((int)studentId, (int)id);//HERE IS A PROBLEM!
             if (!studentHasAccessToSubject)
             {
-                return Forbid();
+                return BadRequest();
             }
 
             Grades = await gradeService.GetAllGradesByStudentSubjectInstance((int)studentId, (int)id);

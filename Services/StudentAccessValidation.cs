@@ -21,7 +21,9 @@ namespace SchoolGradebook.Services
 
         public async Task<bool> HasAccessToSubject(int studentId, int subjectInstanceId)
         {
-            List<StudentGroupEnrollment> studentGroupEnrollments = await context.StudentGroupEnrollments.Where(e => e.StudentId == studentId).AsNoTracking().ToListAsync();
+            List<StudentGroupEnrollment> studentGroupEnrollments = await context.StudentGroupEnrollments.Where(e => e.StudentId == studentId)
+                                                                                                        .AsNoTracking()
+                                                                                                        .ToListAsync();
             foreach (StudentGroupEnrollment sge in studentGroupEnrollments)
             {
                 if (await context.Enrollments.Where(e => e.StudentGroupId == sge.Id && e.SubjectInstanceId == subjectInstanceId).AnyAsync())

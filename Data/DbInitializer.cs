@@ -1,5 +1,4 @@
-﻿
-using SchoolGradebook.Models;
+﻿using SchoolGradebook.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,8 +16,8 @@ namespace SchoolGradebook.Data
             string[] firstNames = { "Jan", "Jakub", "Tomáš", "Matyáš", "Adam", "Filip", "Vojtěch", "Lukáš", "Martin", "Matěj", "Eliška", "Anna", "Adéla", "Tereza", "Sofie", "Viktorie", "Ema", "Karolína", "Natálie", "Amálie" };
 
             string[] lastNames = { "Nováková", "Novák", "Svobodová", "Svoboda", "Novotný", "Novotná", "Dvořáková", "Dvořák", "Černá", "Černý", "Procházková", "Procházka", "Kučerová", "Kučera", "Veselá", "Veselý" };
-            DateTime[] dates = { DateTime.Parse("07-09-2019"), DateTime.Parse("10-12-2019"), DateTime.Parse("21-01-2020"), DateTime.Parse("18-02-2020"), DateTime.Parse("05-03-2020"), DateTime.Parse("28-03-2020"), DateTime.Parse("11-04-2020") };
-            DateTime[] birthdays = { DateTime.Parse("07-09-2002"), DateTime.Parse("10-12-2002"), DateTime.Parse("21-01-2002"), DateTime.Parse("18-02-2002"), DateTime.Parse("05-03-2002"), DateTime.Parse("28-03-2002"), DateTime.Parse("11-04-2002") };
+            DateTime[] dates = { DateTime.Parse("07/09/2019"), DateTime.Parse("10/12/2019"), DateTime.Parse("21/01/2020"), DateTime.Parse("18/02/2020"), DateTime.Parse("05/03/2020"), DateTime.Parse("28/03/2020"), DateTime.Parse("11/04/2020") };
+            DateTime[] birthdays = { DateTime.Parse("07/09/2002"), DateTime.Parse("10/12/2002"), DateTime.Parse("21/01/2002"), DateTime.Parse("18/02/2002"), DateTime.Parse("05/03/2002"), DateTime.Parse("28/03/2002"), DateTime.Parse("11/04/2002") };
             const int NUMBER_OF_TEACHERS = 10;
             const int NUMBER_OF_STUDENTS = 15;
             const int NUMBER_OF_GRADES = 200;
@@ -157,7 +156,7 @@ namespace SchoolGradebook.Data
                         new Grade
                         {
                             Value = r.Next(1, 6),
-                            Name = "Domácí úkol - prezentace",
+                            Name = "Domácí úkol / prezentace",
                             StudentId = r.Next(1, NUMBER_OF_STUDENTS),
                             SubjectInstanceId = r.Next(1, 8),
                             Added = dates[r.Next(dates.Length)]

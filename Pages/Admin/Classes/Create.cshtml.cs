@@ -61,7 +61,8 @@ namespace SchoolGradebook.Pages.Admin.Classes
             {
                 return Page();
             }
-            Class.SchoolId = await adminService.GetAdminId(UserId);
+            int adminId = await adminService.GetAdminId(UserId);
+            Class.SchoolId = (await adminService.GetAdminById(adminId)).SchoolId;
             await classService.AddClassAsync(Class);
 
             return RedirectToPage("./Index");

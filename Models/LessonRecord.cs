@@ -9,6 +9,8 @@ namespace SchoolGradebook.Models
     {
         public int Id { set; get; }
         public int TimeFrameId { set; get; }
+        public int SubjectInstanceId { get; set; }
+        public int Week { get; set; }
         public string Description { set; get; }
         public bool Canceled { set; get; }
         public int? SubstitutionSubjectInstanceId { set; get; }

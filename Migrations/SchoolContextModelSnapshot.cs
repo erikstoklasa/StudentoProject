@@ -15,7 +15,7 @@ namespace SchoolGradebook.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.7")
+                .HasAnnotation("ProductVersion", "3.1.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -191,6 +191,9 @@ namespace SchoolGradebook.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("SubjectInstanceId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("SubstitutionSubjectInstanceId")
                         .HasColumnType("int");
 
@@ -198,6 +201,9 @@ namespace SchoolGradebook.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("TimeFrameId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Week")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

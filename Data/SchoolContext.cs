@@ -34,6 +34,7 @@ namespace SchoolGradebook.Data
         public DbSet<TimetableRecord> TimetableRecords { set; get; }
         public DbSet<Approbation> Approbations { get; set; }
         public DbSet<School> Schools { get; set; }
+        public DbSet<TimetableChange> TimetableChanges { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -57,6 +58,7 @@ namespace SchoolGradebook.Data
             modelBuilder.Entity<LessonRecord>().ToTable("LessonRecords");
             modelBuilder.Entity<AttendanceRecord>().ToTable("AttendanceRecords");
             modelBuilder.Entity<TimetableRecord>().ToTable("TimetableRecords").HasIndex(tr => tr.TimeFrameId).IsUnique(false);
+            modelBuilder.Entity<TimetableChange>().ToTable("TimetableChanges");
 
             foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             {

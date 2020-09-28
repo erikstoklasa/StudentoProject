@@ -16,6 +16,8 @@ namespace SchoolGradebook.Models
         public int SchoolId { get; set; }
 
         public TimetableRecord? TimetableRecord { get; set; } //Possible attachment
+        public LessonRecord? LessonRecord { get; set; } //Possible attachment
+        public TimetableChange? TimetableChange { get; set; } //Possible attachment
         public School? School { get; set; }
     }
 }

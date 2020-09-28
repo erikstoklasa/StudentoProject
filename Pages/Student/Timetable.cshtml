@@ -22,15 +22,37 @@
 
                 @foreach (var tf in Model.TimeFramesByDay[i])
                 {
-                    if (tf.TimetableRecord != null)
+                    if (tf.LessonRecord != null)
+                    {
+                        if (tf.LessonRecord.Canceled)
+                        {
+                            <div class="timeframe timeframe-change">
+                                @tf.Start.ToString("h:mm") - @tf.End.ToString("h:mm")<br>
+                                <strong>
+                                    Volno
+                                </strong><br>
+                            </div>
+                        }
+                        else if (tf.LessonRecord.CurrentSubjectInstanceId != null)
+                        {
+                            <div class="timeframe timeframe-change">
+                                @tf.Start.ToString("h:mm") - @tf.End.ToString("h:mm")<br>
+                                <strong>
+                                    @($"{LanguageHelper.getShorterString(tf.LessonRecord.CurrentSubjectInstance.SubjectType.Name, 99)}")
+                                </strong><br>
+                                @($"{tf.TimetableRecord.Room.Name} - {tf.LessonRecord.CurrentTeacher.LastName}")<br>
+                            </div>
+                        }
+                    }
+                    else if (tf.TimetableRecord != null)
                     {
                         var si = tf.TimetableRecord.SubjectInstance;
                         <div class="timeframe">
                             @tf.Start.ToString("h:mm") - @tf.End.ToString("h:mm")<br>
                             <strong>
-                                @(LanguageHelper.getShorterString(si.GetName(), 99))
+                                @(LanguageHelper.getShorterString(si.SubjectType.Name, 99))
                             </strong><br>
-                            @tf.TimetableRecord.Room.Name<br>
+                            @($"{tf.TimetableRecord.Room.Name} - {si.Teacher.LastName}")<br>
                         </div>
                     }
                     else
@@ -61,9 +83,9 @@ else
                         <div class="timeframe tt-width-5">
                             @tf.Start.ToString("h:mm") - @tf.End.ToString("h:mm")<br>
                             <strong>
-                                @(LanguageHelper.getShorterString(si.GetName(), 99))
+                                @(LanguageHelper.getShorterString(si.SubjectType.Name, 99))
                             </strong><br>
-                            @tf.TimetableRecord.Room.Name<br>
+                            @($"{tf.TimetableRecord.Room.Name} - {si.Teacher.LastName}")<br>
                         </div>
                     }
                     else

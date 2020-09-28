@@ -33,7 +33,7 @@ namespace SchoolGradebook.Services
         {
             if((frame.End - frame.Start).TotalMinutes < 0)
             {
-                throw new ArgumentException("Timeframe cannot have start later than end time");
+                throw new ArgumentException("Timeframe cannot start later than the end time");
             }
             await context.TimeFrames.AddAsync(frame);
             await context.SaveChangesAsync();

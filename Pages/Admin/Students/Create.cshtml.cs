@@ -46,6 +46,11 @@ namespace SchoolGradebook.Pages.Admin.Students
         {
             int adminId = await adminService.GetAdminId(UserId);
             Student.SchoolId = (await adminService.GetAdminById(adminId)).SchoolId;
+            Classes = await classService.GetAllClasses();
+            foreach (Models.Class c in Classes)
+            {
+                ClassesList.Add(new SelectListItem(c.GetName(), c.Id.ToString()));
+            }
             if (!ModelState.IsValid)
             {
                 ViewData["status_type"] = "error";

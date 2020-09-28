@@ -255,6 +255,14 @@ td img {
     background: transparent;
 }
 
+.timeframe-yellow {
+    background: #fbc777;
+}
+
+.timeframe-change {
+    background: #fb9077;
+}
+
 .timeframe-day {
     padding: 10px 0;
     margin: 0 auto;

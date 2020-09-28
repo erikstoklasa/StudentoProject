@@ -1,5 +1,6 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using SchoolGradebook.Data;
 using SchoolGradebook.Models;
 using System;
@@ -22,11 +23,29 @@ namespace SchoolGradebook.Services
 
         public async Task<LessonRecord> GetLessonRecordById(int id)
             => await context.LessonRecords.Where(r => r.Id == id).AsNoTracking().FirstOrDefaultAsync();
+        public async Task<List<LessonRecord>> GetLessonRecordsByStudentAndWeek(int studentId, int week)
+        {
+            List<SubjectInstance> subjectInstances = new List<SubjectInstance>();
+            List<StudentGroupEnrollment> studentGroupEnrollments = await context.GetService<StudentGroupService>().GetAllGroupEnrollmentsByStudentAsync(studentId);
+            foreach (var sge in studentGroupEnrollments)
+            {
+                subjectInstances.AddRange(
+                    await context.GetService<SubjectService>().GetSubjectInstancesByGroupId(sge.StudentGroupId)
+                    );
+            }
+            List<LessonRecord> output = new List<LessonRecord>();
+            foreach (var si in subjectInstances)
+            {
+                output.AddRange(await context.LessonRecords.Where(lr => lr.SubjectInstanceId == si.Id && lr.Week == week)
+                                                           .AsNoTracking()
+                                                           .ToListAsync());
+            }
+            return output;
+        }
+
 
         public async Task<LessonRecord> GetFullLessonRecordById(int id)
             => await context.LessonRecords.Where(r => r.Id == id).AsNoTracking()
-                .Include(r => r.SubstitutionTeacher)
-                .Include(r => r.SubstitutionSubjectInstance)
                 .Include(r => r.TimeFrame)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();

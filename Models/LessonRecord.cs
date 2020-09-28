@@ -12,12 +12,9 @@ namespace SchoolGradebook.Models
         public int SubjectInstanceId { get; set; }
         public int Week { get; set; }
         public string Description { set; get; }
-        public bool Canceled { set; get; }
-        public int? SubstitutionSubjectInstanceId { set; get; }
-        public int? SubstitutionTeacherId { set; get; }
+        public string SafetyInstructions { set; get; }
 
-        public SubjectInstance SubstitutionSubjectInstance { set; get; }
-        public Teacher SubstitutionTeacher { set; get; }
+
         public TimeFrame TimeFrame { set; get; }
         public ICollection<AttendanceRecord> Attendance { set; get; }
     }

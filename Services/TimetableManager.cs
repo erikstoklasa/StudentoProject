@@ -29,7 +29,7 @@ namespace SchoolGradebook.Services
             List<TimeFrame> timeFrames = (await timeFrameService.GetAllTimeFrames()).OrderBy(tf => tf.Start.TimeOfDay).ToList();
             List<TimetableRecord> timetableRecords = await timetableRecordService.GetTimetableRecordsByStudentId(studentId);
             List<LessonRecord> lessonRecords = await lessonRecordService.GetLessonRecordsByStudentAndWeek(studentId, week);
-            List<TimetableChange> timetableChanges = await timetableChangeService.GetAllTimetableChangesByStudent(studentId, week);
+            List<TimetableChange> timetableChanges = (await timetableChangeService.GetAllTimetableChangesByStudent(studentId, week)).ToList();
             //Attaching timetableRecordProperties
             foreach (var tf in timeFrames)
             {
@@ -51,6 +51,10 @@ namespace SchoolGradebook.Services
                         tf.TimetableRecord.Room = await roomService.GetRoomById((int)tf.TimetableRecord.RoomId);
                     }
                 }
+                if (timetableChanges.Count() > 0)
+                {
+                    tf.TimetableChange = timetableChanges.Where(tch => tch.TimeFrameId == tf.Id).FirstOrDefault();
+                }
             }
             return new Timetable() { TimeFrames = timeFrames, UserId = studentId, Week = week };
         }
@@ -58,6 +62,8 @@ namespace SchoolGradebook.Services
         {
             List<TimeFrame> timeFrames = (await timeFrameService.GetAllTimeFrames()).OrderBy(tf => tf.Start.TimeOfDay).ToList();
             List<TimetableRecord> timetableRecords = (await timetableRecordService.GetTimetableRecordsByTeacher(teacherId)).ToList();
+            List<LessonRecord> lessonRecords = await lessonRecordService.GetLessonRecordsByTeacherAndWeek(teacherId, week);
+            List<TimetableChange> timetableChanges = (await timetableChangeService.GetAllTimetableChangesByTeacher(teacherId, week)).ToList();
             //Attaching timetableRecordProperties
             foreach (var tf in timeFrames)
             {
@@ -65,14 +71,23 @@ namespace SchoolGradebook.Services
                 if (tr != null && (week - tr.RecurrenceStart) >= 0 && (week - tr.RecurrenceStart) % tr.Recurrence == 0)
                 {
                     tf.TimetableRecord = tr;
+                    var lessonRecord = lessonRecords.FirstOrDefault(lr => lr.TimeFrameId == tf.Id);
                     if (tf.TimetableRecord.SubjectInstanceId != null)
                     {
                         tf.TimetableRecord.SubjectInstance = await subjectService.GetSubjectInstanceAsync((int)tf.TimetableRecord.SubjectInstanceId);
+                    }
+                    if (lessonRecord != null)
+                    {
+                        tf.LessonRecord = lessonRecord;
                     }
                     if (tf.TimetableRecord.RoomId != null)
                     {
                         tf.TimetableRecord.Room = await roomService.GetRoomById((int)tf.TimetableRecord.RoomId);
                     }
+                }
+                if (timetableChanges.Count() > 0)
+                {
+                    tf.TimetableChange = timetableChanges.Where(tch => tch.TimeFrameId == tf.Id).FirstOrDefault();
                 }
             }
             return new Timetable() { TimeFrames = timeFrames, UserId = teacherId, Week = week };

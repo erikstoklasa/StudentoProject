@@ -264,6 +264,7 @@ td img {
 }
 
 .timeframe-day {
+    font-weight: bold;
     padding: 10px 0;
     margin: 0 auto;
     flex-shrink: 0;
@@ -509,7 +510,7 @@ html {
     }
 
         .table-heading-group a {
-            margin: 0;
+            margin: auto 0;
         }
 
     .landing-page {

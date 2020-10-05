@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using SchoolGradebook.Data;
 using SchoolGradebook.Models;
 using System;
@@ -18,9 +19,47 @@ namespace SchoolGradebook.Services
 
         public async Task<TimetableChange[]> GetAllTimetableChanges()
             => await context.TimetableChanges.AsNoTracking().ToArrayAsync();
-        public async Task<TimetableChange[]> GetAllTimetableChangesByStudent(int studentId)
-       => await context.TimetableChanges.Where(tch => tch.).AsNoTracking().ToArrayAsync();
+        public async Task<TimetableChange[]> GetAllTimetableChangesByStudent(int studentId, int week)
+        {
+            var SGEnrollments = await context.GetService<StudentGroupService>().GetAllGroupEnrollmentsByStudentAsync(studentId);
+            List<TimetableChange> timetableChanges = new List<TimetableChange>();
+            foreach (var sge in SGEnrollments)
+            {
+                timetableChanges.AddRange(
+                    await context.TimetableChanges
+                    .Where(tch => tch.StudentGroupId == sge.StudentGroupId && tch.Week == week)
+                    .Include(tch => tch.CurrentSubjectInstance)
+                    .Include(tch => tch.CurrentSubjectInstance.SubjectType)
+                    .Include(tch => tch.CurrentRoom)
+                    .Include(tch => tch.CurrentTeacher)
+                    .AsNoTracking()
+                    .ToListAsync()
+                    );
+            }
+            return timetableChanges.ToArray();
+        }
+        public async Task<TimetableChange[]> GetAllTimetableChangesByTeacher(int teacherId, int week)
+        {
+            List<TimetableChange> timetableChanges = new List<TimetableChange>();
+            var subjectInstances = await context.GetService<SubjectService>().GetAllSubjectInstancesByTeacherAsync(teacherId);
+            foreach (var si in subjectInstances)
+            {
+                timetableChanges.AddRange(
+                    await context.TimetableChanges
+                    .Where(tch => (tch.CurrentTeacherId == teacherId || tch.SubjectInstanceId == si.Id) && tch.Week == week)
+                    .Include(tch => tch.CurrentSubjectInstance)
+                    .Include(tch => tch.CurrentSubjectInstance.Enrollments)
+                        .ThenInclude(e => e.StudentGroup)
+                    .Include(tch => tch.CurrentSubjectInstance.SubjectType)
+                    .Include(tch => tch.CurrentRoom)
+                    .Include(tch => tch.StudentGroup)
+                    .AsNoTracking()
+                    .ToListAsync()
+                    );
+            }
 
+            return timetableChanges.Distinct().ToArray();
+        }
         public async Task<TimetableChange[]> GetTimetableChanges(Expression<Func<TimetableChange, bool>> expression)
             => await context.TimetableChanges.Where(expression).AsNoTracking().ToArrayAsync();
 

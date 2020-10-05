@@ -7,9 +7,11 @@
     string[] days = { "Pondělí", "Úterý", "Středa", "Čtvrtek", "Pátek" };
     System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("cs-CZ");
     DateTime firstDayOfTermStartWeek = Model.TermStart.AddDays(-(int)Model.TermStart.DayOfWeek);
+    DateTime firstDayOfThisWeek = firstDayOfTermStartWeek.AddDays((Model.Timetable.Week * 7) + 1);
 }
+<h1>Můj rozvrh</h1>
 <p class="table-heading">
-    Týden @firstDayOfTermStartWeek.AddDays((Model.Timetable.Week * 7) + 1).ToShortDateString() - @firstDayOfTermStartWeek.AddDays((Model.Timetable.Week + 1) * 7).ToShortDateString()
+    Týden @firstDayOfThisWeek.ToShortDateString() - @firstDayOfThisWeek.AddDays(7).ToShortDateString()
 </p>
 @if (Model.DisplayModeRow == null || Model.DisplayModeRow == false)
 {
@@ -18,13 +20,13 @@
         @for (int i = 0; i < Model.TimeFramesByDay.Length; i++)
         {
             <div class="tt-day-group">
-                <div class="timeframe-day">@days[i]</div>
+                <div class="timeframe-day">@days[i]<br><small>@firstDayOfThisWeek.AddDays(i).ToString("d. M.")</small></div>
 
                 @foreach (var tf in Model.TimeFramesByDay[i])
                 {
-                    if (tf.LessonRecord != null)
+                    if (tf.TimetableChange != null)
                     {
-                        if (tf.LessonRecord.Canceled)
+                        if ((bool)tf.TimetableChange.Canceled)
                         {
                             <div class="timeframe timeframe-change">
                                 @tf.Start.ToString("h:mm") - @tf.End.ToString("h:mm")<br>
@@ -33,14 +35,20 @@
                                 </strong><br>
                             </div>
                         }
-                        else if (tf.LessonRecord.CurrentSubjectInstanceId != null)
+                        else
                         {
+                            var subjectInstance = tf.TimetableChange.CurrentSubjectInstance;
+                            subjectInstance ??= tf.TimetableRecord.SubjectInstance;
+                            var room = tf.TimetableChange.CurrentRoom;
+                            room ??= tf.TimetableRecord.Room;
+                            var teacher = tf.TimetableChange.CurrentTeacher;
+                            teacher ??= tf.TimetableRecord.SubjectInstance.Teacher;
                             <div class="timeframe timeframe-change">
                                 @tf.Start.ToString("h:mm") - @tf.End.ToString("h:mm")<br>
                                 <strong>
-                                    @($"{LanguageHelper.getShorterString(tf.LessonRecord.CurrentSubjectInstance.SubjectType.Name, 99)}")
+                                    @($"{LanguageHelper.getShorterString(subjectInstance.SubjectType.Name, 99)}")
                                 </strong><br>
-                                @($"{tf.TimetableRecord.Room.Name} - {tf.LessonRecord.CurrentTeacher.LastName}")<br>
+                                @($"{room.Name} - {teacher.LastName}")<br>
                             </div>
                         }
                     }
@@ -73,11 +81,39 @@ else
         @for (int i = 0; i < Model.TimeFramesByDay.Length; i++)
         {
             <div class="tt-day-group d-flex flex-row">
-                <div class="timeframe-day tt-width-5">@days[i]</div>
+                <div class="timeframe-day tt-width-5">@days[i]<br><small>@firstDayOfThisWeek.AddDays(i).ToString("d. M.")</small></div>
 
                 @foreach (var tf in Model.TimeFramesByDay[i])
                 {
-                    if (tf.TimetableRecord != null)
+                    if (tf.TimetableChange != null)
+                    {
+                        if ((bool)tf.TimetableChange.Canceled)
+                        {
+                            <div class="timeframe tt-width-5 timeframe-change">
+                                @tf.Start.ToString("h:mm") - @tf.End.ToString("h:mm")<br>
+                                <strong>
+                                    Volno
+                                </strong><br>
+                            </div>
+                        }
+                        else
+                        {
+                            var subjectInstance = tf.TimetableChange.CurrentSubjectInstance;
+                            subjectInstance ??= tf.TimetableRecord.SubjectInstance;
+                            var room = tf.TimetableChange.CurrentRoom;
+                            room ??= tf.TimetableRecord.Room;
+                            var teacher = tf.TimetableChange.CurrentTeacher;
+                            teacher ??= tf.TimetableRecord.SubjectInstance.Teacher;
+                            <div class="timeframe tt-width-5 timeframe-change">
+                                @tf.Start.ToString("h:mm") - @tf.End.ToString("h:mm")<br>
+                                <strong>
+                                    @($"{LanguageHelper.getShorterString(subjectInstance.SubjectType.Name, 99)}")
+                                </strong><br>
+                                @($"{room.Name} - {teacher.LastName}")<br>
+                            </div>
+                        }
+                    }
+                    else if (tf.TimetableRecord != null)
                     {
                         var si = tf.TimetableRecord.SubjectInstance;
                         <div class="timeframe tt-width-5">

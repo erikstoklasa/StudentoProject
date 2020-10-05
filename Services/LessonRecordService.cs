@@ -42,7 +42,18 @@ namespace SchoolGradebook.Services
             }
             return output;
         }
-
+        public async Task<List<LessonRecord>> GetLessonRecordsByTeacherAndWeek(int teacherId, int week)
+        {
+            List<SubjectInstance> subjectInstances = await context.GetService<SubjectService>().GetAllSubjectInstancesByTeacherAsync(teacherId);
+            List<LessonRecord> output = new List<LessonRecord>();
+            foreach (var si in subjectInstances)
+            {
+                output.AddRange(await context.LessonRecords.Where(lr => lr.SubjectInstanceId == si.Id && lr.Week == week)
+                                                           .AsNoTracking()
+                                                           .ToListAsync());
+            }
+            return output;
+        }
 
         public async Task<LessonRecord> GetFullLessonRecordById(int id)
             => await context.LessonRecords.Where(r => r.Id == id).AsNoTracking()

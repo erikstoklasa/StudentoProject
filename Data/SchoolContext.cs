@@ -58,7 +58,7 @@ namespace SchoolGradebook.Data
             modelBuilder.Entity<LessonRecord>().ToTable("LessonRecords");
             modelBuilder.Entity<AttendanceRecord>().ToTable("AttendanceRecords");
             modelBuilder.Entity<TimetableRecord>().ToTable("TimetableRecords").HasIndex(tr => tr.TimeFrameId).IsUnique(false);
-            modelBuilder.Entity<TimetableChange>().ToTable("TimetableChanges");
+            modelBuilder.Entity<TimetableChange>().ToTable("TimetableChanges").HasIndex(tr => tr.TimeFrameId).IsUnique(false);
 
             foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             {

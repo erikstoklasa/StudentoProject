@@ -32,7 +32,7 @@ namespace SchoolGradebook.Pages.Teacher
         public List<TimeFrame>[] TimeFramesByDay { get; set; }
         public List<StudentGroup> StudentGroups { get; set; }
         [BindProperty(SupportsGet = true)]
-        public bool? DisplayModeRow { get; set; }
+        public bool? DisplayModeRow { get; set; } = true;
         public DateTime TermStart { get; set; }
         public async Task OnGetAsync()
         {

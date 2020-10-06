@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore.Metadata;
 using SchoolGradebook.Models;
 using SchoolGradebook.Services;
 
@@ -33,12 +34,13 @@ namespace SchoolGradebook.Pages.Student
         public List<TimeFrame>[] TimeFramesByDay { get; set; }
         [BindProperty(SupportsGet = true)]
         public bool? DisplayModeRow { get; set; }
+        public int WeekInTerm { get; set; }
         public async Task OnGetAsync()
         {
             StudentId = await studentService.GetStudentId(UserId);
             TermStart = DateTime.Parse("01/09/2020");
-            int weekInTerm = (DateTime.Now.DayOfYear - (TermStart.DayOfYear - (int)TermStart.DayOfWeek)) / 7;
-            Timetable = await timetableManager.GetTimetableForStudent(StudentId, weekInTerm);
+            WeekInTerm = (DateTime.Now.DayOfYear - (TermStart.DayOfYear - (int)TermStart.DayOfWeek)) / 7;
+            Timetable = await timetableManager.GetTimetableForStudent(StudentId, WeekInTerm);
             TimeFrame tf;
             for (int i = 0; i < Timetable.TimeFrames.Count; i++)
             {

@@ -21,7 +21,7 @@ namespace SchoolGradebook.Services
             => await context.TimetableChanges.AsNoTracking().ToArrayAsync();
         public async Task<TimetableChange[]> GetAllTimetableChangesByStudent(int studentId, int week)
         {
-            var SGEnrollments = await context.GetService<StudentGroupService>().GetAllGroupEnrollmentsByStudentAsync(studentId);
+            List<StudentGroupEnrollment> SGEnrollments = await context.GetService<StudentGroupService>().GetAllGroupEnrollmentsByStudentAsync(studentId);
             List<TimetableChange> timetableChanges = new List<TimetableChange>();
             foreach (var sge in SGEnrollments)
             {
@@ -41,7 +41,7 @@ namespace SchoolGradebook.Services
         public async Task<TimetableChange[]> GetAllTimetableChangesByTeacher(int teacherId, int week)
         {
             List<TimetableChange> timetableChanges = new List<TimetableChange>();
-            var subjectInstances = await context.GetService<SubjectService>().GetAllSubjectInstancesByTeacherAsync(teacherId);
+            List<SubjectInstance> subjectInstances = await context.GetService<SubjectService>().GetAllSubjectInstancesByTeacherAsync(teacherId);
             foreach (var si in subjectInstances)
             {
                 timetableChanges.AddRange(

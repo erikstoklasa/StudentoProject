@@ -11,7 +11,7 @@
 }
 <h1>Můj rozvrh</h1>
 <p class="table-heading">
-    Týden @firstDayOfThisWeek.ToShortDateString() - @firstDayOfThisWeek.AddDays(7).ToShortDateString() (@Model.WeekInTerm.)
+    Týden @firstDayOfThisWeek.ToShortDateString() - @firstDayOfThisWeek.AddDays(7).ToShortDateString() (@Model.WeekInTerm.) (@Model.Timetable.Week.)
 </p>
 @if (Model.DisplayModeRow == null || Model.DisplayModeRow == false)
 {
@@ -136,6 +136,8 @@ else
         }
     </div>
 }
+Debug info:
+<br>
 <span>BYDAY</span>
 <ul>
     @foreach (var tfList in Model.TimeFramesByDay)
@@ -149,7 +151,7 @@ else
         }
     }
 </ul>
-<span>BYDAY</span>
+<span>TFALL</span>
 <ul>
     @foreach (var tf in Model.Timetable.TimeFrames)
     {

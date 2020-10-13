@@ -206,7 +206,17 @@ namespace SchoolGradebook.Data
                     context.StudentGroups.Add(group);
                 context.SaveChanges();
             }
-
+            //TimetableChanges
+            if (!context.TimetableChanges.Any())
+            {
+                List<TimetableChange> timetableChanges = new List<TimetableChange>();
+                for (int i = 0; i < 20; i++)
+                {
+                    timetableChanges.Add(new TimetableChange() { SubjectInstanceId = r.Next(1, 8), StudentGroupId = r.Next(1, 3), Week = r.Next(1, 11), TimeFrameId = r.Next(1, 36), Canceled = r.Next(1, 3) == 1 });
+                }
+                context.TimetableChanges.AddRange(timetableChanges);
+                context.SaveChanges();
+            }
             //StudentGroupEnrollments
             if (!context.StudentGroupEnrollments.Any())
             {

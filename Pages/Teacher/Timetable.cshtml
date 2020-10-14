@@ -29,7 +29,7 @@
                         if ((bool)tf.TimetableChange.Canceled)
                         {
                             <div class="timeframe timeframe-change">
-                                @tf.Start.ToString("h:mm") - @tf.End.ToString("h:mm")<br>
+                                @tf.Start.ToString("HH:mm") - @tf.End.ToString("HH:mm")<br>
                                 <strong>
                                     Volno
                                 </strong><br>
@@ -43,7 +43,7 @@
                             room ??= tf.TimetableRecord.Room;
                             var studentGroup = tf.TimetableChange.StudentGroup;
                             <div class="timeframe timeframe-change">
-                                @tf.Start.ToString("h:mm") - @tf.End.ToString("h:mm")<br>
+                                @tf.Start.ToString("HH:mm") - @tf.End.ToString("HH:mm")<br>
                                 <strong>
                                     @($"{LanguageHelper.getShorterString(subjectInstance.SubjectType.Name, 99)}")
                                 </strong><br>
@@ -66,7 +66,7 @@
                     {
                         var si = tf.TimetableRecord.SubjectInstance;
                         <div class="timeframe">
-                            @tf.Start.ToString("h:mm") - @tf.End.ToString("h:mm")<br>
+                            @tf.Start.ToString("HH:mm") - @tf.End.ToString("HH:mm")<br>
                             <strong>
                                 @(LanguageHelper.getShorterString(si.SubjectType.Name, 99))
                             </strong><br>
@@ -80,7 +80,7 @@
                     else
                     {
                         <div class="timeframe timeframe-blank">
-                            @tf.Start.ToString("h:mm") - @tf.End.ToString("h:mm")
+                            @tf.Start.ToString("HH:mm") - @tf.End.ToString("HH:mm")
                         </div>
                     }
 
@@ -104,7 +104,7 @@ else
                         if ((bool)tf.TimetableChange.Canceled)
                         {
                             <div class="timeframe tt-width-5 timeframe-change">
-                                @tf.Start.ToString("h:mm") - @tf.End.ToString("h:mm")<br>
+                                @tf.Start.ToString("HH:mm") - @tf.End.ToString("HH:mm")<br>
                                 <strong>
                                     Volno
                                 </strong><br>
@@ -118,7 +118,7 @@ else
                             room ??= tf.TimetableRecord.Room;
                             var studentGroup = tf.TimetableChange.StudentGroup;
                             <div class="timeframe tt-width-5 timeframe-change">
-                                @tf.Start.ToString("h:mm") - @tf.End.ToString("h:mm")<br>
+                                @tf.Start.ToString("HH:mm") - @tf.End.ToString("HH:mm")<br>
                                 <strong>
                                     @($"{LanguageHelper.getShorterString(subjectInstance.SubjectType.Name, 99)}")
                                 </strong><br>
@@ -141,7 +141,7 @@ else
                     {
                         var si = tf.TimetableRecord.SubjectInstance;
                         <div class="timeframe tt-width-5">
-                            @tf.Start.ToString("h:mm") - @tf.End.ToString("h:mm")<br>
+                            @tf.Start.ToString("HH:mm") - @tf.End.ToString("HH:mm")<br>
                             <strong>
                                 @(LanguageHelper.getShorterString(si.SubjectType.Name, 99))
                             </strong><br>
@@ -155,7 +155,7 @@ else
                     else
                     {
                         <div class="timeframe timeframe-blank tt-width-5">
-                            @tf.Start.ToString("h:mm") - @tf.End.ToString("h:mm")
+                            @tf.Start.ToString("HH:mm") - @tf.End.ToString("HH:mm")
                         </div>
                     }
 

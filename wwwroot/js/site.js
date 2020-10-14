@@ -1,7 +1,6 @@
 ﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 document.addEventListener('DOMContentLoaded', (event) => {
     //Search
-    console.log("dom loaded");
     var searchUsers = document.querySelector('#search'),
         users = document.querySelectorAll('tbody tr'),
         usersData = document.querySelectorAll('.search-data'),
@@ -22,9 +21,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     //Timetable string shortener
     let elements = document.querySelectorAll(".timeframe strong");
-    console.log(elements);
     let width = document.documentElement.clientWidth;
-    console.log(width);
     let displayModeRow = document.querySelector("#displayModeRow");
     function truncate(str, n) {
         return (str.length > n) ? str.substr(0, n - 1) + '..' : str;
@@ -37,7 +34,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
             } else {
                 string = truncate(string, 11);
             }
-            console.log(string);
             elements[i].textContent = string;
         }
     } else {
@@ -48,7 +44,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
             } else {
                 string = truncate(string, 20);
             }
-            console.log(string);
             elements[i].textContent = string;
         }
     }

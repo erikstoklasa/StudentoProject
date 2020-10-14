@@ -18,6 +18,7 @@ namespace SchoolGradebook.Pages.Student
         private readonly StudentService studentService;
         public string UserId { get; set; }
         public int StudentId { get; set; }
+        public System.Globalization.CultureInfo Provider { get; set; }
         public TimetableModel(IHttpContextAccessor httpContextAccessor, TimetableManager timetableManager, StudentService studentService)
         {
             this.timetableManager = timetableManager;
@@ -28,6 +29,7 @@ namespace SchoolGradebook.Pages.Student
             {
                 TimeFramesByDay[i] = new List<TimeFrame>();
             }
+            Provider = System.Globalization.CultureInfo.InvariantCulture;
         }
         public Timetable Timetable { get; set; }
         public DateTime TermStart { get; set; }
@@ -38,7 +40,7 @@ namespace SchoolGradebook.Pages.Student
         public async Task OnGetAsync()
         {
             StudentId = await studentService.GetStudentId(UserId);
-            TermStart = DateTime.Parse("01/09/2020");
+            TermStart = DateTime.ParseExact("01/09/2020", "dd/MM/yyyy", Provider);
             WeekInTerm = (DateTime.Now.DayOfYear - (TermStart.DayOfYear - (int)TermStart.DayOfWeek)) / 7;
             Timetable = await timetableManager.GetTimetableForStudent(StudentId, WeekInTerm);
             TimeFrame tf;

@@ -136,28 +136,3 @@ else
         }
     </div>
 }
-Debug info:
-<br>
-<span>BYDAY</span>
-<ul>
-    @foreach (var tfList in Model.TimeFramesByDay)
-    {
-        foreach (var tf in tfList)
-        {
-            if (tf.TimetableChange != null)
-            {
-                <li>TimeFrame Id: @tf.Id Canceled: @tf.TimetableChange.Canceled</li>
-            }
-        }
-    }
-</ul>
-<span>TFALL</span>
-<ul>
-    @foreach (var tf in Model.Timetable.TimeFrames)
-    {
-        if (tf.TimetableChange != null)
-        {
-            <li>TimeFrame Id: @tf.Id Canceled: @tf.TimetableChange.Canceled</li>
-        }
-    }
-</ul>

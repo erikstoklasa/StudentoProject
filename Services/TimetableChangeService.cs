@@ -60,6 +60,27 @@ namespace SchoolGradebook.Services
 
             return timetableChanges.Distinct().ToArray();
         }
+        public async Task<List<TimetableChange>> GetAllTimetableChangesByTeacherUntilThisWeek(int teacherId, int thisWeek)
+        {
+            List<TimetableChange> timetableChanges = new List<TimetableChange>();
+            List<SubjectInstance> subjectInstances = await context.GetService<SubjectService>().GetAllSubjectInstancesByTeacherAsync(teacherId);
+            foreach (var si in subjectInstances)
+            {
+                timetableChanges.AddRange(
+                    await context.TimetableChanges
+                    .Where(tch => (tch.CurrentTeacherId == teacherId || tch.SubjectInstanceId == si.Id) && tch.Week <= thisWeek)
+                    .Include(tch => tch.CurrentSubjectInstance.Enrollments)
+                        .ThenInclude(e => e.StudentGroup)
+                    .Include(tch => tch.CurrentSubjectInstance.SubjectType)
+                    .Include(tch => tch.CurrentRoom)
+                    .Include(tch => tch.StudentGroup)
+                    .AsNoTracking()
+                    .ToListAsync()
+                    );
+            }
+
+            return timetableChanges.Distinct().ToList();
+        }
         public async Task<TimetableChange[]> GetTimetableChanges(Expression<Func<TimetableChange, bool>> expression)
             => await context.TimetableChanges.Where(expression).AsNoTracking().ToArrayAsync();
 

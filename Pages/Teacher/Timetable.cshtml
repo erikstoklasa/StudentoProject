@@ -164,4 +164,35 @@ else
         }
     </div>
 }
+<h2 class="mt-4">Nezapsané hodiny<span class="badge badge-pill badge-warning ml-3">@Model.LessonRecords.Count()</span></h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Předmět
+            </th>
+            <th>
+                Datum (čas)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody class="table-white">
+        @foreach (var lr in Model.LessonRecords)
+        {
+            <tr>
+                <td>
+                    @lr.SubjectInstanceId 
+                </td>
+                <td>
+                    @lr.TimeFrameId (@(lr.Week))
+                </td>
+                <td>
+                    <a asp-page="/Teacher/LessonRecords/Index" asp-route-subjectInstanceId="@lr.SubjectInstanceId" asp-route-week="@lr.Week" asp-route-timeFrameId="@lr.TimeFrameId" class="btn btn-primary">Zapsat hodinu</a>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
 

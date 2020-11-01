@@ -48,7 +48,10 @@ namespace SchoolGradebook.Services
         }
         public async Task<List<StudentGroup>> GetAllGroupsBySubjectInstanceAsync(int subjectInstanceId)
         {
-            var enrollments = await context.Enrollments.Where(e => e.SubjectInstanceId == subjectInstanceId).Include(e => e.StudentGroup).AsNoTracking().ToListAsync();
+            var enrollments = await context.Enrollments.Where(e => e.SubjectInstanceId == subjectInstanceId)
+                .Include(e => e.StudentGroup)
+                .AsNoTracking()
+                .ToListAsync();
             var studentGroups = new List<StudentGroup>();
             foreach (var e in enrollments)
             {

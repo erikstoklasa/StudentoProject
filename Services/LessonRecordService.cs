@@ -54,12 +54,37 @@ namespace SchoolGradebook.Services
             }
             return output;
         }
+        public async Task<List<LessonRecord>> GetAllLessonRecordsByTeacher(int teacherId)
+        {
+            List<SubjectInstance> subjectInstances = await context.SubjectInstances
+                .Where(si => si.TeacherId == teacherId)
+                .AsNoTracking()
+                .ToListAsync();
+            List<LessonRecord> output = new List<LessonRecord>();
+            foreach (var si in subjectInstances)
+            {
+                output.AddRange(await context.LessonRecords.Where(lr => lr.SubjectInstanceId == si.Id)
+                                                           .AsNoTracking()
+                                                           .ToListAsync());
+            }
+            return output;
+        }
 
         public async Task<LessonRecord> GetFullLessonRecordById(int id)
             => await context.LessonRecords.Where(r => r.Id == id).AsNoTracking()
                 .Include(r => r.TimeFrame)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
+        public async Task<LessonRecord> GetLessonRecord(int week, int subjectInstanceId, int timeFrameId)
+        {
+            return await context.LessonRecords
+                       .Where(r => r.Week == week && r.SubjectInstanceId == subjectInstanceId && r.TimeFrameId == timeFrameId)
+                       .Include(r => r.TimeFrame)
+                       .Include(r => r.SubjectInstance)
+                       .ThenInclude(si => si.SubjectType)
+                       .AsNoTracking()
+                       .FirstOrDefaultAsync();
+        }
 
         public async Task AddLessonRecord(LessonRecord record)
         {

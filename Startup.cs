@@ -72,6 +72,7 @@ namespace SchoolGradebook
             services.AddTransient<SchoolService>();
             services.AddTransient<AdminService>();
             services.AddTransient<TimetableChangeService>();
+            services.AddTransient<AttendanceService>();
 
             services.AddRazorPages().AddRazorPagesOptions(options =>
             {

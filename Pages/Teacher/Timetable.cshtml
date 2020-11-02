@@ -164,4 +164,42 @@ else
         }
     </div>
 }
+<h2 class="mt-4">Nezapsané hodiny<small><span class="badge badge-pill badge-warning ml-3">@Model.LessonRecords.Count()</span></small></h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Předmět
+            </th>
+            <th>
+                Datum (čas)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody class="table-white">
+        @foreach (var lr in Model.LessonRecords)
+        {
+            <tr>
+                <td>
+                    @lr.SubjectInstance.GetFullName()
+                </td>
+                <td>
+                    @getDateString((int)lr.Week, (int)lr.TimeFrame.DayOfWeek) @($"({lr.TimeFrame.Start:HH:mm} - {lr.TimeFrame.End:HH:mm})")
+                </td>
+                <td>
+                    <a asp-page="/Teacher/LessonRecords/Index" asp-route-subjectInstanceId="@lr.SubjectInstanceId" asp-route-week="@lr.Week" asp-route-timeFrameId="@lr.TimeFrameId" class="btn btn-primary">Zapsat hodinu</a>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+@{
+    string getDateString(int week, int dayOfWeek)
+    {
+        return firstDayOfTermStartWeek.AddDays((double)(((week - 1) * 7) + dayOfWeek)).ToString("dddd, dd. MM.");
+    }
+}
+   
 

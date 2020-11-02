@@ -1,0 +1,84 @@
+﻿@page
+@model SchoolGradebook.Pages.Teacher.LessonRecords.IndexModel
+@using System.Globalization;
+@{
+    ViewData["Title"] = "Zápis hodiny";
+    System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("cs-CZ");
+    List<string> subjectGroupNames = new List<string>();
+    if (Model.StudentGroups != null)
+    {
+        foreach (var sg in Model.StudentGroups)
+        {
+            subjectGroupNames.Add(sg.Name);
+        }
+    }
+    DateTime firstDayOfTermStartWeek = DateTime.ParseExact("01/09/2020", "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+    firstDayOfTermStartWeek = firstDayOfTermStartWeek.AddDays(-(int)firstDayOfTermStartWeek.DayOfWeek);
+    string dateOutput = firstDayOfTermStartWeek.AddDays((double)(((Model.Week - 1) * 7) + (int)Model.LessonRecord.TimeFrame.DayOfWeek)).ToString("dddd, dd. MM.");
+}
+<div class="main-container">
+    <div class="side-pane box-shadow">
+        <a class="btn btn-outline-primary" asp-page="/Teacher/Timetable"><img src="~/images/back.png" alt="Přidat" height="18px" class="btn-icon" />Zpět</a>
+        <button class="btn btn-primary" id="btn_submit"><img src="~/images/edit.png" alt="Upravit" height="18px" class="btn-icon" />Upravit</button>
+    </div>
+    <div class="d-flex flex-column flex-grow-1 mt-3 mt-lg-0">
+        <div id="alert"></div>
+        <h2>@($"{Model.LessonRecord.SubjectInstance.SubjectType.Name}, {String.Join(",", subjectGroupNames)}")</h2>
+        <h4>@($"{dateOutput} | {@Model.LessonRecord.TimeFrame.Start:HH:mm} - {@Model.LessonRecord.TimeFrame.End:HH:mm}")</h4>
+        <form>
+            <div class="form-group">
+                <label>Téma hodiny</label>
+                <textarea class="form-control" id="lessonDescription">@Model.LessonRecord.Description</textarea>
+            </div>
+            @Html.AntiForgeryToken()
+            <input type="hidden" id="week" value="@Model.Week" />
+            <input type="hidden" id="subjectInstanceId" value="@Model.SubjectInstanceId" />
+            <input type="hidden" id="timeFrameId" value="@Model.TimeframeId" />
+        </form>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Jméno
+                    </th>
+                    <th>
+                        Příjmení
+                    </th>
+                    <th>
+                        Celková absence
+                    </th>
+                    <th>
+                        Přítomen/na
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="table-white">
+                @foreach (var item in Model.Students)
+                {
+                    <tr>
+                        <td>
+                            @item.FirstName
+                        </td>
+                        <td>
+                            @item.LastName
+                        </td>
+                        <td>
+                        </td>
+                        <td class="d-flex">
+                            <label class="checkbox-container">
+                                <input type="checkbox" student-id="@item.Id" class="absence-checkbox"
+                                       @if (Model.LessonRecord.Attendance != null && Model.LessonRecord.Attendance.Where(a => a.StudentId == item.Id).Any()) { <text> checked</text> ; } />
+                                <span class="checkmark"></span>
+                            </label>
+
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+@section Scripts {
+    <script src="~/js/LessonRecordSubmit.js"></script>
+}

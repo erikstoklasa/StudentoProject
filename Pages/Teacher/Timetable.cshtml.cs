@@ -36,6 +36,7 @@ namespace SchoolGradebook.Pages.Teacher
         [BindProperty(SupportsGet = true)]
         public bool? DisplayModeRow { get; set; } = true;
         public DateTime TermStart { get; set; }
+        public List<LessonRecord> LessonRecords { get; set; }
         public async Task OnGetAsync()
         {
             TeacherId = await teacherService.GetTeacherId(UserId);
@@ -44,6 +45,7 @@ namespace SchoolGradebook.Pages.Teacher
             int weekInTerm = (DateTime.Now.DayOfYear - (TermStart.DayOfYear - (int)TermStart.DayOfWeek)) / 7;
 
             Timetable = await timetableManager.GetTimetableForTeacher(TeacherId, weekInTerm);
+            LessonRecords = await timetableManager.GetLessonRecordsNeededToBeCompleted(TeacherId, DateTime.Now);
             TimeFrame tf;
             for (int i = 0; i < Timetable.TimeFrames.Count; i++)
             {

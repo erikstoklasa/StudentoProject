@@ -20,13 +20,30 @@ namespace SchoolGradebook.Services
             => this.context = context;
 
         public async Task<TimetableRecord[]> GetAllTimetableRecords()
-            => await context.TimetableRecords.AsNoTracking().AsNoTracking().ToArrayAsync();
+        {
+            return await context.TimetableRecords
+                .Include(tr => tr.SubjectInstance)
+                .Include(tr => tr.SubjectInstance.Teacher)
+                .Include(tr => tr.SubjectInstance.SubjectType)
+                .Include(tr => tr.Room)
+                .AsNoTracking()
+                .ToArrayAsync();
+        }
 
         public async Task<TimetableRecord[]> GetTimetableRecords(Expression<Func<TimetableRecord, bool>> expression)
             => await context.TimetableRecords.Where(expression).AsNoTracking().ToArrayAsync();
 
         public async Task<TimetableRecord[]> GetTimetableRecordsBySubjectInstanceIdAsync(int id)
-            => await GetTimetableRecords(tr => tr.SubjectInstance.Id == id);
+        {
+            return await context.TimetableRecords
+                .Where(tr => tr.SubjectInstanceId == id)
+                .Include(tr => tr.SubjectInstance)
+                .Include(tr => tr.SubjectInstance.Teacher)
+                .Include(tr => tr.SubjectInstance.SubjectType)
+                .Include(tr => tr.Room)
+                .AsNoTracking()
+                .ToArrayAsync();
+        }
 
         public async Task<TimetableRecord[]> GetTimetableRecordsByRoomId(int id)
             => await GetTimetableRecords(tr => tr.RoomId == id);
@@ -40,15 +57,24 @@ namespace SchoolGradebook.Services
         public async Task<List<TimetableRecord>> GetTimetableRecordsByStudentId(int id)
         {
             var output = new List<TimetableRecord>();
-            foreach (var subj in await context.GetService<SubjectService>().GetAllSubjectInstancesByStudentAsync(id))
+            TimetableRecord[] trAll = await GetAllTimetableRecords();
+            foreach (var subjectInstance in await context.GetService<SubjectService>().GetAllSubjectInstancesByStudentAsync(id))
             {
-                output.AddRange(await GetTimetableRecordsBySubjectInstanceIdAsync(subj.Id));
+                output.AddRange(trAll.Where(tr => tr.SubjectInstanceId == subjectInstance.Id));
             }
             return output;
         }
         public async Task<TimetableRecord[]> GetTimetableRecordsByTeacher(int id)
         {
-            return await context.TimetableRecords.Where(tr => tr.SubjectInstance.TeacherId == id).Include(tr => tr.SubjectInstance.Enrollments).AsNoTracking().ToArrayAsync();
+            return await context.TimetableRecords.Where(tr => tr.SubjectInstance.TeacherId == id)
+                .Include(tr => tr.Room)
+                .Include(tr => tr.SubjectInstance)
+                .Include(tr => tr.SubjectInstance.SubjectType)
+                .Include(tr => tr.SubjectInstance.Enrollments)
+                .ThenInclude(e => e.StudentGroup)
+                .Include(tr => tr.TimeFrame)
+                .AsNoTracking()
+                .ToArrayAsync();
         }
 
         public async Task<TimetableRecord> GetTimetableRecordById(int id)

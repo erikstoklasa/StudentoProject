@@ -55,7 +55,7 @@ namespace SchoolGradebook.Data
             modelBuilder.Entity<StudentGroupEnrollment>().ToTable("StudentGroupEnrollments");
             modelBuilder.Entity<TimeFrame>().ToTable("TimeFrames");
             modelBuilder.Entity<Room>().ToTable("Rooms");
-            modelBuilder.Entity<LessonRecord>().ToTable("LessonRecords");
+            modelBuilder.Entity<LessonRecord>().ToTable("LessonRecords").HasIndex(tr => tr.TimeFrameId).IsUnique(false);
             modelBuilder.Entity<AttendanceRecord>().ToTable("AttendanceRecords");
             modelBuilder.Entity<TimetableRecord>().ToTable("TimetableRecords").HasIndex(tr => tr.TimeFrameId).IsUnique(false);
             modelBuilder.Entity<TimetableChange>().ToTable("TimetableChanges").HasIndex(tr => tr.TimeFrameId).IsUnique(false);

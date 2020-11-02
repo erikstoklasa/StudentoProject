@@ -63,9 +63,10 @@ namespace SchoolGradebook.Services
             List<LessonRecord> output = new List<LessonRecord>();
             foreach (var si in subjectInstances)
             {
-                output.AddRange(await context.LessonRecords.Where(lr => lr.SubjectInstanceId == si.Id)
-                                                           .AsNoTracking()
-                                                           .ToListAsync());
+                output.AddRange(await context.LessonRecords
+                    .Where(lr => lr.SubjectInstanceId == si.Id)
+                    .AsNoTracking()
+                    .ToListAsync());
             }
             return output;
         }

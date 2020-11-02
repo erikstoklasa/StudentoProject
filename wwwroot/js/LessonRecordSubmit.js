@@ -5,7 +5,7 @@
     let week = parseInt(document.querySelector("#week").value);
     let subjectInstanceId = parseInt(document.querySelector("#subjectInstanceId").value);
     let timeFrameId = parseInt(document.querySelector("#timeFrameId").value);
-    let alertDiv = document.querySelector(".alert");
+    let alertDiv = document.querySelector("#alert");
     submitBtn.addEventListener("click", () => {
         let checkboxes = document.querySelectorAll(".absence-checkbox:checked");
         let absentStudentIds = [];
@@ -28,14 +28,14 @@
 
         xhr.onload = () => {
             if (xhr.status == 200) {
-                alertDiv.classList.remove("alert-danger");
+                alertDiv.classList.remove("alert alert-danger");
                 alertDiv.textContent = "Hodina byla úspěšně zapsána";
-                alertDiv.classList.add("alert-success");
+                alertDiv.classList.add("alert alert-success");
 
             } else {
-                alertDiv.classList.remove("alert-success");
+                alertDiv.classList.remove("alert alert-success");
                 alertDiv.textContent = "Chyba";
-                alertDiv.classList.add("alert-danger");
+                alertDiv.classList.add("alert alert-danger");
             }
         }
     });

@@ -62,7 +62,7 @@ namespace SchoolGradebook.Pages.Teacher.LessonRecords
                 }
 
                 StudentGroups = await studentGroupService.GetAllGroupsBySubjectInstanceAsync((int)SubjectInstanceId);
-                Students = (await studentService.GetAllStudentsBySubjectInstanceAsync((int)SubjectInstanceId)).ToList();
+                Students = (await studentService.GetAllStudentsBySubjectInstanceAsync((int)SubjectInstanceId)).OrderBy(s => s.LastName).ToList();
                 return Page();
             }
             else

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace SchoolGradebook.Models
 {
+#nullable enable
     public class LessonRecord
     {
         public int Id { set; get; }

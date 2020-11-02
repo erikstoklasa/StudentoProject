@@ -206,13 +206,15 @@ td img {
 .side-pane {
     display: flex;
     flex-direction: column;
-    width: 12rem;
-    height: 15rem;
     background: white;
-    padding: 1rem;
-    justify-content: space-around;
     border-radius: 5px;
+    height: max-content;
 }
+
+    .side-pane > * {
+        margin: 1rem;
+        width: auto;
+    }
 
 .navbar-toggler[aria-expanded='false'] .navbar-toggler-icon {
     background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgb(0, 0, 0)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
@@ -317,7 +319,7 @@ td img {
     border-radius: 5px;
     display: flex;
     height: 25px;
-    width: 25px;
+    width: 12ch;
     line-height: 22px;
     background-color: #28A228;
     justify-content: center;
@@ -332,7 +334,7 @@ td img {
 /* When the checkbox is checked, add a blue background */
 .checkbox-container input:checked ~ .checkmark {
     background-color: white;
-    border: 2px solid red;
+    border: 1px solid red;
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */
@@ -540,6 +542,11 @@ html {
         .main-container > div:nth-child(2) {
             padding-left: 50px !important;
         }
+
+    .side-pane {
+        max-width: 12rem;
+        flex-direction: column !important;
+    }
 }
 
 @media (min-width: 1120px) {
@@ -550,6 +557,11 @@ html {
 }
 
 @media (min-width: 576px) {
+    .side-pane {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
     .navbar-nav {
         border-radius: 0 0 1rem 1rem;
         padding: 0;

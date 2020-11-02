@@ -98,17 +98,19 @@ namespace SchoolGradebook.Services
         }
         public async Task<List<LessonRecord>> GetLessonRecordsNeededToBeCompleted(int teacherId, DateTime today)
         {
-            int thisWeek = today.Date.DayOfYear / 7;
+            DateTime TermStart = DateTime.ParseExact("01/09/2020", "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+            int thisWeek = (today.DayOfYear - (TermStart.DayOfYear - (int)TermStart.DayOfWeek)) / 7;
             List<TimetableRecord> timetableRecords = (await timetableRecordService.GetTimetableRecordsByTeacher(teacherId)).ToList();
             List<TimetableChange> timetableChanges =
                 await timetableChangeService.GetAllTimetableChangesByTeacherUntilThisWeek(teacherId, thisWeek);
             List<LessonRecord> completedLessonRecords = await lessonRecordService.GetAllLessonRecordsByTeacher(teacherId);
             List<LessonRecord> lessonRecordsToBeCompleted = new List<LessonRecord>();
             //Go through each timetable record and timetable change and check if there is a lesson record for that
-            foreach (var tr in timetableRecords)
+            for (int currWeek = 1; currWeek < thisWeek; currWeek++)
             {
-                for (int currWeek = 0; currWeek < thisWeek; currWeek++)
+                foreach (var tr in timetableRecords)
                 {
+
                     if (tr != null && (currWeek - tr.RecurrenceStart) >= 0 && (currWeek - tr.RecurrenceStart) % tr.Recurrence == 0)
                     {
                         IEnumerable<TimetableChange> thisWeeksChanges = timetableChanges.Where(tch => tch.Week == currWeek);
@@ -116,7 +118,7 @@ namespace SchoolGradebook.Services
                         {
                             //Implement timetableChanges to alter the output
                         }
-                        lessonRecordsToBeCompleted.Add(new LessonRecord() { SubjectInstanceId = tr.SubjectInstanceId, Week = currWeek, TimeFrameId = tr.TimeFrameId });
+                        lessonRecordsToBeCompleted.Add(new LessonRecord() { SubjectInstanceId = tr.SubjectInstanceId, Week = currWeek, TimeFrameId = tr.TimeFrameId, SubjectInstance = tr.SubjectInstance, TimeFrame = tr.TimeFrame });
                     }
                 }
             }

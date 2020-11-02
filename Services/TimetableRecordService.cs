@@ -72,6 +72,7 @@ namespace SchoolGradebook.Services
                 .Include(tr => tr.SubjectInstance.SubjectType)
                 .Include(tr => tr.SubjectInstance.Enrollments)
                 .ThenInclude(e => e.StudentGroup)
+                .Include(tr => tr.TimeFrame)
                 .AsNoTracking()
                 .ToArrayAsync();
         }

@@ -37,7 +37,7 @@ namespace SchoolGradebook.Pages.Student.Subjects
             foreach(SubjectInstance si in Subjects)
             {
                 //Update analytics method to use only studentId instead of UserID
-                double sAvg = await analytics.GetSubjectAverageForStudentAsync(UserId, si.Id);
+                double sAvg = await analytics.GetSubjectAverageForStudentAsync((int)studentId, si.Id);
                 string output = sAvg.CompareTo(double.NaN) == 0 ? "Žádné známky" : sAvg.ToString("f2");
                 SubjectAverages.Add(output);
             }

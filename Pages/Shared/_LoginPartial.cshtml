@@ -20,7 +20,7 @@
         int? studentId = await studentService.GetStudentId(UserId);
         if (studentId != null)
         {
-            Student s = await studentService.GetStudentAsync((int)studentId);
+            Student s = await studentService.GetStudentBasicInfoAsync((int)studentId);
             if (s != null)
             {
                 fullName = s.GetFullName();

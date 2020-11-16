@@ -9,10 +9,12 @@ using iText.Layout.Properties;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Logging;
 using SchoolGradebook.Models;
 using SchoolGradebook.Services;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -31,8 +33,9 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
         private readonly SubjectMaterialService subjectMaterialService;
         private readonly GradeService gradeService;
         private readonly StudentGroupService studentGroupService;
+        private readonly ILogger<DetailsModel> logger;
 
-        public DetailsModel(IHttpContextAccessor httpContextAccessor, Analytics analytics, TeacherAccessValidation teacherAccessValidation, TeacherService teacherService, StudentService studentService, SubjectService subjectService, SubjectMaterialService subjectMaterialService, GradeService gradeService, StudentGroupService studentGroupService)
+        public DetailsModel(IHttpContextAccessor httpContextAccessor, Analytics analytics, TeacherAccessValidation teacherAccessValidation, TeacherService teacherService, StudentService studentService, SubjectService subjectService, SubjectMaterialService subjectMaterialService, GradeService gradeService, StudentGroupService studentGroupService, ILogger<DetailsModel> logger)
         {
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             _analytics = analytics;
@@ -43,6 +46,7 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
             this.subjectMaterialService = subjectMaterialService;
             this.gradeService = gradeService;
             this.studentGroupService = studentGroupService;
+            this.logger = logger;
             StudentGrades = new List<List<Grade>>();
             SubjectMaterials = new List<SubjectMaterial>();
             StudentAverages = new List<double>();
@@ -57,6 +61,7 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
         public List<double> StudentAverages { get; set; }
         public List<List<Grade>> StudentGrades { get; set; }
         public List<string> StudentGroupNames { get; set; }
+        public double SubjectAvg { get; set; }
         public List<SubjectMaterial> SubjectMaterials { get; set; }
         public List<(Models.Student student, double studentAverage, List<Grade> studentGrades)> StudentsAndAverageAndGrades;
 
@@ -81,7 +86,7 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
             }
             SubjectMaterials = await subjectMaterialService.GetAllMaterialsBySubjectInstance(Subject.Id);
             Students = await studentService.GetAllStudentsBySubjectInstanceAsync(Subject.Id);
-
+            SubjectAvg = await _analytics.GetSubjectAverageAsync((int)id);
             foreach (Models.Student s in Students)
             {
                 StudentAverages.Add(await _analytics.GetSubjectAverageForStudentByStudentIdAsync(s.Id, Subject.Id));
@@ -100,6 +105,8 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
         }
         public async Task<IActionResult> OnGetPrintAsync(int? id)
         {
+            var timer = new Stopwatch();
+            timer.Start();
             int TeacherId = await teacherService.GetTeacherId(UserId);
             bool teacherHasAccessToSubject = await teacherAccessValidation.HasAccessToSubject(TeacherId, (int)id);
             if (!teacherHasAccessToSubject)
@@ -129,8 +136,6 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
             {
                 StudentGroupNames.Add(studentGroup.Name);
             }
-
-
             using MemoryStream stream = new MemoryStream();
             PdfDocument pdfDoc = new PdfDocument(new PdfWriter(stream));
             Document doc = new Document(pdfDoc);
@@ -138,12 +143,12 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
             //Image picture = new Image(ImageDataFactory.Create("wwwroot/images/girl.png"));
             //picture.ScaleToFit(100,150);
             //doc.Add(new Paragraph().Add(picture).SetHorizontalAlignment(HorizontalAlignment.RIGHT));
-            doc.Add(new Paragraph(Subject.GetFullName()).SetFont(defaultFont));
-            doc.Add(new Paragraph(String.Join(" + ", StudentGroupNames)).SetFont(defaultFont));
-            doc.Add(new Paragraph($"Počet studentů: {Students.Length}").SetFont(defaultFont));
-            Text t = new Text($"Aktuální k: {DateTime.UtcNow.ToLocalTime()}").SetFont(defaultFont);
+            doc.Add(new Paragraph(Subject.GetFullName())).SetFont(defaultFont).SetFont(defaultFont);
+            doc.Add(new Paragraph(String.Join(" + ", StudentGroupNames))).SetFont(defaultFont);
+            doc.Add(new Paragraph($"Počet studentů: {Students.Length}")).SetFont(defaultFont);
+            Text t = new Text($"Aktuální k: {DateTime.UtcNow.ToLocalTime()}");
             t.SetFontSize(10);
-            doc.Add(new Paragraph(t));
+            doc.Add(new Paragraph(t)).SetFont(defaultFont);
 
             Table table = new Table(UnitValue.CreatePercentArray(3)).UseAllAvailableWidth();
 
@@ -152,7 +157,7 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
             table.AddHeaderCell("Známky");
             foreach (var i in StudentsAndAverageAndGrades)
             {
-                table.AddCell(i.student.GetFullName()).SetFont(defaultFont);
+                table.AddCell(i.student.GetFullName());
                 table.AddCell(i.studentAverage.ToString("f2"));
                 List<float> onlyGradeValues = new List<float>();
                 foreach (var y in i.studentGrades)
@@ -166,8 +171,11 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
                 table.AddCell(gradesString);
             }
 
-            doc.Add(table);
+            doc.Add(table).SetFont(defaultFont);
             doc.Close();
+
+            timer.Stop();
+            logger.LogInformation($"Time taken generating:{timer.ElapsedMilliseconds}");
             return File(stream.ToArray(), "application/pdf", $"{Subject.GetFullName()} (výpis známek).pdf");
         }
     }

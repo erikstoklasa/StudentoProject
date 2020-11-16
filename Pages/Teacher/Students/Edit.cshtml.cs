@@ -42,7 +42,7 @@ namespace SchoolGradebook.Pages.Teacher.Students
                 return NotFound();
             }
 
-            Student = await studentService.GetStudentAsync((int)id);
+            Student = await studentService.GetStudentFullProfileAsync((int)id);
             if (Student == null)
             {
                 return NotFound();
@@ -90,19 +90,24 @@ namespace SchoolGradebook.Pages.Teacher.Students
             }
 
             bool updatedSuccessfully = await studentService.UpdateStudentAsync(Student);
+            Student = await studentService.GetStudentFullProfileAsync(Student.Id);
+            Classes = await classService.GetAllClasses();
+            foreach (Class c in Classes)
+            {
+                ClassesList.Add(new SelectListItem(c.GetName(), c.Id.ToString()));
+            }
             if (!updatedSuccessfully)
             {
-                Classes = await classService.GetAllClasses();
-                foreach (Class c in Classes)
-                {
-                    ClassesList.Add(new SelectListItem(c.GetName(), c.Id.ToString()));
-                }
                 ViewData["status_type"] = "error";
                 ViewData["status_message"] = "Nevyplnili jste všechny údaje správně.";
-                return Page();
+            }
+            else
+            {
+                ViewData["status_type"] = "success";
+                ViewData["status_message"] = "Profil byl úspěšně upraven.";
             }
 
-            return RedirectToPage("./Index");
+            return Page();
         }
     }
 }

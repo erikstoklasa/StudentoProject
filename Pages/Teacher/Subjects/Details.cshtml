@@ -14,49 +14,61 @@
     <div class="d-flex flex-column">
         <h1>@Model.Subject.SubjectType.Name</h1>
         <h5>@String.Join(" + ", Model.StudentGroupNames) </h5>
-        <h6>Počet studentů: @Model.Students.Length</h6>
         <div class="table-heading-group">
-            <p class="table-heading">Studenti</p>
+            <p class="table-heading">Studenti<span class="badge badge-pill badge-success ml-3">@Model.Students.Length</span></p>
             <div>
                 <a asp-page="" asp-page-handler="print" asp-route-id="@Model.Subject.Id" class="btn btn-outline-primary"><img src="~/images/print.svg" alt="Vytisknout" height="20px" class="btn-icon" />Tisk výpisu</a>
-                <a asp-page="./Grades" class="btn btn-primary">Známky</a>
+                <!--
+                    <a asp-page="./Grades" class="btn btn-primary">Známky</a>
+                -->
             </div>
         </div>
-        <table class="table table-responsive table-white">
-            <tbody>
-                @foreach (var i in Model.StudentsAndAverageAndGrades)
-                {
+        @if (Model.StudentsAndAverageAndGrades.Count > 0)
+        {
 
-                    <tr>
-                        <td>
-                            <a asp-page="/Teacher/Students/Details" asp-route-id="@i.student.Id">@i.student.GetFullName()</a>
-                        </td>
-                        <td>
-                            <strong>@($"{i.studentAverage:f2}")</strong>
-                        </td>
-                        <td>
-                            @for (int y = 0; y < i.studentGrades.Count; y++)
-                            {
-                                @i.studentGrades[y].Value
-                                if (y != i.studentGrades.Count - 1)
+
+            <table class="table table-responsive table-white">
+                <tbody>
+                    @foreach (var i in Model.StudentsAndAverageAndGrades)
+                    {
+
+                        <tr>
+                            <td>
+                                <a asp-page="/Teacher/Students/Details" asp-route-id="@i.student.Id">@i.student.GetFullName()</a>
+                            </td>
+                            <td>
+                                <strong>@($"{i.studentAverage:f2}")</strong>
+                            </td>
+                            <td>
+                                @for (int y = 0; y < i.studentGrades.Count; y++)
                                 {
-                                    @(",")
+                                    @i.studentGrades[y].Value
+                                    if (y != i.studentGrades.Count - 1)
+                                    {
+                                        @(",")
+                                    }
                                 }
-                            }
-                        </td>
-                        <td>
-                            <a asp-page="/Teacher/Grades/Create" asp-route-SubjectInstanceId="@Model.Subject.Id" asp-route-StudentId="@i.student.Id">Přidat známku</a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+                            </td>
+                            <td>
+                                <a asp-page="/Teacher/Grades/Create" asp-route-SubjectInstanceId="@Model.Subject.Id" asp-route-StudentId="@i.student.Id">Přidat známku</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p class="alert alert-dark">Zatím váš administrátor nepřidal/a žádné studenty 🙁</p>
+        }
         <!--Place for files-->
     </div>
     <div class="d-flex flex-column flex-wrap">
+        <h3 class="mt-2 mb-3">@($"Ø {Model.SubjectAvg:f2}")</h3>
+        <h5>Poslední aktivita 10.11. 2020</h5>
         <div class="table-heading-group">
-            <p class="table-heading">Materiály</p>
-            <a class="btn btn-primary" asp-page="Materials/Create" asp-route-SubjectInstanceId="@Model.Subject.Id"><img src="~/images/add.svg" alt="Přidat" height="18px" class="btn-icon" />Přidat materiál</a>
+            <p class="table-heading">Studijní materiály<span class="badge badge-pill badge-success ml-3">@Model.SubjectMaterials.Count</span></p>
+            <a class="btn btn-primary" asp-page="Materials/Create" asp-route-SubjectInstanceId="@Model.Subject.Id"><img src="~/images/add.svg" alt="Přidat" height="18px" class="btn-icon" />Přidat studijní materiál</a>
         </div>
 
         @if (Model.SubjectMaterials.Count > 0)
@@ -80,7 +92,7 @@
         }
         else
         {
-            <p class="alert alert-info my-5">Zatím nebyly přidány žádné materiály 🙁</p>
+            <p class="alert alert-dark">Zatím jste nepřidal/a žádné studijní materiály 🙁</p>
         }
     </div>
 

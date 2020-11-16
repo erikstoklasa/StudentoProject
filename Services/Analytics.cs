@@ -79,6 +79,22 @@ namespace SchoolGradebook.Services
             }
             return Math.Round(sum / count, 2);
         }
+        public async Task<double> GetSubjectAverageAsync(int subjectInstanceId)
+        {
+            double sum = 0.0;
+            Grade[] grades = await Context.Grades.Where(g => g.SubjectInstanceId == subjectInstanceId).AsNoTracking().ToArrayAsync();
+
+            int count = grades.Length;
+            if (count == 0) //Student doesn't have any grades in the given subject
+            {
+                return Double.NaN;
+            }
+            foreach (Grade g in grades)
+            {
+                sum += (double)g.Value;
+            }
+            return Math.Round(sum / count, 4);
+        }
         //Student
         public async Task<double> GetTotalAverageForStudentAsync(
             int studentId,

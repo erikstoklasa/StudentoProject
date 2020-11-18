@@ -42,17 +42,17 @@ namespace SchoolGradebook.Pages.Teacher.Students
                 return NotFound();
             }
 
-            Student = await studentService.GetStudentAsync((int)id);
+            Student = await studentService.GetStudentFullProfileAsync((int)id);
             if (Student == null)
             {
                 return NotFound();
             }
 
             TeacherId = await teacherService.GetTeacherId(UserId);
-            bool teacherHasAccessToStudent = await teacherAccessValidation.HasAccessToStudent(TeacherId, Student.Id);
+            bool teacherHasAccessToStudent = await teacherAccessValidation.HasAccessToStudent(TeacherId, (int)id);
             if (!teacherHasAccessToStudent)
             {
-                return BadRequest();
+                return Forbid();
             }
             Classes = await classService.GetAllClasses();
             foreach (Class c in Classes)
@@ -74,9 +74,12 @@ namespace SchoolGradebook.Pages.Teacher.Students
                 return NotFound();
             }
 
+            //Preventing from teacher overposting UserAuthId and changing it
             Models.Student student = await studentService.GetStudentAsync(Student.Id);
             Student.UserAuthId = student.UserAuthId;
-            //Preventing from teacher overposting UserAuthId and changing it
+
+            //Preventing from teacher overposting SchoolId and changing it
+            Student.SchoolId = student.SchoolId;
 
             TeacherId = await teacherService.GetTeacherId(UserId);
             bool teacherHasAccessToStudent = await teacherAccessValidation.HasAccessToStudent(TeacherId, Student.Id);
@@ -87,14 +90,24 @@ namespace SchoolGradebook.Pages.Teacher.Students
             }
 
             bool updatedSuccessfully = await studentService.UpdateStudentAsync(Student);
+            Student = await studentService.GetStudentFullProfileAsync(Student.Id);
+            Classes = await classService.GetAllClasses();
+            foreach (Class c in Classes)
+            {
+                ClassesList.Add(new SelectListItem(c.GetName(), c.Id.ToString()));
+            }
             if (!updatedSuccessfully)
             {
                 ViewData["status_type"] = "error";
                 ViewData["status_message"] = "Nevyplnili jste všechny údaje správně.";
-                return Page();
+            }
+            else
+            {
+                ViewData["status_type"] = "success";
+                ViewData["status_message"] = "Profil byl úspěšně upraven.";
             }
 
-            return RedirectToPage("./Index");
+            return Page();
         }
     }
 }

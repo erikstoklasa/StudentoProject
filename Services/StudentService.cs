@@ -25,7 +25,9 @@ namespace SchoolGradebook.Services
             Student student = await context.Students
                 .Where(t => t.UserAuthId == userAuthId)
                 .AsNoTracking()
+                .Select(s => new Student { Id = s.Id })
                 .FirstOrDefaultAsync();
+
             if (student == null) //Has role student but no assigned userAuthId - can happen after db resets
             {
                 return -1;
@@ -58,6 +60,22 @@ namespace SchoolGradebook.Services
         {
             Student student = await context.Students
                 .Where(s => s.Id == studentId)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+            return student;
+        }
+        public async Task<Student> GetStudentBasicInfoAsync(int studentId)
+        {
+            //Basic info: First Name, Last Name, Id
+            Student student = await context.Students
+                .Where(s => s.Id == studentId)
+                .Select(s => new Student
+                {
+                    Id = s.Id,
+                    FirstName = s.FirstName,
+                    LastName = s.LastName,
+                    SchoolId = s.SchoolId
+                })
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
             return student;

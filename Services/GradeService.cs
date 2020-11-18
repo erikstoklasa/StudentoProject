@@ -36,34 +36,37 @@ namespace SchoolGradebook.Services
                 .ToListAsync();
             return grades;
         }
-        public async Task<List<Grade>> GetAllGradesByStudentAsync(int studentId, int skip = 0, int take = 0)
+        public async Task<Grade[]> GetAllGradesInArrayByStudentSubjectInstance(int studentId, int subjectInstanceId)
         {
-            List<Grade> grades;
-            if (take > 0)
-            {
-                grades = await context.Grades
-                .Where(g => g.StudentId == studentId)
-                .Include(g => g.SubjectInstance)
-                .Include(g => g.SubjectInstance.Teacher)
-                .Include(g => g.SubjectInstance.SubjectType)
-                .OrderByDescending(g => g.Added)
+            Grade[] grades = await context.Grades
+                .Where(g => g.SubjectInstanceId == subjectInstanceId && g.StudentId == studentId)
                 .AsNoTracking()
-                .Skip(skip)
-                .Take(take)
-                .ToListAsync();
-            } else
-            {
-                grades = await context.Grades
-                .Where(g => g.StudentId == studentId)
-                .Include(g => g.SubjectInstance)
-                .Include(g => g.SubjectInstance.Teacher)
-                .Include(g => g.SubjectInstance.SubjectType)
-                .OrderByDescending(g => g.Added)
-                .AsNoTracking()
-                .Skip(skip)
-                .ToListAsync();
-            }
-            
+                .ToArrayAsync();
+            return grades;
+        }
+        public async Task<Grade[]> GetAllGradesByStudentAsync(int studentId)
+        {
+            Grade[] grades;
+            grades = await context.Grades
+            .Where(g => g.StudentId == studentId)
+            .Include(g => g.SubjectInstance)
+            .Include(g => g.SubjectInstance.Teacher)
+            .Include(g => g.SubjectInstance.SubjectType)
+            .OrderByDescending(g => g.Added)
+            .AsNoTracking()
+            .ToArrayAsync();
+            return grades;
+        }
+        public async Task<Grade[]> GetRecentGradesByStudentAsync(int studentId, int skip = 0, int take = 0)
+        {
+            Grade[] grades;
+            grades = await context.Grades
+            .Where(g => g.StudentId == studentId)
+            .OrderByDescending(g => g.Added)
+            .AsNoTracking()
+            .Skip(skip)
+            .Take(take)
+            .ToArrayAsync();
             return grades;
         }
         public async Task AddGradeAsync(Grade grade, bool saveChanges = true)
@@ -74,10 +77,10 @@ namespace SchoolGradebook.Services
             //Grading scale is relative to the country of school
             if (grade.Value <= 0 || grade.Value > 5)
                 throw new ArgumentOutOfRangeException("Grade must be grater than 0 but less than 5.");
-            
+
             await context.Grades.AddAsync(grade);
 
-            if(saveChanges)
+            if (saveChanges)
                 await context.SaveChangesAsync();
         }
 

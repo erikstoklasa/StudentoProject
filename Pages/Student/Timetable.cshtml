@@ -43,25 +43,33 @@
                             room ??= tf.TimetableRecord.Room;
                             var teacher = tf.TimetableChange.CurrentTeacher;
                             teacher ??= tf.TimetableRecord.SubjectInstance.Teacher;
-                            <div class="timeframe timeframe-change">
-                                @tf.Start.ToString("HH:mm") - @tf.End.ToString("HH:mm")<br>
-                                <strong>
-                                    @($"{LanguageHelper.getShorterString(subjectInstance.SubjectType.Name, 99)}")
-                                </strong><br>
-                                @($"{room.Name} - {teacher.LastName}")<br>
-                            </div>
+                            <a class="no-bcg-onhover text-dark" asp-page="/Student/Subjects/Details" asp-route-Id="@subjectInstance.Id">
+                                <div class="timeframe timeframe-change">
+                                    @tf.Start.ToString("HH:mm") - @tf.End.ToString("HH:mm")<br>
+
+                                    <strong>
+                                        @($"{LanguageHelper.getShorterString(subjectInstance.SubjectType.Name, 99)}")
+                                    </strong>
+                                    <br>
+                                    @($"{room.Name} - {teacher.LastName}")<br>
+                                </div>
+                            </a>
                         }
                     }
                     else if (tf.TimetableRecord != null)
                     {
                         var si = tf.TimetableRecord.SubjectInstance;
-                        <div class="timeframe">
-                            @tf.Start.ToString("HH:mm") - @tf.End.ToString("HH:mm")<br>
-                            <strong>
-                                @(LanguageHelper.getShorterString(si.SubjectType.Name, 99))
-                            </strong><br>
-                            @($"{tf.TimetableRecord.Room.Name} - {si.Teacher.LastName}")<br>
-                        </div>
+                        <a class="no-bcg-onhover text-dark" asp-page="/Student/Subjects/Details" asp-route-Id="@si.Id">
+                            <div class="timeframe">
+                                @tf.Start.ToString("HH:mm") - @tf.End.ToString("HH:mm")<br>
+
+                                <strong>
+                                    @(LanguageHelper.getShorterString(si.SubjectType.Name, 99))
+                                </strong>
+                                <br>
+                                @($"{tf.TimetableRecord.Room.Name} - {si.Teacher.LastName}")<br>
+                            </div>
+                        </a>
                     }
                     else
                     {
@@ -104,25 +112,33 @@ else
                             room ??= tf.TimetableRecord.Room;
                             var teacher = tf.TimetableChange.CurrentTeacher;
                             teacher ??= tf.TimetableRecord.SubjectInstance.Teacher;
-                            <div class="timeframe tt-width-5 timeframe-change">
-                                @tf.Start.ToString("HH:mm") - @tf.End.ToString("HH:mm")<br>
-                                <strong>
-                                    @($"{LanguageHelper.getShorterString(subjectInstance.SubjectType.Name, 99)}")
-                                </strong><br>
-                                @($"{room.Name} - {teacher.LastName}")<br>
-                            </div>
+                            <a class="no-bcg-onhover text-dark" asp-page="/Student/Subjects/Details" asp-route-Id="@subjectInstance.Id">
+                                <div class="timeframe tt-width-5 timeframe-change">
+                                    @tf.Start.ToString("HH:mm") - @tf.End.ToString("HH:mm")<br>
+
+                                    <strong>
+                                        @($"{LanguageHelper.getShorterString(subjectInstance.SubjectType.Name, 99)}")
+                                    </strong>
+                                    <br>
+                                    @($"{room.Name} - {teacher.LastName}")<br>
+                                </div>
+                            </a>
                         }
                     }
                     else if (tf.TimetableRecord != null)
                     {
                         var si = tf.TimetableRecord.SubjectInstance;
-                        <div class="timeframe tt-width-5">
-                            @tf.Start.ToString("HH:mm") - @tf.End.ToString("HH:mm")<br>
-                            <strong>
-                                @(LanguageHelper.getShorterString(si.SubjectType.Name, 99))
-                            </strong><br>
-                            @($"{tf.TimetableRecord.Room.Name} - {si.Teacher.LastName}")<br>
-                        </div>
+                        <a class="no-bcg-onhover text-dark" asp-page="/Student/Subjects/Details" asp-route-Id="@si.Id">
+                            <div class="timeframe tt-width-5">
+                                @tf.Start.ToString("HH:mm") - @tf.End.ToString("HH:mm")<br>
+
+                                <strong>
+                                    @(LanguageHelper.getShorterString(si.SubjectType.Name, 99))
+                                </strong>
+                                <br>
+                                @($"{tf.TimetableRecord.Room.Name} - {si.Teacher.LastName}")<br>
+                            </div>
+                        </a>
                     }
                     else
                     {

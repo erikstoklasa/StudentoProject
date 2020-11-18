@@ -76,11 +76,10 @@ namespace SchoolGradebook.Pages.Student.Subjects
             Grades = await gradeService.GetAllGradesByStudentSubjectInstance((int)studentId, (int)id);
 
             SubjectMaterials = await subjectMaterialService.GetAllMaterialsBySubjectInstance((int)id);
-            //SubjectMaterials = await _analytics.GetAllSubjectMaterialsAsync((int)id);
-            SubjectAverage = await _analytics.GetSubjectAverageForStudentAsync(UserId, Subject.Id);
+            SubjectAverage = await _analytics.GetSubjectAverageForStudentAsync((int)studentId, Subject.Id);
 
-            double currentAvg = await _analytics.GetSubjectAverageForStudentAsync(UserId, Subject.Id);
-            double comparisonAvg = await _analytics.GetSubjectAverageForStudentAsync(UserId, Subject.Id, 365, 30);
+            double currentAvg = await _analytics.GetSubjectAverageForStudentAsync((int)studentId, Subject.Id);
+            double comparisonAvg = await _analytics.GetSubjectAverageForStudentAsync((int)studentId, Subject.Id, 365, 30);
             ViewData["ComparisonString"] = LanguageHelper.getAverageComparisonString(currentAvg, comparisonAvg);
 
 

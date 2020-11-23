@@ -35,3 +35,5 @@ Human activation codes
 - codes can include also numbers 1 through 9 (9)
 
 total characters 35⁶ = 1 800 mil. combinations 
+
+HELLO WORLD

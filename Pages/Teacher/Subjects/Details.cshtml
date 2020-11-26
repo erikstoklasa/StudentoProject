@@ -19,8 +19,8 @@
             <div>
                 <a asp-page="" asp-page-handler="print" asp-route-id="@Model.Subject.Id" class="btn btn-outline-primary"><img src="~/images/print.svg" alt="Vytisknout" height="20px" class="btn-icon" />Tisk výpisu</a>
                 <!--
-                    <a asp-page="./Grades" class="btn btn-primary">Známky</a>
-                -->
+                <a asp-page="./Grades" class="btn btn-primary">Známky</a>
+            -->
             </div>
         </div>
         @if (Model.StudentsAndAverageAndGrades.Count > 0)
@@ -95,7 +95,8 @@
             <p class="alert alert-dark">Zatím jste nepřidal/a žádné studijní materiály 🙁</p>
         }
     </div>
-
+    <div id="root"></div>
+    
 </div>
 
 <div>

@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UserSecretsId>aspnet-SchoolGradebook-3AED8BFF-4AE2-4528-A214-8A72EE1B66CC</UserSecretsId>
     <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
+	<TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,6 +17,18 @@
   <ItemGroup>
     <Compile Remove="Migrations\20200104180555_UpdateHumanCodes.cs" />
     <Compile Remove="Migrations\20200104180555_UpdateHumanCodes.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="node_modules\js-tokens\package.json" />
+    <Content Include="node_modules\loose-envify\package.json" />
+    <Content Include="node_modules\object-assign\package.json" />
+    <Content Include="node_modules\react-dom\build-info.json" />
+    <Content Include="node_modules\react-dom\package.json" />
+    <Content Include="node_modules\react\build-info.json" />
+    <Content Include="node_modules\react\package.json" />
+    <Content Include="node_modules\scheduler\build-info.json" />
+    <Content Include="node_modules\scheduler\package.json" />
   </ItemGroup>
 
 
@@ -45,6 +58,92 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
+    <Folder Include="wwwroot\dist\" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <None Include="node_modules\.bin\loose-envify" />
+    <None Include="node_modules\.bin\loose-envify.cmd" />
+    <None Include="node_modules\.bin\loose-envify.ps1" />
+    <None Include="node_modules\js-tokens\CHANGELOG.md" />
+    <None Include="node_modules\js-tokens\index.js" />
+    <None Include="node_modules\js-tokens\LICENSE" />
+    <None Include="node_modules\js-tokens\README.md" />
+    <None Include="node_modules\loose-envify\cli.js" />
+    <None Include="node_modules\loose-envify\custom.js" />
+    <None Include="node_modules\loose-envify\index.js" />
+    <None Include="node_modules\loose-envify\LICENSE" />
+    <None Include="node_modules\loose-envify\loose-envify.js" />
+    <None Include="node_modules\loose-envify\README.md" />
+    <None Include="node_modules\loose-envify\replace.js" />
+    <None Include="node_modules\object-assign\index.js" />
+    <None Include="node_modules\object-assign\license" />
+    <None Include="node_modules\object-assign\readme.md" />
+    <None Include="node_modules\react-dom\cjs\react-dom-server.browser.development.js" />
+    <None Include="node_modules\react-dom\cjs\react-dom-server.browser.production.min.js" />
+    <None Include="node_modules\react-dom\cjs\react-dom-server.node.development.js" />
+    <None Include="node_modules\react-dom\cjs\react-dom-server.node.production.min.js" />
+    <None Include="node_modules\react-dom\cjs\react-dom-test-utils.development.js" />
+    <None Include="node_modules\react-dom\cjs\react-dom-test-utils.production.min.js" />
+    <None Include="node_modules\react-dom\cjs\react-dom.development.js" />
+    <None Include="node_modules\react-dom\cjs\react-dom.production.min.js" />
+    <None Include="node_modules\react-dom\cjs\react-dom.profiling.min.js" />
+    <None Include="node_modules\react-dom\index.js" />
+    <None Include="node_modules\react-dom\LICENSE" />
+    <None Include="node_modules\react-dom\profiling.js" />
+    <None Include="node_modules\react-dom\README.md" />
+    <None Include="node_modules\react-dom\server.browser.js" />
+    <None Include="node_modules\react-dom\server.js" />
+    <None Include="node_modules\react-dom\server.node.js" />
+    <None Include="node_modules\react-dom\test-utils.js" />
+    <None Include="node_modules\react-dom\umd\react-dom-server.browser.development.js" />
+    <None Include="node_modules\react-dom\umd\react-dom-server.browser.production.min.js" />
+    <None Include="node_modules\react-dom\umd\react-dom-test-utils.development.js" />
+    <None Include="node_modules\react-dom\umd\react-dom-test-utils.production.min.js" />
+    <None Include="node_modules\react-dom\umd\react-dom.development.js" />
+    <None Include="node_modules\react-dom\umd\react-dom.production.min.js" />
+    <None Include="node_modules\react-dom\umd\react-dom.profiling.min.js" />
+    <None Include="node_modules\react\cjs\react-jsx-dev-runtime.development.js" />
+    <None Include="node_modules\react\cjs\react-jsx-dev-runtime.production.min.js" />
+    <None Include="node_modules\react\cjs\react-jsx-dev-runtime.profiling.min.js" />
+    <None Include="node_modules\react\cjs\react-jsx-runtime.development.js" />
+    <None Include="node_modules\react\cjs\react-jsx-runtime.production.min.js" />
+    <None Include="node_modules\react\cjs\react-jsx-runtime.profiling.min.js" />
+    <None Include="node_modules\react\cjs\react.development.js" />
+    <None Include="node_modules\react\cjs\react.production.min.js" />
+    <None Include="node_modules\react\index.js" />
+    <None Include="node_modules\react\jsx-dev-runtime.js" />
+    <None Include="node_modules\react\jsx-runtime.js" />
+    <None Include="node_modules\react\LICENSE" />
+    <None Include="node_modules\react\README.md" />
+    <None Include="node_modules\react\umd\react.development.js" />
+    <None Include="node_modules\react\umd\react.production.min.js" />
+    <None Include="node_modules\react\umd\react.profiling.min.js" />
+    <None Include="node_modules\scheduler\cjs\scheduler-tracing.development.js" />
+    <None Include="node_modules\scheduler\cjs\scheduler-tracing.production.min.js" />
+    <None Include="node_modules\scheduler\cjs\scheduler-tracing.profiling.min.js" />
+    <None Include="node_modules\scheduler\cjs\scheduler-unstable_mock.development.js" />
+    <None Include="node_modules\scheduler\cjs\scheduler-unstable_mock.production.min.js" />
+    <None Include="node_modules\scheduler\cjs\scheduler-unstable_post_task.development.js" />
+    <None Include="node_modules\scheduler\cjs\scheduler-unstable_post_task.production.min.js" />
+    <None Include="node_modules\scheduler\cjs\scheduler.development.js" />
+    <None Include="node_modules\scheduler\cjs\scheduler.production.min.js" />
+    <None Include="node_modules\scheduler\index.js" />
+    <None Include="node_modules\scheduler\LICENSE" />
+    <None Include="node_modules\scheduler\README.md" />
+    <None Include="node_modules\scheduler\tracing-profiling.js" />
+    <None Include="node_modules\scheduler\tracing.js" />
+    <None Include="node_modules\scheduler\umd\scheduler-tracing.development.js" />
+    <None Include="node_modules\scheduler\umd\scheduler-tracing.production.min.js" />
+    <None Include="node_modules\scheduler\umd\scheduler-tracing.profiling.min.js" />
+    <None Include="node_modules\scheduler\umd\scheduler-unstable_mock.development.js" />
+    <None Include="node_modules\scheduler\umd\scheduler-unstable_mock.production.min.js" />
+    <None Include="node_modules\scheduler\umd\scheduler.development.js" />
+    <None Include="node_modules\scheduler\umd\scheduler.production.min.js" />
+    <None Include="node_modules\scheduler\umd\scheduler.profiling.min.js" />
+    <None Include="node_modules\scheduler\unstable_mock.js" />
+    <None Include="node_modules\scheduler\unstable_post_task.js" />
   </ItemGroup>
 
 

@@ -44,6 +44,14 @@ namespace SchoolGradebook.Services
                 .ToArrayAsync();
             return grades;
         }
+        public async Task<Grade[]> GetAllGradesBySubjectInstance(int subjectInstanceId)
+        {
+            Grade[] grades = await context.Grades
+                .Where(g => g.SubjectInstanceId == subjectInstanceId)
+                .AsNoTracking()
+                .ToArrayAsync();
+            return grades;
+        }
         public async Task<Grade[]> GetAllGradesByStudentAsync(int studentId)
         {
             Grade[] grades;
@@ -72,11 +80,11 @@ namespace SchoolGradebook.Services
         public async Task AddGradeAsync(Grade grade, bool saveChanges = true)
         {
             if (!HasRequiredFields(grade))
-                throw new ArgumentNullException("Grade must have a Name.");
+                throw new ArgumentNullException("Grade name");
 
             //Grading scale is relative to the country of school
             if (grade.Value <= 0 || grade.Value > 5)
-                throw new ArgumentOutOfRangeException("Grade must be grater than 0 but less than 5.");
+                throw new ArgumentOutOfRangeException("Grade value");
 
             await context.Grades.AddAsync(grade);
 
@@ -88,8 +96,24 @@ namespace SchoolGradebook.Services
         {
             foreach (var grade in grades)
             {
-                await AddGradeAsync(grade, false);
+                if (!HasRequiredFields(grade))
+                    throw new ArgumentNullException("Grade name");
+
+                //Grading scale is relative to the country of school
+                if (grade.Value <= 0 || grade.Value > 5)
+                    throw new ArgumentOutOfRangeException("Grade value");
             }
+            await context.Grades.AddRangeAsync(grades);
+            await context.SaveChangesAsync();
+        }
+        public async Task DeleteGradesAsync(ICollection<int> gradeIds)
+        {
+            List<Grade> grades = new List<Grade>();
+            foreach (int gId in gradeIds)
+            {
+                grades.Add(new Grade() { Id = gId });
+            }
+            context.Grades.RemoveRange(grades);
             await context.SaveChangesAsync();
         }
 

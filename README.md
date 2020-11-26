@@ -1,12 +1,12 @@
 ﻿# Školní systém Studento
-Vítej na repozitáři moderního klasifikačního systému Studento, aplikace je poskytována zdarma :blush:
+Vítej na repozitáři moderního klasifikačního systému Studento :blush:
 
-Inovujeme zastaralé systémy, které se dnes používají na školách.
+Inovujeme zastaralé systémy, které se dnes používají na školách. Zjednodušujeme práci všem učitelům a studentům.
 
 [![Build Status](https://dev.azure.com/Studento/WebApp/_apis/build/status/WebApp?branchName=master)](https://dev.azure.com/Studento/WebApp/_build/latest?definitionId=2&branchName=master)
 
 Takhle zatím vypadá naše aplikace ->
-![Studento dashboard](/github_readme_images/dashboard_v2.jpg)
+![Studento dashboard](/github_readme_images/dashboard_v3.jpg)
 
 ## Naše milníky:
 
@@ -21,17 +21,8 @@ Takhle zatím vypadá naše aplikace ->
 ## Úkolníček před dalším milníkem:
 :white_check_mark: Podrobná správa dat o studentovi
 
-:white_check_mark: Demo verze: [studento.org](https://studento.org)
+:white_check_mark: Demo verze: [studento.cz](https://studento.cz)
 
 :red_circle: Pololetní vysvedčení
 
 :red_circle: Více typů rolí (ředitel, zástupce)
-
-## Docs
-
-Human activation codes
-- codes are 6 character string
-- codes can include all letters of alphabet except: o, i, l, (total 26)
-- codes can include also numbers 1 through 9 (9)
-
-total characters 35⁶ = 1 800 mil. combinations 

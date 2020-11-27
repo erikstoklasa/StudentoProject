@@ -19,17 +19,15 @@ namespace SchoolGradebook.Pages.Teacher.Students
     public class DetailsModel : PageModel
     {
         private readonly TeacherService teacherService;
-        private readonly TeacherAccessValidation teacherAccessValidation;
         private readonly StudentService studentService;
         private readonly SubjectService subjectService;
 
         public string UserId { get; set; }
         public int TeacherId { get; set; }
 
-        public DetailsModel(IHttpContextAccessor httpContextAccessor, TeacherService teacherService, TeacherAccessValidation teacherAccessValidation, StudentService studentService, SubjectService subjectService)
+        public DetailsModel(IHttpContextAccessor httpContextAccessor, TeacherService teacherService, StudentService studentService, SubjectService subjectService)
         {
             this.teacherService = teacherService;
-            this.teacherAccessValidation = teacherAccessValidation;
             this.studentService = studentService;
             this.subjectService = subjectService;
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);

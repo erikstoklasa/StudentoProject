@@ -1,15 +1,21 @@
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Classroom.v1;
+using Google.Apis.Classroom.v1.Data;
+using Google.Apis.Services;
+using Google.Apis.Util.Store;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
 using SchoolGradebook.Models;
 using SchoolGradebook.Services;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SchoolGradebook.Pages.Student
 {
@@ -27,6 +33,7 @@ namespace SchoolGradebook.Pages.Student
         public Grade[] RecentGrades { get; set; }
         public string GPA { get; set; }
         public IEnumerable<(SubjectInstance subjectInstance, string subjectAverage)> SubjectsAndSubjectAverages { get; set; }
+        public ListCoursesResponse ListCoursesResponse { get; set; }
 
         public IndexModel(IHttpContextAccessor httpContextAccessor, SubjectService subjectService, StudentService studentService, Analytics analytics, GradeService gradeService)
         {
@@ -60,6 +67,37 @@ namespace SchoolGradebook.Pages.Student
 
             double comparisonAvg = await _analytics.GetTotalAverageForStudentAsync(studentId, 365, 30);
             ViewData["ComparisonString"] = LanguageHelper.getAverageComparisonString(currentAvg, comparisonAvg);
+
+
+            //UserCredential credential;
+
+            //using (var stream =
+            //    new FileStream("credentials.json", FileMode.Open, FileAccess.Read))
+            //{
+            //    // The file token.json stores the user's access and refresh tokens, and is created
+            //    // automatically when the authorization flow completes for the first time.
+            //    string credPath = "token.json";
+            //    credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+            //        GoogleClientSecrets.Load(stream).Secrets,
+            //        new string[] { ClassroomService.Scope.ClassroomCoursesReadonly },
+            //        "user",
+            //        CancellationToken.None,
+            //        new FileDataStore(credPath, true)).Result;
+            //}
+
+            //// Create Classroom API service.
+            //var service = new ClassroomService(new BaseClientService.Initializer()
+            //{
+            //    HttpClientInitializer = credential,
+            //    ApplicationName = "Classroom API .NET Quickstart",
+            //});
+
+            //// Define request parameters.
+            //CoursesResource.ListRequest request = service.Courses.List();
+            //request.PageSize = 10;
+
+            //// List courses.
+            //ListCoursesResponse = request.Execute();
             return Page();
         }
     }

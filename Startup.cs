@@ -81,12 +81,16 @@ namespace SchoolGradebook
                 options.Conventions.AuthorizeFolder("/Admin", "OnlyAdmin");
                 options.Conventions.AuthorizeFolder("/Student", "OnlyStudent");
             });
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
+
             services.AddDbContext<SchoolContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("SchoolContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, RoleManager<IdentityRole> roleManager)
         {
             app.UseStatusCodePagesWithReExecute("/ErrorPage", "?code={0}");
             app.UseRouting();
@@ -110,6 +114,9 @@ namespace SchoolGradebook
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
+                endpoints.MapControllerRoute(
+                    name: "api",
+                    pattern: "api/{controller=Home}/{id?}");
             });
 
             roleManager.CreateAsync(new IdentityRole("admin")).Wait();

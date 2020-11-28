@@ -17,9 +17,12 @@ namespace SchoolGradebook.Services
         {
             this.context = context;
         }
-        public async Task<bool> HasAccessToSubject(int teacherId, int subjectId)
+        public async Task<bool> HasAccessToSubject(int teacherId, int subjectInstanceId)
         {
-            SubjectInstance subject = await context.SubjectInstances.FindAsync(subjectId);
+            SubjectInstance subject = await context.SubjectInstances
+                .Where(si => si.Id == subjectInstanceId)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
             return subject.TeacherId == teacherId;
         }
         public async Task<bool> HasAccessToSubjectType(int teacherId, int subjectTypeId)
@@ -33,7 +36,14 @@ namespace SchoolGradebook.Services
         }
         public async Task<bool> HasAccessToGrade(int teacherId, int gradeId)
         {
-            Grade grade = await context.Grades.FindAsync(gradeId);
+            Grade grade = await context.Grades
+                .Where(g => g.Id == gradeId)
+                .Select(g => new Grade()
+                {
+                    SubjectInstanceId = g.SubjectInstanceId
+                })
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
             return await HasAccessToSubject(teacherId, grade.SubjectInstanceId);
         }
         public async Task<bool> HasAccessToStudent(int teacherId, int studentId)
@@ -44,7 +54,14 @@ namespace SchoolGradebook.Services
         }
         public async Task<bool> HasAccessToSubjectMaterial(int teacherId, Guid subjectMaterialId)
         {
-            SubjectMaterial subjectMaterial = await context.SubjectMaterials.FindAsync(subjectMaterialId);
+            SubjectMaterial subjectMaterial = await context.SubjectMaterials
+                .Where(sm => sm.Id == subjectMaterialId)
+                .Select(sm => new SubjectMaterial()
+                {
+                    SubjectTypeId = sm.SubjectTypeId
+                })
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
             return await HasAccessToSubjectType(teacherId, subjectMaterial.SubjectTypeId);
         }
     }

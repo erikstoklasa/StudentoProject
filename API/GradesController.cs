@@ -43,6 +43,10 @@ namespace SchoolGradebook.API
 
             if (studentId != null)
             {
+                if (!await teacherAccessValidation.HasAccessToStudent(teacherId, (int)studentId))
+                {
+                    return StatusCode(403);
+                }
                 var grades = await gradeService.GetAllGradesByStudentAsync((int)studentId);
                 foreach (var g in grades)
                 {
@@ -70,6 +74,15 @@ namespace SchoolGradebook.API
         [HttpGet("{id}")]
         public async Task<ActionResult<GradeObject>> GetGrade(int id)
         {
+            int teacherId = await teacherService.GetTeacherId(UserId);
+            if (teacherId == -1)
+            {
+                return StatusCode(403);
+            }
+            if (!await teacherAccessValidation.HasAccessToGrade(teacherId, id))
+            {
+                return StatusCode(403);
+            }
             var g = await gradeService.GetGradeAsync(id);
 
             if (g == null)
@@ -84,9 +97,17 @@ namespace SchoolGradebook.API
         [Authorize(policy: "OnlyTeacher")]
         public async Task<IActionResult> PostGrade(GradeObject grade)
         {
+            int teacherId = await teacherService.GetTeacherId(UserId);
+            if (teacherId == -1)
+            {
+                return StatusCode(403);
+            }
+            if (!await teacherAccessValidation.HasAccessToSubject(teacherId, grade.SubjectInstanceId))
+            {
+                return StatusCode(403);
+            }
             Grade g = new Grade()
             {
-                Id = grade.Id,
                 Added = grade.Added,
                 Name = grade.Name,
                 StudentId = grade.StudentId,
@@ -118,19 +139,38 @@ namespace SchoolGradebook.API
         [Authorize(policy: "OnlyTeacher")]
         public async Task<IActionResult> PostGrades(ICollection<GradeObject> grades)
         {
+            int teacherId = await teacherService.GetTeacherId(UserId);
+            if (teacherId == -1)
+            {
+                return StatusCode(403);
+            }
+            List<int> subjectInstanceIdsToCheck = new List<int>();
             List<Grade> gradesToCreate = new List<Grade>();
+
             foreach (var g in grades)
             {
                 gradesToCreate.Add(new Grade()
                 {
-                    Id = g.Id,
                     Added = g.Added,
                     Name = g.Name,
                     StudentId = g.StudentId,
                     SubjectInstanceId = g.SubjectInstanceId,
                     Value = g.Value
                 });
+                if (!subjectInstanceIdsToCheck.Contains(g.SubjectInstanceId))
+                {
+                    subjectInstanceIdsToCheck.Add(g.SubjectInstanceId);
+                }
             }
+
+            foreach (int id in subjectInstanceIdsToCheck)
+            {
+                if (!await teacherAccessValidation.HasAccessToSubject(teacherId, id))
+                {
+                    return StatusCode(403);
+                }
+            }
+
             try
             {
                 await gradeService.AddGradesAsync(gradesToCreate);
@@ -156,6 +196,18 @@ namespace SchoolGradebook.API
         [Authorize(policy: "OnlyTeacher")]
         public async Task<IActionResult> DeleteGrades(ICollection<int> gradeIds)
         {
+            int teacherId = await teacherService.GetTeacherId(UserId);
+            if (teacherId == -1)
+            {
+                return StatusCode(403);
+            }
+            foreach (int id in gradeIds)
+            {
+                if (!await teacherAccessValidation.HasAccessToGrade(teacherId, id))
+                {
+                    return StatusCode(403);
+                }
+            }
             try
             {
                 await gradeService.DeleteGradesAsync(gradeIds);

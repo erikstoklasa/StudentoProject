@@ -43,6 +43,8 @@ namespace SchoolGradebook.Pages
             }
             int targetId = code.TargetId; //Student Or Teacher id
             CodeType codeType = code.CodeType;
+            IdentityUser user;
+            user = UsersManager.FindByIdAsync(UserId).Result;
 
             if (codeType == CodeType.Student)
             {
@@ -62,8 +64,7 @@ namespace SchoolGradebook.Pages
                     await _context.SaveChangesAsync();
                 }
                 //Assigning user a student role
-                IdentityUser user;
-                user = UsersManager.FindByIdAsync(UserId).Result;
+
                 UsersManager.AddToRoleAsync(user, "student").Wait();
             }
             else
@@ -83,12 +84,11 @@ namespace SchoolGradebook.Pages
                     await _context.SaveChangesAsync();
                 }
                 //Assigning user a teacher role
-                IdentityUser user;
-                user = UsersManager.FindByIdAsync(UserId).Result;
                 UsersManager.AddToRoleAsync(user, "teacher").Wait();
             }
             await SignInManager.SignOutAsync();
-            return LocalRedirect(Url.Page("/Account/Login", new { area = "Identity" }));
+            await SignInManager.SignInAsync(user, false);
+            return LocalRedirect("/");
         }
     }
 }

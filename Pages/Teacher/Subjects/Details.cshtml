@@ -1,13 +1,11 @@
 ﻿@page
 @model SchoolGradebook.Pages.Teacher.Subjects.DetailsModel
-@using SchoolGradebook.Models;
 @using System.Globalization;
 @using MimeTypes;
 
 @{
     ViewData["Title"] = "Details";
     System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("cs-CZ");
-
 }
 
 <div class="main-container">
@@ -18,9 +16,7 @@
             <p class="table-heading">Studenti<span class="badge badge-pill badge-success ml-3">@Model.Students.Length</span></p>
             <div>
                 <a asp-page="" asp-page-handler="print" asp-route-id="@Model.Subject.Id" class="btn btn-outline-primary"><img src="~/images/print.svg" alt="Vytisknout" height="20px" class="btn-icon" />Tisk výpisu</a>
-                <!--
-                    <a asp-page="./Grades" class="btn btn-primary">Známky</a>
-                -->
+                <a asp-page="/Teacher/Grades/Index" class="btn btn-primary">Zobrazit známky</a>
             </div>
         </div>
         @if (Model.StudentsAndAverageAndGrades.Count > 0)

@@ -4,3 +4,4 @@ obj/
 /bin
 /Migrations
 /Properties/PublishProfiles
+/node_modules

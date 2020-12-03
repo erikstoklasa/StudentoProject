@@ -3,8 +3,7 @@
 @{
     ViewData["Title"] = "Domů";
 }
-
-<h1 class="mb-4">Všechny vaše předměty</h1>
+<h1 class="mb-4">Všechny předměty</h1>
 @if (Model.Subjects.Count == 0)
 {
     <p class="alert alert-warning my-5">Zatím Vám administrátor nepřidělil žádný předmět 🙁</p>
@@ -18,14 +17,14 @@ else
             <div class="card mx-1 flex-column">
                 <div class="card-body">
                     <div class="w-100">
-                        <h5 class="card-title"><a asp-page="/Teacher/Subjects/Details" asp-route-id="@i.subjectInstance.Id">@i.subjectInstance.SubjectType.Name</a></h5>
+                        <h5 class="card-title">
+                            <a asp-page="/Teacher/Subjects/Details" asp-route-id="@i.subjectInstance.Id">@i.subjectInstance.SubjectType.Name</a>
+                        </h5>
                         <p class="card-text pl-lg-2">Studentů: @i.studentCount</p>
-                        <a class="btn btn-primary" asp-page="/Teacher/Grades/Create" asp-route-SubjectInstanceId="@i.subjectInstance.Id">Přidat známku</a>
+                        <a class="btn btn-primary" asp-page="/Teacher/Subjects/Details" asp-route-id="@i.subjectInstance.Id">Otevřít předmět</a>
                     </div>
                 </div>
             </div>
-
         }
     </div>
-
 }

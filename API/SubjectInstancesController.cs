@@ -22,6 +22,8 @@ namespace SchoolGradebook.API
             this.subjectService = subjectService;
             this.studentService = studentService;
         }
+
+        // GET: api/SubjectInstances/5
         [HttpGet("{id}")]
         [Authorize(policy: "OnlyTeacher")]
         public async Task<ActionResult<SubjectInstanceObject>> GetSubjectInstance(int id)

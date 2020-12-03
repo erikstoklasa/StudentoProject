@@ -19,6 +19,7 @@ namespace SchoolGradebook.Pages.Teacher.LessonRecords
         private readonly TimeFrameService timeFrameService;
         private readonly AttendanceService attendanceService;
 
+        public string ErrorMessage { get; set; }
         public List<Models.Student> Students { get; set; }
         public List<StudentGroup> StudentGroups { get; set; }
         public LessonRecord LessonRecord { get; set; }
@@ -78,7 +79,7 @@ namespace SchoolGradebook.Pages.Teacher.LessonRecords
             public int? TimeframeId { get; set; }
             public int? SubjectInstanceId { get; set; }
         }
-        public async Task<IActionResult> OnPostAsync([FromBody] LessonRec lr)
+        public async Task<ActionResult> OnPostAsync([FromBody] LessonRec lr)
         {
             if (!ModelState.IsValid)
             {
@@ -119,6 +120,7 @@ namespace SchoolGradebook.Pages.Teacher.LessonRecords
                     });
                 }
                 await attendanceService.RemoveOrCreateAttendenceRecords(attendanceRecords, LessonRecord.Id);
+                return StatusCode(201);
             }
             else //Updating an existing lessonRecord
             {
@@ -143,14 +145,10 @@ namespace SchoolGradebook.Pages.Teacher.LessonRecords
                     });
                 }
                 await attendanceService.RemoveOrCreateAttendenceRecords(attendanceRecords, LessonRecord.Id);
+                return StatusCode(200);
             }
-
             //TODO: 2) Validate if teacher has access to this lessonrecord
             //TODO: 3) Validate if timeFrameId and subjectInstanceId and week are valid
-
-            return new EmptyResult();
-
-
         }
     }
 }

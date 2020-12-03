@@ -27,15 +27,26 @@
         xhr.send(body);
 
         xhr.onload = () => {
-            if (xhr.status == 200) {
-                alertDiv.classList.remove("alert alert-danger");
-                alertDiv.textContent = "Hodina byla úspěšně zapsána";
-                alertDiv.classList.add("alert alert-success");
+            if (xhr.status == 201) {
+                alertDiv.classList.remove("alert");
+                alertDiv.classList.remove("alert-danger");
+                alertDiv.textContent = "Hodina úspěšně zapsána";
+                alertDiv.classList.add("alert");
+                alertDiv.classList.add("alert-success");
 
-            } else {
-                alertDiv.classList.remove("alert alert-success");
+            } else if (xhr.status == 200) {
+                alertDiv.classList.remove("alert");
+                alertDiv.classList.remove("alert-danger");
+                alertDiv.textContent = "Hodina úspěšně upravena";
+                alertDiv.classList.add("alert");
+                alertDiv.classList.add("alert-success");
+            }
+            else {
+                alertDiv.classList.remove("alert");
+                alertDiv.classList.remove("alert-success");
                 alertDiv.textContent = "Chyba";
-                alertDiv.classList.add("alert alert-danger");
+                alertDiv.classList.add("alert");
+                alertDiv.classList.add("alert-danger");
             }
         }
     });

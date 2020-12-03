@@ -35,8 +35,8 @@
                     @item.GetFullName()
                 </td>
                 <td>
-                    <a asp-page="Edit" asp-route-id="@item.Id">Upravit</a> |
-                    <a asp-page="Details" asp-route-id="@item.Id">Detaily</a>
+                    <a class="btn btn-primary" asp-page="Details" asp-route-id="@item.Id">Zobrazit</a>
+                    <a class="btn btn-outline-primary" asp-page="Edit" asp-route-id="@item.Id">Upravit</a>
                 </td>
             </tr>
         }

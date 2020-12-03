@@ -12,6 +12,9 @@
                     @if (User.IsInRole("teacher"))
                     {
                         <li class="nav-item">
+                            <a class="nav-link text-dark" asp-page="/Teacher/Index">Domů</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-page="/Teacher/Index">Předměty</a>
                         </li>
                         <li class="nav-item">
@@ -27,11 +30,17 @@
                     @if (User.IsInRole("student"))
                     {
                         <li class="nav-item">
+                            <a class="nav-link text-dark" asp-page="/Student/Index">Domů</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-page="/Student/Timetable">Rozvrh hodin</a>
                         </li>
                     }
                     @if (User.IsInRole("admin"))
                     {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-page="/Admin/Index">Domů</a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-page="/Admin/Students/Index">Studenti</a>
                         </li>

@@ -108,7 +108,7 @@ namespace SchoolGradebook.API
             }
             Grade g = new Grade()
             {
-                Added = grade.Added,
+                Added = DateTime.UtcNow,
                 Name = grade.Name,
                 StudentId = grade.StudentId,
                 SubjectInstanceId = grade.SubjectInstanceId,
@@ -134,6 +134,48 @@ namespace SchoolGradebook.API
             return CreatedAtAction("PostGrade", new { id = g.Id }, g);
         }
 
+        [HttpPut]
+        [Authorize(policy: "OnlyTeacher")]
+        public async Task<IActionResult> UpdateGrade(GradeObject grade)
+        {
+            int teacherId = await teacherService.GetTeacherId(UserId);
+            if (teacherId == -1)
+            {
+                return StatusCode(403);
+            }
+            if (!await teacherAccessValidation.HasAccessToSubject(teacherId, grade.SubjectInstanceId))
+            {
+                return StatusCode(403);
+            }
+            Grade g = new Grade()
+            {
+                Id = grade.Id,
+                Added = DateTime.UtcNow,
+                Name = grade.Name,
+                StudentId = grade.StudentId,
+                SubjectInstanceId = grade.SubjectInstanceId,
+                Value = grade.Value
+            };
+            try
+            {
+                await gradeService.UpdateGradeAsync(g);
+            }
+            catch (ArgumentNullException e)
+            {
+                return BadRequest(new ErrorObject() { Message = e.Message });
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                return BadRequest(new ErrorObject() { Message = e.Message });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new ErrorObject() { Message = e.Message });
+            }
+
+            return CreatedAtAction("PutGrade", new { id = g.Id }, g);
+        }
+
         // POST: api/Grades/Batch
         [HttpPost("Batch")]
         [Authorize(policy: "OnlyTeacher")]
@@ -151,7 +193,7 @@ namespace SchoolGradebook.API
             {
                 gradesToCreate.Add(new Grade()
                 {
-                    Added = g.Added,
+                    Added = DateTime.UtcNow,
                     Name = g.Name,
                     StudentId = g.StudentId,
                     SubjectInstanceId = g.SubjectInstanceId,
@@ -174,6 +216,64 @@ namespace SchoolGradebook.API
             try
             {
                 await gradeService.AddGradesAsync(gradesToCreate);
+            }
+            catch (ArgumentNullException e)
+            {
+                return BadRequest(new ErrorObject() { Message = e.Message });
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                return BadRequest(new ErrorObject() { Message = e.Message });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new ErrorObject() { Message = e.Message });
+            }
+
+            return StatusCode(201);
+        }
+
+        // PUT: api/Grades/Batch
+        [HttpPut("Batch")]
+        [Authorize(policy: "OnlyTeacher")]
+        public async Task<IActionResult> UpdateGrades(ICollection<GradeObject> grades)
+        {
+            int teacherId = await teacherService.GetTeacherId(UserId);
+            if (teacherId == -1)
+            {
+                return StatusCode(403);
+            }
+            List<int> subjectInstanceIdsToCheck = new List<int>();
+            List<Grade> gradesToUpdate = new List<Grade>();
+
+            foreach (var g in grades)
+            {
+                gradesToUpdate.Add(new Grade()
+                {
+                    Id = g.Id,
+                    Added = DateTime.UtcNow,
+                    Name = g.Name,
+                    StudentId = g.StudentId,
+                    SubjectInstanceId = g.SubjectInstanceId,
+                    Value = g.Value
+                });
+                if (!subjectInstanceIdsToCheck.Contains(g.SubjectInstanceId))
+                {
+                    subjectInstanceIdsToCheck.Add(g.SubjectInstanceId);
+                }
+            }
+
+            foreach (int id in subjectInstanceIdsToCheck)
+            {
+                if (!await teacherAccessValidation.HasAccessToSubject(teacherId, id))
+                {
+                    return StatusCode(403);
+                }
+            }
+
+            try
+            {
+                await gradeService.UpdateGradesAsync(gradesToUpdate);
             }
             catch (ArgumentNullException e)
             {

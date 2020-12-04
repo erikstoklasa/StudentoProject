@@ -80,16 +80,54 @@ namespace SchoolGradebook.Services
         public async Task AddGradeAsync(Grade grade, bool saveChanges = true)
         {
             if (!HasRequiredFields(grade))
+            {
                 throw new ArgumentNullException("Grade name");
+            }
 
             //Grading scale is relative to the country of school
             if (grade.Value <= 0 || grade.Value > 5)
+            {
                 throw new ArgumentOutOfRangeException("Grade value");
+            }
 
             await context.Grades.AddAsync(grade);
 
             if (saveChanges)
                 await context.SaveChangesAsync();
+        }
+        public async Task UpdateGradeAsync(Grade grade)
+        {
+            if (!HasRequiredFields(grade))
+            {
+                throw new ArgumentNullException("Grade name");
+            }
+
+            //Grading scale is relative to the country of school
+            if (grade.Value <= 0 || grade.Value > 5)
+            {
+                throw new ArgumentOutOfRangeException("Grade value");
+            }
+
+            context.Attach(grade).State = EntityState.Modified;
+            await context.SaveChangesAsync();
+        }
+
+        public async Task UpdateGradesAsync(ICollection<Grade> grades)
+        {
+            foreach (var grade in grades)
+            {
+                if (!HasRequiredFields(grade))
+                {
+                    throw new ArgumentNullException("Grade name");
+                }
+                //Grading scale is relative to the country of school
+                if (grade.Value <= 0 || grade.Value > 5)
+                {
+                    throw new ArgumentOutOfRangeException("Grade value");
+                }
+                context.Attach(grade).State = EntityState.Modified;
+            }
+            await context.SaveChangesAsync();
         }
 
         public async Task AddGradesAsync(IEnumerable<Grade> grades)
@@ -97,11 +135,15 @@ namespace SchoolGradebook.Services
             foreach (var grade in grades)
             {
                 if (!HasRequiredFields(grade))
+                {
                     throw new ArgumentNullException("Grade name");
+                }
 
                 //Grading scale is relative to the country of school
                 if (grade.Value <= 0 || grade.Value > 5)
+                {
                     throw new ArgumentOutOfRangeException("Grade value");
+                }
             }
             await context.Grades.AddRangeAsync(grades);
             await context.SaveChangesAsync();

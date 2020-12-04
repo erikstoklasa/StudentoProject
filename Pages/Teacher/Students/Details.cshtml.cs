@@ -21,15 +21,18 @@ namespace SchoolGradebook.Pages.Teacher.Students
         private readonly TeacherService teacherService;
         private readonly StudentService studentService;
         private readonly SubjectService subjectService;
+        private readonly TeacherAccessValidation teacherAccessValidation;
 
         public string UserId { get; set; }
         public int TeacherId { get; set; }
+        public bool HasFullAccess { get; set; }
 
-        public DetailsModel(IHttpContextAccessor httpContextAccessor, TeacherService teacherService, StudentService studentService, SubjectService subjectService)
+        public DetailsModel(IHttpContextAccessor httpContextAccessor, TeacherService teacherService, StudentService studentService, SubjectService subjectService, TeacherAccessValidation teacherAccessValidation)
         {
             this.teacherService = teacherService;
             this.studentService = studentService;
             this.subjectService = subjectService;
+            this.teacherAccessValidation = teacherAccessValidation;
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         }
@@ -51,7 +54,7 @@ namespace SchoolGradebook.Pages.Teacher.Students
             }
             SubjectInstances = await subjectService.GetAllSubjectInstancesByStudentAsync((int)id);
             TeacherId = await teacherService.GetTeacherId(UserId);
-
+            HasFullAccess = await teacherAccessValidation.HasAccessToStudent(TeacherId, (int)id);
             return Page();
         }
         public async Task<IActionResult> OnGetPrintAsync(int? id)

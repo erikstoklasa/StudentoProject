@@ -23,17 +23,17 @@
         </tr>
     </thead>
     <tbody class="table-white">
-        @foreach (var item in Model.Classes)
+        @foreach (var c in Model.Classes)
         {
             <tr>
                 <td class="search-data">
-                    @item.GetName()
+                    @c.GetName()
                 </td>
                 <td>
-                    @item.Teacher.GetFullName()
+                    @c.Teacher.GetFullName()
                 </td>
                 <td>
-                    <a asp-page="./Details" asp-route-id="@item.Id">Zobrazit</a>
+                    <a class="btn btn-primary" asp-page="/Teacher/Classes/Details" asp-route-id="@c.Id">Zobrazit</a>
                 </td>
             </tr>
         }

@@ -1,5 +1,5 @@
 ﻿@page
-@model SchoolGradebook.Pages.Admin.Classes.DetailsModel
+@model SchoolGradebook.Pages.Teacher.Classes.DetailsModel
 
 @{
     ViewData["Title"] = "Details";
@@ -8,21 +8,34 @@
 <div>
     <h1>@Model.Class.GetName()</h1>
     <h5>Třídní vyučující: @Model.Class.Teacher.GetFullName()</h5>
-    <h6>Počet studentů: @Model.Students.Count</h6>
-    <p class="text-muted">Studenti ve třídě</p>
-    <table class="table table-white">
-        <tbody>
-            @foreach (var student in Model.Students)
-            {
-                <tr>
-                    <td>
-                        <a asp-page="/Teacher/Students/Details" asp-route-id="@student.Id">@student.GetFullName()</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <p class="table-heading">Studenti ve třídě<span class="badge badge-pill badge-success ml-3">@Model.Students.Count</span></p>
+    @if (Model.Students.Count > 0)
+    {
+        <table class="table table-white">
+            <tbody>
+                @foreach (var student in Model.Students)
+                {
+                    <tr>
+                        <td>
+                            @student.FirstName
+                        </td>
+                        <td>
+                            @student.LastName
+                        </td>
+                        <td>
+                            <a class="btn btn-primary" asp-page="/Teacher/Students/Details" asp-route-id="@student.Id">Zobrazit</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="alert alert-dark">Ve třídě nejsou žádní studenti 🙁</p>
+    }
+
 </div>
 <div>
-    <a asp-page="./Index">Zpět</a>
+    <a asp-page="./Index">Všechny třídy</a>
 </div>

@@ -60,7 +60,7 @@
                     {
                         var si = tf.TimetableRecord.SubjectInstance;
                         <a class="no-bcg-onhover text-dark" asp-page="/Student/Subjects/Details" asp-route-Id="@si.Id">
-                            <div class="timeframe">
+                            <div class="timeframe" style="background: @Model.GetColorByItemId(si.Id)">
                                 @tf.Start.ToString("HH:mm") - @tf.End.ToString("HH:mm")<br>
 
                                 <strong>

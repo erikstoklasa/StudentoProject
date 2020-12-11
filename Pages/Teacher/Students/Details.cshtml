@@ -7,10 +7,10 @@
 
 <div class="main-container">
     <div class="side-pane box-shadow">
-        <a class="btn btn-primary" asp-page="./Index"><img src="~/images/back.png" alt="Přidat" height="18px" class="btn-icon" />Zpět</a>
+        <a class="btn btn-primary" asp-page="./Index"><img src="~/images/back.svg" alt="Přidat" height="18px" class="btn-icon" />Zpět</a>
         @if (Model.HasFullAccess)
         {
-            <a class="btn btn-outline-primary" asp-page="./Edit" asp-route-id="@Model.Student.Id"><img src="~/images/edit.png" alt="Upravit" height="18px" class="btn-icon" />Upravit</a>
+            <a class="btn btn-outline-primary" asp-page="./Edit" asp-route-id="@Model.Student.Id"><img src="~/images/edit.svg" alt="Upravit" height="18px" class="btn-icon" />Upravit</a>
         }
         <a class="btn btn-outline-primary" asp-page="./Details" asp-page-handler="print" asp-route-id="@Model.Student.Id"><img src="~/images/print.svg" alt="Vytisknout" height="20px" class="btn-icon" />Tisk výpisu</a>
     </div>

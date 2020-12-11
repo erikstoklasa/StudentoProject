@@ -18,7 +18,7 @@ module.exports = {
                 exclude: /node_modules/ //excludes node_modules folder from being transpiled by babel. We do this because it's a waste of resources to do so.
             },
             {
-                test: /\.css$/i,
+                test: /\.css$/,
                 use: ["style-loader", "css-loader"],
                 exclude: /node_modules/
             },

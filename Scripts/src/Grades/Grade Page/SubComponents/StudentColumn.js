@@ -9,8 +9,10 @@ const StudentNames = ({ students }) => {
 
     return (
         <div className="grade-table-column">
-            <ColumnHeader title={''}/> 
-            {NameList}
+            <ColumnHeader title={''} /> 
+            <div className="grade-shadow-left">
+             {NameList}
+            </div>
         </div>
     )
 }

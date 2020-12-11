@@ -110,6 +110,7 @@ namespace SchoolGradebook.Services
                     .Include(e => e.SubjectInstance)
                     .Include(e => e.SubjectInstance.Teacher)
                     .Include(e => e.SubjectInstance.SubjectType)
+                    .OrderBy(e => e.SubjectInstance.SubjectType.Name)
                     .AsNoTracking()
                     .ToArrayAsync();
                 foreach (SubjectInstanceEnrollment e in enrollments)

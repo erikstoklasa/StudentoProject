@@ -71,6 +71,7 @@ namespace SchoolGradebook.Services
             grades = await context.Grades
             .Where(g => g.StudentId == studentId)
             .OrderByDescending(g => g.Added)
+            .Include(g => g.SubjectInstance.SubjectType)
             .AsNoTracking()
             .Skip(skip)
             .Take(take)

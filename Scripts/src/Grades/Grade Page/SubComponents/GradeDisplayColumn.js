@@ -4,10 +4,9 @@ import ColumnHeader from './ColumnHeader'
 import '../GradePage.css'
 
 const GradeDisplayColumn = ({ grade, students, studentGrades, modifyGrade }) => {
-    const [filteredGrades, updateFilteredGrades] = useState([])
-    const generateGrades = () => {
-        const gradeList = studentGrades.filter(studentGrade => studentGrade.name === grade.name)
-        const gradeDisplayList = students.map((student, index) => {
+   
+    const gradeList = studentGrades.filter(studentGrade => studentGrade.name === grade.name)
+    const gradeDisplayList = students.map((student, index) => {
             let gId;
             let gValue = '';
             gradeList.forEach(grade => {
@@ -17,17 +16,13 @@ const GradeDisplayColumn = ({ grade, students, studentGrades, modifyGrade }) => 
                 }        
             }           
             )
-            return <GradeDisplay key={index} gradeId={gId} studentId={student.id} value={gValue} modifyGrade={modifyGrade} gradeName={grade.name}/>
-        })
-        updateFilteredGrades(gradeDisplayList)
-    }
-
-    useEffect(generateGrades, [grade,students, studentGrades])
+        return <GradeDisplay key={index} gradeId={gId} studentId={student.id} value={gValue} modifyGrade={modifyGrade} gradeName={grade.name}/>
+    })    
     
     return (
-        <div className="grade-table-column">
+        <div className="">
             <ColumnHeader title={grade.name} />
-            {filteredGrades}
+            {gradeDisplayList}
         </div>
     )
 }

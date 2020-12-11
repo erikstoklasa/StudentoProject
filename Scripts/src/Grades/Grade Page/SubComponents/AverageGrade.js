@@ -4,7 +4,7 @@ import '../GradePage.css';
 const AverageGrade = ({ grade }) => {
     return (
     <div className="grade-cell">
-            {(grade ? <p className="grade-text">{grade}</p> : <p className="grade-text"></p>)}           
+            {(grade ? <p className="average-grade-text">{grade}</p> : <p className="grade-text"></p>)}           
     </div>   
     )
 }

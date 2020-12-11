@@ -1,5 +1,12 @@
 .grade-table-container{
     display: flex;
+    border-radius: 0.25rem;
+    background: #fff;
+    padding: 0;
+    padding-top: 20px;
+    padding-bottom: 10px !important;
+    overflow-x: scroll;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16);
 }
 
 .grade-column-section{
@@ -7,28 +14,46 @@
 }
 
 .grade-cell{
-    height: 20px;
-    min-width: 30px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    height: 40px;
+    min-width: 50px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 50px;
+    padding-right: 50px;
+    border-top: 1px solid lightgray;
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
 .student-name-cell{
-    height: 20px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    height: 40px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 50px;
+    padding-right: 50px;
+    border-top: 1px solid lightgray;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .student-name-text{
     white-space: nowrap;
     margin: 0;
     padding: 0;
-    max-height: 20px;
 }
 
 .grade-text{
+    width: 40px;
+    height: 24px;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+.average-grade-text{
+    font-weight: bold;
     margin: 0;
     padding: 0;
 }
@@ -38,17 +63,68 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: #fff;
+    padding-bottom: 20px;
 }
 
-.grade-table-column{
-    margin-left: 50px;
-    margin-right: 50px;
+.column-header-text{
+    white-space: nowrap;
+    margin: 0;
+    padding: 0;
 }
 
-.new-grade-input{
-    width: 20px;
+.filler-column{
+    width: 100%;
 }
 
-.display-grade-input{
-
+.grade-input{
+    max-width: 40px;
+    max-height: 25px;
+    -webkit-appearance: none !important;
+    margin: 0;
 }
+
+.column-header-input{
+    max-width: 90px;
+}
+
+.button-cell{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.new-grade-cell{
+    width: 150px;
+}
+
+.subject-info{
+    flex-grow: 1;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    white-space: nowrap;
+}
+
+.subject-average-text{   
+   flex-grow: 1;
+   white-space: nowrap;
+   font-weight: normal !important;
+}
+
+.subject-heading{
+ padding-bottom: 0!important;
+}
+
+.average-header-number{
+    font-weight: 500;
+}
+
+.subject-info-container{
+  display: flex;
+  flex-wrap: wrap;
+  flex-basis: 0;
+  
+}
+

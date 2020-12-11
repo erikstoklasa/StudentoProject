@@ -4,7 +4,7 @@ import '../GradePage.css';
 const StudentName = ({ name }) => {
     return (
         <div className="student-name-cell">
-            <p className="student-name-text">{name}</p>
+            <div className="student-name-text">{name}</div>
         </div>
     )
 }

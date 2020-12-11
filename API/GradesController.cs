@@ -224,6 +224,7 @@ namespace SchoolGradebook.API
             }
             List<int> subjectInstanceIdsToCheck = new List<int>();
             List<Grade> gradesToCreate = new List<Grade>();
+            List<int> gradeIds = new List<int>();
 
             foreach (var g in grades)
             {
@@ -265,8 +266,11 @@ namespace SchoolGradebook.API
             {
                 return BadRequest(new ErrorObject() { Message = e.Message });
             }
-
-            return StatusCode(201);
+            foreach(var g in gradesToCreate)
+            {
+                gradeIds.Add(g.Id);
+            }
+            return CreatedAtAction("PostGrade", gradeIds, gradesToCreate);
         }
 
         // PUT: api/Grades/Batch

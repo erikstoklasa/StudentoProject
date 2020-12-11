@@ -47,6 +47,7 @@ for details on configuring this project to bundle and minify static web assets. 
 .btn {
     padding: 0.4rem 0.7rem;
     width: 100%;
+    cursor: pointer;
 }
 
 .btn-icon {

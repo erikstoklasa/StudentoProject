@@ -62,5 +62,27 @@ namespace SchoolGradebook.Pages.Student
                 TimeFramesByDay[(int)tf.DayOfWeek - 1].Add(tf);
             }
         }
+        public string GetColorByItemId(int id)
+        {
+            string[] colors = {
+                "#473CB1",
+                "#FEB13C",
+                "#B56F04",
+                "#4F81B9",
+                "#EF950B",
+                "#79A3D2",
+                "#FED33C",
+                "#FFE58A",
+                "#feb23c",
+                "#B58E04",
+                "#FFC060",
+                "#6359C2",
+                "#FFD18A",
+                "#3168A6",
+                "#13549C",
+                "#0C3E76"
+            };
+            return colors[id % colors.Length];
+        }
     }
 }

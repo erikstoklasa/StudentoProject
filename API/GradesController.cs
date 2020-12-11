@@ -28,9 +28,26 @@ namespace SchoolGradebook.API
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
         }
 
-        // GET: api/Grades?studentId=5
-        // GET: api/Grades?subjectInstanceId=5
+        /// <summary>
+        /// Gets all grades by the selected filter
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     GET /Grades
+        ///     {
+        ///        "studentId": 1
+        ///     }
+        ///
+        /// </remarks>
+        /// <param name="studentId"></param>
+        /// <param name="subjectInstanceId"></param>
+        /// <returns>Grades</returns>
+        /// <response code="200">Returns grades</response>
+        /// <response code="403">If the user is not a teacher, or is not allowed to view the selected student/subject</response>
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [Authorize(policy: "OnlyTeacher")]
         public async Task<ActionResult<IEnumerable<GradeObject>>> GetGrades(int? studentId, int? subjectInstanceId)
         {
@@ -70,7 +87,26 @@ namespace SchoolGradebook.API
             return Ok();
         }
 
-        // GET: api/Grades/5
+        /// <summary>
+        /// Gets a single grade
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     GET /Grades
+        ///     {
+        ///        "id": 1
+        ///     }
+        ///
+        /// </remarks>
+        /// <param name="id"></param>
+        /// <returns>Grade</returns>
+        /// <response code="200">Returns the grade</response>
+        /// <response code="404">If grade is not found</response>
+        /// <response code="403">If the user is not a teacher, or is not allowed to view the selected grade</response>
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet("{id}")]
         public async Task<ActionResult<GradeObject>> GetGrade(int id)
         {
@@ -188,6 +224,7 @@ namespace SchoolGradebook.API
             }
             List<int> subjectInstanceIdsToCheck = new List<int>();
             List<Grade> gradesToCreate = new List<Grade>();
+            List<int> gradeIds = new List<int>();
 
             foreach (var g in grades)
             {
@@ -229,8 +266,11 @@ namespace SchoolGradebook.API
             {
                 return BadRequest(new ErrorObject() { Message = e.Message });
             }
-
-            return StatusCode(201);
+            foreach(var g in gradesToCreate)
+            {
+                gradeIds.Add(g.Id);
+            }
+            return CreatedAtAction("PostGrade", gradeIds, gradesToCreate);
         }
 
         // PUT: api/Grades/Batch

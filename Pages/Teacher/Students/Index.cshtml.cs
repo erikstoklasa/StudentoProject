@@ -14,13 +14,16 @@ namespace SchoolGradebook.Pages.Teacher.Students
     {
         private readonly StudentService studentService;
         private readonly TeacherService teacherService;
+        private readonly TeacherAccessValidation teacherAccessValidation;
 
         public string UserId { get; set; }
+        public bool HasFullAccess { get; set; }
 
-        public IndexModel(StudentService studentService, TeacherService teacherService, IHttpContextAccessor httpContextAccessor)
+        public IndexModel(StudentService studentService, TeacherService teacherService, IHttpContextAccessor httpContextAccessor, TeacherAccessValidation teacherAccessValidation)
         {
             this.studentService = studentService;
             this.teacherService = teacherService;
+            this.teacherAccessValidation = teacherAccessValidation;
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
         }
 

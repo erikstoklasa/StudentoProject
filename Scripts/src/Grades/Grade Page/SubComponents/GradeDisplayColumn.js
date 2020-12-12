@@ -4,7 +4,7 @@ import ColumnHeader from './ColumnHeader'
 import '../GradePage.css'
 
 const GradeDisplayColumn = ({ grade, students, studentGrades, modifyGrade }) => {
-    console.log(`re rendered column ${grade.name} with `, studentGrades)
+  
     const gradeList = studentGrades.filter(studentGrade => studentGrade.name === grade.name)
     const gradeDisplayList = students.map((student, index) => {
             let gId;

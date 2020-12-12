@@ -43,12 +43,11 @@ const GradePage = () => {
     const sortStudents = () => {
         if (bulkStudentData.students && !sortByAverage) {
         const studentArray = bulkStudentData.students;            
-        studentArray.sort((a, b) => a.lastName.localeCompare(b.lastName)) 
-        updateOrderedStudents(studentArray)
-        }
-        if (bulkStudentData.students && sortByAverage) {
-
-        }
+        studentArray.sort((a, b) => a.lastName.localeCompare(b.lastName))
+            if (studentArray.length > 0) {
+                updateOrderedStudents(studentArray)
+            }
+        }      
         
     }
 
@@ -106,7 +105,7 @@ const GradePage = () => {
             
                 if (!isNaN(formatedAvearage)) {
                     Object.assign(student, { average: formatedAvearage })
-                    console.log(student)
+        
                     return student
                 }
                 else {
@@ -176,7 +175,7 @@ const GradePage = () => {
                         })
                         updateBulkGradeData(newGrades)
                     }              
-                }).catch(err => { console.log(err) })
+                }).catch(err => {})
             }
         } else if (!gradeId) {
             
@@ -252,7 +251,7 @@ const GradePage = () => {
 
             let array;
             array = [...bulkGradeData, ...data]
-            console.log('new arr ', array)
+    
             updateBulkGradeData(array)
 
         })
@@ -263,25 +262,43 @@ const GradePage = () => {
     const onClickHeader = () => {
         updateSortByAverage(!sortByAverage)
     }
-
-    return (
-        <div>            
-            <div className="subject-info">
-                {(bulkStudentData ? <h1 className="subject-heading">{bulkStudentData.name}</h1> : null)}
-                {(bulkGradeData ? <h2 className="subject-average-text">Průměr: <span className="average-header-number">{bigAverage}</span></h2> : null)}
-                {(bulkStudentData.students ? <div>{`${bulkStudentData.students.length} studentů`}</div> : null)}
-            </div> 
+    
+    if (!orderedStudents) { 
+        return (
+            <div>
+                <div className="subject-info">
+                    {(bulkStudentData ? <h1 className="subject-heading">{bulkStudentData.name}</h1> : null)}
+                    {(bulkGradeData ? <h2 className="subject-average-text">Průměr: <span className="average-header-number">{bigAverage}</span></h2> : null)}
+                    {(bulkStudentData.students ? <div>{`${bulkStudentData.students.length} studentů`}</div> : null)}
+                </div>
                       
            
-            <div className="grade-table-container">                   
-            {(orderedStudents ? <StudentColumn students={orderedStudents} /> : null)} 
-                {(orderedStudents && bulkGradeData ? <AverageColumn students={orderedStudents} grades={bulkGradeData} onClickHeader= {onClickHeader}  /> : null)}
-            {(orderedStudents ? <NewGradeColumn students={orderedStudents} trackNewGradeValues={trackNewGradeValues} removeNewGrade={removeNewGrade} handleSubmitNewGrades={handleSubmitNewGrades} /> : null)}
-            {(orderedStudents && orderedGrades && bulkGradeData ? <GradeDisplaySection orderedGrades={orderedGrades} orderedStudents={orderedStudents} bulkGradeData={bulkGradeData} modifyGrade={modifyGrade} /> : null)}
-            {(orderedStudents ? <FillerColumn students={orderedStudents} /> : null)}
+                <div className="empty-grade-table">
+                    <div>Zatím žádní studenti</div>                  
+                </div>
             </div>
-        </div>        
-    )
+        )
+    }
+    else {
+        return (
+            <div>
+                <div className="subject-info">
+                    {(bulkStudentData ? <h1 className="subject-heading">{bulkStudentData.name}</h1> : null)}
+                    {(bulkGradeData ? <h2 className="subject-average-text">Průměr: <span className="average-header-number">{bigAverage}</span></h2> : null)}
+                    {(bulkStudentData.students ? <div>{`${bulkStudentData.students.length} studentů`}</div> : null)}
+                </div>
+                      
+           
+                <div className="grade-table-container">
+                    {(orderedStudents ? <StudentColumn students={orderedStudents} /> : null)}
+                    {(orderedStudents && bulkGradeData ? <AverageColumn students={orderedStudents} grades={bulkGradeData} onClickHeader={onClickHeader} /> : null)}
+                    {(orderedStudents ? <NewGradeColumn students={orderedStudents} trackNewGradeValues={trackNewGradeValues} removeNewGrade={removeNewGrade} handleSubmitNewGrades={handleSubmitNewGrades} /> : null)}
+                    {(orderedStudents && orderedGrades && bulkGradeData ? <GradeDisplaySection orderedGrades={orderedGrades} orderedStudents={orderedStudents} bulkGradeData={bulkGradeData} modifyGrade={modifyGrade} /> : null)}
+                    {(orderedStudents ? <FillerColumn students={orderedStudents} /> : null)}
+                </div>
+            </div>
+        )
+    }
 
 }
 

@@ -1,10 +1,10 @@
-import React, {useState, useEffect} from 'react'
+import React from 'react'
 import GradeDisplay from './GradeDisplay'
 import ColumnHeader from './ColumnHeader'
 import '../GradePage.css'
 
 const GradeDisplayColumn = ({ grade, students, studentGrades, modifyGrade }) => {
-   
+    console.log(`re rendered column ${grade.name} with `, studentGrades)
     const gradeList = studentGrades.filter(studentGrade => studentGrade.name === grade.name)
     const gradeDisplayList = students.map((student, index) => {
             let gId;
@@ -15,9 +15,11 @@ const GradeDisplayColumn = ({ grade, students, studentGrades, modifyGrade }) => 
                     gValue = grade.value;
                 }        
             }           
-            )
+        )
+       
         return <GradeDisplay key={index} gradeId={gId} studentId={student.id} value={gValue} modifyGrade={modifyGrade} gradeName={grade.name}/>
-    })    
+    })
+   
     
     return (
         <div className="">

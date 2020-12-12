@@ -53,12 +53,17 @@ const GradePage = () => {
     }
 
     const sortGrades = () => {
+        if (bulkGradeData.length === 0) {
+            updateOrderedGrades([])
+        }
+
         if (bulkGradeData.length > 0) {
             const studentGrades = [];
             const sortedGrades = bulkGradeData;
             let gradeSum = 0;
             const gradeNum = bulkGradeData.length;
-           
+
+                   
             sortedGrades.sort((a, b) => { 
                 if (a.added > b.added) { 
                     return 1
@@ -198,7 +203,7 @@ const GradePage = () => {
                 return array
             }).then(array => {
                updateBulkGradeData(array)                            
-            }).then().catch(err => console.log(err))
+            }).then().catch()
 
 
         }
@@ -229,7 +234,7 @@ const GradePage = () => {
     }
 
     const handleSubmitNewGrades = (newGradeName) => {
-       /* newGrades.forEach(grade => {
+        newGrades.forEach(grade => {
             Object.assign(grade, {name: newGradeName})
         })
         fetch(`${apiAdress}/Grades/Batch`, {
@@ -239,30 +244,34 @@ const GradePage = () => {
                 // 'Content-Type': 'application/x-www-form-urlencoded',
               },
             body: JSON.stringify(newGrades)
-        }).then(res => {
+        }).then(res => {            
             if (res.ok) {
-                res.json()
+               return res.json()
             }
-        }).then(data => console.log(data))*/
+        }).then(data => {
+
+            let array;
+            array = [...bulkGradeData, ...data]
+            console.log('new arr ', array)
+            updateBulkGradeData(array)
+
+        })
         
-        //finish after API update
+   
     }
 
     const onClickHeader = () => {
         updateSortByAverage(!sortByAverage)
     }
 
-
-    
-
     return (
         <div>            
-                <div className="subject-info">
-                    {(bulkStudentData ? <h1 className="subject-heading">{bulkStudentData.name}</h1> : null)}
-                    {(bulkGradeData ? <h2 className="subject-average-text">Pruměr: <span className="average-header-number">{bigAverage}</span></h2>: null)}
-                    {(bulkStudentData.students ? <div>{`${bulkStudentData.students.length} studentů`}</div> : null)}
-                </div> 
-                                    
+            <div className="subject-info">
+                {(bulkStudentData ? <h1 className="subject-heading">{bulkStudentData.name}</h1> : null)}
+                {(bulkGradeData ? <h2 className="subject-average-text">Průměr: <span className="average-header-number">{bigAverage}</span></h2> : null)}
+                {(bulkStudentData.students ? <div>{`${bulkStudentData.students.length} studentů`}</div> : null)}
+            </div> 
+                      
            
             <div className="grade-table-container">                   
             {(orderedStudents ? <StudentColumn students={orderedStudents} /> : null)} 

@@ -1,10 +1,15 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import '../GradePage.css'
 
 const GradeDisplay = ({ gradeId, studentId, value, modifyGrade, gradeName }) => {
-    const [initialValue, updateInitialValue] = useState(value);
-    const [gradeValue, updateGradeValue] = useState(value);
+    const [initialValue, updateInitialValue] = useState();
+    const [gradeValue, updateGradeValue] = useState();
     const [displayInput, updateDisplayInput] = useState(false);
+
+    useEffect(() => {
+        updateInitialValue(value)
+        updateGradeValue(value)
+    }, [value])
 
     const handleClick = () => {       
         updateDisplayInput(true)        

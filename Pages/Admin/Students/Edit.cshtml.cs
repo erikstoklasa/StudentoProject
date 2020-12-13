@@ -39,7 +39,7 @@ namespace SchoolGradebook.Pages.Admin.Students
                 return NotFound();
             }
 
-            Student = await studentService.GetStudentAsync((int)id);
+            Student = await studentService.GetStudentFullProfileAsync((int)id);
             if (Student == null)
             {
                 return NotFound();
@@ -54,7 +54,7 @@ namespace SchoolGradebook.Pages.Admin.Students
 
         public async Task<IActionResult> OnPostAsync()
         {
-            Models.Student s = await studentService.GetStudentAsync((int)Student.Id);
+            Models.Student s = await studentService.GetStudentFullProfileAsync((int)Student.Id);
             Student.UserAuthId = s.UserAuthId;
             int adminId = await adminService.GetAdminId(UserId);
             Student.SchoolId = (await adminService.GetAdminById(adminId)).SchoolId;
@@ -79,7 +79,7 @@ namespace SchoolGradebook.Pages.Admin.Students
                 ViewData["status_type"] = "error";
                 ViewData["status_message"] = "Nevyplnili jste všechny nutné údaje správně";
             }
-
+            Student = s; //Copying for redisplaying data to the user
             Classes = await classService.GetAllClasses();
             foreach (Class c in Classes)
             {

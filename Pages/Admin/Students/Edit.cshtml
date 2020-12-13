@@ -2,99 +2,152 @@
 @model SchoolGradebook.Pages.Admin.Students.EditModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Upravit";
+    int studentAge = (DateTime.Now - Model.Student.Birthdate.GetValueOrDefault()).Days / 365;
 }
 
-<h1>Upravit studenta</h1>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        @if ((string)ViewData["status_type"] == "success")
-        {
-            <div class="alert alert-success">@(ViewData["status_message"])</div>
-        }
-        else if ((string)ViewData["status_type"] == "error")
-        {
-            <div class="alert alert-danger">@(ViewData["status_message"])</div>
-        }
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Student.Id" />
-            <div class="form-group">
-                <label asp-for="Student.ClassId" class="control-label">Třída</label>
-                <select asp-for="Student.ClassId" class="form-control" asp-items="Model.ClassesList"></select>
+@if ((string)ViewData["status_type"] == "success")
+{
+    <div class="alert alert-success">@(ViewData["status_message"])</div>
+}
+else if ((string)ViewData["status_type"] == "error")
+{
+    <div class="alert alert-danger">@(ViewData["status_message"])</div>
+}
+<div class="main-container">
+    <div class="side-pane box-shadow">
+        <a class="btn btn-outline-primary" asp-page="./Index"><img src="~/images/back.svg" alt="Zpět" height="18px" class="btn-icon" />Zpět</a>
+        <a class="btn btn-primary" id="submit-btn"><img src="~/images/add.svg" alt="Upravit" height="18px" class="btn-icon" />Uložit</a>
+    </div>
+    <div class="d-flex flex-column flex-grow-1 mt-3 mt-lg-0">
+        <form method="post" id="profile">
+            <div class="d-flex flex-column">
+                <div class="form-group">
+                    <label asp-for="Student.FirstName" class="control-label"></label>
+                    <input asp-for="Student.FirstName" class="form-control col-lg-4" />
+                    <span asp-validation-for="Student.FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Student.LastName" class="control-label"></label>
+                    <input asp-for="Student.LastName" class="form-control col-lg-4" />
+                    <span asp-validation-for="Student.LastName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Student.ClassId" class="control-label">Třída</label>
+                    <select asp-for="Student.ClassId" class="form-control col-lg-4" asp-items="Model.ClassesList"></select>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Student.FirstName" class="control-label"></label>
-                <input asp-for="Student.FirstName" class="form-control" />
-                <span asp-validation-for="Student.FirstName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Student.LastName" class="control-label"></label>
-                <input asp-for="Student.LastName" class="form-control" />
-                <span asp-validation-for="Student.LastName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Student.Birthdate" class="control-label"></label>
-                <input asp-for="Student.Birthdate" class="form-control" type="date" />
-                <span asp-validation-for="Student.Birthdate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Student.PlaceOfBirth" class="control-label"></label>
-                <input asp-for="Student.PlaceOfBirth" class="form-control" />
-                <span asp-validation-for="Student.PlaceOfBirth" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Student.PersonalIdentifNumber" class="control-label"></label>
-                <input asp-for="Student.PersonalIdentifNumber" class="form-control" />
-                <span asp-validation-for="Student.PersonalIdentifNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Student.IdentifCardNumber" class="control-label"></label>
-                <input asp-for="Student.IdentifCardNumber" class="form-control" />
-                <span asp-validation-for="Student.IdentifCardNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Student.InsuranceCompany" class="control-label"></label>
-                <input asp-for="Student.InsuranceCompany" class="form-control" />
-                <span asp-validation-for="Student.InsuranceCompany" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Student.StreetAddress" class="control-label"></label>
-                <input asp-for="Student.StreetAddress" class="form-control" />
-                <span asp-validation-for="Student.StreetAddress" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Student.CityAddress" class="control-label"></label>
-                <input asp-for="Student.CityAddress" class="form-control" />
-                <span asp-validation-for="Student.CityAddress" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Student.ZipCode" class="control-label"></label>
-                <input asp-for="Student.ZipCode" class="form-control" />
-                <span asp-validation-for="Student.ZipCode" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Student.Email" class="control-label"></label>
-                <input asp-for="Student.Email" class="form-control" />
-                <span asp-validation-for="Student.Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Student.PhoneNumber" class="control-label"></label>
-                <input asp-for="Student.PhoneNumber" class="form-control" />
-                <span asp-validation-for="Student.PhoneNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Uložit" class="btn btn-primary" />
+            <div class="d-flex flex-row">
+
+                <input type="hidden" asp-for="Student.Id" />
+                <div class="mr-3 d-flex flex-row flex-grow-1">
+                    <div class="d-flex flex-column">
+                        <p class="table-heading">Základní údaje</p>
+                        <table class="table table-dense">
+                            <tr>
+                                <td><label asp-for="Student.Birthdate" class="control-label"></label></td>
+                                <td>
+                                    <input asp-for="Student.Birthdate" class="form-control" type="date" />
+                                    <span asp-validation-for="Student.Birthdate" class="text-danger"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label asp-for="Student.Email" class="control-label"></label></td>
+                                <td>
+                                    <input asp-for="Student.Email" class="form-control" />
+                                    <span asp-validation-for="Student.Email" class="text-danger"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label asp-for="Student.PhoneNumber" class="control-label"></label></td>
+                                <td>
+                                    <input asp-for="Student.PhoneNumber" class="form-control" />
+                                    <span asp-validation-for="Student.PhoneNumber" class="text-danger"></span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="flex-grow-1">
+                    <p class="table-heading">Detailní údaje</p>
+                    <table class="table table-dense">
+                        <tr>
+                            <td><label asp-for="Student.PersonalIdentifNumber" class="control-label"></label></td>
+                            <td>
+                                <input asp-for="Student.PersonalIdentifNumber" class="form-control" />
+                                <span asp-validation-for="Student.PersonalIdentifNumber" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label asp-for="Student.PlaceOfBirth" class="control-label"></label></td>
+                            <td>
+                                <input asp-for="Student.PlaceOfBirth" class="form-control" />
+                                <span asp-validation-for="Student.PlaceOfBirth" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label asp-for="Student.IdentifCardNumber" class="control-label"></label></td>
+                            <td>
+                                <input asp-for="Student.IdentifCardNumber" class="form-control" />
+                                <span asp-validation-for="Student.IdentifCardNumber" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label asp-for="Student.InsuranceCompany" class="control-label"></label></td>
+                            <td>
+                                <input asp-for="Student.InsuranceCompany" class="form-control" />
+                                <span asp-validation-for="Student.InsuranceCompany" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label asp-for="Student.StreetAddress" class="control-label"></label></td>
+                            <td>
+                                <input asp-for="Student.StreetAddress" class="form-control" />
+                                <span asp-validation-for="Student.StreetAddress" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label asp-for="Student.CityAddress" class="control-label"></label></td>
+                            <td>
+                                <input asp-for="Student.CityAddress" class="form-control" />
+                                <span asp-validation-for="Student.CityAddress" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label asp-for="Student.ZipCode" class="control-label"></label></td>
+                            <td>
+                                <input asp-for="Student.ZipCode" class="form-control" />
+                                <span asp-validation-for="Student.ZipCode" class="text-danger"></span>
+                            </td>
+                        </tr>
+                    </table>
+                    @if (Model.Student.StudentGroupEnrollments.Count == 0)
+                    {
+
+                        <p class="alert alert-warning my-5">Student/ka namá přiřazený žádný předmět 🙁</p>
+
+                    }
+                    else
+                    {
+                        <p class="table-heading">Přiřazen/a do skupin</p>
+                        <table class="table table-dense">
+                            @foreach (var item in Model.Student.StudentGroupEnrollments)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.StudentGroup.Name
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    }
+                </div>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-page="./Index">Zpět</a>
-</div>
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/remapSubmitButton.js"></script>
 }

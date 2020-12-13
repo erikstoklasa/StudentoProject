@@ -44,6 +44,11 @@ for details on configuring this project to bundle and minify static web assets. 
         border-color: #feb23c;
     }
 
+.btn-outline-danger {
+    color: #000;
+    border: 2px solid #dc3545;
+}
+
 .btn {
     padding: 0.4rem 0.7rem;
     width: 100%;

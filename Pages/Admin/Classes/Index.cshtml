@@ -36,9 +36,9 @@
                     @item.Teacher.GetFullName()
                 </td>
                 <td>
-                    <a asp-page="./Details" asp-route-id="@item.Id">Zobrazit</a> |
-                    <a asp-page="./Edit" asp-route-id="@item.Id">Upravit</a> |
-                    <a asp-page="./Delete" asp-route-id="@item.Id">Odstranit</a>
+                    <a class="btn btn-primary" asp-page="/Admin/Classes/Details" asp-route-id="@item.Id">Zobrazit</a>
+                    <a class="btn btn-outline-primary" asp-page="/Admin/Classes/Edit" asp-route-id="@item.Id">Upravit</a>
+                    <a class="btn btn-outline-danger" asp-page="/Admin/Classes/Delete" asp-route-id="@item.Id">Odstranit</a>
                 </td>
             </tr>
         }

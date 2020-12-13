@@ -5,25 +5,49 @@
     ViewData["Title"] = "Details";
 }
 
-<div>
-    <h1>@Model.Class.GetName()</h1>
-    <h5>Třídní vyučující: @Model.Class.Teacher.GetFullName()</h5>
-    <h6>Počet studentů: @Model.Students.Count</h6>
-    <p class="text-muted">Studenti ve třídě</p>
-    <table class="table table-white">
-        <tbody>
-            @foreach (var student in Model.Students)
-            {
-                <tr>
-                    <td>
-                        <a asp-page="/Admin/Students/Details" asp-route-id="@student.Id">@student.GetFullName()</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+<div class="main-container">
+    <div class="side-pane box-shadow">
+        <a class="btn btn-primary" asp-page="/Admin/Classes/Index">
+            <img src="~/images/back.svg" alt="Zpět" height="18px" class="btn-icon" />Zpět
+        </a>
+        <a class="btn btn-outline-primary" asp-page="/Admin/Classes/Edit" asp-route-id="@Model.Class.Id">
+            <img src="~/images/edit.svg" alt="Upravit" height="18px" class="btn-icon" />Upravit
+        </a>
+        <a class="btn btn-outline-danger" asp-page="/Admin/Classes/Delete" asp-route-id="@Model.Class.Id">Odstranit</a>
+    </div>
+    <div class="d-flex flex-column flex-grow-1 mt-3 mt-lg-0">
+        <h1>@Model.Class.GetName()</h1>
+        <h5>Třídní vyučující: @Model.Class.Teacher.GetFullName()</h5>
+        <h5>Kmenová třída: @Model.Class.BaseRoom.Name</h5>
+        <p class="table-heading">Studenti ve třídě<span class="badge badge-pill badge-success ml-3">@Model.Students.Count</span></p>
+        @if (Model.Students.Count > 0)
+        {
+            <table class="table table-white">
+                <tbody>
+                    @foreach (var student in Model.Students)
+                    {
+                        <tr>
+                            <td>
+                                @student.FirstName
+                            </td>
+                            <td>
+                                @student.LastName
+                            </td>
+                            <td>
+                                <a class="btn btn-primary" asp-page="/Teacher/Students/Details" asp-route-id="@student.Id">Zobrazit</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p class="alert alert-dark">Ve třídě nejsou žádní studenti 🙁</p>
+        }
+
+    </div>
 </div>
 <div>
-    <a asp-page="./Edit" asp-route-id="@Model.Class.Id">Upravit</a> |
-    <a asp-page="./Index">Zpět</a>
+    <a asp-page="./Index">Všechny třídy</a>
 </div>

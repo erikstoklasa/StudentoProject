@@ -8,13 +8,13 @@ import apiAdress from './SubComponents/Variables'
 import './GradePage.css';
 
 const GradePage = () => {
-    const [bulkGradeData, updateBulkGradeData] = useState([]);
     const [sortByAverage, updateSortByAverage] = useState(false);
+    const [bulkGradeData, updateBulkGradeData] = useState([]);
+    const [formattedStudentData, updateFormattedStudentData] = useState()    
     const [bigAverage, updateBigAverage] = useState([]);
     const [bulkStudentData, updateBulkStudentData] = useState([]);
     const [InstanceId, updateInstanceId] = useState();
     const [orderedStudents, updateOrderedStudents] = useState();
-    /*const [orderedStudentsByAverage, updateOrderedByAverage] = useState()*/
     const [orderedGrades, updateOrderedGrades] = useState();
     const newGrades = [];
 
@@ -33,21 +33,35 @@ const GradePage = () => {
             fetch(`${apiAdress}/SubjectInstances/${InstanceId}`, {
                 method: 'GET',
             }).then(res => res.json()).then(data => {                
-               
-                updateBulkStudentData(data)
+                updateBulkStudentData(data)                
             }) 
         
         }
     }
 
-    const sortStudents = () => {
-        if (bulkStudentData.students && !sortByAverage) {
-        const studentArray = bulkStudentData.students;            
-        studentArray.sort((a, b) => a.lastName.localeCompare(b.lastName))
+    const sortStudents = () => {      
+        if (formattedStudentData && sortByAverage === false) {
+            const studentArray = [...formattedStudentData];
+            studentArray.sort((a, b) => a.lastName.localeCompare(b.lastName))
             if (studentArray.length > 0) {
                 updateOrderedStudents(studentArray)
             }
-        }      
+        }
+        if (formattedStudentData && sortByAverage === true) {           
+            const studentArray = [...formattedStudentData]
+            studentArray.sort((a, b) => (a.average > b.average) ? 1 : -1)         
+            let studentsWithAverage = [];
+            let studentsWithoutAverage = [];
+            studentArray.forEach(student => {
+                if (student.average === '') {
+                    studentsWithoutAverage.push(student)
+                } else {
+                    studentsWithAverage.push(student)
+                }
+            })
+            const finalStudentArray = studentsWithAverage.concat(studentsWithoutAverage);
+            updateOrderedStudents(finalStudentArray)
+        }
         
     }
 
@@ -87,10 +101,9 @@ const GradePage = () => {
         }
     }
 
-  /*  const calculateAverages = () => {   
-      
-       if (bulkStudentData.students && bulkGradeData.length > 0) {
-            const newStudentData = bulkStudentData.students.map((student, index) => {
+    const calculateAverages = () => {   
+        if (bulkStudentData.students && bulkGradeData.length > 0) {
+            const newStudentData = [...bulkStudentData.students.map((student, index) => {
                 let total = 0;
                 let gradeNum = 0;
                     
@@ -113,18 +126,18 @@ const GradePage = () => {
                     return student
                 }
             
-            })
-           newStudentData.sort()
-           updateBulkStudentData(newStudentData)
+            })]
+           updateFormattedStudentData(newStudentData)
         }
         
-    }*/
+    }
 
     useEffect(getInstanceId)
     useEffect(fetchData, [InstanceId])
-    useEffect(sortStudents, [bulkStudentData, sortByAverage])
+    useEffect(calculateAverages, [bulkGradeData, bulkStudentData])
+    useEffect(sortStudents, [formattedStudentData, sortByAverage])
     useEffect(sortGrades, [bulkGradeData])
-   /* useEffect(calculateAverages, [bulkGradeData])*/
+  
   
     const modifyGrade = (gradeId, gradeValue, studentId, gradeName) => {
         if (gradeId) {
@@ -262,8 +275,14 @@ const GradePage = () => {
     const onClickHeader = () => {
         updateSortByAverage(!sortByAverage)
     }
-    
-    if (!orderedStudents) { 
+
+    /*const checkData = () => {
+        console.log(formattedStudentData)
+        console.log(orderedStudents)
+        console.log(sortByAverage)
+    }*/
+
+    if (!bulkStudentData.students) { 
         return (
             <div>
                 <div className="subject-info">
@@ -282,16 +301,15 @@ const GradePage = () => {
     else {
         return (
             <div>
-                <div className="subject-info">
+                 <div className="subject-info">
                     {(bulkStudentData ? <h1 className="subject-heading">{bulkStudentData.name}</h1> : null)}
                     {(bulkGradeData ? <h2 className="subject-average-text">Průměr: <span className="average-header-number">{bigAverage}</span></h2> : null)}
                     {(bulkStudentData.students ? <div>{`${bulkStudentData.students.length} studentů`}</div> : null)}
-                </div>
-                      
-           
+                </div>              
+                
                 <div className="grade-table-container">
                     {(orderedStudents ? <StudentColumn students={orderedStudents} /> : null)}
-                    {(orderedStudents && bulkGradeData ? <AverageColumn students={orderedStudents} grades={bulkGradeData} onClickHeader={onClickHeader} /> : null)}
+                    {(orderedStudents && bulkGradeData ? <AverageColumn students={orderedStudents} onClickHeader={onClickHeader} /> : null)}
                     {(orderedStudents ? <NewGradeColumn students={orderedStudents} trackNewGradeValues={trackNewGradeValues} removeNewGrade={removeNewGrade} handleSubmitNewGrades={handleSubmitNewGrades} /> : null)}
                     {(orderedStudents && orderedGrades && bulkGradeData ? <GradeDisplaySection orderedGrades={orderedGrades} orderedStudents={orderedStudents} bulkGradeData={bulkGradeData} modifyGrade={modifyGrade} /> : null)}
                     {(orderedStudents ? <FillerColumn students={orderedStudents} /> : null)}

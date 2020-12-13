@@ -8,6 +8,7 @@
 <div>
     <h1>@Model.Class.GetName()</h1>
     <h5>Třídní vyučující: @Model.Class.Teacher.GetFullName()</h5>
+    <h5>Kmenová třída: @Model.Class.BaseRoom.Name</h5>
     <p class="table-heading">Studenti ve třídě<span class="badge badge-pill badge-success ml-3">@Model.Students.Count</span></p>
     @if (Model.Students.Count > 0)
     {

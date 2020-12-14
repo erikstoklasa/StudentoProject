@@ -141,3 +141,10 @@
   
 }
 
+.notification-bar-container{
+    height: 50px;
+    width: 100%;
+    position: fixed;
+    top: 20px;
+    background-color: green
+}

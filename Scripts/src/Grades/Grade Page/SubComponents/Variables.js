@@ -1,3 +1,3 @@
-const apiAdress = 'https://localhost:5001/api'
+const apiAdress = `${window.location.origin}/api`
 
 export default apiAdress

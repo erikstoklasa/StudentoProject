@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect} from 'react';
 import StudentColumn from './SubComponents/StudentColumn.js';
 import AverageColumn from './SubComponents/AverageColumn.js';
 import NewGradeColumn from './SubComponents/NewGradeColumn.js';
 import GradeDisplaySection from './SubComponents/GradeDisplaySection.js';
 import FillerColumn from './SubComponents/FillerColumn.js'
+import NotificationBar from './SubComponents/NotificationBar.js'
 import apiAdress from './SubComponents/Variables'
 import './GradePage.css';
-
 const GradePage = () => {
     const [sortByAverage, updateSortByAverage] = useState(false);
     const [bulkGradeData, updateBulkGradeData] = useState([]);
@@ -16,6 +16,10 @@ const GradePage = () => {
     const [InstanceId, updateInstanceId] = useState();
     const [orderedStudents, updateOrderedStudents] = useState();
     const [orderedGrades, updateOrderedGrades] = useState();
+    const [notificationData, updateNotificationData] = useState({
+        show: false,
+        text: '',
+    });
     const newGrades = [];
 
     const getInstanceId = () => {
@@ -40,11 +44,9 @@ const GradePage = () => {
     }
 
     const sortStudents = () => {      
-        if (formattedStudentData && sortByAverage === false) {
-            const studentArray = [...formattedStudentData];
-            studentArray.sort((a, b) => a.lastName.localeCompare(b.lastName))
-            if (studentArray.length > 0) {
-                updateOrderedStudents(studentArray)
+        if (formattedStudentData && sortByAverage === false) {           
+            if (formattedStudentData.length > 0) {
+                updateOrderedStudents(formattedStudentData)
             }
         }
         if (formattedStudentData && sortByAverage === true) {           
@@ -153,8 +155,9 @@ const GradePage = () => {
                 }).then(res => {
                     if (res.ok) {
                         updateBulkGradeData(bulkGradeData.filter(grade => gradeId !== grade.id))
+                        renderNotificationBar()
                     }
-                }).then()
+                })
             }
             else {
                 const reqBody = {
@@ -187,6 +190,7 @@ const GradePage = () => {
                             }
                         })
                         updateBulkGradeData(newGrades)
+                        renderNotificationBar()
                     }              
                 }).catch(err => {})
             }
@@ -214,8 +218,9 @@ const GradePage = () => {
                 array = [...bulkGradeData, data]    
                 return array
             }).then(array => {
-               updateBulkGradeData(array)                            
-            }).then().catch()
+                updateBulkGradeData(array)
+                renderNotificationBar()
+            }).catch()
 
 
         }
@@ -266,7 +271,7 @@ const GradePage = () => {
             array = [...bulkGradeData, ...data]
     
             updateBulkGradeData(array)
-
+            renderNotificationBar()
         })
         
    
@@ -274,6 +279,21 @@ const GradePage = () => {
 
     const onClickHeader = () => {
         updateSortByAverage(!sortByAverage)
+    }
+
+    const renderNotificationBar = () => {
+
+        updateNotificationData(Object.assign(notificationBarData, {
+            show: true
+        }))
+
+        setTimeout(unrenderNotification, 3000)
+    }
+
+    const unrenderNotification = () => {        
+        updateNotificationData(Object.assign(notificationBarData, {
+            show:false
+        }))
     }
 
     /*const checkData = () => {
@@ -301,6 +321,7 @@ const GradePage = () => {
     else {
         return (
             <div>
+                <NotificationBar data={notificationData} />
                  <div className="subject-info">
                     {(bulkStudentData ? <h1 className="subject-heading">{bulkStudentData.name}</h1> : null)}
                     {(bulkGradeData ? <h2 className="subject-average-text">Průměr: <span className="average-header-number">{bigAverage}</span></h2> : null)}
@@ -313,7 +334,9 @@ const GradePage = () => {
                     {(orderedStudents ? <NewGradeColumn students={orderedStudents} trackNewGradeValues={trackNewGradeValues} removeNewGrade={removeNewGrade} handleSubmitNewGrades={handleSubmitNewGrades} /> : null)}
                     {(orderedStudents && orderedGrades && bulkGradeData ? <GradeDisplaySection orderedGrades={orderedGrades} orderedStudents={orderedStudents} bulkGradeData={bulkGradeData} modifyGrade={modifyGrade} /> : null)}
                     {(orderedStudents ? <FillerColumn students={orderedStudents} /> : null)}
+                  
                 </div>
+               
             </div>
         )
     }

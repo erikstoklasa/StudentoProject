@@ -114,14 +114,13 @@
 }
 
 .subject-info{
-    flex-grow: 1;
+    display: inline-block;
     margin-top: 50px;
     margin-bottom: 50px;
     white-space: nowrap;
 }
 
 .subject-average-text{   
-   flex-grow: 1;
    white-space: nowrap;
    font-weight: normal !important;
 }
@@ -142,9 +141,37 @@
 }
 
 .notification-bar-container{
-    height: 50px;
-    width: 100%;
-    position: fixed;
-    top: 20px;
-    background-color: green
+    height: 30px;
+    width: 40%;
+    max-width: 100px;
+    margin-top: -40px;
+    margin-left: auto;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5rem;  
+    background-color: rgba(47,150,47,1)	;
+    font-style: bold;
+
+    color: #fff
+}
+
+.notification-text{
+    padding: 0 ;
+    margin: 0 ;
+  
+}
+
+@media only screen and (max-width: 600px) {
+    .notification-bar-container{
+        position: fixed;
+        bottom: 20px;
+        width: 80%;
+        max-width: 80%;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 10px;
+        z-index: 1;
+    }
 }

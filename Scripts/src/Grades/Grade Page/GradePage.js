@@ -129,7 +129,14 @@ const GradePage = () => {
                 }
             
             })]
-           updateFormattedStudentData(newStudentData)
+            updateFormattedStudentData(newStudentData)
+        }
+        else if (bulkStudentData.students) {
+            const newStudentData = [...bulkStudentData.students];
+            newStudentData.forEach(student => {
+                Object.assign(student, {average: ''})
+            })
+            updateFormattedStudentData(newStudentData)
         }
         
     }
@@ -283,17 +290,15 @@ const GradePage = () => {
 
     const renderNotificationBar = () => {
 
-        updateNotificationData(Object.assign(notificationBarData, {
-            show: true
-        }))
+        updateNotificationData({
+            show:true
+        })
 
         setTimeout(unrenderNotification, 3000)
     }
 
     const unrenderNotification = () => {        
-        updateNotificationData(Object.assign(notificationBarData, {
-            show:false
-        }))
+        updateNotificationData({show:false})
     }
 
     /*const checkData = () => {
@@ -302,7 +307,7 @@ const GradePage = () => {
         console.log(sortByAverage)
     }*/
 
-    if (!bulkStudentData.students) { 
+    if (!orderedStudents) {     
         return (
             <div>
                 <div className="subject-info">
@@ -318,16 +323,19 @@ const GradePage = () => {
             </div>
         )
     }
+
+
+
     else {
         return (
             <div>
-                <NotificationBar data={notificationData} />
+                
                  <div className="subject-info">
                     {(bulkStudentData ? <h1 className="subject-heading">{bulkStudentData.name}</h1> : null)}
                     {(bulkGradeData ? <h2 className="subject-average-text">Průměr: <span className="average-header-number">{bigAverage}</span></h2> : null)}
                     {(bulkStudentData.students ? <div>{`${bulkStudentData.students.length} studentů`}</div> : null)}
-                </div>              
-                
+                </div>
+                <NotificationBar data={notificationData} />
                 <div className="grade-table-container">
                     {(orderedStudents ? <StudentColumn students={orderedStudents} /> : null)}
                     {(orderedStudents && bulkGradeData ? <AverageColumn students={orderedStudents} onClickHeader={onClickHeader} /> : null)}

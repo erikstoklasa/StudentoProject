@@ -14,24 +14,18 @@ namespace SchoolGradebook.Services
     {
         private readonly TimeFrameService timeFrameService;
         private readonly TimetableRecordService timetableRecordService;
-        private readonly SubjectService subjectService;
-        private readonly RoomService roomService;
         private readonly LessonRecordService lessonRecordService;
         private readonly TimetableChangeService timetableChangeService;
         private readonly ILogger<TimetableManager> logger;
 
         public TimetableManager(TimeFrameService timeFrameService,
                                 TimetableRecordService timetableRecordService,
-                                SubjectService subjectService,
-                                RoomService roomService,
                                 LessonRecordService lessonRecordService,
                                 TimetableChangeService timetableChangeService,
                                 ILogger<TimetableManager> logger)
         {
             this.timeFrameService = timeFrameService;
             this.timetableRecordService = timetableRecordService;
-            this.subjectService = subjectService;
-            this.roomService = roomService;
             this.lessonRecordService = lessonRecordService;
             this.timetableChangeService = timetableChangeService;
             this.logger = logger;

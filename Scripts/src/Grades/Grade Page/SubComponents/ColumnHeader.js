@@ -7,7 +7,7 @@ const ColumnHeader = ({ title, type, handleClick, displayInput, onInputChange, o
         return (
             <div className="column-header">
             
-                {(!displayInput ? <div className="column-header-container"><div className="btn btn-primary" onClick={handleClick}><p className="column-header-text">{title}</p></div></div>
+                {(!displayInput ? <div className=" column-header-container"><div className=" btn btn-primary btn-display" onClick={handleClick}><img src="/images/add.svg" alt="Přidat" height="18px" class="plus"></img><p className="column-header-text">{title}</p></div></div>
                     : <div className="column-header-container"><input className="form-control column-header-input" onChange={onInputChange} /></div>)}
             
             </div>
@@ -28,3 +28,4 @@ const ColumnHeader = ({ title, type, handleClick, displayInput, onInputChange, o
 }
 
 export default ColumnHeader
+

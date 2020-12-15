@@ -98,7 +98,7 @@
 }
 
 .column-header-input{
-    width: 130px;
+    width: 150px;
 }
 
 .button-cell{
@@ -176,3 +176,20 @@
 .new-grade-header-container{
     width:150px
 }
+
+
+
+.plus{
+  margin-right: 0.4rem;
+  transform: scale(0.8);
+}
+  
+
+.btn-display{
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+}
+
+
+

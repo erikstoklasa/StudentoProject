@@ -24,7 +24,7 @@ const NewGradeColumn = ({ students, trackNewGradeValues, removeNewGrade, handleS
 
     return (
         <div className='grade-table-column new-grade-column'>            
-            <ColumnHeader title={'+ Přidat známku'} type={'New Grade'} handleClick={handleHeaderClick} displayInput={displayGradeNameInput} onInputChange={ onGradeNameInputChange} />
+            <ColumnHeader title={'Přidat známku'} type={'New Grade'} handleClick={handleHeaderClick} displayInput={displayGradeNameInput} onInputChange={ onGradeNameInputChange} />
             {inputList}
             {(displayGradeNameInput ? <div className="button-cell"><button className="btn btn-primary" onClick={() => {
                 handleHeaderClick();

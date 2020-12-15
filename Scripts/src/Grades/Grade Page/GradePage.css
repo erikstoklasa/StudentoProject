@@ -27,12 +27,10 @@
 }
 
 .grade-cell{
-    height: 40px;
-    min-width: 50px;
+    height: 40px;    
     padding-top: 10px;
     padding-bottom: 10px;
-    padding-left: 50px;
-    padding-right: 50px;
+    width: 100%;
     border-top: 1px solid lightgray;
     display: flex;
     justify-content: center;
@@ -78,6 +76,8 @@
     align-items: center;
     background-color: #fff;
     padding-bottom: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
 }
 
 .column-header-text{
@@ -98,7 +98,7 @@
 }
 
 .column-header-input{
-    max-width: 90px;
+    width: 130px;
 }
 
 .button-cell{
@@ -110,7 +110,7 @@
 }
 
 .new-grade-cell{
-    width: 150px;
+    width: 100%;
 }
 
 .subject-info{
@@ -136,8 +136,7 @@
 .subject-info-container{
   display: flex;
   flex-wrap: wrap;
-  flex-basis: 0;
-  
+  flex-basis: 0;  
 }
 
 .notification-bar-container{
@@ -153,14 +152,12 @@
     border-radius: 5rem;  
     background-color: rgba(47,150,47,1)	;
     font-style: bold;
-
     color: #fff
 }
 
 .notification-text{
-    padding: 0 ;
-    margin: 0 ;
-  
+    padding: 0;
+    margin: 0;  
 }
 
 @media only screen and (max-width: 600px) {
@@ -174,4 +171,8 @@
         border-radius: 10px;
         z-index: 1;
     }
+}
+
+.new-grade-header-container{
+    width:150px
 }

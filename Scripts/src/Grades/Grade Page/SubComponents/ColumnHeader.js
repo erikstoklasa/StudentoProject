@@ -7,8 +7,8 @@ const ColumnHeader = ({ title, type, handleClick, displayInput, onInputChange, o
         return (
             <div className="column-header">
             
-                {(!displayInput ? <div className="btn btn-primary" onClick={handleClick}><p className="column-header-text">{title}</p></div>
-                :<input className="form-control" onChange={onInputChange} />)}
+                {(!displayInput ? <div className="column-header-container"><div className="btn btn-primary" onClick={handleClick}><p className="column-header-text">{title}</p></div></div>
+                    : <div className="column-header-container"><input className="form-control column-header-input" onChange={onInputChange} /></div>)}
             
             </div>
         )

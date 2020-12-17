@@ -14,24 +14,27 @@ namespace SchoolGradebook.Pages.Admin.Subjects
         public List<SubjectInstance> SubjectInstances { get; set; }
         private readonly Analytics _analytics;
         private readonly SubjectService subjectService;
+        private readonly StudentService studentService;
 
-        public int[] StudentsCount { get; set; }
+        public List<int> StudentsCount { get; set; }
 
-        public IndexModel(IHttpContextAccessor httpContextAccessor, Analytics analytics, SubjectService subjectService)
+        public IndexModel(IHttpContextAccessor httpContextAccessor, Analytics analytics, SubjectService subjectService, StudentService studentService)
         {
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             UserId ??= "";
             _analytics = analytics;
             this.subjectService = subjectService;
+            this.studentService = studentService;
+            StudentsCount = new List<int>();
         }
 
         public async Task OnGetAsync()
         {
             SubjectInstances = await subjectService.GetAllSubjectInstancesAsync();
-            StudentsCount = new int[SubjectInstances.Count];
-            for (int i = 0; i < SubjectInstances.Count; i++)
+
+            foreach (var si in SubjectInstances)
             {
-                StudentsCount[i] = await _analytics.GetStudentsCountInSubjectAsync(SubjectInstances[i].Id);
+                StudentsCount.Add(await studentService.GetStudentCountBySubjectAsync(si.Id));
             }
         }
     }

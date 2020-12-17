@@ -180,6 +180,10 @@ namespace SchoolGradebook.Data
                     timeFrames.Add(new TimeFrame() { DayOfWeek = (DayOfWeek)i, Start = DateTime.Parse("12:30:00"), End = DateTime.Parse("13:15:00"), SchoolId = 1 });
                     timeFrames.Add(new TimeFrame() { DayOfWeek = (DayOfWeek)i, Start = DateTime.Parse("13:30:00"), End = DateTime.Parse("14:15:00"), SchoolId = 1 });
                     timeFrames.Add(new TimeFrame() { DayOfWeek = (DayOfWeek)i, Start = DateTime.Parse("14:30:00"), End = DateTime.Parse("15:15:00"), SchoolId = 1 });
+                    timeFrames.Add(new TimeFrame() { DayOfWeek = (DayOfWeek)i, Start = DateTime.Parse("15:20:00"), End = DateTime.Parse("16:05:00"), SchoolId = 1 });
+                    timeFrames.Add(new TimeFrame() { DayOfWeek = (DayOfWeek)i, Start = DateTime.Parse("16:10:00"), End = DateTime.Parse("16:55:00"), SchoolId = 1 });
+                    timeFrames.Add(new TimeFrame() { DayOfWeek = (DayOfWeek)i, Start = DateTime.Parse("17:00:00"), End = DateTime.Parse("17:45:00"), SchoolId = 1 });
+                    timeFrames.Add(new TimeFrame() { DayOfWeek = (DayOfWeek)i, Start = DateTime.Parse("17:50:00"), End = DateTime.Parse("18:35:00"), SchoolId = 1 });
                 }
                 context.TimeFrames.AddRange(timeFrames);
                 context.SaveChanges();
@@ -188,9 +192,9 @@ namespace SchoolGradebook.Data
             if (!context.TimetableRecords.Any())
             {
                 List<TimetableRecord> timetableRecords = new List<TimetableRecord>();
-                for (int i = 0; i < 20; i++)
+                for (int i = 0; i < 50; i++)
                 {
-                    timetableRecords.Add(new TimetableRecord() { SubjectInstanceId = r.Next(1, 8), RoomId = r.Next(1, 4), Recurrence = 1, TimeFrameId = r.Next(1, 36) });
+                    timetableRecords.Add(new TimetableRecord() { SubjectInstanceId = r.Next(1, 8), RoomId = r.Next(1, 4), Recurrence = 1, TimeFrameId = r.Next(1, 56) });
                 }
                 context.TimetableRecords.AddRange(timetableRecords);
                 context.SaveChanges();
@@ -212,9 +216,9 @@ namespace SchoolGradebook.Data
             if (!context.TimetableChanges.Any())
             {
                 List<TimetableChange> timetableChanges = new List<TimetableChange>();
-                for (int i = 0; i < 20; i++)
+                for (int i = 0; i < 60; i++)
                 {
-                    timetableChanges.Add(new TimetableChange() { SubjectInstanceId = r.Next(1, 8), StudentGroupId = r.Next(1, 3), Week = r.Next(1, 11), TimeFrameId = r.Next(1, 36), Canceled = r.Next(1, 3) == 1 });
+                    timetableChanges.Add(new TimetableChange() { SubjectInstanceId = r.Next(1, 8), StudentGroupId = r.Next(1, 3), Week = r.Next(1, 50), TimeFrameId = r.Next(1, 36), Canceled = r.Next(1, 3) == 1 });
                 }
                 context.TimetableChanges.AddRange(timetableChanges);
                 context.SaveChanges();

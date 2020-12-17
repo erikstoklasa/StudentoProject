@@ -41,13 +41,6 @@ namespace SchoolGradebook.Services
         }
 
         //Teacher
-        public async Task<int> GetStudentsCountInSubjectAsync(int SubjectInstanceId)
-        {
-            return await Context.Enrollments
-                .Where(s => s.SubjectInstanceId == SubjectInstanceId)
-                .AsNoTracking()
-                .CountAsync();
-        }
 
         public async Task<int> GetStudentsCountByTeacherUserAuthIdAsync(string teacherUserAuthId)
         {

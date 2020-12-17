@@ -42,7 +42,7 @@ namespace SchoolGradebook.Pages.Admin.Teachers
             }
             AllSubjectTypes = await subjectService.GetAllSubjectTypesAsync();
             List<Approbation> apprs = await approbationService.GetAllApprobations((int)id);
-            foreach(var a in apprs)
+            foreach (var a in apprs)
             {
                 Approbations.Add(a.SubjectTypeId);
             }
@@ -55,6 +55,7 @@ namespace SchoolGradebook.Pages.Admin.Teachers
         {
             Models.Teacher t = await teacherService.GetTeacherAsync(Teacher.Id);
             Teacher.UserAuthId = t.UserAuthId;
+            Teacher.SchoolId = t.SchoolId;
 
             if (await teacherService.UpdateTeacherAsync(Teacher, Approbations))
             {

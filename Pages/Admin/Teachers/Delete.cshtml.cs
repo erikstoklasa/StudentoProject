@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using SchoolGradebook.Models;
-using SchoolGradebook.Data;
 using SchoolGradebook.Services;
+using System.Threading.Tasks;
 
 namespace SchoolGradebook.Pages.Admin.Teachers
 {

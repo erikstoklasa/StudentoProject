@@ -48,9 +48,9 @@ else
                     <td>
                         @Model.StudentsCount[i]
                     </td>
-                    <td>
-                        <a asp-page="Details" asp-route-id="@Model.SubjectInstances[i].Id">Detail</a> |
-                        <a asp-page="Delete" asp-route-id="@Model.SubjectInstances[i].Id">Odstranit</a>
+                    <td class="btn-section">
+                        <a class="btn btn-primary btn-condensed" asp-page="/Admin/Subjects/Details" asp-route-id="@Model.SubjectInstances[i].Id">Zobrazit</a>
+                        <a class="btn btn-outline-danger btn-condensed" asp-page="/Admin/Subjects/Delete" asp-route-id="@Model.SubjectInstances[i].Id">Odstranit</a>
                     </td>
                 </tr>
             }

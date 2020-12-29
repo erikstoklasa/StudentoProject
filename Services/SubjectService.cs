@@ -127,6 +127,7 @@ namespace SchoolGradebook.Services
                 .Where(s => s.TeacherId == teacherId)
                 .Include(s => s.SubjectType)
                 .Include(s => s.Teacher)
+                .OrderBy(s => s.SubjectType.Name)
                 .AsNoTracking()
                 .ToListAsync();
             return subjectInstances;

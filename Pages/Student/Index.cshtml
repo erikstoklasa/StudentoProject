@@ -16,7 +16,7 @@
                     Ahoj <strong>@LanguageHelper.Sklonuj(Model.StudentFirstName)!</strong>
                 </h1>
                 <h3 class="mt-3" style="font-weight: 400;">
-                    Celkový průměr: <strong>
+                    Pololetní průměr: <strong>
                         @Model.GPA
                     </strong>
                 </h3>
@@ -56,21 +56,19 @@
             SubjectMaterial subjectMaterial = (await subjectMaterialService.GetAllMaterialsBySubjectInstance(x.subjectInstance.Id, 1)).FirstOrDefault();
 
             <div class="card">
-                <a class="no-bcg-onhover" asp-page="Subjects/Details" asp-route-Id="@x.subjectInstance.Id">
-                    <div class="card-body">
-                        <div>
-                            <h5 class="card-title">@x.subjectInstance.SubjectType.Name</h5>
-                            <p class="card-subtitle">@x.subjectInstance.Teacher.GetFullName()</p>
-                        </div>
-                        <div class="card-avg">
-                            @x.subjectAverage
-                        </div>
+                <div class="card-body pb-0">
+                    <div>
+                        <h5 class="card-title">@x.subjectInstance.SubjectType.Name</h5>
+                        <p class="card-subtitle">@x.subjectInstance.Teacher.GetFullName()</p>
                     </div>
-                </a>
+                    <div class="card-avg">
+                        @x.subjectAverage
+                    </div>
+                </div>
                 @if (subjectMaterial != null)
                 {
                     <a class="no-bcg-onhover" asp-page="Subjects/Materials/Details" asp-route-Id="@subjectMaterial.Id">
-                        <div class="card-body p-0 pb-1">
+                        <div class="card-body mt-3 py-0">
                             <div class="row-custom">
                                 <img class="cell" src="~/images/icons/@(MimeTypeMap.GetExtension(MimeTypeMap.GetMimeType(subjectMaterial.FileExt)).Substring(1)).png" />
                                 <div class="cell"><span>@(subjectMaterial.Name)</span></div>
@@ -78,8 +76,10 @@
                         </div>
                     </a>
                 }
+                <div class="card-body flex-column justify-content-end">
+                    <a class="btn btn-primary" asp-page="/Student/Subjects/Details" asp-route-id="@x.subjectInstance.Id">Otevřít předmět</a>
+                </div>
             </div>
-
         }
     </div>
 </div>

@@ -50,11 +50,34 @@
                 <tbody>
                     @foreach (Grade x in Model.Grades)
                     {
+                        string gradeBackgroundColor = "black";
+                        string gradeTextColor = "dark";
+                        @if (x.Value < 2)
+                        {
+                            gradeBackgroundColor = "green";
+                        }
+                        else if (x.Value < 3)
+                        {
+                            gradeBackgroundColor = "grey";
+                        }
+                        else if (x.Value < 4)
+                        {
+                            gradeBackgroundColor = "yellow";
+                        }
+                        else if (x.Value < 5)
+                        {
+                            gradeBackgroundColor = "red";
+                        }
+                        if (gradeBackgroundColor == "black")
+                        {
+                            gradeTextColor = "light";
+                        }
+
                         <tr>
                             <td>
-                                <strong>
+                                <div class="grade-circle background-@(gradeBackgroundColor) text-@(gradeTextColor)">
                                     @x.Value.ToString()
-                                </strong>
+                                </div>
                             </td>
                             <td>
                                 <a asp-page="/Student/Grades/Details" asp-route-gradeId="@x.Id">

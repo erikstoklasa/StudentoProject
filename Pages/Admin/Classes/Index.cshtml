@@ -35,10 +35,10 @@
                 <td>
                     @item.Teacher.GetFullName()
                 </td>
-                <td>
-                    <a class="btn btn-primary" asp-page="/Admin/Classes/Details" asp-route-id="@item.Id">Zobrazit</a>
-                    <a class="btn btn-outline-primary" asp-page="/Admin/Classes/Edit" asp-route-id="@item.Id">Upravit</a>
-                    <a class="btn btn-outline-danger" asp-page="/Admin/Classes/Delete" asp-route-id="@item.Id">Odstranit</a>
+                <td class="btn-section">
+                    <a class="btn btn-primary btn-condensed" asp-page="/Admin/Classes/Details" asp-route-id="@item.Id">Zobrazit</a>
+                    <a class="btn btn-outline-primary btn-condensed" asp-page="/Admin/Classes/Edit" asp-route-id="@item.Id">Upravit</a>
+                    <a class="btn btn-outline-danger btn-condensed" asp-page="/Admin/Classes/Delete" asp-route-id="@item.Id">Odstranit</a>
                 </td>
             </tr>
         }

@@ -52,13 +52,13 @@
                 <td class="search-data">
                     @teacher.GetFullName()
                 </td>
-                <td>
-                    <a asp-page="/HumanCodes/Create"
+                <td class="btn-section">
+                    <a class="btn btn-primary btn-condensed" asp-page="/Admin/Teachers/Details" asp-route-id="@teacher.Id">Zobrazit</a>
+                    <a class="btn btn-outline-primary btn-condensed" asp-page="/Admin/Teachers/Edit" asp-route-id="@teacher.Id">Upravit</a>
+                    <a class="btn btn-outline-primary btn-condensed" asp-page="/HumanCodes/Create"
                        asp-route-targetId="@teacher.Id"
-                       asp-route-codeType="@CodeType.Teacher">Vygenerovat nový kód</a> |
-                    <a asp-page="./Edit" asp-route-id="@teacher.Id">Upravit</a> |
-                    <a asp-page="./Details" asp-route-id="@teacher.Id">Detaily</a> |
-                    <a asp-page="./Delete" asp-route-id="@teacher.Id">Odstranit</a>
+                       asp-route-codeType="@CodeType.Teacher">Nový přístupový kód</a>
+                    <a class="btn btn-outline-danger btn-condensed" asp-page="/Admin/Teachers/Delete" asp-route-id="@teacher.Id">Odstranit</a>
                 </td>
             </tr>
         }

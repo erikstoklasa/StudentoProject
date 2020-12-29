@@ -32,6 +32,7 @@ namespace SchoolGradebook.Services
         {
             List<Grade> grades = await context.Grades
                 .Where(g => g.SubjectInstanceId == subjectInstanceId && g.StudentId == studentId)
+                .OrderByDescending(g => g.Added)
                 .AsNoTracking()
                 .ToListAsync();
             return grades;
@@ -40,6 +41,7 @@ namespace SchoolGradebook.Services
         {
             Grade[] grades = await context.Grades
                 .Where(g => g.SubjectInstanceId == subjectInstanceId && g.StudentId == studentId)
+                .OrderByDescending(g => g.Added)
                 .AsNoTracking()
                 .ToArrayAsync();
             return grades;

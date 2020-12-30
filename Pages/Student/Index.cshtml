@@ -17,23 +17,53 @@
                 </h1>
                 <h3 class="mt-3" style="font-weight: 400;">
                     Pololetní průměr: <strong>
-                        @Model.GPA
+                        @Model.GPAToDisplay
                     </strong>
                 </h3>
-                @Html.Raw(ViewData["ComparisonString"])
+                @Html.Raw(Model.GPAComparisonHTML)<br>
+                @if (Model.GPA > 1.5)
+                {
+                    <small>Vyznamenání v pololetí <strong class="text-danger">nevychází</strong></small>
+                }
+                else
+                {
+                    <small>Vyznamenání v pololetí <strong class="text-success">vychází!</strong></small>
+                }
             </div>
         </div>
         <div class="d-flex flex-column">
-            <p class="table-heading">Nové známky</p>
+            <p class="table-heading">Nejnovější známky</p>
             <table class="table table-responsive table-white table-condensed">
                 <tbody>
                     @foreach (var grade in Model.RecentGrades)
                     {
+                        string gradeBackgroundColor = "black";
+                        string gradeTextColor = "dark";
+                        @if (grade.Value < 2)
+                        {
+                            gradeBackgroundColor = "green";
+                        }
+                        else if (grade.Value < 3)
+                        {
+                            gradeBackgroundColor = "grey";
+                        }
+                        else if (grade.Value < 4)
+                        {
+                            gradeBackgroundColor = "yellow";
+                        }
+                        else if (grade.Value < 5)
+                        {
+                            gradeBackgroundColor = "red";
+                        }
+                        if (gradeBackgroundColor == "black")
+                        {
+                            gradeTextColor = "light";
+                        }
                         <tr>
                             <td>
-                                <strong>
+                                <div class="grade-circle background-@(gradeBackgroundColor) text-@(gradeTextColor)">
                                     @grade.Value.ToString()
-                                </strong>
+                                </div>
                             </td>
                             <td>
                                 <a asp-page="/Student/Grades/Details" asp-route-gradeId="@grade.Id">

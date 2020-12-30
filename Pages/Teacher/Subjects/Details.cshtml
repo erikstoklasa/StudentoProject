@@ -46,8 +46,8 @@
                                 }
                             </td>
                             @*<td>
-                                <a asp-page="/Teacher/Grades/Create" asp-route-SubjectInstanceId="@Model.Subject.Id" asp-route-StudentId="@i.student.Id">Přidat známku</a>
-                            </td>*@
+                                    <a asp-page="/Teacher/Grades/Create" asp-route-SubjectInstanceId="@Model.Subject.Id" asp-route-StudentId="@i.student.Id">Přidat známku</a>
+                                </td>*@
                         </tr>
                     }
                 </tbody>
@@ -69,22 +69,24 @@
 
         @if (Model.SubjectMaterials.Count > 0)
         {
-            <div class="table table-responsive table-white">
-                @foreach (SchoolGradebook.Models.SubjectMaterial subjectMaterial in Model.SubjectMaterials)
-                {
-                    <div class="row-custom">
-                        <div class="cell-group">
-                            <img class="cell" src="~/images/icons/@(MimeTypeMap.GetExtension(MimeTypeMap.GetMimeType(subjectMaterial.FileExt)).Substring(1)).png" />
-                            <div class="cell"><span>@subjectMaterial.Name</span></div>
-                        </div>
-                        <div class="cell-group">
-                            <div class="cell"><a class="btn btn-outline-primary" asp-page="Materials/Details" asp-route-id="@subjectMaterial.Id">Otevřít</a></div>
-                            <div class="cell"><a class="btn btn-outline-danger" asp-page="Materials/Delete" asp-route-id="@subjectMaterial.Id">Odstranit</a></div>
-                        </div>
-                    </div>
+            <table class="table table-responsive table-white">
+                <tbody>
+                    @foreach (SchoolGradebook.Models.SubjectMaterial subjectMaterial in Model.SubjectMaterials)
+                    {
+                        <tr>
+                            <td>
+                                <img src="~/images/icons/@(MimeTypeMap.GetExtension(MimeTypeMap.GetMimeType(subjectMaterial.FileExt)).Substring(1)).png" />
+                            </td>
+                            <td>@subjectMaterial.Name</td>
+                            <td class="btn-section">
+                                <a class="btn btn-outline-primary" asp-page="Materials/Details" asp-route-id="@subjectMaterial.Id">Otevřít</a>
+                                <a class="btn btn-outline-danger" asp-page="Materials/Delete" asp-route-id="@subjectMaterial.Id">Odstranit</a>
+                            </td>
+                        </tr>
 
-                }
-            </div>
+                    }
+                </tbody>
+            </table>
         }
         else
         {

@@ -58,6 +58,7 @@
                                 {
                                     @(studentGroup.GetName() + ",")
                                 }
+                                <br>
                                 @($"{room.Name}")<br>
                             </div>
                         }
@@ -74,6 +75,7 @@
                             {
                                 @(enrollment.StudentGroup.GetName() + ",")
                             }
+                            <br>
                             @tf.TimetableRecord.Room.Name<br>
                         </div>
                     }
@@ -133,6 +135,7 @@ else
                                 {
                                     @(studentGroup.GetName() + ",")
                                 }
+                                <br>
                                 @($"{room.Name}")<br>
                             </div>
                         }
@@ -149,6 +152,7 @@ else
                             {
                                 @(enrollment.StudentGroup.GetName() + ",")
                             }
+                            <br>
                             @tf.TimetableRecord.Room.Name<br>
                         </div>
                     }
@@ -187,7 +191,7 @@ else
                 <td>
                     @getDateString((int)lr.Week, (int)lr.TimeFrame.DayOfWeek) @($"({lr.TimeFrame.Start:HH:mm} - {lr.TimeFrame.End:HH:mm})")
                 </td>
-                <td>
+                <td class="btn-section">
                     <a asp-page="/Teacher/LessonRecords/Index" asp-route-subjectInstanceId="@lr.SubjectInstanceId" asp-route-week="@lr.Week" asp-route-timeFrameId="@lr.TimeFrameId" class="btn btn-primary">Zapsat hodinu</a>
                 </td>
             </tr>
@@ -200,7 +204,4 @@ else
     {
         return firstDayOfTermStartWeek.AddDays((double)(((week - 1) * 7) + dayOfWeek)).ToString("dddd, dd. MM.");
     }
-}
-@section Scripts{
-    <script src="~/js/timetableStringShortener.js"></script>
 }

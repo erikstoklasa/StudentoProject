@@ -31,9 +31,11 @@ namespace SchoolGradebook.Pages.Student
         public List<SubjectInstance> Subjects { get; set; }
         public List<string> SubjectAverages { get; set; }
         public Grade[] RecentGrades { get; set; }
-        public string GPA { get; set; }
+        public string GPAToDisplay { get; set; }
+        public double GPA { get; set; }
         public IEnumerable<(SubjectInstance subjectInstance, string subjectAverage)> SubjectsAndSubjectAverages { get; set; }
         public ListCoursesResponse ListCoursesResponse { get; set; }
+        public string GPAComparisonHTML { get; set; }
 
         public IndexModel(IHttpContextAccessor httpContextAccessor, SubjectService subjectService, StudentService studentService, Analytics analytics, GradeService gradeService)
         {
@@ -63,10 +65,10 @@ namespace SchoolGradebook.Pages.Student
             }
             SubjectsAndSubjectAverages = Subjects.Zip(SubjectAverages, (s, sa) => (s, sa));
             double currentAvg = await _analytics.GetTotalAverageForStudentAsync(studentId);
-            GPA = currentAvg.CompareTo(double.NaN) == 0 ? "Žádné známky" : currentAvg.ToString("f2");
-
+            GPAToDisplay = currentAvg.CompareTo(double.NaN) == 0 ? "Žádné známky" : currentAvg.ToString("f2");
+            GPA = currentAvg;
             double comparisonAvg = await _analytics.GetTotalAverageForStudentAsync(studentId, 365, 30);
-            ViewData["ComparisonString"] = LanguageHelper.getAverageComparisonString(currentAvg, comparisonAvg);
+            GPAComparisonHTML = LanguageHelper.getAverageComparisonString(currentAvg, comparisonAvg);
 
 
             //UserCredential credential;

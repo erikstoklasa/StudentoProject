@@ -15,16 +15,16 @@ for details on configuring this project to bundle and minify static web assets. 
     width: 100%;
 }
 
-.add-grades-container .row {
-    padding: .3em 0;
-    flex-wrap: nowrap;
-}
+    .add-grades-container .row {
+        padding: .3em 0;
+        flex-wrap: nowrap;
+    }
 
-.add-grades-container input[type=number] {
-    width: 3em;
-    text-align: center;
-    appearance: textfield;
-}
+    .add-grades-container input[type=number] {
+        width: 3em;
+        text-align: center;
+        appearance: textfield;
+    }
 
 .grade-circle {
     height: 2rem;
@@ -55,10 +55,10 @@ for details on configuring this project to bundle and minify static web assets. 
     color: #1a0504 !important;
 }
 
-.btn-primary:hover {
-    background-color: #fff !important;
-    border-color: var(--primaryYellowStrong) !important;
-}
+    .btn-primary:hover {
+        background-color: #fff !important;
+        border-color: var(--primaryYellowStrong) !important;
+    }
 
 .btn-outline-primary {
     color: #000;
@@ -66,11 +66,11 @@ for details on configuring this project to bundle and minify static web assets. 
     border: 2px solid var(--primaryYellowStrong) !important;
 }
 
-.btn-outline-primary:hover {
-    color: #000;
-    background-color: var(--primaryYellowStrong);
-    border-color: var(--primaryYellowStrong);
-}
+    .btn-outline-primary:hover {
+        color: #000;
+        background-color: var(--primaryYellowStrong);
+        border-color: var(--primaryYellowStrong);
+    }
 
 .btn-outline-danger {
     color: #000;
@@ -103,10 +103,9 @@ for details on configuring this project to bundle and minify static web assets. 
     flex-direction: column;
 }
 
-.btn-section .btn {
-    margin: 0.25rem 0;
-    flex-grow: 1;
-}
+    .btn-section .btn {
+        margin: 0.25rem 0;
+    }
 
 
 .text-dark {
@@ -159,19 +158,19 @@ h2 {
     justify-content: space-between;
 }
 
-.landing-page div {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    padding: 0;
-}
+    .landing-page div {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        padding: 0;
+    }
 
-.landing-page h1 {
-    font-size: 2.5rem;
-    font-weight: bold;
-    text-align: start;
-    padding-bottom: 1rem;
-}
+    .landing-page h1 {
+        font-size: 2.5rem;
+        font-weight: bold;
+        text-align: start;
+        padding-bottom: 1rem;
+    }
 
 .table-heading {
     color: var(--grey);
@@ -187,9 +186,9 @@ h2 {
     margin: 1rem 0;
 }
 
-.table-heading-group a {
-    margin: 1rem 0 0;
-}
+    .table-heading-group a {
+        margin: 1rem 0 0;
+    }
 
 .table-white {
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
@@ -198,14 +197,14 @@ h2 {
     padding: 0.5rem;
 }
 
-.table-white .btn {
-    width: auto;
-}
+    .table-white .btn {
+        width: auto;
+    }
 
-.table-white tbody {
-    width: 100%;
-    display: table;
-}
+    .table-white tbody {
+        width: 100%;
+        display: table;
+    }
 
 .row-custom {
     display: flex;
@@ -214,9 +213,9 @@ h2 {
     border-radius: 5px;
 }
 
-.row-custom:hover {
-    background: rgba(0, 0, 0, 0.10);
-}
+    .row-custom:hover {
+        background: rgba(0, 0, 0, 0.10);
+    }
 
 .table-condensed .cell {
     height: 50px;
@@ -245,10 +244,10 @@ td img {
     padding: 6px;
 }
 
-.main-logo:hover {
-    background: rgba(0, 0, 0, 0.10);
-    border-radius: 3px;
-}
+    .main-logo:hover {
+        background: rgba(0, 0, 0, 0.10);
+        border-radius: 3px;
+    }
 
 .vertical-separator {
     margin: 0 5px;
@@ -264,10 +263,10 @@ td img {
     height: max-content;
 }
 
-.side-pane>* {
-    margin: 1rem;
-    width: auto;
-}
+    .side-pane > * {
+        margin: 1rem;
+        width: auto;
+    }
 
 .navbar-toggler[aria-expanded='false'] .navbar-toggler-icon {
     background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgb(0, 0, 0)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
@@ -278,9 +277,9 @@ td img {
     margin: 0.5rem 1rem;
 }
 
-.navbar-toggler[aria-expanded='true'] .navbar-toggler-icon {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 18 18'%3E%3Cpath d='M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z'/%3E%3C/svg%3E");
-}
+    .navbar-toggler[aria-expanded='true'] .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 18 18'%3E%3Cpath d='M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z'/%3E%3C/svg%3E");
+    }
 
 .navbar-light .navbar-toggler {
     color: rgb(255, 255, 255);
@@ -300,10 +299,10 @@ td img {
     justify-content: space-around;
 }
 
-.timetable .row {
-    margin: 0;
-    flex-wrap: nowrap;
-}
+    .timetable .row {
+        margin: 0;
+        flex-wrap: nowrap;
+    }
 
 .tt-width-5 {
     width: 5rem;
@@ -315,17 +314,24 @@ td img {
 }
 
 .timeframe {
-    padding: 0.5rem;
-    margin: 0.2rem;
+    padding: 5px;
+    margin: 5px 2.5px;
     background: #E2E2E2;
     border-radius: 5px;
     font-size: 8px;
     flex-shrink: 0;
-    height: 4rem;
+    height: 4.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-.timeframe strong {
-    font-size: 10px;
+    .timeframe strong {
+        font-size: 10px;
+    }
+
+.timeframe-small {
+    height: 4rem;
 }
 
 .timeframe-blank {
@@ -360,14 +366,14 @@ td img {
     user-select: none;
 }
 
-/* Hide the browser's default checkbox */
-.checkbox-container input {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-    height: 0;
-    width: 0;
-}
+    /* Hide the browser's default checkbox */
+    .checkbox-container input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
 
 /* Create a custom checkbox */
 .checkmark {
@@ -383,12 +389,12 @@ td img {
 }
 
 /* On mouse-over, add a green background color */
-.checkbox-container:hover input~.checkmark {
+.checkbox-container:hover input ~ .checkmark {
     background-color: #32C732;
 }
 
 /* When the checkbox is checked, add a red background */
-.checkbox-container input:checked~.checkmark {
+.checkbox-container input:checked ~ .checkmark {
     background-color: white;
     border: 2px solid red;
 }
@@ -400,7 +406,7 @@ td img {
 }
 
 /* Show the checkmark when checked */
-.checkbox-container input:checked~.checkmark:after {
+.checkbox-container input:checked ~ .checkmark:after {
     display: block;
 }
 
@@ -518,7 +524,7 @@ a:hover {
 }
 
 .nav-pills .nav-link.active,
-.nav-pills .show>.nav-link {
+.nav-pills .show > .nav-link {
     color: #fff;
     background-color: #1b6ec2;
     border-color: #1861ac;
@@ -546,7 +552,7 @@ html {
         max-width: initial;
     }
 
-    .main-container>div:nth-child(2) {
+    .main-container > div:nth-child(2) {
         padding-left: 0 !important;
     }
 
@@ -578,7 +584,7 @@ html {
         max-width: 960px !important;
     }
 
-    .main-container>div {
+    .main-container > div {
         width: 50%;
     }
 
@@ -598,9 +604,9 @@ html {
         flex-direction: row;
     }
 
-    .main-container>div:nth-child(2) {
-        padding-left: 50px !important;
-    }
+        .main-container > div:nth-child(2) {
+            padding-left: 50px !important;
+        }
 
     .side-pane {
         max-width: 12rem;
@@ -625,13 +631,12 @@ html {
 @media (min-width: 576px) {
     .btn-section {
         flex-direction: row;
-        justify-content: flex-end;
         flex-wrap: wrap;
     }
 
-    .btn-section .btn {
-        margin: 0.15rem;
-    }
+        .btn-section .btn {
+            margin: 0.15rem;
+        }
 
     .side-pane {
         flex-direction: row;
@@ -682,28 +687,28 @@ html {
         flex-direction: row;
     }
 
-    .table-heading-group a {
-        margin: auto 0;
-    }
+        .table-heading-group a {
+            margin: auto 0;
+        }
 
     .landing-page {
         flex-direction: row;
         padding: 4rem 2rem;
     }
 
-    .landing-page .main-image {
-        width: 200px;
-        margin: 0 auto;
-    }
+        .landing-page .main-image {
+            width: 200px;
+            margin: 0 auto;
+        }
 
-    .landing-page div {
-        height: 400px;
-    }
+        .landing-page div {
+            height: 400px;
+        }
 
-    .landing-page h1 {
-        font-size: 3rem;
-        padding-bottom: 0;
-    }
+        .landing-page h1 {
+            font-size: 3rem;
+            padding-bottom: 0;
+        }
 
     footer .container {
         flex-direction: row !important;
@@ -749,11 +754,11 @@ button.accept-policy {
     padding: 1rem 2rem;
 }
 
-.navbar-yellow div {
-    display: flex;
-    width: 15rem;
-    justify-content: space-around;
-}
+    .navbar-yellow div {
+        display: flex;
+        width: 15rem;
+        justify-content: space-around;
+    }
 
 .nav-item .text-muted {
     font-size: 10px;
@@ -793,18 +798,18 @@ footer {
     padding: 2rem;
 }
 
-footer .container div {
-    display: flex;
-    flex-direction: column;
-}
+    footer .container div {
+        display: flex;
+        flex-direction: column;
+    }
 
-footer .container {
-    display: flex;
-    justify-content: space-between;
-    flex-direction: column;
-    width: inherit;
-}
+    footer .container {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+        width: inherit;
+    }
 
-footer .container div * {
-    padding: 0.5rem 1rem;
-}
+        footer .container div * {
+            padding: 0.5rem 1rem;
+        }

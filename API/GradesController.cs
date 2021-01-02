@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace SchoolGradebook.API
+namespace SchoolGradebook.API.Grades
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -266,7 +266,7 @@ namespace SchoolGradebook.API
             {
                 return BadRequest(new ErrorObject() { Message = e.Message });
             }
-            foreach(var g in gradesToCreate)
+            foreach (var g in gradesToCreate)
             {
                 gradeIds.Add(g.Id);
             }

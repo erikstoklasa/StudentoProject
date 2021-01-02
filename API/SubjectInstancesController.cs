@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using SchoolGradebook.Models;
 using SchoolGradebook.Services;
 
-namespace SchoolGradebook.API
+namespace SchoolGradebook.API.SubjectInstance
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -28,7 +28,7 @@ namespace SchoolGradebook.API
         [Authorize(policy: "OnlyTeacher")]
         public async Task<ActionResult<SubjectInstanceObject>> GetSubjectInstance(int id)
         {
-            SubjectInstance si = await subjectService.GetSubjectInstanceAsync(id);
+            Models.SubjectInstance si = await subjectService.GetSubjectInstanceAsync(id);
             ICollection<Student> students = await studentService.GetAllStudentsBySubjectInstanceAsync(id);
             List<UserObject> userObjects = new List<UserObject>();
             foreach (var s in students)

@@ -11,7 +11,7 @@
 }
 <h1>Můj rozvrh</h1>
 <p class="table-heading">
-    Týden @firstDayOfThisWeek.ToShortDateString() - @firstDayOfThisWeek.AddDays(7).ToShortDateString() (Week in term model @Model.WeekInTerm.) (Model tt week: @Model.Timetable.Week.) (Term start: @Model.TermStart) (Now: @DateTime.Now.DayOfYear)
+    Týden @firstDayOfThisWeek.ToShortDateString() - @firstDayOfThisWeek.AddDays(6).ToShortDateString() (Week in term model @Model.WeekInTerm.) (Model tt week: @Model.Timetable.Week.) (Term start: @Model.TermStart) (Now: @DateTime.Now.DayOfYear)
 </p>
 @if (Model.DisplayModeRow == null || Model.DisplayModeRow == false)
 {

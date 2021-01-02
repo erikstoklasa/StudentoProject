@@ -42,7 +42,8 @@ namespace SchoolGradebook.Pages.Teacher
             TeacherId = await teacherService.GetTeacherId(UserId);
 
             TermStart = DateTime.ParseExact("01/09/2020", "dd/MM/yyyy", Provider);
-            int weekInTerm = (DateTime.Now.DayOfYear - (TermStart.DayOfYear - (int)TermStart.DayOfWeek)) / 7;
+            DateTime today = DateTime.UtcNow.AddDays(1);
+            int weekInTerm = (today - TermStart).Days / 7;
 
             Timetable = await timetableManager.GetTimetableForTeacher(TeacherId, weekInTerm);
             LessonRecords = await timetableManager.GetLessonRecordsNeededToBeCompleted(TeacherId, DateTime.Now);

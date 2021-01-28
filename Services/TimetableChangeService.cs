@@ -52,7 +52,7 @@ namespace SchoolGradebook.Services
                         .ThenInclude(e => e.StudentGroup)
                     .Include(tch => tch.CurrentSubjectInstance.SubjectType)
                     .Include(tch => tch.CurrentRoom)
-                    .Include(tch => tch.StudentGroup)
+                    .Include(tch => tch.CurrentTeacher)
                     .AsNoTracking()
                     .ToListAsync()
                     );

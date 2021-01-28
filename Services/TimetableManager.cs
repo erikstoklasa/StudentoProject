@@ -71,7 +71,7 @@ namespace SchoolGradebook.Services
             List<LessonRecord> lessonRecords = await lessonRecordService.GetLessonRecordsByTeacherAndWeek(teacherId, week);
             List<TimetableChange> timetableChanges = (await timetableChangeService.GetAllTimetableChangesByTeacher(teacherId, week)).ToList();
             //Attaching timetableRecordProperties
-            foreach (var tf in timeFrames)
+            foreach (TimeFrame tf in timeFrames)
             {
                 var tr = timetableRecords.FirstOrDefault(tr => tr.TimeFrameId == tf.Id);
                 if (tr != null && (week - tr.RecurrenceStart) >= 0 && (week - tr.RecurrenceStart) % tr.Recurrence == 0)
@@ -127,7 +127,7 @@ namespace SchoolGradebook.Services
     public class Timetable
     {
         public int Week { get; set; }
-        public int UserId { get; set; } //Either StudentId or TeacherId
+        public int UserId { get; set; } //Either StudentId or TeacherId CAN BE CONFUSED EASILY
         public List<TimeFrame> TimeFrames { get; set; }
     }
 }

@@ -36,7 +36,7 @@ namespace SchoolGradebook.API.Timetable
         /// 
         ///     GET /Timetable/Student/?week=1&wantMultipleWeeks=true
         /// </remarks>
-        /// <param name="weeks"></param>
+        /// <param name="week"></param>
         /// <param name="wantMultipleWeeks">True if you want one week before and after the selected week</param>
         /// <returns>Timetable week objects</returns>
         /// <response code="200">Returns timetable weeks</response>

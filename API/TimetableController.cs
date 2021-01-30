@@ -100,6 +100,16 @@ namespace SchoolGradebook.API.Timetable
                             TimetableEntryNew = timetableEntryNew
                         });
                     }
+                    else //No subject in timeframe
+                    {
+                        timeFrameObjects.Add(new TimeFrameObject()
+                        {
+                            Id = tf.Id,
+                            StartTime = tf.Start,
+                            EndTime = tf.End,
+                            DayOfWeek = tf.DayOfWeek
+                        });
+                    }
                 }
                 timetableWeeks.Add(new TimetableWeekObject()
                 {
@@ -182,6 +192,18 @@ namespace SchoolGradebook.API.Timetable
                             },
                             TimetableEntryNew = timetableEntryNew,
                             LessonRecordId = tf.LessonRecord?.Id
+                        });
+
+
+                    }
+                    else //No subject in timeframe
+                    {
+                        timeFrameObjects.Add(new TimeFrameObject()
+                        {
+                            Id = tf.Id,
+                            StartTime = tf.Start,
+                            EndTime = tf.End,
+                            DayOfWeek = tf.DayOfWeek
                         });
                     }
                 }

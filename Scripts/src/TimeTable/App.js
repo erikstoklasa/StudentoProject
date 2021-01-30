@@ -1,9 +1,10 @@
 import React from 'react';
-  
+import TimeTable from './TimeTable'  
+
 function App() {
   return (
     <div>
-      <h1>Hello</h1>
+      <TimeTable />
     </div>
   );
 }

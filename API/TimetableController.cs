@@ -34,24 +34,29 @@ namespace SchoolGradebook.API.Timetable
         /// <remarks>
         /// Sample request:
         /// 
-        ///     GET /Timetable/Student
-        ///     {
-        ///         [1]
-        ///     }
+        ///     GET /Timetable/Student/?week=1&wantMultipleWeeks=true
         /// </remarks>
         /// <param name="weeks"></param>
+        /// <param name="wantMultipleWeeks">True if you want one week before and after the selected week</param>
         /// <returns>Timetable week objects</returns>
         /// <response code="200">Returns timetable weeks</response>
         /// <response code="403">If the user is not a student</response>
         [HttpGet("Student")]
         [Authorize(policy: "OnlyStudent")]
-        public async Task<ActionResult<List<TimetableWeekObject>>> GetTimetableForStudent(IEnumerable<int> weeks)
+        public async Task<ActionResult<List<TimetableWeekObject>>> GetTimetableForStudent(int week, bool wantMultipleWeeks)
         {
+            List<int> weeks = new List<int>();
+            weeks.Add(week);
+            if (wantMultipleWeeks)
+            {
+                weeks.Add(week - 1);
+                weeks.Add(week + 1);
+            }
             int studentId = await studentService.GetStudentId(UserId);
             List<TimetableWeekObject> timetableWeeks = new List<TimetableWeekObject>();
-            foreach (var week in weeks)
+            foreach (var w in weeks)
             {
-                var tt = await timetableManager.GetTimetableForStudent(studentId, week);
+                var tt = await timetableManager.GetTimetableForStudent(studentId, w);
                 List<TimeFrameObject> timeFrameObjects = new List<TimeFrameObject>();
                 foreach (var tf in tt.TimeFrames)
                 {
@@ -113,7 +118,7 @@ namespace SchoolGradebook.API.Timetable
                 }
                 timetableWeeks.Add(new TimetableWeekObject()
                 {
-                    Week = week,
+                    Week = w,
                     TimeFrames = timeFrameObjects
                 });
 
@@ -126,24 +131,29 @@ namespace SchoolGradebook.API.Timetable
         /// <remarks>
         /// Sample request:
         /// 
-        ///     GET /Timetable/Teacher
-        ///     {
-        ///         [1]
-        ///     }
+        ///     GET /Timetable/Teacher?week=1&wantMultipleWeeks=true
         /// </remarks>
-        /// <param name="weeks"></param>
+        /// <param name="week"></param>
+        /// <param name="wantMultipleWeeks">True if you want one week before and after the selected week</param>
         /// <returns>Timetable week objects</returns>
         /// <response code="200">Returns timetable weeks</response>
         /// <response code="403">If the user is not a teacher</response>
         [HttpGet("Teacher")]
         [Authorize(policy: "OnlyTeacher")]
-        public async Task<ActionResult<List<TimetableWeekObject>>> GetTimetableForTeacher(IEnumerable<int> weeks)
+        public async Task<ActionResult<List<TimetableWeekObject>>> GetTimetableForTeacher(int week, bool wantMultipleWeeks)
         {
+            List<int> weeks = new List<int>();
+            weeks.Add(week);
+            if (wantMultipleWeeks)
+            {
+                weeks.Add(week - 1);
+                weeks.Add(week + 1);
+            }
             int teacherId = await teacherService.GetTeacherId(UserId);
             List<TimetableWeekObject> timetableWeeks = new List<TimetableWeekObject>();
-            foreach (var week in weeks)
+            foreach (var w in weeks)
             {
-                var tt = await timetableManager.GetTimetableForTeacher(teacherId, week);
+                var tt = await timetableManager.GetTimetableForTeacher(teacherId, w);
                 List<TimeFrameObject> timeFrameObjects = new List<TimeFrameObject>();
                 foreach (var tf in tt.TimeFrames)
                 {
@@ -209,7 +219,7 @@ namespace SchoolGradebook.API.Timetable
                 }
                 timetableWeeks.Add(new TimetableWeekObject()
                 {
-                    Week = week,
+                    Week = w,
                     TimeFrames = timeFrameObjects
                 });
 

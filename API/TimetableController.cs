@@ -41,7 +41,7 @@ namespace SchoolGradebook.API.Timetable
         /// <returns>Timetable week objects</returns>
         /// <response code="200">Returns timetable weeks</response>
         /// <response code="403">If the user is not a student</response>
-        [HttpGet("Student")]
+        [HttpPut("Student")]
         [Authorize(policy: "OnlyStudent")]
         public async Task<ActionResult<List<TimetableWeekObject>>> GetTimetableForStudent(int week, bool wantMultipleWeeks)
         {

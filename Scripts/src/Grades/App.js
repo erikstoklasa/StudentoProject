@@ -1,10 +1,10 @@
 import React from 'react';
-import GradePage from './Grade Page/GradePage'
-
+import GradePage from './Grade Page/GradePage.js'
+  
 function App() {
   return (
-    <div className="App">
-      <GradePage />
+    <div>
+      <GradePage/>
     </div>
   );
 }

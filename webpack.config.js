@@ -1,8 +1,8 @@
 ﻿const path = require("path");
 
 module.exports = {
-    entry: {
-        Grades: "./Scripts/src/Grades/index.js",
+    entry: {        
+        TimeTable: "./Scripts/src/TimeTable/index.js",
     },
     output: {
         path: path.resolve(__dirname, "./wwwroot/dist"),

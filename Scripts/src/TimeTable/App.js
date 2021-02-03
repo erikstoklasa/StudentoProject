@@ -3,9 +3,9 @@ import TimeTable from './TimeTable'
 
 function App() {
   return (
-    <div>
+      
       <TimeTable />
-    </div>
+    
   );
 }
 

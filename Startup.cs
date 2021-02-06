@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -119,7 +120,19 @@ namespace SchoolGradebook
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            const string cacheMaxAge = "604800";
+            FileExtensionContentTypeProvider provider = new FileExtensionContentTypeProvider();
+            provider.Mappings[".webmanifest"] = "application/manifest+json";
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                ContentTypeProvider = provider,
+                OnPrepareResponse = ctx =>
+                {
+                    // using Microsoft.AspNetCore.Http;
+                    ctx.Context.Response.Headers.Append(
+                         "Cache-Control", $"public, max-age={cacheMaxAge}");
+                }
+            });
 
             app.UseAuthentication();
             app.UseAuthorization();

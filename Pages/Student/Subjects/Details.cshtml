@@ -104,7 +104,7 @@
                         {
                             <tr>
                                 <td>
-                                    <img src="~/images/icons/@(MimeTypeMap.GetExtension(MimeTypeMap.GetMimeType(subjectMaterial.FileExt)).Substring(1)).png" />
+                                    <img alt="Extension icon" src="~/images/icons/@(MimeTypeMap.GetExtension(MimeTypeMap.GetMimeType(subjectMaterial.FileExt)).Substring(1)).png" />
                                 </td>
                                 <td>@subjectMaterial.Name</td>
                                 <td class="text-muted">@subjectMaterial.Added.ToLocalTime().ToString("d. MMMM")</td>

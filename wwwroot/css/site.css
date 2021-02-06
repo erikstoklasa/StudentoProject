@@ -5,7 +5,7 @@ for details on configuring this project to bundle and minify static web assets. 
     --primaryYellow: #fec368;
     --primaryYellowStrong: #feb23c;
     --transparentGrey: #0000001a;
-    --grey: #707070;
+    --grey: #505050;
     --pastelRed: #ff000085;
     --pastelGreen: #33c72180;
 }
@@ -48,6 +48,13 @@ for details on configuring this project to bundle and minify static web assets. 
 
 
 /*Studento style adaptation*/
+.text-success {
+    color: #00800f !important;
+}
+
+.text-danger {
+    color: #cb3140 !important;
+}
 
 .btn-primary {
     background-color: var(--primaryYellowStrong) !important;

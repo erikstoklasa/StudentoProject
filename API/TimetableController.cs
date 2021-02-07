@@ -36,21 +36,22 @@ namespace SchoolGradebook.API.Timetable
         /// 
         ///     GET /Timetable/Student/?week=1&wantMultipleWeeks=true
         /// </remarks>
-        /// <param name="week"></param>
+        /// <param name="week">Optional, if not set, will be automatically inferred</param>
         /// <param name="wantMultipleWeeks">True if you want one week before and after the selected week</param>
         /// <returns>Timetable week objects</returns>
         /// <response code="200">Returns timetable weeks</response>
         /// <response code="403">If the user is not a student</response>
         [HttpPut("Student")]
         [Authorize(policy: "OnlyStudent")]
-        public async Task<ActionResult<List<TimetableWeekObject>>> GetTimetableForStudent(int week, bool wantMultipleWeeks)
+        public async Task<ActionResult<List<TimetableWeekObject>>> GetTimetableForStudent(int? week, bool wantMultipleWeeks)
         {
+            week ??= GetWeekInTerm(DateTime.ParseExact("01/09/2020", "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture), DateTime.UtcNow);
             List<int> weeks = new List<int>();
-            weeks.Add(week);
+            weeks.Add((int)week);
             if (wantMultipleWeeks)
             {
-                weeks.Add(week - 1);
-                weeks.Add(week + 1);
+                weeks.Add((int)week - 1);
+                weeks.Add((int)week + 1);
             }
             int studentId = await studentService.GetStudentId(UserId);
             List<TimetableWeekObject> timetableWeeks = new List<TimetableWeekObject>();
@@ -62,28 +63,32 @@ namespace SchoolGradebook.API.Timetable
                 {
                     if (tf.TimetableRecord != null && tf.TimetableRecord.SubjectInstanceId != null)
                     {
-                        TimetableEntryObject timetableEntryNew = null;
+                        TimetableChangeObject timetableEntryChange = null;
                         //Add new timetable change if the is any change
                         if (tf.TimetableChange != null)
                         {
-                            timetableEntryNew = new TimetableEntryObject();
+                            timetableEntryChange = new TimetableChangeObject();
+                            if (tf.TimetableChange.Canceled != null)
+                            {
+                                timetableEntryChange.Cancelled = tf.TimetableChange.Canceled;
+                            }
                             if (tf.TimetableChange.CurrentRoom != null)
                             {
-                                timetableEntryNew.Room = tf.TimetableChange.CurrentRoom.Name;
+                                timetableEntryChange.Room = tf.TimetableChange.CurrentRoom.Name;
                             }
                             if (tf.TimetableChange.CurrentSubjectInstanceId != null)
                             {
-                                timetableEntryNew.SubjectInstanceId = (int)tf.TimetableChange.CurrentSubjectInstanceId;
+                                timetableEntryChange.SubjectInstanceId = (int)tf.TimetableChange.CurrentSubjectInstanceId;
                             }
                             if (tf.TimetableChange.CurrentSubjectInstance != null)
                             {
 
-                                timetableEntryNew.SubjectInstanceName = tf.TimetableChange.CurrentSubjectInstance.SubjectType.Name;
+                                timetableEntryChange.SubjectInstanceName = tf.TimetableChange.CurrentSubjectInstance.SubjectType.Name;
                             }
                             if (tf.TimetableChange.CurrentTeacher != null)
                             {
-                                timetableEntryNew.TeacherFirstName = tf.TimetableChange.CurrentTeacher.FirstName;
-                                timetableEntryNew.TeacherLastName = tf.TimetableChange.CurrentTeacher.LastName;
+                                timetableEntryChange.TeacherFirstName = tf.TimetableChange.CurrentTeacher.FirstName;
+                                timetableEntryChange.TeacherLastName = tf.TimetableChange.CurrentTeacher.LastName;
                             }
 
                         }
@@ -102,7 +107,7 @@ namespace SchoolGradebook.API.Timetable
                                 SubjectInstanceName = tf.TimetableRecord.SubjectInstance.SubjectType.Name
 
                             },
-                            TimetableEntryNew = timetableEntryNew
+                            TimetableEntryChange = timetableEntryChange
                         });
                     }
                     else //No subject in timeframe
@@ -133,21 +138,22 @@ namespace SchoolGradebook.API.Timetable
         /// 
         ///     GET /Timetable/Teacher?week=1&wantMultipleWeeks=true
         /// </remarks>
-        /// <param name="week"></param>
+        /// <param name="week">Optional, if not set, will be automatically inferred</param>
         /// <param name="wantMultipleWeeks">True if you want one week before and after the selected week</param>
         /// <returns>Timetable week objects</returns>
         /// <response code="200">Returns timetable weeks</response>
         /// <response code="403">If the user is not a teacher</response>
         [HttpGet("Teacher")]
         [Authorize(policy: "OnlyTeacher")]
-        public async Task<ActionResult<List<TimetableWeekObject>>> GetTimetableForTeacher(int week, bool wantMultipleWeeks)
+        public async Task<ActionResult<List<TimetableWeekObject>>> GetTimetableForTeacher(int? week, bool wantMultipleWeeks)
         {
+            week ??= GetWeekInTerm(DateTime.ParseExact("01/09/2020", "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture), DateTime.UtcNow);
             List<int> weeks = new List<int>();
-            weeks.Add(week);
+            weeks.Add((int)week);
             if (wantMultipleWeeks)
             {
-                weeks.Add(week - 1);
-                weeks.Add(week + 1);
+                weeks.Add((int)week - 1);
+                weeks.Add((int)week + 1);
             }
             int teacherId = await teacherService.GetTeacherId(UserId);
             List<TimetableWeekObject> timetableWeeks = new List<TimetableWeekObject>();
@@ -159,31 +165,35 @@ namespace SchoolGradebook.API.Timetable
                 {
                     if (tf.TimetableRecord != null && tf.TimetableRecord.SubjectInstanceId != null)
                     {
-                        TimetableEntryObject timetableEntryNew = null;
+                        TimetableChangeObject timetableEntryChange = null;
                         //Add new timetable change if the is any change
                         if (tf.TimetableChange != null)
                         {
-                            timetableEntryNew = new TimetableEntryObject();
+                            timetableEntryChange = new TimetableChangeObject();
+                            if (tf.TimetableChange.Canceled != null)
+                            {
+                                timetableEntryChange.Cancelled = tf.TimetableChange.Canceled;
+                            }
                             if (tf.TimetableChange.CurrentRoom != null)
                             {
-                                timetableEntryNew.Room = tf.TimetableChange.CurrentRoom.Name;
+                                timetableEntryChange.Room = tf.TimetableChange.CurrentRoom.Name;
                             }
                             if (tf.TimetableChange.CurrentSubjectInstanceId != null)
                             {
-                                timetableEntryNew.SubjectInstanceId = (int)tf.TimetableChange.CurrentSubjectInstanceId;
+                                timetableEntryChange.SubjectInstanceId = (int)tf.TimetableChange.CurrentSubjectInstanceId;
                             }
                             if (tf.TimetableChange.CurrentSubjectInstance != null)
                             {
-                                timetableEntryNew.SubjectInstanceName = tf.TimetableChange.CurrentSubjectInstance.SubjectType.Name;
+                                timetableEntryChange.SubjectInstanceName = tf.TimetableChange.CurrentSubjectInstance.SubjectType.Name;
                             }
                             if (tf.TimetableChange.CurrentTeacher != null)
                             {
-                                timetableEntryNew.TeacherFirstName = tf.TimetableChange.CurrentTeacher.FirstName;
-                                timetableEntryNew.TeacherLastName = tf.TimetableChange.CurrentTeacher.LastName;
+                                timetableEntryChange.TeacherFirstName = tf.TimetableChange.CurrentTeacher.FirstName;
+                                timetableEntryChange.TeacherLastName = tf.TimetableChange.CurrentTeacher.LastName;
                             }
                             if (tf.TimetableChange.CurrentSubjectInstance.Enrollments != null)
                             {
-                                timetableEntryNew.Group = GetGroupName(tf.TimetableChange.CurrentSubjectInstance.Enrollments);
+                                timetableEntryChange.Group = GetGroupName(tf.TimetableChange.CurrentSubjectInstance.Enrollments);
                             }
 
                         }
@@ -200,7 +210,7 @@ namespace SchoolGradebook.API.Timetable
                                 SubjectInstanceName = tf.TimetableRecord.SubjectInstance.SubjectType.Name,
                                 Group = GetGroupName(tf.TimetableRecord.SubjectInstance.Enrollments)
                             },
-                            TimetableEntryNew = timetableEntryNew,
+                            TimetableEntryChange = timetableEntryChange,
                             LessonRecordId = tf.LessonRecord?.Id
                         });
 
@@ -235,6 +245,9 @@ namespace SchoolGradebook.API.Timetable
             }
             return String.Join(",", groupNames);
         }
+        private int GetWeekInTerm(DateTime termStart, DateTime targetDate)
+            => (targetDate.AddDays(1) - termStart).Days / 7;
+
     }
 
 
@@ -250,14 +263,25 @@ namespace SchoolGradebook.API.Timetable
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public DayOfWeek DayOfWeek { get; set; }
-        public TimetableEntryObject TimetableEntry { get; set; }
-        public TimetableEntryObject? TimetableEntryNew { get; set; }
+        public TimetableEntryObject? TimetableEntry { get; set; }
+        public TimetableChangeObject? TimetableEntryChange { get; set; }
         public int? LessonRecordId { get; set; } //Only for teacher
 
     }
     public class TimetableEntryObject
     {
 #nullable enable
+        public string Room { get; set; }
+        public int SubjectInstanceId { get; set; }
+        public string SubjectInstanceName { get; set; }
+        public string? TeacherFirstName { get; set; }
+        public string? TeacherLastName { get; set; }
+        public string? Group { get; set; } //Only for teacher
+    }
+    public class TimetableChangeObject
+    {
+#nullable enable
+        public bool? Cancelled { get; set; }
         public string Room { get; set; }
         public int SubjectInstanceId { get; set; }
         public string SubjectInstanceName { get; set; }

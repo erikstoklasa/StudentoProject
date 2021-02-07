@@ -5,3 +5,18 @@
     padding-right: 10px;
     padding-bottom: 10px;
 }
+
+.table-row{
+    display: flex;
+}
+
+.table-cell{
+    border: 1px solid black;
+    margin: 0;
+    height: 100px;
+    width: 80px;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

@@ -72,7 +72,9 @@ const TimeTable = () => {
     
     return (
         <div className="outer-table">
-            <InnerTable sortedData={sortedData} week={ currentWeek}/>
+            <InnerTable sortedData={sortedData} week={currentWeek} />
+            <button onClick={() => { updateCurrentWeek(currentWeek + 1)}}>next</button>
+            <button onClick={() => { updateCurrentWeek(currentWeek - 1) }}>previous</button>         
         </div>
     )
  }

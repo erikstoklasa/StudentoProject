@@ -9,7 +9,7 @@ const InnerTable = ({ sortedData, week }) => {
         console.log(actualWeek)
     
         return (
-            <div>
+            <div className="inner-table">
                 <TableRow frameArray={actualWeek[0].timeFrames[0]} />
                 <TableRow frameArray={actualWeek[0].timeFrames[1]} />
                 <TableRow frameArray={actualWeek[0].timeFrames[2]} />

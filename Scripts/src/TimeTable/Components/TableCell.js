@@ -2,17 +2,19 @@ import React from 'react'
 import '../TimeTable.css'
 
 const TableCell = ({ frame }) => {
+   
     if (frame.timetableEntry) {
+        const heading = frame.timetableEntry.subjectInstanceName.substring(0,3)
         return (
             <div className="table-cell">
-                {frame.timetableEntry.subjectInstanceName}
+                <div className="subject-heading">{heading}</div>
             </div>
         )
     }
     else { 
         return (
             <div className="table-cell">
-                empty
+                <div className="subject-heading"></div>
             </div>
         )
     }

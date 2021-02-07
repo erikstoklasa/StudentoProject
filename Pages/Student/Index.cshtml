@@ -80,6 +80,12 @@
         </div>
     </div>
     <p class="table-heading">Předměty</p>
+    @foreach (var c in Model.Courses)
+    {
+        <p>@(c.Name)</p>
+        <p>@(c.Description)</p>
+    }
+    @(Model.ClassroomStatus)
     <div class="subject-container">
         @foreach (var x in Model.SubjectsAndSubjectAverages)
         {

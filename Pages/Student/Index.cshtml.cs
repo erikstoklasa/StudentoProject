@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SchoolGradebook.Models;
 using SchoolGradebook.Services;
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -36,6 +35,8 @@ namespace SchoolGradebook.Pages.Student
         public IEnumerable<(SubjectInstance subjectInstance, string subjectAverage)> SubjectsAndSubjectAverages { get; set; }
         public ListCoursesResponse ListCoursesResponse { get; set; }
         public string GPAComparisonHTML { get; set; }
+        public IList<Course> Courses { get; set; }
+        public string ClassroomStatus { get; set; }
 
         public IndexModel(IHttpContextAccessor httpContextAccessor, SubjectService subjectService, StudentService studentService, Analytics analytics, GradeService gradeService)
         {
@@ -49,6 +50,8 @@ namespace SchoolGradebook.Pages.Student
         }
         public async Task<IActionResult> OnGetAsync()
         {
+            string[] Scopes = { ClassroomService.Scope.ClassroomCoursesReadonly };
+            string ApplicationName = "Classroom API .NET Quickstart";
             int studentId = await studentService.GetStudentId(UserId);
             if (studentId == -1)
             {
@@ -71,35 +74,44 @@ namespace SchoolGradebook.Pages.Student
             GPAComparisonHTML = LanguageHelper.getAverageComparisonString(currentAvg, comparisonAvg);
 
 
-            //UserCredential credential;
+            UserCredential credential;
 
-            //using (var stream =
-            //    new FileStream("credentials.json", FileMode.Open, FileAccess.Read))
-            //{
-            //    // The file token.json stores the user's access and refresh tokens, and is created
-            //    // automatically when the authorization flow completes for the first time.
-            //    string credPath = "token.json";
-            //    credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-            //        GoogleClientSecrets.Load(stream).Secrets,
-            //        new string[] { ClassroomService.Scope.ClassroomCoursesReadonly },
-            //        "user",
-            //        CancellationToken.None,
-            //        new FileDataStore(credPath, true)).Result;
-            //}
+            using (var stream =
+                new FileStream("credentials.json", FileMode.Open, FileAccess.Read))
+            {
+                // The file token.json stores the user's access and refresh tokens, and is created
+                // automatically when the authorization flow completes for the first time.
+                string credPath = "token.json";
+                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+                    GoogleClientSecrets.Load(stream).Secrets,
+                    Scopes,
+                    "user",
+                    CancellationToken.None,
+                    new FileDataStore(credPath, true)).Result;
+            }
 
-            //// Create Classroom API service.
-            //var service = new ClassroomService(new BaseClientService.Initializer()
-            //{
-            //    HttpClientInitializer = credential,
-            //    ApplicationName = "Classroom API .NET Quickstart",
-            //});
+            // Create Classroom API service.
+            var service = new ClassroomService(new BaseClientService.Initializer()
+            {
+                HttpClientInitializer = credential,
+                ApplicationName = ApplicationName,
+            });
 
-            //// Define request parameters.
-            //CoursesResource.ListRequest request = service.Courses.List();
-            //request.PageSize = 10;
+            // Define request parameters.
+            CoursesResource.ListRequest request = service.Courses.List();
+            request.PageSize = 10;
+            
+            // List courses.
+            ListCoursesResponse response = request.Execute();
+            if (response.Courses != null && response.Courses.Count > 0)
+            {
+                Courses = response.Courses;
+            }
+            else
+            {
+                ClassroomStatus = "No courses found";
+            }
 
-            //// List courses.
-            //ListCoursesResponse = request.Execute();
             return Page();
         }
     }

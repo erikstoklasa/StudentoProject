@@ -98,7 +98,7 @@ namespace SchoolGradebook.Areas.Identity.Pages.Account
                 else //User not allowed
                 {
                     var user = await _userManager.FindByEmailAsync(Input.Email);
-                    if (user.EmailConfirmed == false)
+                    if (user != null && user.EmailConfirmed == false)
                     {
                         ModelState.AddModelError(string.Empty, "Nemáte ověřenou emailovou adresu, podívejte se prosím na svůj email.");
                     }

@@ -13,28 +13,36 @@ namespace SchoolGradebook.API
     public class AuthController : ControllerBase
     {
         private readonly SignInManager<IdentityUser> signInManager;
+        private readonly UserManager<IdentityUser> userManager;
 
-        public AuthController(SignInManager<IdentityUser> signInManager)
+        public AuthController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)
         {
             this.signInManager = signInManager;
+            this.userManager = userManager;
         }
         [HttpPost("Login")]
-        public async Task<ActionResult> LogIn(InputModelObject credentials)
+        public async Task<ActionResult<AuthResponseObject>> LogIn(InputModelObject credentials)
         {
             var result = await signInManager.PasswordSignInAsync(credentials.Email, credentials.Password, false, lockoutOnFailure: false);
             if (result.Succeeded)
             {
-                return Ok();
+                var user = await userManager.FindByEmailAsync(credentials.Email);
+                var roles = await userManager.GetRolesAsync(user);
+                if (roles == null)
+                {
+                    return BadRequest(new AuthResponseObject() { Error = "User has no role" });
+                }
+                return new AuthResponseObject() { UserType = roles.FirstOrDefault() };
             }
             if (result.RequiresTwoFactor)
             {
-                return BadRequest("You require 2FA");
+                return BadRequest(new AuthResponseObject() { Error = "Authentication requires 2FA" });
             }
             if (result.IsLockedOut)
             {
-                return BadRequest("You are locked out");
+                return BadRequest(new AuthResponseObject() { Error = "Account locked out" });
             }
-            return BadRequest("Neověřená emailová adresa, nebo špatné údaje");
+            return BadRequest(new AuthResponseObject() { Error = "Neověřená emailová adresa, nebo špatné údaje" });
         }
         [HttpPost("Logout")]
         public async Task<ActionResult> LogOut()
@@ -48,5 +56,10 @@ namespace SchoolGradebook.API
         public string Email { get; set; }
         public string Password { get; set; }
 
+    }
+    public class AuthResponseObject
+    {
+        public string UserType { get; set; }
+        public string Error { get; set; }
     }
 }

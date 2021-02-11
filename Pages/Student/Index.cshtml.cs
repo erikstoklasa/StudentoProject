@@ -74,43 +74,43 @@ namespace SchoolGradebook.Pages.Student
             GPAComparisonHTML = LanguageHelper.getAverageComparisonString(currentAvg, comparisonAvg);
 
 
-            UserCredential credential;
+            //UserCredential credential;
 
-            using (var stream =
-                new FileStream("credentials.json", FileMode.Open, FileAccess.Read))
-            {
-                // The file token.json stores the user's access and refresh tokens, and is created
-                // automatically when the authorization flow completes for the first time.
-                string credPath = "token.json";
-                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-                    GoogleClientSecrets.Load(stream).Secrets,
-                    Scopes,
-                    "user",
-                    CancellationToken.None,
-                    new FileDataStore(credPath, true)).Result;
-            }
+            //using (var stream =
+            //    new FileStream("credentials.json", FileMode.Open, FileAccess.Read))
+            //{
+            //    // The file token.json stores the user's access and refresh tokens, and is created
+            //    // automatically when the authorization flow completes for the first time.
+            //    string credPath = "token.json";
+            //    credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+            //        GoogleClientSecrets.Load(stream).Secrets,
+            //        Scopes,
+            //        "user",
+            //        CancellationToken.None,
+            //        new FileDataStore(credPath, true)).Result;
+            //}
 
-            // Create Classroom API service.
-            var service = new ClassroomService(new BaseClientService.Initializer()
-            {
-                HttpClientInitializer = credential,
-                ApplicationName = ApplicationName,
-            });
+            //// Create Classroom API service.
+            //var service = new ClassroomService(new BaseClientService.Initializer()
+            //{
+            //    HttpClientInitializer = credential,
+            //    ApplicationName = ApplicationName,
+            //});
 
-            // Define request parameters.
-            CoursesResource.ListRequest request = service.Courses.List();
-            request.PageSize = 10;
+            //// Define request parameters.
+            //CoursesResource.ListRequest request = service.Courses.List();
+            //request.PageSize = 10;
             
-            // List courses.
-            ListCoursesResponse response = request.Execute();
-            if (response.Courses != null && response.Courses.Count > 0)
-            {
-                Courses = response.Courses;
-            }
-            else
-            {
-                ClassroomStatus = "No courses found";
-            }
+            //// List courses.
+            //ListCoursesResponse response = request.Execute();
+            //if (response.Courses != null && response.Courses.Count > 0)
+            //{
+            //    Courses = response.Courses;
+            //}
+            //else
+            //{
+            //    ClassroomStatus = "No courses found";
+            //}
 
             return Page();
         }

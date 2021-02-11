@@ -9,7 +9,7 @@ const TimeRow = ({ frameArray }) => {
         return (
             <div className="time-cell">
                 <div className="hour-number">{`${index + 1}.`}</div>
-                <div>{`${frame.startTime.slice(0, -3)} - ${frame.endTime.slice(0, -3)}`}</div>
+                <div className="hour">{`${frame.startTime.slice(0, -3)} - ${frame.endTime.slice(0, -3)}`}</div>
             </div>
         )
     })

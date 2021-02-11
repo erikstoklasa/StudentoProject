@@ -30,7 +30,7 @@ const TableCell = ({ frame, type }) => {
         if (type === "Teacher") {
             const group = frame.timetableEntry.group
             return (
-                <div className="table-cell">
+                <div className="table-cell table-cell-change">
                     <div className="room-number">{frame.timetableEntry.room}</div>
                     <div className="subject-heading">{heading}</div>
                     <div className="teacher-name">{group}</div>
@@ -39,7 +39,7 @@ const TableCell = ({ frame, type }) => {
         } else {        
             const teacher = frame.timetableEntryChange.teacherFirstName.substring(0, 1).concat(`. ${frame.timetableEntry.teacherLastName}`)
             return (
-                <div className="table-cell-change">
+                <div className="table-cell table-cell-change">
                     <div className="room-number">{frame.timetableEntryChange.room}</div>
                     <div className="subject-heading">{heading}</div>
                     <div className="teacher-name">{`${teacher}`}</div>
@@ -49,7 +49,7 @@ const TableCell = ({ frame, type }) => {
      }
     else { 
         return (
-            <div className="table-cell-empty">                
+            <div className="table-cell table-cell-empty">                
             </div>
         )
     }

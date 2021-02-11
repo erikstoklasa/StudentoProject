@@ -105,10 +105,10 @@ const TimeTable = () => {
     return (
         <div className="outer-table">
             <div className="top-bar">
-                <h1 className="table-heading">Můj rozvrh</h1>
+                <h1>Můj rozvrh</h1>
                 <div className="button-container">                    
-                    <div className="week-button-prev" onClick={() => { changeWeek(-1) }}><img  className="arrow flip-horizontally" src='/images/rightarrow.svg'></img></div>
-                    <div className="week-button-prev" onClick={() => { changeWeek(+1)}}><img className="arrow " src='/images/rightarrow.svg'></img></div>                    
+                    <a className="week-button" onClick={() => { changeWeek(-1) }}><img  className="arrow flip-horizontally" src='/images/rightarrow.svg'></img></a>
+                    <a className="week-button" onClick={() => { changeWeek(+1)}}><img className="arrow " src='/images/rightarrow.svg'></img></a>                    
                 </div>    
             </div>
             <InnerTable sortedData={sortedData} week={currentWeek} type={tableType}/>                     

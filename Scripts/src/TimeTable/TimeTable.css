@@ -1,34 +1,139 @@
 .outer-table{
-    padding-top: 40px;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-bottom: 10px;
+    background-color: white;
+    padding-top: 20px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 20px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
 }
 
 .inner-table{
-    width: 80%;
+    width: 100%;
     margin-left: auto;
     margin-right: auto;
+    overflow: auto;
 }
 
 .table-row{
     display: flex;
 }
 
+.time-row{
+    display: flex;
+    max-height: 80px;
+}
+
 .table-cell{
-    border: 1px solid black;
-    margin: 0;
-    flex: auto;
+    border: 2px solid darkgrey;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+    margin: 5px;
+    flex: 1 1 0px;
+    min-width: 80px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}
+
+.table-cell-change{
+    border: 2px solid var(--primaryYellowStrong);
+    background-color: var(--primaryYellowStrong);
+    border-radius: 10px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+    margin: 5px;
+    flex: 1 1 0px;
+    min-width: 80px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}
+
+.table-cell-empty{
+    border: 2px solid lightgrey;
+    border-radius: 10px;
+    background-color: lightgrey;
+    margin: 5px;
+    flex: 1 1 0px;
+    min-width: 80px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}
+
+.day-cell{    
+    margin: 5px;
+    flex: 0.7 1 0;
     height: 100px;
+    min-width: 80px;
     padding: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.subject-heading{
+.subject-heading{      
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;    
+}
+
+.teacher-name{
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.time-cell{
+    margin: 5px;
+    border: 1px solid transparent;
+    padding: 10px 10px 5px 10px;
     display: flex;
+    flex-direction: column;
+    flex: 1 1 0px;
+    min-width: 80px;
     justify-content: center;
-    margin: 0;
-    min-width: 40px;
-} 
+    align-items: center;    
+}
+
+.hour-number{
+    font-weight: bold;
+}
+
+.top-bar{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding-right: 5px;
+}
+
+.table-heading{
+    margin: 0px 0px 0px 15px
+}
+
+.week-button-prev{
+    margin-right: 10px;
+}
+
+.arrow{
+    height: 32px;
+    width: 32px;
+}
+
+.arrow-left{
+    height: 20px;
+    width: 20px;
+   
+}
+
+.button-container{
+    display: flex;
+    align-items: center;
+}
+
+.flip-horizontally {
+    transform: scaleX(-1);
+  }

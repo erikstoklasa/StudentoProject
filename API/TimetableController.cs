@@ -45,7 +45,9 @@ namespace SchoolGradebook.API.Timetable
         [Authorize(policy: "OnlyStudent")]
         public async Task<ActionResult<List<TimetableWeekObject>>> GetTimetableForStudent(int? week, bool wantMultipleWeeks)
         {
-            week ??= GetWeekInTerm(DateTime.ParseExact("01/09/2020", "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture), DateTime.UtcNow);
+            //Term start to be replaced by school's term start
+            DateTime termStart = DateTime.ParseExact("01/09/2020", "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+            week ??= GetWeekInTerm(termStart, DateTime.UtcNow);
             List<int> weeks = new List<int>();
             weeks.Add((int)week);
             if (wantMultipleWeeks)
@@ -121,8 +123,10 @@ namespace SchoolGradebook.API.Timetable
                         });
                     }
                 }
+                DateTime thisWeekStart = GetMondayFromWeek(w, termStart);
                 timetableWeeks.Add(new TimetableWeekObject()
                 {
+                    WeekStart = thisWeekStart,
                     Week = w,
                     TimeFrames = timeFrameObjects
                 });
@@ -147,7 +151,9 @@ namespace SchoolGradebook.API.Timetable
         [Authorize(policy: "OnlyTeacher")]
         public async Task<ActionResult<List<TimetableWeekObject>>> GetTimetableForTeacher(int? week, bool wantMultipleWeeks)
         {
-            week ??= GetWeekInTerm(DateTime.ParseExact("01/09/2020", "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture), DateTime.UtcNow);
+            //Term start to be replaced by school's term start
+            DateTime termStart = DateTime.ParseExact("01/09/2020", "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+            week ??= GetWeekInTerm(termStart, DateTime.UtcNow);
             List<int> weeks = new List<int>();
             weeks.Add((int)week);
             if (wantMultipleWeeks)
@@ -227,8 +233,10 @@ namespace SchoolGradebook.API.Timetable
                         });
                     }
                 }
+                DateTime thisWeekStart = GetMondayFromWeek(w, termStart);
                 timetableWeeks.Add(new TimetableWeekObject()
                 {
+                    WeekStart = thisWeekStart,
                     Week = w,
                     TimeFrames = timeFrameObjects
                 });
@@ -247,6 +255,10 @@ namespace SchoolGradebook.API.Timetable
         }
         private int GetWeekInTerm(DateTime termStart, DateTime targetDate)
             => (targetDate.AddDays(1) - termStart).Days / 7;
+        private DateTime GetMondayFromWeek(int week, DateTime termStart)
+            => termStart.AddDays((week * 7) - 1);
+
+
 
     }
 
@@ -254,6 +266,7 @@ namespace SchoolGradebook.API.Timetable
     public class TimetableWeekObject
     {
         public int Week { get; set; }
+        public DateTime WeekStart { get; set; } //Day when the week starts (Monday)
         public IEnumerable<TimeFrameObject> TimeFrames { get; set; }
     }
     public class TimeFrameObject

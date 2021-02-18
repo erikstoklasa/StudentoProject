@@ -5,10 +5,11 @@ import './TimeTable.css'
 
 const TimeTable = () => {
 
-    const [tableType, updateTableType] = useState()
-    const [currentWeek, updateCurrentWeek] = useState()
-    const [bulkData, updateBulkData] = useState()
-    const [sortedData, updateSortedData] = useState()
+    const [tableType, updateTableType] = useState();
+    const [currentWeek, updateCurrentWeek] = useState();
+    const [bulkData, updateBulkData] = useState();
+    const [sortedData, updateSortedData] = useState();
+    const [initialWeek, updateInitialWeek] = useState();
 
     const getType = () => {
         const adress = window.location.pathname
@@ -62,8 +63,9 @@ const TimeTable = () => {
                 })
                 weekObject.timeFrames = daysSorted
             });
-
+            console.log(newData)
             updateSortedData(newData)
+            updateInitialWeek(newData[0].week)
         } else if (data) {            
             const newData = data.map(weekObject => {
                 weekObject.timeFrames.forEach(timeFrame => {
@@ -83,11 +85,11 @@ const TimeTable = () => {
                 })
                 weekObject.timeFrames = daysSorted
             });
-            const finalData = sortedData.concat(newData)
-            updateSortedData(finalData)
+            const finalData = sortedData.concat(newData) 
+            updateSortedData(finalData)            
         }
     }
-
+    
     const changeWeek = (number) => { 
         const nextWeek = (currentWeek + number)
         if (sortedData.some(weekObject => weekObject.week === nextWeek)) {
@@ -106,7 +108,8 @@ const TimeTable = () => {
         <div className="outer-table">
             <div className="top-bar">
                 <h1>Můj rozvrh</h1>
-                <div className="button-container">                    
+                <div className="button-container back-button">    
+                    {currentWeek !== initialWeek ? <a className="btn btn-primary back-button" onClick={() => { updateCurrentWeek(initialWeek) }}>Zobrazit aktualní týden</a> : null}    
                     <a className="week-button" onClick={() => { changeWeek(-1) }}><img  className="arrow flip-horizontally" src='/images/rightarrow.svg'></img></a>
                     <a className="week-button" onClick={() => { changeWeek(+1)}}><img className="arrow " src='/images/rightarrow.svg'></img></a>                    
                 </div>    

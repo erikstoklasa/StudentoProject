@@ -59,7 +59,7 @@ namespace SchoolGradebook.Services
         public async Task<double> GetSubjectAverageForStudentByStudentIdAsync(int studentId, int SubjectInstanceId)
         {
             double sum = 0.0;
-            Grade[] grades = (await gradeService.GetAllGradesInArrayByStudentSubjectInstance(studentId, SubjectInstanceId));
+            Grade[] grades = (await gradeService.GetAllGradesByStudentSubjectInstance(studentId, SubjectInstanceId));
 
             int count = grades.Length;
             if (count == 0) //Student doesn't have any grades in the given subject
@@ -125,7 +125,7 @@ namespace SchoolGradebook.Services
             int minGradeDayAge = 0,
             int decimalPlaces = 2)
         {
-            Grade[] grades = await gradeService.GetAllGradesInArrayByStudentSubjectInstance(studentId, subjectInstanceId);
+            Grade[] grades = await gradeService.GetAllGradesByStudentSubjectInstance(studentId, subjectInstanceId);
             List<Grade> filtredGrades = new List<Grade>();
             foreach (Grade g in grades)
             {

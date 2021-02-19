@@ -46,6 +46,7 @@ namespace SchoolGradebook.Pages.Student.Subjects
 
         public string UserId { get; private set; }
         public SubjectInstance Subject { get; set; }
+        public Grade[] GradesAddedByStudent { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -73,8 +74,8 @@ namespace SchoolGradebook.Pages.Student.Subjects
                 return BadRequest();
             }
 
-            Grades = await gradeService.GetAllGradesByStudentSubjectInstance((int)studentId, (int)id);
-
+            Grades = (await gradeService.GetAllGradesByStudentSubjectInstance((int)studentId, (int)id)).ToList();
+            GradesAddedByStudent = await gradeService.GetGradesAddedByStudentAsync((int)studentId, (int)id);
             SubjectMaterials = await subjectMaterialService.GetAllMaterialsBySubjectInstance((int)id);
             SubjectAverage = await _analytics.GetSubjectAverageForStudentAsync((int)studentId, Subject.Id);
 

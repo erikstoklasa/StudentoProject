@@ -30,7 +30,7 @@ namespace SchoolGradebook.Pages.Student.Grades
         public async Task OnGetAsync()
         {
             int studentId = await studentService.GetStudentId(UserId);
-            Grades = await gradeService.GetAllGradesByStudentAsync(studentId);
+            Grades = await gradeService.GetAllGradesAsync(studentId);
         }
     }
 }

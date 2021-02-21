@@ -6,6 +6,7 @@ using SchoolGradebook.Models;
 using SchoolGradebook.Services;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
+using System.Collections.Generic;
 
 namespace SchoolGradebook.Pages.Student.Grades
 {
@@ -44,6 +45,34 @@ namespace SchoolGradebook.Pages.Student.Grades
                 return NotFound();
             }
             return Page();
+        }
+        public async Task<IActionResult> OnPostAsync(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            int studentId = await studentService.GetStudentId(UserId);
+            bool hasAccessToGrade = await studentAccessValidation.HasAccessToGrade(studentId, (int)id);
+
+            if (!hasAccessToGrade)
+            {
+                return BadRequest();
+            }
+
+            Grade = await gradeService.GetGradeAsync((int)id);
+
+            if (Grade == null)
+            {
+                return NotFound();
+            }
+
+            await gradeService.DeleteGradesAsync(new List<int>()
+            {
+                (int)id
+            });
+            return RedirectToPage("/Student/Subjects/Details", new { id = Grade.SubjectInstanceId });
         }
     }
 }

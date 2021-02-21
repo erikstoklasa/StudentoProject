@@ -15,14 +15,14 @@ namespace SchoolGradebook.Pages.Student.Subjects
 {
     public class DetailsModel : PageModel
     {
-        private readonly Analytics _analytics;
+        private readonly Analytics analytics;
         private readonly SubjectService subjectService;
         private readonly StudentAccessValidation studentAccessValidation;
         private readonly StudentService studentService;
         private readonly SubjectMaterialService subjectMaterialService;
         private readonly GradeService gradeService;
 
-        public List<Grade> Grades { get; set; }
+        public Grade[] Grades { get; set; }
 
         public List<SubjectMaterial> SubjectMaterials { get; set; }
         public double SubjectAverage { get; set; }
@@ -36,7 +36,7 @@ namespace SchoolGradebook.Pages.Student.Subjects
                             GradeService gradeService)
         {
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            _analytics = analytics;
+            this.analytics = analytics;
             this.subjectService = subjectService;
             this.studentAccessValidation = studentAccessValidation;
             this.studentService = studentService;
@@ -74,14 +74,13 @@ namespace SchoolGradebook.Pages.Student.Subjects
                 return BadRequest();
             }
 
-            Grades = (await gradeService.GetAllGradesByStudentSubjectInstance((int)studentId, (int)id)).ToList();
+            Grades = await gradeService.GetGradesAddedByTeacherAsync((int)studentId, (int)id);
             GradesAddedByStudent = await gradeService.GetGradesAddedByStudentAsync((int)studentId, (int)id);
             SubjectMaterials = await subjectMaterialService.GetAllMaterialsBySubjectInstance((int)id);
-            SubjectAverage = await _analytics.GetSubjectAverageForStudentAsync((int)studentId, Subject.Id);
+            SubjectAverage = await analytics.GetSubjectAverageForStudentAsync((int)studentId, Subject.Id);
 
-            double currentAvg = await _analytics.GetSubjectAverageForStudentAsync((int)studentId, Subject.Id);
-            double comparisonAvg = await _analytics.GetSubjectAverageForStudentAsync((int)studentId, Subject.Id, 365, 30);
-            ViewData["ComparisonString"] = LanguageHelper.getAverageComparisonString(currentAvg, comparisonAvg);
+            double comparisonAvg = await analytics.GetSubjectAverageForStudentAsync((int)studentId, Subject.Id, 365, 30);
+            ViewData["ComparisonString"] = LanguageHelper.getAverageComparisonString(SubjectAverage, comparisonAvg);
 
 
             return Page();

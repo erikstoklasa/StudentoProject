@@ -3,8 +3,10 @@
 @{
     ViewData["Title"] = "Přidat známku";
 }
-<h1>@ViewData["Title"]</h1>
-<h2>@Model.SubjectInstance.SubjectType.Name</h2>
+<h1>@Model.SubjectInstance.SubjectType.Name</h1>
+<h4>@Model.SubjectInstance.Teacher.GetFullName()</h4>
+<hr />
+<h5>@ViewData["Title"]</h5>
 <div class="row">
     <div class="col-md-4">
         <form method="post">
@@ -24,7 +26,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Grade.Name" class="control-label">Název známky</label>
-                <input asp-for="Grade.Name" class="form-control" required />
+                <input asp-for="Grade.Name" placeholder="Test" class="form-control" required />
             </div>
             <div class="form-group">
                 <input type="submit" value="Přidat známku" class="btn btn-primary" />
@@ -32,3 +34,4 @@
         </form>
     </div>
 </div>
+<a asp-page="/Student/Subjects/Details" asp-route-id="@Model.Grade.SubjectInstanceId">Zpět</a>

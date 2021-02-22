@@ -58,7 +58,7 @@ namespace SchoolGradebook.Pages.Student
                 return LocalRedirect("/ActivateAccount");
             }
             StudentFirstName = (await studentService.GetStudentBasicInfoAsync(studentId)).FirstName;
-            RecentGrades = await gradeService.GetRecentGradesByStudentAsync(studentId, 0, 3);
+            RecentGrades = await gradeService.GetRecentGradesAsync(studentId, 0, 3);
             Subjects = await subjectService.GetAllSubjectInstancesByStudentAsync(studentId);
             foreach (SubjectInstance si in Subjects)
             {

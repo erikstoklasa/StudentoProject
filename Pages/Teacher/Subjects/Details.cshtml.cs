@@ -89,8 +89,8 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
             SubjectAvg = await _analytics.GetSubjectAverageAsync((int)id);
             foreach (Models.Student s in Students)
             {
-                StudentAverages.Add(await _analytics.GetSubjectAverageForStudentByStudentIdAsync(s.Id, Subject.Id));
-                StudentGrades.Add(await gradeService.GetAllGradesByStudentSubjectInstance(s.Id, Subject.Id));
+                StudentAverages.Add(await _analytics.GetSubjectAverageForStudentAsync(s.Id, Subject.Id));
+                StudentGrades.Add((await gradeService.GetGradesAddedByTeacherAsync(s.Id, Subject.Id)).ToList());
             }
             StudentsAndAverageAndGrades = Enumerable
                 .Range(0, Students.Length)
@@ -124,8 +124,8 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
 
             foreach (Models.Student s in Students)
             {
-                StudentAverages.Add(await _analytics.GetSubjectAverageForStudentByStudentIdAsync(s.Id, Subject.Id));
-                StudentGrades.Add(await gradeService.GetAllGradesByStudentSubjectInstance(s.Id, Subject.Id));
+                StudentAverages.Add(await _analytics.GetSubjectAverageForStudentAsync(s.Id, Subject.Id));
+                StudentGrades.Add((await gradeService.GetGradesAddedByTeacherAsync(s.Id, Subject.Id)).ToList());
             }
             StudentsAndAverageAndGrades = Enumerable
                 .Range(0, Students.Length)

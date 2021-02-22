@@ -1,0 +1,37 @@
+﻿@page
+@model SchoolGradebook.Pages.Student.Grades.CreateModel
+@{
+    ViewData["Title"] = "Přidat známku";
+}
+<h1>@Model.SubjectInstance.SubjectType.Name</h1>
+<h4>@Model.SubjectInstance.Teacher.GetFullName()</h4>
+<hr />
+<h5>@ViewData["Title"]</h5>
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @if (Model.SuccessMessage != null)
+            {
+                <div class="alert alert-success">@Model.SuccessMessage</div>
+            }
+            @if (Model.ErrorMessage != null)
+            {
+                <div class="alert alert-danger">@Model.ErrorMessage</div>
+            }
+            <input asp-for="Grade.SubjectInstanceId" type="hidden" class="form-control" />
+            <div class="form-group">
+                <label asp-for="Grade.Value" class="control-label">Známka</label>
+                <input asp-for="Grade.Value" type="number" min="1" max="5" class="form-control" style="width: 4rem; text-align:center;" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Grade.Name" class="control-label">Název známky</label>
+                <input asp-for="Grade.Name" placeholder="Test" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Přidat známku" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<a asp-page="/Student/Subjects/Details" asp-route-id="@Model.Grade.SubjectInstanceId">Zpět</a>

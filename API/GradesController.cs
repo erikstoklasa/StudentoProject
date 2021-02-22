@@ -64,7 +64,7 @@ namespace SchoolGradebook.API.Grades
                 {
                     return StatusCode(403);
                 }
-                var grades = await gradeService.GetAllGradesByStudentAsync((int)studentId);
+                var grades = await gradeService.GetAllGradesAddedByTeacherAsync((int)studentId);
                 foreach (var g in grades)
                 {
                     gradeObjects.Add(new GradeObject { Added = g.Added, Id = g.Id, Name = g.Name, StudentId = g.StudentId, SubjectInstanceId = g.SubjectInstanceId, Value = g.Value });
@@ -77,7 +77,7 @@ namespace SchoolGradebook.API.Grades
                 {
                     return StatusCode(403);
                 }
-                var grades = await gradeService.GetAllGradesBySubjectInstance((int)subjectInstanceId);
+                var grades = await gradeService.GetAllGradesAddedByTeacherAsync((int)subjectInstanceId);
                 foreach (var g in grades)
                 {
                     gradeObjects.Add(new GradeObject { Added = g.Added, Id = g.Id, Name = g.Name, StudentId = g.StudentId, SubjectInstanceId = g.SubjectInstanceId, Value = g.Value });
@@ -152,7 +152,7 @@ namespace SchoolGradebook.API.Grades
             };
             try
             {
-                await gradeService.AddGradeAsync(g);
+                await gradeService.AddGradeAsync(g, Grade.USERTYPE.Teacher);
             }
             catch (ArgumentNullException e)
             {

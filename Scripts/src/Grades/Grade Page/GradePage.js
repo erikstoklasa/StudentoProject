@@ -23,6 +23,7 @@ const GradePage = () => {
     const newGrades = [];
 
     const getInstanceId = () => {
+        console.log('got instance id')
         const idContainer = document.querySelector("#subjectInstanceId")
         updateInstanceId(idContainer.value);
     }   
@@ -32,11 +33,17 @@ const GradePage = () => {
         if (InstanceId) {
             fetch(`${apiAdress}/Grades?subjectInstanceId=${InstanceId}`, {
                 method: 'GET',
-            }).then(res => res.json()).then(data => updateBulkGradeData(data))
+                headers: {
+                    'Cache-Control': 'no-cache'
+                }
+            }).then(res => res.json()).then(data => {               
+                updateBulkGradeData(data)
+            })
 
             fetch(`${apiAdress}/SubjectInstances/${InstanceId}`, {
                 method: 'GET',
-            }).then(res => res.json()).then(data => {                
+            }).then(res => res.json()).then(data => {   
+                
                 updateBulkStudentData(data)                
             }) 
         
@@ -141,7 +148,7 @@ const GradePage = () => {
         
     }
 
-    useEffect(getInstanceId)
+    useEffect(getInstanceId, [])
     useEffect(fetchData, [InstanceId])
     useEffect(calculateAverages, [bulkGradeData, bulkStudentData])
     useEffect(sortStudents, [formattedStudentData, sortByAverage])

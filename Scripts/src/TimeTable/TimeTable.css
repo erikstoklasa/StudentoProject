@@ -15,6 +15,23 @@
     overflow: auto;
 }
 
+.inner-table-vertical{ 
+
+    display: flex;
+}
+
+.table-column{
+    display: flex;
+    flex: 1 1 0px;
+    flex-direction: column;
+}
+
+.time-column{
+    display: flex;
+    flex: 0.7 1 0px;
+    flex-direction: column;
+}
+
 .table-row {
     display: flex;
 }
@@ -30,11 +47,17 @@
     border-radius: 10px;
     margin: 3px;
     flex: 1 1 0px;
-    min-width: 80px;
+    min-width: 100px;
+    min-height: 100px;
     padding: 10px;
     display: flex;
     flex-direction: column;
     justify-content: start;
+}
+
+.table-cell-vertical{
+    min-height: 100px;
+    min-width: 0px;
 }
 
 .table-cell-change {
@@ -42,24 +65,33 @@
     background-color: var(--primaryYellowStrong);
 }
 
+
 .table-cell-empty {
     border: 2px solid #00000026;
     background-color: #00000024;
 }
 
 .day-cell {
-    margin: 5px;
+    position: relative;
+    margin: 3px;
     flex: 0.7 1 0;
-    height: 100px;
-    min-width: 80px;
+    min-width: 100px;
     padding: 10px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
+.day-cell-vertical {
+    min-height: 100px;
+    
+    min-width: 0px !important;
+}
+
 .subject-heading {
     font-weight: bold;
+    min-width: 0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -68,22 +100,32 @@
 .teacher-name {
     overflow: hidden;
     text-overflow: ellipsis;
+    margin-bottom: 10px;
 }
 
 .time-cell {
-    margin: 5px;
-    border: 1px solid transparent;
+    margin: 3px;
+    border: 2px solid transparent;
     padding: 10px 10px 5px 10px;
     display: flex;
     flex-direction: column;
     flex: 1 1 0px;
-    min-width: 80px;
+    min-width: 100px;
     justify-content: center;
     align-items: center;
 }
 
+.time-cell-vertical{
+    min-height: 100px;
+    min-width: 0px !important;
+    flex: 0.7 1 0px 
+}
+
 .hour {
     font-size: 12px;
+    margin-top: 5px;
+    min-width: 0;
+
 }
 
 .hour-number {
@@ -100,6 +142,7 @@
 
 .table-heading {
     margin: 0px 0px 0px 15px
+
 }
 
 .week-button {
@@ -128,4 +171,21 @@
 
 .flip-horizontally {
     transform: scaleX(-1);
+}
+
+.row-date{
+    position: absolute;
+    bottom: 0px;
+}
+
+.back-button{
+    margin: 0px 20px 0px 10px !important;
+    min-width: 120px;
+}
+
+.time-text2{
+    word-wrap: break-word !important;
+    text-align: center;
+    margin: 0;
+    min-width: 0px;
 }

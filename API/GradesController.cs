@@ -14,42 +14,38 @@ namespace SchoolGradebook.API.Grades
     [ApiController]
     public class GradesController : ControllerBase
     {
+
         private readonly GradeService gradeService;
         private readonly TeacherService teacherService;
         private readonly TeacherAccessValidation teacherAccessValidation;
+        private readonly StudentAccessValidation studentAccessValidation;
+        private readonly StudentService studentService;
 
         private string UserId { get; set; }
 
-        public GradesController(GradeService gradeService, IHttpContextAccessor httpContextAccessor, TeacherService teacherService, TeacherAccessValidation teacherAccessValidation)
+        public GradesController(GradeService gradeService, IHttpContextAccessor httpContextAccessor, TeacherService teacherService, TeacherAccessValidation teacherAccessValidation, StudentAccessValidation studentAccessValidation, StudentService studentService)
         {
             this.gradeService = gradeService;
             this.teacherService = teacherService;
             this.teacherAccessValidation = teacherAccessValidation;
+            this.studentAccessValidation = studentAccessValidation;
+            this.studentService = studentService;
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
         }
 
         /// <summary>
         /// Gets all grades by the selected filter
         /// </summary>
-        /// <remarks>
-        /// Sample request:
-        ///
-        ///     GET /Grades
-        ///     {
-        ///        "studentId": 1
-        ///     }
-        ///
-        /// </remarks>
         /// <param name="studentId"></param>
         /// <param name="subjectInstanceId"></param>
         /// <returns>Grades</returns>
         /// <response code="200">Returns grades</response>
         /// <response code="403">If the user is not a teacher, or is not allowed to view the selected student/subject</response>
-        [HttpGet]
+        [HttpGet("Teacher")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [Authorize(policy: "OnlyTeacher")]
-        public async Task<ActionResult<IEnumerable<GradeObject>>> GetGrades(int? studentId, int? subjectInstanceId)
+        public async Task<ActionResult<IEnumerable<GradeObject>>> TeacherGetGrades(int? studentId, int? subjectInstanceId)
         {
             List<GradeObject> gradeObjects = new List<GradeObject>();
             int teacherId = await teacherService.GetTeacherId(UserId);
@@ -90,15 +86,6 @@ namespace SchoolGradebook.API.Grades
         /// <summary>
         /// Gets a single grade
         /// </summary>
-        /// <remarks>
-        /// Sample request:
-        ///
-        ///     GET /Grades
-        ///     {
-        ///        "id": 1
-        ///     }
-        ///
-        /// </remarks>
         /// <param name="id"></param>
         /// <returns>Grade</returns>
         /// <response code="200">Returns the grade</response>
@@ -107,8 +94,8 @@ namespace SchoolGradebook.API.Grades
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [HttpGet("{id}")]
-        public async Task<ActionResult<GradeObject>> GetGrade(int id)
+        [HttpGet("Teacher/{id}")]
+        public async Task<ActionResult<GradeObject>> TeacherGetGrade(int id)
         {
             int teacherId = await teacherService.GetTeacherId(UserId);
             if (teacherId == -1)
@@ -128,10 +115,14 @@ namespace SchoolGradebook.API.Grades
             return new GradeObject { Added = g.Added, Id = g.Id, Name = g.Name, StudentId = g.StudentId, SubjectInstanceId = g.SubjectInstanceId, Value = g.Value };
         }
 
-        // POST: api/Grades
-        [HttpPost]
+        /// <summary>
+        /// Creates a single grade for teacher
+        /// </summary>
+        /// <param name="grade"></param>
+        /// <returns></returns>
+        [HttpPost("Teacher")]
         [Authorize(policy: "OnlyTeacher")]
-        public async Task<IActionResult> PostGrade(GradeObject grade)
+        public async Task<IActionResult> TeacherPostGrade(GradeObject grade)
         {
             int teacherId = await teacherService.GetTeacherId(UserId);
             if (teacherId == -1)
@@ -170,9 +161,14 @@ namespace SchoolGradebook.API.Grades
             return CreatedAtAction("PostGrade", new { id = g.Id }, g);
         }
 
-        [HttpPut]
+        /// <summary>
+        /// Updates a single grade for teacher
+        /// </summary>
+        /// <param name="grade"></param>
+        /// <returns></returns>
+        [HttpPut("Teacher")]
         [Authorize(policy: "OnlyTeacher")]
-        public async Task<IActionResult> UpdateGrade(GradeObject grade)
+        public async Task<IActionResult> TeacherUpdateGrade(GradeObject grade)
         {
             int teacherId = await teacherService.GetTeacherId(UserId);
             if (teacherId == -1)
@@ -212,10 +208,14 @@ namespace SchoolGradebook.API.Grades
             return CreatedAtAction("PutGrade", new { id = g.Id }, g);
         }
 
-        // POST: api/Grades/Batch
-        [HttpPost("Batch")]
+        /// <summary>
+        /// Creates grades for teachers in batch
+        /// </summary>
+        /// <param name="grades"></param>
+        /// <returns></returns>
+        [HttpPost("Teacher/Batch")]
         [Authorize(policy: "OnlyTeacher")]
-        public async Task<IActionResult> PostGrades(ICollection<GradeObject> grades)
+        public async Task<IActionResult> TeacherPostGrades(ICollection<GradeObject> grades)
         {
             int teacherId = await teacherService.GetTeacherId(UserId);
             if (teacherId == -1)
@@ -273,10 +273,14 @@ namespace SchoolGradebook.API.Grades
             return CreatedAtAction("PostGrade", gradeIds, gradesToCreate);
         }
 
-        // PUT: api/Grades/Batch
-        [HttpPut("Batch")]
+        /// <summary>
+        /// Updates grades for teacher in batch 
+        /// </summary>
+        /// <param name="grades"></param>
+        /// <returns></returns>
+        [HttpPut("Teacher/Batch")]
         [Authorize(policy: "OnlyTeacher")]
-        public async Task<IActionResult> UpdateGrades(ICollection<GradeObject> grades)
+        public async Task<IActionResult> TeacherUpdateGrades(ICollection<GradeObject> grades)
         {
             int teacherId = await teacherService.GetTeacherId(UserId);
             if (teacherId == -1)
@@ -331,10 +335,14 @@ namespace SchoolGradebook.API.Grades
             return StatusCode(201);
         }
 
-        // Delete: api/Grades/Batch
-        [HttpDelete("Batch")]
+        /// <summary>
+        /// Deletes grades for teacher in batch
+        /// </summary>
+        /// <param name="gradeIds"></param>
+        /// <returns></returns>
+        [HttpDelete("Teacher/Batch")]
         [Authorize(policy: "OnlyTeacher")]
-        public async Task<IActionResult> DeleteGrades(ICollection<int> gradeIds)
+        public async Task<IActionResult> TeacherDeleteGrades(ICollection<int> gradeIds)
         {
             int teacherId = await teacherService.GetTeacherId(UserId);
             if (teacherId == -1)
@@ -359,15 +367,172 @@ namespace SchoolGradebook.API.Grades
 
             return StatusCode(200);
         }
+
+        //****************
+        //Student requests
+        //****************
+
+        /// <summary>
+        /// Gets all grades by the selected filter for students
+        /// </summary>
+        /// <param name="subjectInstanceId"></param>
+        /// <returns>Grades</returns>
+        /// <response code="200">Returns grades</response>
+        /// <response code="403">If the user is not a student, or is not allowed to view the selected subject</response>
+        [HttpGet("Student")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [Authorize(policy: "OnlyStudent")]
+        public async Task<ActionResult<IEnumerable<GradeObject>>> StudentGetGrades(int? subjectInstanceId)
+        {
+            List<GradeObject> gradeObjects = new List<GradeObject>();
+            int loggedInStudentId = await studentService.GetStudentId(UserId);
+            if (loggedInStudentId == -1)
+            {
+                return StatusCode(403);
+            }
+
+            if (subjectInstanceId != null)
+            {
+                if (!await studentAccessValidation.HasAccessToSubject(loggedInStudentId, (int)subjectInstanceId))
+                {
+                    return StatusCode(403);
+                }
+                var grades = await gradeService.GetAllGradesByStudentSubjectInstance(loggedInStudentId, (int)subjectInstanceId);
+                foreach (var g in grades)
+                {
+                    var utype = g.AddedBy;
+                    gradeObjects.Add(
+                        new GradeObject
+                        {
+                            Added = g.Added,
+                            AddedBy = (GradeObject.USERTYPE)utype,
+                            Id = g.Id,
+                            Name = g.Name,
+                            StudentId = g.StudentId,
+                            SubjectInstanceId = g.SubjectInstanceId,
+                            Value = g.Value
+                        }
+                        );
+                }
+                return gradeObjects;
+            }
+            else //No subject instance id set -> display all grades for student
+            {
+                var grades = await gradeService.GetAllGradesAsync(loggedInStudentId);
+                foreach (var g in grades)
+                {
+                    var utype = g.AddedBy;
+                    gradeObjects.Add(
+                        new GradeObject
+                        {
+                            Added = g.Added,
+                            AddedBy = (GradeObject.USERTYPE)utype, //Casting the Grade UserType data model enum to the response GradeObject UserType
+                            Id = g.Id,
+                            Name = g.Name,
+                            StudentId = g.StudentId,
+                            SubjectInstanceId = g.SubjectInstanceId,
+                            Value = g.Value
+                        }
+                        );
+                }
+                return gradeObjects;
+            }
+        }
+
+
+        /// <summary>
+        /// Adds a single grade for a student
+        /// </summary>
+        /// <param name="grade"></param>
+        /// <returns></returns>
+        [HttpPost("Student")]
+        [Authorize(policy: "OnlyStudent")]
+        public async Task<IActionResult> StudentPostGrade(GradeObject grade)
+        {
+            int studentId = await studentService.GetStudentId(UserId);
+            if (studentId == -1)
+            {
+                return StatusCode(403);
+            }
+            if (!await studentAccessValidation.HasAccessToSubject(studentId, grade.SubjectInstanceId))
+            {
+                return StatusCode(403);
+            }
+            Grade g = new Grade()
+            {
+                Added = DateTime.UtcNow,
+                Name = grade.Name,
+                StudentId = studentId,
+                SubjectInstanceId = grade.SubjectInstanceId,
+                Value = grade.Value
+            };
+            try
+            {
+                await gradeService.AddGradeAsync(g, Grade.USERTYPE.Student);
+            }
+            catch (ArgumentNullException e)
+            {
+                return BadRequest(new ErrorObject() { Message = e.Message });
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                return BadRequest(new ErrorObject() { Message = e.Message });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new ErrorObject() { Message = e.Message });
+            }
+
+            return CreatedAtAction("StudentPostGrade", new { id = g.Id }, g);
+        }
+
+        /// <summary>
+        /// Deletes grades for students in batch
+        /// </summary>
+        /// <param name="gradeIds"></param>
+        /// <returns></returns>
+        [HttpDelete("Student/Batch")]
+        [Authorize(policy: "OnlyStudent")]
+        public async Task<IActionResult> StudentDeleteGrades(ICollection<int> gradeIds)
+        {
+            int studentId = await studentService.GetStudentId(UserId);
+            List<int> idsToDelete = new List<int>();
+            if (studentId == -1)
+            {
+                return StatusCode(403);
+            }
+            foreach (int id in gradeIds)
+            {
+                var g = await gradeService.GetPlainGradeAsync(id);
+                if (g.AddedBy == Grade.USERTYPE.Student && g.StudentId == studentId)
+                {
+                    idsToDelete.Add(g.Id);
+                }
+            }
+            try
+            {
+                await gradeService.DeleteGradesAsync(idsToDelete);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new ErrorObject() { Message = e.Message });
+            }
+
+            return StatusCode(200);
+        }
+
     }
     public class GradeObject
     {
+        public enum USERTYPE { Teacher, Student }
         public int Id { get; set; }
         public int? Value { get; set; }
         public int SubjectInstanceId { get; set; }
         public int StudentId { get; set; }
         public string Name { get; set; }
         public DateTime Added { get; set; }
+        public USERTYPE? AddedBy { get; set; }
 
     }
     public class ErrorObject

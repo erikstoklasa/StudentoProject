@@ -20,6 +20,11 @@ namespace SchoolGradebook.API
             this.signInManager = signInManager;
             this.userManager = userManager;
         }
+        /// <summary>
+        /// Gets the auth session cookie
+        /// </summary>
+        /// <param name="credentials"></param>
+        /// <returns></returns>
         [HttpPost("Login")]
         public async Task<ActionResult<AuthResponseObject>> LogIn(InputModelObject credentials)
         {
@@ -44,6 +49,10 @@ namespace SchoolGradebook.API
             }
             return BadRequest(new AuthResponseObject() { Error = "Neověřená emailová adresa, nebo špatné údaje" });
         }
+        /// <summary>
+        /// Clears the auth session cookie
+        /// </summary>
+        /// <returns></returns>
         [HttpPost("Logout")]
         public async Task<ActionResult> LogOut()
         {

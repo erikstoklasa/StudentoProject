@@ -30,6 +30,15 @@ namespace SchoolGradebook.Services
             return grade;
         }
 
+        public async Task<Grade> GetPlainGradeAsync(int gradeId)
+        {
+            Grade grade = await context.Grades
+                .Where(s => s.Id == gradeId)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+            return grade;
+        }
+
         public async Task<Grade[]> GetAllGradesByStudentSubjectInstance(int studentId, int subjectInstanceId)
         {
             Grade[] grades = await context.Grades

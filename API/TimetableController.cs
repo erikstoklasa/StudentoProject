@@ -31,11 +31,6 @@ namespace SchoolGradebook.API.Timetable
         /// <summary>
         /// Gets timetable weeks for student
         /// </summary>
-        /// <remarks>
-        /// Sample request:
-        /// 
-        ///     GET /Timetable/Student/?week=1&wantMultipleWeeks=true
-        /// </remarks>
         /// <param name="week">Optional, if not set, will be automatically inferred</param>
         /// <param name="wantMultipleWeeks">True if you want one week before and after the selected week</param>
         /// <returns>Timetable week objects</returns>
@@ -137,11 +132,6 @@ namespace SchoolGradebook.API.Timetable
         /// <summary>
         /// Gets timetable weeks for teacher
         /// </summary>
-        /// <remarks>
-        /// Sample request:
-        /// 
-        ///     GET /Timetable/Teacher?week=1&wantMultipleWeeks=true
-        /// </remarks>
         /// <param name="week">Optional, if not set, will be automatically inferred</param>
         /// <param name="wantMultipleWeeks">True if you want one week before and after the selected week</param>
         /// <returns>Timetable week objects</returns>
@@ -284,9 +274,9 @@ namespace SchoolGradebook.API.Timetable
     public class TimetableEntryObject
     {
 #nullable enable
-        public string Room { get; set; }
+        public string? Room { get; set; }
         public int SubjectInstanceId { get; set; }
-        public string SubjectInstanceName { get; set; }
+        public string? SubjectInstanceName { get; set; }
         public string? TeacherFirstName { get; set; }
         public string? TeacherLastName { get; set; }
         public string? Group { get; set; } //Only for teacher
@@ -295,9 +285,9 @@ namespace SchoolGradebook.API.Timetable
     {
 #nullable enable
         public bool? Cancelled { get; set; }
-        public string Room { get; set; }
+        public string? Room { get; set; }
         public int SubjectInstanceId { get; set; }
-        public string SubjectInstanceName { get; set; }
+        public string? SubjectInstanceName { get; set; }
         public string? TeacherFirstName { get; set; }
         public string? TeacherLastName { get; set; }
         public string? Group { get; set; } //Only for teacher

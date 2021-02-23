@@ -15,7 +15,7 @@ namespace SchoolGradebook.Pages.Teacher.Grades
         {
 
         }
-        public async Task OnGetAsync()
+        public void OnGet()
         {
 
         }

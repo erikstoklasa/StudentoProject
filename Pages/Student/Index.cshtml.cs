@@ -50,8 +50,8 @@ namespace SchoolGradebook.Pages.Student
         }
         public async Task<IActionResult> OnGetAsync()
         {
-            string[] Scopes = { ClassroomService.Scope.ClassroomCoursesReadonly };
-            string ApplicationName = "Classroom API .NET Quickstart";
+            //string[] Scopes = { ClassroomService.Scope.ClassroomCoursesReadonly };
+            //string ApplicationName = "Classroom API .NET Quickstart";
             int studentId = await studentService.GetStudentId(UserId);
             if (studentId == -1)
             {
@@ -100,7 +100,7 @@ namespace SchoolGradebook.Pages.Student
             //// Define request parameters.
             //CoursesResource.ListRequest request = service.Courses.List();
             //request.PageSize = 10;
-            
+
             //// List courses.
             //ListCoursesResponse response = request.Execute();
             //if (response.Courses != null && response.Courses.Count > 0)

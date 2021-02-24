@@ -25,7 +25,7 @@
                 {
                     <small>Vyznamenání v pololetí <strong class="text-danger">nevychází</strong></small>
                 }
-                else
+                else if (Model.GPA <= 1.5)
                 {
                     <small>Vyznamenání v pololetí <strong class="text-success">vychází!</strong></small>
                 }
@@ -35,87 +35,104 @@
             <p class="table-heading">Nejnovější známky</p>
             <table class="table table-responsive table-white table-condensed">
                 <tbody>
-                    @foreach (var grade in Model.RecentGrades)
+                    @if (Model.RecentGrades.Length != 0)
                     {
-                        string gradeBackgroundColor = "black";
-                        string gradeTextColor = "dark";
-                        @if (grade.Value < 2)
+                        @foreach (var grade in Model.RecentGrades)
                         {
-                            gradeBackgroundColor = "green";
+                            string gradeBackgroundColor = "black";
+                            string gradeTextColor = "dark";
+                            @if (grade.Value < 2)
+                            {
+                                gradeBackgroundColor = "green";
+                            }
+                            else if (grade.Value < 3)
+                            {
+                                gradeBackgroundColor = "grey";
+                            }
+                            else if (grade.Value < 4)
+                            {
+                                gradeBackgroundColor = "yellow";
+                            }
+                            else if (grade.Value < 5)
+                            {
+                                gradeBackgroundColor = "red";
+                            }
+                            if (gradeBackgroundColor == "black")
+                            {
+                                gradeTextColor = "light";
+                            }
+                            <tr>
+                                <td>
+                                    <div class="grade-circle background-@(gradeBackgroundColor) text-@(gradeTextColor)">
+                                        @grade.Value.ToString()
+                                    </div>
+                                </td>
+                                <td>
+                                    <a asp-page="/Student/Grades/Details" asp-route-gradeId="@grade.Id">
+                                        @($"{LanguageHelper.getShorterString(grade.Name, 10)} | {LanguageHelper.getShorterString(grade.SubjectInstance.SubjectType.Name, 15)}")
+                                    </a>
+                                </td>
+                                <td>
+                                    @LanguageHelper.getRelativeTime(grade.Added)
+                                </td>
+                            </tr>
                         }
-                        else if (grade.Value < 3)
-                        {
-                            gradeBackgroundColor = "grey";
-                        }
-                        else if (grade.Value < 4)
-                        {
-                            gradeBackgroundColor = "yellow";
-                        }
-                        else if (grade.Value < 5)
-                        {
-                            gradeBackgroundColor = "red";
-                        }
-                        if (gradeBackgroundColor == "black")
-                        {
-                            gradeTextColor = "light";
-                        }
+                    }
+                    else
+                    {
                         <tr>
-                            <td>
-                                <div class="grade-circle background-@(gradeBackgroundColor) text-@(gradeTextColor)">
-                                    @grade.Value.ToString()
-                                </div>
-                            </td>
-                            <td>
-                                <a asp-page="/Student/Grades/Details" asp-route-gradeId="@grade.Id">
-                                    @($"{LanguageHelper.getShorterString(grade.Name, 10)} | {LanguageHelper.getShorterString(grade.SubjectInstance.SubjectType.Name, 15)}")
-                                </a>
-                            </td>
-                            <td>
-                                @LanguageHelper.getRelativeTime(grade.Added)
-                            </td>
+                            <td>Jakmile dostaneš nějaké známky, tak se ti zobrazí tady.</td>
                         </tr>
                     }
+
                 </tbody>
             </table>
         </div>
     </div>
     <p class="table-heading">Předměty</p>
     @*@foreach (var c in Model.Courses)
-    {
-        <p>@(c.Name)</p>
-        <p>@(c.Description)</p>
-    }
-    @(Model.ClassroomStatus)*@
-    <div class="subject-container">
-        @foreach (var x in Model.SubjectsAndSubjectAverages)
         {
-            SubjectMaterial subjectMaterial = (await subjectMaterialService.GetAllMaterialsBySubjectInstance(x.subjectInstance.Id, 1)).FirstOrDefault();
+            <p>@(c.Name)</p>
+            <p>@(c.Description)</p>
+        }
+        @(Model.ClassroomStatus)*@
+    <div class="subject-container">
+        @if (Model.SubjectsAndSubjectAverages.Count() != 0)
+        {
+            @foreach (var x in Model.SubjectsAndSubjectAverages)
+            {
+                SubjectMaterial subjectMaterial = (await subjectMaterialService.GetAllMaterialsBySubjectInstance(x.subjectInstance.Id, 1)).FirstOrDefault();
 
-            <div class="card">
-                <div class="card-body pb-0">
-                    <div>
-                        <h5 class="card-title">@x.subjectInstance.SubjectType.Name</h5>
-                        <p class="card-subtitle">@x.subjectInstance.Teacher.GetFullName()</p>
-                    </div>
-                    <div class="card-avg">
-                        @x.subjectAverage
-                    </div>
-                </div>
-                @if (subjectMaterial != null)
-                {
-                    <a class="no-bcg-onhover" asp-page="Subjects/Materials/Details" asp-route-Id="@subjectMaterial.Id">
-                        <div class="card-body mt-3 py-0">
-                            <div class="row-custom">
-                                <img class="cell" alt="Extension icon" src="~/images/icons/@(MimeTypeMap.GetExtension(MimeTypeMap.GetMimeType(subjectMaterial.FileExt)).Substring(1)).png" />
-                                <div class="cell"><span>@(subjectMaterial.Name)</span></div>
-                            </div>
+                <div class="card">
+                    <div class="card-body pb-0">
+                        <div>
+                            <h5 class="card-title">@x.subjectInstance.SubjectType.Name</h5>
+                            <p class="card-subtitle">@x.subjectInstance.Teacher.GetFullName()</p>
                         </div>
-                    </a>
-                }
-                <div class="card-body flex-column justify-content-end">
-                    <a class="btn btn-primary" asp-page="/Student/Subjects/Details" asp-route-id="@x.subjectInstance.Id">Otevřít předmět</a>
+                        <div class="card-avg">
+                            @x.subjectAverage
+                        </div>
+                    </div>
+                    @if (subjectMaterial != null)
+                    {
+                        <a class="no-bcg-onhover" asp-page="Subjects/Materials/Details" asp-route-Id="@subjectMaterial.Id">
+                            <div class="card-body mt-3 py-0">
+                                <div class="row-custom">
+                                    <img class="cell" alt="Extension icon" src="~/images/icons/@(MimeTypeMap.GetExtension(MimeTypeMap.GetMimeType(subjectMaterial.FileExt)).Substring(1)).png" />
+                                    <div class="cell"><span>@(subjectMaterial.Name)</span></div>
+                                </div>
+                            </div>
+                        </a>
+                    }
+                    <div class="card-body flex-column justify-content-end">
+                        <a class="btn btn-primary" asp-page="/Student/Subjects/Details" asp-route-id="@x.subjectInstance.Id">Otevřít předmět</a>
+                    </div>
                 </div>
-            </div>
+            }
+        }
+        else
+        {
+            <p class="alert alert-warning my-5">Zatím ti administrátor nepřidělil žádný předmět 🙁</p>
         }
     </div>
 </div>

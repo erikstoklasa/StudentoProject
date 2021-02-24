@@ -23,6 +23,7 @@
             <div class="form-group">
                 <label asp-for="Grade.Value" class="control-label">Známka</label>
                 <input asp-for="Grade.Value" type="number" min="1" max="5" class="form-control" style="width: 4rem; text-align:center;" />
+                <small class="text-muted">Zatím podporujeme jen celočíselné známky od 1 do 5.</small>
             </div>
             <div class="form-group">
                 <label asp-for="Grade.Name" class="control-label">Název známky</label>

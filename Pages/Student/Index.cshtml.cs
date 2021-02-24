@@ -68,7 +68,7 @@ namespace SchoolGradebook.Pages.Student
             }
             SubjectsAndSubjectAverages = Subjects.Zip(SubjectAverages, (s, sa) => (s, sa));
             double currentAvg = await _analytics.GetTotalAverageForStudentAsync(studentId);
-            GPAToDisplay = currentAvg.CompareTo(double.NaN) == 0 ? "Žádné známky" : currentAvg.ToString("f2");
+            GPAToDisplay = currentAvg.CompareTo(double.NaN) == 0 ? "žádné známky" : currentAvg.ToString("f2");
             GPA = currentAvg;
             double comparisonAvg = await _analytics.GetTotalAverageForStudentAsync(studentId, 365, 30);
             GPAComparisonHTML = LanguageHelper.getAverageComparisonString(currentAvg, comparisonAvg);

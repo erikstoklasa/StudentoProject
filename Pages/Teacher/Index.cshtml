@@ -15,15 +15,15 @@ else
         {
 
             <div class="card mx-1 flex-column">
-                <div class="card-body">
-                    <div class="w-100">
+                <div class="card-body pb-0">
+                    <div>
                         <h5 class="card-title">
                             <a asp-page="/Teacher/Subjects/Details" asp-route-id="@i.subjectInstance.Id">@i.subjectInstance.SubjectType.Name</a>
                         </h5>
                         <p class="card-text pl-lg-3">Studentů: @i.studentCount</p>
-                        <a class="btn btn-primary" asp-page="/Teacher/Subjects/Details" asp-route-id="@i.subjectInstance.Id">Otevřít předmět</a>
                     </div>
                 </div>
+                <div class="card-body flex-column justify-content-end"><a class="btn btn-primary" asp-page="/Teacher/Subjects/Details" asp-route-id="@i.subjectInstance.Id">Otevřít předmět</a></div>
             </div>
         }
     </div>

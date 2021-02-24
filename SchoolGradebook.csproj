@@ -157,6 +157,10 @@
     <None Include="wwwroot\site.webmanifest" />
   </ItemGroup>
 
+  <Target Name="RunWebpack" BeforeTargets="Build">
+    <Exec Command="npm run build" />
+  </Target>
+
 
   <ProjectExtensions>
     <VisualStudio>

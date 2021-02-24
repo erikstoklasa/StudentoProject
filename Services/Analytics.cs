@@ -59,7 +59,7 @@ namespace SchoolGradebook.Services
         public async Task<double> GetSubjectAverageForStudentAsync(int studentId, int SubjectInstanceId)
         {
             double sum = 0.0;
-            Grade[] grades = await gradeService.GetGradesAddedByTeacherAsync(studentId, SubjectInstanceId);
+            Grade[] grades = await gradeService.GetAllGradesByStudentSubjectInstance(studentId, SubjectInstanceId);
 
             int count = grades.Length;
             if (count == 0) //Student doesn't have any grades in the given subject

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -26,6 +27,7 @@ namespace SchoolGradebook.Pages
         private readonly TeacherService teacherService;
 
         [BindProperty(SupportsGet = true)]
+        [EmailAddress]
         public string Email { get; set; }
 
         public FirstPasswordResetRequest(UserManager<IdentityUser> userManager, IEmailSender emailSender, StudentService studentService, TeacherService teacherService)
@@ -60,15 +62,17 @@ namespace SchoolGradebook.Pages
                     {
                         user.Email = t.Email;
                         user.UserName = t.Email;
-                    } else
+                    }
+                    else
                     {
-                        ModelState.AddModelError("UserNotFound", "User was not found by the email you entered.");
+                        ModelState.AddModelError("UserNotFound", "Zkontroluj si email, protože tenhle bohužel není pozvaný.");
+                        return Page();
                     }
                 }
                 var result = await _userManager.CreateAsync(user, RandomString(10) + "l1D!"); //GENERATE RANDOM PASSWORD
                 if (!result.Succeeded)
                 {
-                    foreach(var e in result.Errors)
+                    foreach (var e in result.Errors)
                     {
                         ModelState.AddModelError(e.Code, e.Description);
                     }
@@ -98,10 +102,10 @@ namespace SchoolGradebook.Pages
 
                 await emailSender.SendEmailAsync(
                     Email,
-                    "Vítejte ve Studentu!",
-                    $"Vytvořte si prosím své heslo <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>kliknutím zde</a>.");
+                    "Vítej ve Studentu! 🎉",
+                    $"Přihlaš se do aplikace Studento <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>kliknutím zde</a>.");
 
-                ViewData["status"] = "Úspěch, zkontrolujte si svůj email, na který jsme vám poslali odkaz pro vytvoření nového hesla.";
+                ViewData["status"] = "Úspěch, zkontroluj si svůj email, na který jsme ti poslali odkaz.";
                 return Page();
             }
             return Page();

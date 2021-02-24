@@ -47,7 +47,23 @@ namespace SchoolGradebook.Pages
                 {
                     foreach (var e in result.Errors)
                     {
-                        ModelState.AddModelError(e.Code, e.Description);
+                        if (e.Code == "PasswordRequiresLower")
+                        {
+                            ModelState.AddModelError(e.Code, "Heslo musí obsahovat nejméně jedno malé písmeno");
+                        }
+                        else if (e.Code == "PasswordRequiresUpper")
+                        {
+                            ModelState.AddModelError(e.Code, "Heslo musí obsahovat nejméně jedno velké písmeno");
+                        }
+                        else if (e.Code == "PasswordTooShort")
+                        {
+                            ModelState.AddModelError(e.Code, "Heslo musí mít nejméně 6 znaků");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(e.Code, e.Description);
+                        }
+
                     }
                     return Page();
                 }

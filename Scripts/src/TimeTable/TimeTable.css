@@ -189,3 +189,13 @@
     margin: 0;
     min-width: 0px;
 }
+
+.empty-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    margin-top: 150px;
+    margin-bottom: 150px;
+    color: lightgrey;
+}

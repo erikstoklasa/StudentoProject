@@ -39,9 +39,12 @@ const InnerTable = ({ sortedData, week, type, displayVertical }) => {
     }
     else { 
         return (
-            <div>no week</div>
+        <div className="empty-container">
+            <div>Nedaří se načíst týden, prosím kontaktujte správce</div>
+        </div>
         )
     }
 }
 
 export default InnerTable
+

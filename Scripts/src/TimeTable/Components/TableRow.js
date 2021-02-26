@@ -8,10 +8,12 @@ const TableRow = ({ frameArray, dayName, type, dateArray, dateModifier }) => {
         return <TableCell frame={frame} type={type}/>
     })   
 
-    const determineDate = () => { 
+    const determineDate = () => {
+        //check if all days fit into current month
         if (dateArray[2] + dateModifier <= dateArray[3]) {
             updateActualDate(`${dateArray[2] + dateModifier}.${dateArray[1]}`)
-        } else {           
+        } else {
+            //not fit, determine date
             const spillOverToTheNextMonth = dateArray[3] - (dateArray[2] + dateModifier)
             const nextMonthDay = 0 - spillOverToTheNextMonth;
 

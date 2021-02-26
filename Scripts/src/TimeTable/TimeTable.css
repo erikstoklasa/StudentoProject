@@ -135,14 +135,22 @@
 
 .top-bar {
     display: flex;
+    flex-wrap: nowrap;
     width: 100%;
-    justify-content: space-between;
+    justify-content: flex-end;
+    align-items: center;
     padding-right: 5px;
+    
+    margin-top: 20px;
 }
 
 .table-heading {
     margin: 0px 0px 0px 15px
 
+}
+
+.week-button-left{
+    margin-right: 20px !important;
 }
 
 .week-button {
@@ -157,6 +165,10 @@
     height: 32px;
     width: 32px;
     user-select: none;
+}
+
+.eye-icon{
+    height: 25px;    
 }
 
 .arrow-left {
@@ -179,8 +191,7 @@
 }
 
 .back-button{
-    margin: 0px 20px 0px 10px !important;
-    min-width: 120px;
+    margin: 0px 0px 0px 10px !important;   
 }
 
 .time-text2{
@@ -198,4 +209,17 @@
     margin-top: 150px;
     margin-bottom: 150px;
     color: lightgrey;
+}
+.control-button-container{
+    margin-right: auto;
+    margin-left: 20px;
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.time-table-button{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    min-width: 120px;
 }

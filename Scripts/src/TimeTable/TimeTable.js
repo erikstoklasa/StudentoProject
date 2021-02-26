@@ -34,6 +34,7 @@ const TimeTable = () => {
                     updateBulkData(data)
                 })
         } else if (tableType && weekNumber) {
+            
             fetch(`${apiAdress}/Timetable/${tableType}?week=${weekNumber}&wantMultipleWeeks=false`)
             .then(res => res.json())
                 .then(data => {
@@ -93,11 +94,13 @@ const TimeTable = () => {
     }
     
     const changeWeek = (number) => { 
+       
         const nextWeek = (currentWeek + number)
         if (sortedData.some(weekObject => weekObject.week === nextWeek)) {
             updateCurrentWeek(nextWeek)
         } else { 
-            fetchData(nextWeek)             
+            fetchData(nextWeek)
+           
         }
     }
 
@@ -108,13 +111,17 @@ const TimeTable = () => {
     
     return (
         <div className="outer-table">
+            <h1 className="table-heading">Můj rozvrh</h1>
             <div className="top-bar">
-                <h1 className="table-heading">Můj rozvrh</h1>
-                <div className="button-container back-button">    
-                    {currentWeek !== initialWeek ? <a className="btn btn-primary back-button" onClick={() => { updateCurrentWeek(initialWeek) }}>Zobrazit aktualní týden</a> : null}
-                    <a className="btn btn-primary back-button" onClick={() => { updateDisplayVertical(!displayVertical) }}>Změnit zobrazení</a>
-                    <a className="week-button" onClick={() => { changeWeek(-1) }}><img  className="arrow flip-horizontally" src='/images/rightarrow.svg'></img></a>
-                    <a className="week-button" onClick={() => { changeWeek(+1)}}><img className="arrow " src='/images/rightarrow.svg'></img></a>                    
+                <div className="control-button-container">
+                    <a className="btn btn-primary timetable-button" onClick={() => { updateDisplayVertical(!displayVertical) }}>Změnit zobrazení</a>                    
+                    {currentWeek !== initialWeek ? <a className="btn btn-primary back-button timetable-button" onClick={() => { updateCurrentWeek(initialWeek) }}>Aktualní týden</a> : null}
+                </div>
+                <div className="button-container back-button">                    
+                    <a className="week-button week-button-left" onClick={() => { changeWeek(-1) }}><img className="arrow flip-horizontally" src='/images/rightarrow.svg'></img></a>                    
+                    <a className="week-button" onClick={() => {                     
+                        changeWeek(+1)
+                    }}><img className="arrow " src='/images/rightarrow.svg'></img></a>                    
                 </div>    
             </div>
             <InnerTable sortedData={sortedData} week={currentWeek} type={tableType} displayVertical={displayVertical}/>                     

@@ -39,7 +39,7 @@ else
                         @item.SubjectInstance.SubjectType.Name
                     </td>
                     <td>
-                        @item.Value
+                        @item.GetGradeValue()
                     </td>
                     <td>
                         @LanguageHelper.getRelativeTime(item.Added)

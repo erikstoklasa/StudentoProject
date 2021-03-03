@@ -63,7 +63,9 @@ namespace SchoolGradebook.API.Grades
                 var grades = await gradeService.GetAllGradesAddedByTeacherAsync((int)studentId);
                 foreach (var g in grades)
                 {
-                    gradeObjects.Add(new GradeObject { Added = g.Added, Id = g.Id, Name = g.Name, StudentId = g.StudentId, SubjectInstanceId = g.SubjectInstanceId, Value = g.Value });
+                    gradeObjects.Add(
+                        new GradeObject { Added = g.Added, Id = g.Id, Name = g.Name, StudentId = g.StudentId, SubjectInstanceId = g.SubjectInstanceId, Value = g.GetGradeValueInDecimal().ToString() }
+                        );
                 }
                 return gradeObjects;
             }
@@ -76,7 +78,9 @@ namespace SchoolGradebook.API.Grades
                 var grades = await gradeService.GetAllGradesAddedByTeacherAsync((int)subjectInstanceId);
                 foreach (var g in grades)
                 {
-                    gradeObjects.Add(new GradeObject { Added = g.Added, Id = g.Id, Name = g.Name, StudentId = g.StudentId, SubjectInstanceId = g.SubjectInstanceId, Value = g.Value });
+                    gradeObjects.Add(
+                        new GradeObject { Added = g.Added, Id = g.Id, Name = g.Name, StudentId = g.StudentId, SubjectInstanceId = g.SubjectInstanceId, Value = g.GetGradeValueInDecimal().ToString() }
+                        );
                 }
                 return gradeObjects;
             }
@@ -112,7 +116,8 @@ namespace SchoolGradebook.API.Grades
             {
                 return StatusCode(404);
             }
-            return new GradeObject { Added = g.Added, Id = g.Id, Name = g.Name, StudentId = g.StudentId, SubjectInstanceId = g.SubjectInstanceId, Value = g.Value };
+            return new GradeObject
+            { Added = g.Added, Id = g.Id, Name = g.Name, StudentId = g.StudentId, SubjectInstanceId = g.SubjectInstanceId, Value = g.GetGradeValueInDecimal().ToString() };
         }
 
         /// <summary>
@@ -138,9 +143,9 @@ namespace SchoolGradebook.API.Grades
                 Added = DateTime.UtcNow,
                 Name = grade.Name,
                 StudentId = grade.StudentId,
-                SubjectInstanceId = grade.SubjectInstanceId,
-                Value = grade.Value
+                SubjectInstanceId = grade.SubjectInstanceId
             };
+            g.SetGradeValue(grade.Value);
             try
             {
                 await gradeService.AddGradeAsync(g, Grade.USERTYPE.Teacher);
@@ -186,7 +191,6 @@ namespace SchoolGradebook.API.Grades
                 Name = grade.Name,
                 StudentId = grade.StudentId,
                 SubjectInstanceId = grade.SubjectInstanceId,
-                Value = grade.Value
             };
             try
             {
@@ -228,14 +232,15 @@ namespace SchoolGradebook.API.Grades
 
             foreach (var g in grades)
             {
-                gradesToCreate.Add(new Grade()
+                var newGrade = new Grade()
                 {
                     Added = DateTime.UtcNow,
                     Name = g.Name,
                     StudentId = g.StudentId,
-                    SubjectInstanceId = g.SubjectInstanceId,
-                    Value = g.Value
-                });
+                    SubjectInstanceId = g.SubjectInstanceId
+                };
+                newGrade.SetGradeValue(g.Value);
+                gradesToCreate.Add(newGrade);
                 if (!subjectInstanceIdsToCheck.Contains(g.SubjectInstanceId))
                 {
                     subjectInstanceIdsToCheck.Add(g.SubjectInstanceId);
@@ -292,15 +297,16 @@ namespace SchoolGradebook.API.Grades
 
             foreach (var g in grades)
             {
-                gradesToUpdate.Add(new Grade()
+                var newGrade = new Grade()
                 {
                     Id = g.Id,
                     Added = DateTime.UtcNow,
                     Name = g.Name,
                     StudentId = g.StudentId,
-                    SubjectInstanceId = g.SubjectInstanceId,
-                    Value = g.Value
-                });
+                    SubjectInstanceId = g.SubjectInstanceId
+                };
+                newGrade.SetGradeValue(g.Value);
+                gradesToUpdate.Add(newGrade);
                 if (!subjectInstanceIdsToCheck.Contains(g.SubjectInstanceId))
                 {
                     subjectInstanceIdsToCheck.Add(g.SubjectInstanceId);
@@ -376,6 +382,7 @@ namespace SchoolGradebook.API.Grades
         /// Gets all grades by the selected filter for students
         /// </summary>
         /// <param name="subjectInstanceId"></param>
+        /// <param name="formatGrades">True for grade value format 1+, 3- or 2 (falls back to decimal if not found), False (default) for format 0.6; 3,4; 2</param>
         /// <returns>Grades</returns>
         /// <response code="200">Returns grades</response>
         /// <response code="403">If the user is not a student, or is not allowed to view the selected subject</response>
@@ -383,7 +390,7 @@ namespace SchoolGradebook.API.Grades
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [Authorize(policy: "OnlyStudent")]
-        public async Task<ActionResult<IEnumerable<GradeObject>>> StudentGetGrades(int? subjectInstanceId)
+        public async Task<ActionResult<IEnumerable<GradeObject>>> StudentGetGrades(int? subjectInstanceId, bool formatGrades = false)
         {
             List<GradeObject> gradeObjects = new List<GradeObject>();
             int loggedInStudentId = await studentService.GetStudentId(UserId);
@@ -402,18 +409,24 @@ namespace SchoolGradebook.API.Grades
                 foreach (var g in grades)
                 {
                     var utype = g.AddedBy;
-                    gradeObjects.Add(
-                        new GradeObject
-                        {
-                            Added = g.Added,
-                            AddedBy = (GradeObject.USERTYPE)utype,
-                            Id = g.Id,
-                            Name = g.Name,
-                            StudentId = g.StudentId,
-                            SubjectInstanceId = g.SubjectInstanceId,
-                            Value = g.Value
-                        }
-                        );
+                    var newGrade = new GradeObject
+                    {
+                        Added = g.Added,
+                        AddedBy = (GradeObject.USERTYPE)utype,
+                        Id = g.Id,
+                        Name = g.Name,
+                        StudentId = g.StudentId,
+                        SubjectInstanceId = g.SubjectInstanceId
+                    };
+                    if (formatGrades)
+                    {
+                        newGrade.Value = g.GetGradeValue();
+                    }
+                    else
+                    {
+                        newGrade.Value = g.GetGradeValueInDecimal().ToString();
+                    }
+                    gradeObjects.Add(newGrade);
                 }
                 return gradeObjects;
             }
@@ -423,18 +436,17 @@ namespace SchoolGradebook.API.Grades
                 foreach (var g in grades)
                 {
                     var utype = g.AddedBy;
-                    gradeObjects.Add(
-                        new GradeObject
-                        {
-                            Added = g.Added,
-                            AddedBy = (GradeObject.USERTYPE)utype, //Casting the Grade UserType data model enum to the response GradeObject UserType
-                            Id = g.Id,
-                            Name = g.Name,
-                            StudentId = g.StudentId,
-                            SubjectInstanceId = g.SubjectInstanceId,
-                            Value = g.Value
-                        }
-                        );
+                    var newGrade = new GradeObject
+                    {
+                        Added = g.Added,
+                        AddedBy = (GradeObject.USERTYPE)utype, //Casting the Grade UserType data model enum to the response GradeObject UserType
+                        Id = g.Id,
+                        Name = g.Name,
+                        StudentId = g.StudentId,
+                        SubjectInstanceId = g.SubjectInstanceId,
+                        Value = g.GetGradeValueInDecimal().ToString()
+                    };
+                    gradeObjects.Add(newGrade);
                 }
                 return gradeObjects;
             }
@@ -446,6 +458,7 @@ namespace SchoolGradebook.API.Grades
         /// </summary>
         /// <param name="grade"></param>
         /// <returns></returns>
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [HttpPost("Student")]
         [Authorize(policy: "OnlyStudent")]
         public async Task<IActionResult> StudentPostGrade(GradeObject grade)
@@ -464,9 +477,9 @@ namespace SchoolGradebook.API.Grades
                 Added = DateTime.UtcNow,
                 Name = grade.Name,
                 StudentId = studentId,
-                SubjectInstanceId = grade.SubjectInstanceId,
-                Value = grade.Value
+                SubjectInstanceId = grade.SubjectInstanceId
             };
+            g.SetGradeValue(grade.Value);
             try
             {
                 await gradeService.AddGradeAsync(g, Grade.USERTYPE.Student);
@@ -527,7 +540,7 @@ namespace SchoolGradebook.API.Grades
     {
         public enum USERTYPE { Teacher, Student }
         public int Id { get; set; }
-        public int? Value { get; set; }
+        public string Value { get; set; }
         public int SubjectInstanceId { get; set; }
         public int StudentId { get; set; }
         public string Name { get; set; }

@@ -11,8 +11,15 @@ using SchoolGradebook.Services;
 
 namespace SchoolGradebook.Pages.Student.Grades
 {
+    public class Grade
+    {
+        public int SubjectInstanceId { get; set; }
+        public string Value { get; set; }
+        public string Name { get; set; }
+    }
     public class CreateModel : PageModel
     {
+
         private readonly SubjectService subjectService;
         private readonly StudentAccessValidation studentAccessValidation;
         private readonly StudentService studentService;
@@ -48,7 +55,12 @@ namespace SchoolGradebook.Pages.Student.Grades
         public async Task<IActionResult> OnPostAsync()
         {
             int studentId = await studentService.GetStudentId(UserId);
-            Grade.StudentId = studentId;
+            Models.Grade grade = new Models.Grade
+            {
+                SubjectInstanceId = Grade.SubjectInstanceId,
+                StudentId = studentId,
+                Name = Grade.Name
+            };
 
             bool hasAccess = await studentAccessValidation.HasAccessToSubject(studentId, Grade.SubjectInstanceId);
             if (!hasAccess)
@@ -56,24 +68,33 @@ namespace SchoolGradebook.Pages.Student.Grades
                 return Forbid();
             }
 
-            Grade.Added = DateTime.UtcNow;
+            grade.Added = DateTime.UtcNow;
+            try
+            {
+                grade.SetGradeValue(Grade.Value);
+            }
+            catch (ArgumentException e)
+            {
+                ErrorMessage = "Známka je ve špatném formátu. Povolené kombinace jsou: 1*;1+;1;1-;2+;2;2-;3+;3;3-;4+;4;4-;5+;5;5- " + e.Message;
+                return await OnGetAsync(grade.SubjectInstanceId);
+            }
 
             try
             {
-                await gradeService.AddGradeAsync(Grade, Grade.USERTYPE.Student);
+                await gradeService.AddGradeAsync(grade, Models.Grade.USERTYPE.Student);
             }
             catch (ArgumentNullException e)
             {
                 ErrorMessage = e.Message;
-                return await OnGetAsync(Grade.SubjectInstanceId);
+                return await OnGetAsync(grade.SubjectInstanceId);
             }
             catch (ArgumentOutOfRangeException e)
             {
                 ErrorMessage = e.Message;
-                return await OnGetAsync(Grade.SubjectInstanceId);
+                return await OnGetAsync(grade.SubjectInstanceId);
             }
-            SuccessMessage = $"Známka {Grade.Value} - {Grade.Name} byla přidána";
-            return await OnGetAsync(Grade.SubjectInstanceId);
+            SuccessMessage = $"Známka {grade.Name} - {grade.GetGradeValue()} byla přidána";
+            return await OnGetAsync(grade.SubjectInstanceId);
         }
     }
 }

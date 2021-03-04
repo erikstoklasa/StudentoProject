@@ -16,7 +16,7 @@ namespace SchoolGradebook.Pages.Student.Grades
         private readonly StudentService studentService;
 
         public string UserId { get; set; }
-        public IList<Grade> Grades { get; set; }
+        public IList<Models.Grade> Grades { get; set; }
 
         public IndexModel(IHttpContextAccessor httpContextAccessor, GradeService gradeService, StudentService studentService)
         {

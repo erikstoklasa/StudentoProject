@@ -148,21 +148,38 @@ namespace SchoolGradebook.Data
                 }
                 context.SaveChanges();
             }
+            //GradeGroups
+            if (!context.GradeGroups.Any())
+            {
+                List<GradeGroup> gradeGroups = new List<GradeGroup>();
+                for (int i = 0; i < 5; i++)
+                {
+                    var g = new GradeGroup
+                    {
+                        Name = "Domácí úkol / prezentace",
+                        Weight = 5,
+                    };
+                    gradeGroups.Add(g);
+                }
+                context.GradeGroups.AddRange(gradeGroups);
+                context.SaveChanges();
+            }
             //Grades
             if (!context.Grades.Any())
             {
                 List<Grade> grades = new List<Grade>();
                 for (int i = 0; i < NUMBER_OF_GRADES; i++)
                 {
-                    grades.Add(
-                        new Grade
-                        {
-                            Value = r.Next(1, 6),
-                            Name = "Domácí úkol / prezentace",
-                            StudentId = r.Next(1, NUMBER_OF_STUDENTS),
-                            SubjectInstanceId = r.Next(1, 8),
-                            Added = dates[r.Next(dates.Length)]
-                        });
+                    var g = new Grade
+                    {
+                        Name = "Domácí úkol / prezentace",
+                        StudentId = r.Next(1, NUMBER_OF_STUDENTS),
+                        SubjectInstanceId = r.Next(1, 8),
+                        GradeGroupId = 1,
+                        Added = dates[r.Next(dates.Length)]
+                    };
+                    g.SetGradeValue(r.Next(-10, 111));
+                    grades.Add(g);
                 }
                 context.Grades.AddRange(grades);
                 context.SaveChanges();

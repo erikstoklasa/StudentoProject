@@ -41,19 +41,19 @@
                         {
                             string gradeBackgroundColor = "black";
                             string gradeTextColor = "dark";
-                            @if (grade.Value < 2)
+                            @if (grade.GetGradeValueInDecimal() < 2)
                             {
                                 gradeBackgroundColor = "green";
                             }
-                            else if (grade.Value < 3)
+                            else if (grade.GetGradeValueInDecimal() < 3)
                             {
                                 gradeBackgroundColor = "grey";
                             }
-                            else if (grade.Value < 4)
+                            else if (grade.GetGradeValueInDecimal() < 4)
                             {
                                 gradeBackgroundColor = "yellow";
                             }
-                            else if (grade.Value < 5)
+                            else if (grade.GetGradeValueInDecimal() < 5)
                             {
                                 gradeBackgroundColor = "red";
                             }
@@ -64,7 +64,7 @@
                             <tr>
                                 <td>
                                     <div class="grade-circle background-@(gradeBackgroundColor) text-@(gradeTextColor)">
-                                        @grade.Value.ToString()
+                                        @grade.GetGradeValue()
                                     </div>
                                 </td>
                                 <td>

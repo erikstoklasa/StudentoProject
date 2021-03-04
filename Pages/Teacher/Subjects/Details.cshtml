@@ -38,7 +38,7 @@
                             <td>
                                 @for (int y = 0; y < i.studentGrades.Count; y++)
                                 {
-                                    @i.studentGrades[y].Value
+                                    @i.studentGrades[y].GetGradeValue()
                                     if (y != i.studentGrades.Count - 1)
                                     {
                                         @(",")

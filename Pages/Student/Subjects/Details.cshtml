@@ -40,7 +40,7 @@
 <div class="main-container">
     <div class="d-flex flex-column">
         <p class="table-heading">Známky od vyučující/ho</p>
-        @if (Model.SubjectAverage.CompareTo(Double.NaN) == 0)
+        @if (Model.Grades.Length == 0)
         {
             <p class="alert alert-info my-1">Zatím ti vyučující nepřidal žádné známky 🙁</p>
         }
@@ -52,19 +52,19 @@
                     {
                         string gradeBackgroundColor = "black";
                         string gradeTextColor = "dark";
-                        @if (x.Value < 2)
+                        @if (x.GetGradeValueInDecimal() < 2)
                         {
                             gradeBackgroundColor = "green";
                         }
-                        else if (x.Value < 3)
+                        else if (x.GetGradeValueInDecimal() < 3)
                         {
                             gradeBackgroundColor = "grey";
                         }
-                        else if (x.Value < 4)
+                        else if (x.GetGradeValueInDecimal() < 4)
                         {
                             gradeBackgroundColor = "yellow";
                         }
-                        else if (x.Value < 5)
+                        else if (x.GetGradeValueInDecimal() < 5)
                         {
                             gradeBackgroundColor = "red";
                         }
@@ -76,7 +76,7 @@
                         <tr>
                             <td>
                                 <div class="grade-circle background-@(gradeBackgroundColor) text-@(gradeTextColor)">
-                                    @x.Value.ToString()
+                                    @x.GetGradeValue()
                                 </div>
                             </td>
                             <td>
@@ -108,19 +108,19 @@
                     {
                         string gradeBackgroundColor = "black";
                         string gradeTextColor = "dark";
-                        @if (x.Value < 2)
+                        @if (x.GetGradeValueInDecimal() < 2)
                         {
                             gradeBackgroundColor = "green";
                         }
-                        else if (x.Value < 3)
+                        else if (x.GetGradeValueInDecimal() < 3)
                         {
                             gradeBackgroundColor = "grey";
                         }
-                        else if (x.Value < 4)
+                        else if (x.GetGradeValueInDecimal() < 4)
                         {
                             gradeBackgroundColor = "yellow";
                         }
-                        else if (x.Value < 5)
+                        else if (x.GetGradeValueInDecimal() < 5)
                         {
                             gradeBackgroundColor = "red";
                         }
@@ -132,7 +132,7 @@
                         <tr>
                             <td>
                                 <div class="grade-circle background-@(gradeBackgroundColor) text-@(gradeTextColor)">
-                                    @x.Value.ToString()
+                                    @x.GetGradeValue()
                                 </div>
                             </td>
                             <td>

@@ -159,10 +159,10 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
             {
                 table.AddCell(i.student.GetFullName());
                 table.AddCell(i.studentAverage.ToString("f2"));
-                List<float> onlyGradeValues = new List<float>();
+                List<string> onlyGradeValues = new List<string>();
                 foreach (var y in i.studentGrades)
                 {
-                    onlyGradeValues.Add((float)y.Value);
+                    onlyGradeValues.Add(y.GetGradeValue());
                 }
                 string gradesString = String.Join(",", onlyGradeValues);
                 Cell cell = new Cell();

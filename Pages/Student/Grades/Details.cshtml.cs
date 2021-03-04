@@ -17,7 +17,7 @@ namespace SchoolGradebook.Pages.Student.Grades
         private readonly StudentService studentService;
 
         public string UserId { get; set; }
-        public Grade Grade { get; set; }
+        public Models.Grade Grade { get; set; }
 
         [BindProperty(SupportsGet = true)]
         public int gradeId { get; set; }

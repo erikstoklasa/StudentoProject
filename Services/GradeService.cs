@@ -116,7 +116,7 @@ namespace SchoolGradebook.Services
             }
 
             //Grading scale is relative to the country of school
-            if (grade.Value <= 0 || grade.Value > 5)
+            if (grade.GetInternalGradeValue() < -10 || grade.GetInternalGradeValue() > 110)
             {
                 throw new ArgumentOutOfRangeException("Grade value");
             }
@@ -134,7 +134,7 @@ namespace SchoolGradebook.Services
             }
 
             //Grading scale is relative to the country of school
-            if (grade.Value <= 0 || grade.Value > 5)
+            if (grade.GetInternalGradeValue() < -10 || grade.GetInternalGradeValue() > 110)
             {
                 throw new ArgumentOutOfRangeException("Grade value");
             }
@@ -152,7 +152,7 @@ namespace SchoolGradebook.Services
                     throw new ArgumentNullException("Grade name");
                 }
                 //Grading scale is relative to the country of school
-                if (grade.Value <= 0 || grade.Value > 5)
+                if (grade.GetInternalGradeValue() < -10 || grade.GetInternalGradeValue() > 110)
                 {
                     throw new ArgumentOutOfRangeException("Grade value");
                 }
@@ -171,7 +171,7 @@ namespace SchoolGradebook.Services
                 }
 
                 //Grading scale is relative to the country of school
-                if (grade.Value <= 0 || grade.Value > 5)
+                if (grade.GetInternalGradeValue() < -10 || grade.GetInternalGradeValue() > 110)
                 {
                     throw new ArgumentOutOfRangeException("Grade value");
                 }

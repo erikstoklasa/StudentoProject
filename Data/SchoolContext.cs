@@ -17,6 +17,7 @@ namespace SchoolGradebook.Data
         public DbSet<Student> Students { get; set; }
         public DbSet<SubjectInstance> SubjectInstances { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<GradeGroup> GradeGroups { get; set; }
         public DbSet<Grade> Grades { get; set; }
         public DbSet<SubjectInstanceEnrollment> Enrollments { get; set; }
         public DbSet<HumanActivationCode> HumanActivationCodes { get; set; }
@@ -46,6 +47,7 @@ namespace SchoolGradebook.Data
             modelBuilder.Entity<Parent>().ToTable("Parents");
             modelBuilder.Entity<Student>().ToTable("Students");
             modelBuilder.Entity<SubjectInstanceEnrollment>().ToTable("Enrollments");
+            modelBuilder.Entity<GradeGroup>().ToTable("GradeGroups");
             modelBuilder.Entity<Grade>().ToTable("Grades");
             modelBuilder.Entity<HumanActivationCode>().ToTable("HumanActivationCodes");
             modelBuilder.Entity<SubjectMaterial>().ToTable("SubjectMaterials");

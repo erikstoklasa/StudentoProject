@@ -56,9 +56,15 @@ namespace SchoolGradebook.Services
                 .CountAsync();
             return countOfSubjects;
         }
+        /// <summary>
+        /// Gets the subject average for specified student and subject instance
+        /// </summary>
+        /// <param name="studentId"></param>
+        /// <param name="SubjectInstanceId"></param>
+        /// <returns>Subject average in 2 precision points (eg. 1.48)</returns>
         public async Task<double> GetSubjectAverageForStudentAsync(int studentId, int SubjectInstanceId)
         {
-            double sum = 0.0;
+            int sum = 0;
             Grade[] grades = await gradeService.GetAllGradesByStudentSubjectInstance(studentId, SubjectInstanceId);
 
             int count = grades.Length;
@@ -68,25 +74,32 @@ namespace SchoolGradebook.Services
             }
             foreach (Grade g in grades)
             {
-                sum += (double)g.Value;
+                sum += g.GetInternalGradeValue();
             }
-            return Math.Round(sum / count, 2);
+            int internalAverage = (int)Math.Ceiling((float)sum / count);
+            return Grade.MapInnerValueToDecimalValue(internalAverage);
         }
+
+        /// <summary>
+        /// Gets the subject average in decimal (eg. 1.481)
+        /// </summary>
+        /// <param name="subjectInstanceId"></param>
+        /// <returns>Subject average decimal number for 3 precision points</returns>
         public async Task<double> GetSubjectAverageAsync(int subjectInstanceId)
         {
             double sum = 0.0;
             Grade[] grades = await Context.Grades.Where(g => g.SubjectInstanceId == subjectInstanceId).AsNoTracking().ToArrayAsync();
 
             int count = grades.Length;
-            if (count == 0) //Student doesn't have any grades in the given subject
+            if (count == 0) //Students has no grades for specified subject
             {
                 return Double.NaN;
             }
             foreach (Grade g in grades)
             {
-                sum += (double)g.Value;
+                sum += g.GetGradeValueInDecimal();
             }
-            return Math.Round(sum / count, 4);
+            return Math.Round(sum / count, 3);
         }
         //Student
         public async Task<double> GetTotalAverageForStudentAsync(
@@ -145,7 +158,7 @@ namespace SchoolGradebook.Services
             }
             foreach (Grade g in filtredGrades)
             {
-                sum += (double)g.Value;
+                sum += g.GetGradeValueInDecimal();
             }
             return Math.Round(sum / count, decimalPlaces);
         }

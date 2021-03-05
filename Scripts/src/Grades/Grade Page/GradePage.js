@@ -22,8 +22,7 @@ const GradePage = () => {
     });
     const newGrades = [];
 
-    const getInstanceId = () => {
-        console.log('got instance id')
+    const getInstanceId = () => {       
         const idContainer = document.querySelector("#subjectInstanceId")
         updateInstanceId(idContainer.value);
     }   
@@ -31,19 +30,19 @@ const GradePage = () => {
 
     const fetchData = () => {
         if (InstanceId) {
-            fetch(`${apiAdress}/Grades?subjectInstanceId=${InstanceId}`, {
+            fetch(`${apiAdress}/Grades/Teacher?subjectInstanceId=${InstanceId}`, {
                 method: 'GET',
                 headers: {
                     'Cache-Control': 'no-cache'
                 }
             }).then(res => res.json()).then(data => {               
                 updateBulkGradeData(data)
+
             })
 
-            fetch(`${apiAdress}/SubjectInstances/${InstanceId}`, {
+            fetch(`${apiAdress}/SubjectInstances/Teacher/${InstanceId}`, {
                 method: 'GET',
-            }).then(res => res.json()).then(data => {   
-                
+            }).then(res => res.json()).then(data => {                   
                 updateBulkStudentData(data)                
             }) 
         
@@ -159,7 +158,7 @@ const GradePage = () => {
         if (gradeId) {
             if (gradeValue === 0) {
                 const gradeArr = [gradeId]
-                fetch(`${apiAdress}/Grades/Batch`, {
+                fetch(`${apiAdress}/Grades/Teacher/Batch`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json'
@@ -181,7 +180,7 @@ const GradePage = () => {
                     studentId: studentId,
                     name: gradeName
                 }
-                fetch(`${apiAdress}/Grades`, {
+                fetch(`${apiAdress}/Grades/Teacher`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
@@ -217,7 +216,7 @@ const GradePage = () => {
                 name: gradeName
             }
 
-            fetch(`${apiAdress}/Grades`, {
+            fetch(`${apiAdress}/Grades/Teacher`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -268,7 +267,7 @@ const GradePage = () => {
         newGrades.forEach(grade => {
             Object.assign(grade, {name: newGradeName})
         })
-        fetch(`${apiAdress}/Grades/Batch`, {
+        fetch(`${apiAdress}/Grades/Teacher/Batch`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -307,13 +306,7 @@ const GradePage = () => {
     const unrenderNotification = () => {        
         updateNotificationData({show:false})
     }
-
-    /*const checkData = () => {
-        console.log(formattedStudentData)
-        console.log(orderedStudents)
-        console.log(sortByAverage)
-    }*/
-
+  
     if (!orderedStudents) {     
         return (
             <div>

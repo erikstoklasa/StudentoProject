@@ -38,6 +38,7 @@ namespace SchoolGradebook.API.Grades
         /// </summary>
         /// <param name="studentId"></param>
         /// <param name="subjectInstanceId"></param>
+        /// <param name="gradeValueFormat">0 = "internal" (default) from -10 to 110, 1 = "decimal" from 0.6 to 5.0, 2 = "display" from 1+ to 5- (falls back to decimal)</param>
         /// <returns>Grades</returns>
         /// <response code="200">Returns grades</response>
         /// <response code="403">If the user is not a teacher, or is not allowed to view the selected student/subject</response>
@@ -45,7 +46,7 @@ namespace SchoolGradebook.API.Grades
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [Authorize(policy: "OnlyTeacher")]
-        public async Task<ActionResult<IEnumerable<GradeObject>>> TeacherGetGrades(int? studentId, int? subjectInstanceId)
+        public async Task<ActionResult<IEnumerable<GradeObject>>> TeacherGetGrades(int? studentId, int? subjectInstanceId, int gradeValueFormat = 0)
         {
             List<GradeObject> gradeObjects = new List<GradeObject>();
             int teacherId = await teacherService.GetTeacherId(UserId);
@@ -63,9 +64,19 @@ namespace SchoolGradebook.API.Grades
                 var grades = await gradeService.GetAllGradesAddedByTeacherAsync((int)studentId);
                 foreach (var g in grades)
                 {
-                    gradeObjects.Add(
-                        new GradeObject { Added = g.Added, Id = g.Id, Name = g.Name, StudentId = g.StudentId, SubjectInstanceId = g.SubjectInstanceId, Value = g.GetGradeValueInDecimal().ToString() }
-                        );
+
+                    var newGrade = new GradeObject { Added = g.Added, Id = g.Id, Name = g.Name, StudentId = g.StudentId, SubjectInstanceId = g.SubjectInstanceId, GradeGroupId = g.GradeGroupId, GradeGroupName = g.GradeGroup?.Name };
+                    newGrade.Value = gradeValueFormat switch
+                    {
+                        //Internal
+                        0 => g.GetInternalGradeValue().ToString(),
+                        //Decimal
+                        1 => g.GetGradeValueInDecimal().ToString(),
+                        //Display
+                        2 => g.GetGradeValue(),
+                        _ => g.GetInternalGradeValue().ToString(),
+                    };
+                    gradeObjects.Add(newGrade);
                 }
                 return gradeObjects;
             }
@@ -78,9 +89,18 @@ namespace SchoolGradebook.API.Grades
                 var grades = await gradeService.GetAllGradesAddedByTeacherAsync((int)subjectInstanceId);
                 foreach (var g in grades)
                 {
-                    gradeObjects.Add(
-                        new GradeObject { Added = g.Added, Id = g.Id, Name = g.Name, StudentId = g.StudentId, SubjectInstanceId = g.SubjectInstanceId, Value = g.GetGradeValueInDecimal().ToString() }
-                        );
+                    var newGrade = new GradeObject { Added = g.Added, Id = g.Id, Name = g.Name, StudentId = g.StudentId, SubjectInstanceId = g.SubjectInstanceId, GradeGroupId = g.GradeGroupId, GradeGroupName = g.GradeGroup?.Name };
+                    newGrade.Value = gradeValueFormat switch
+                    {
+                        //Internal
+                        0 => g.GetInternalGradeValue().ToString(),
+                        //Decimal
+                        1 => g.GetGradeValueInDecimal().ToString(),
+                        //Display
+                        2 => g.GetGradeValue(),
+                        _ => g.GetInternalGradeValue().ToString(),
+                    };
+                    gradeObjects.Add(newGrade);
                 }
                 return gradeObjects;
             }
@@ -91,6 +111,7 @@ namespace SchoolGradebook.API.Grades
         /// Gets a single grade
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="gradeValueFormat">0 = "internal" (default) from -10 to 110, 1 = "decimal" from 0.6 to 5.0, 2 = "display" from 1+ to 5- (falls back to decimal)</param>
         /// <returns>Grade</returns>
         /// <response code="200">Returns the grade</response>
         /// <response code="404">If grade is not found</response>
@@ -99,7 +120,7 @@ namespace SchoolGradebook.API.Grades
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet("Teacher/{id}")]
-        public async Task<ActionResult<GradeObject>> TeacherGetGrade(int id)
+        public async Task<ActionResult<GradeObject>> TeacherGetGrade(int id, int gradeValueFormat = 0)
         {
             int teacherId = await teacherService.GetTeacherId(UserId);
             if (teacherId == -1)
@@ -116,8 +137,19 @@ namespace SchoolGradebook.API.Grades
             {
                 return StatusCode(404);
             }
-            return new GradeObject
-            { Added = g.Added, Id = g.Id, Name = g.Name, StudentId = g.StudentId, SubjectInstanceId = g.SubjectInstanceId, Value = g.GetGradeValueInDecimal().ToString() };
+            var newGrade = new GradeObject
+            { Added = g.Added, Id = g.Id, Name = g.Name, StudentId = g.StudentId, SubjectInstanceId = g.SubjectInstanceId, Value = g.GetInternalGradeValue().ToString(), GradeGroupId = g.GradeGroupId, GradeGroupName = g.GradeGroup?.Name };
+            newGrade.Value = gradeValueFormat switch
+            {
+                //Internal
+                0 => g.GetInternalGradeValue().ToString(),
+                //Decimal
+                1 => g.GetGradeValueInDecimal().ToString(),
+                //Display
+                2 => g.GetGradeValue(),
+                _ => g.GetInternalGradeValue().ToString(),
+            };
+            return newGrade;
         }
 
         /// <summary>
@@ -143,9 +175,26 @@ namespace SchoolGradebook.API.Grades
                 Added = DateTime.UtcNow,
                 Name = grade.Name,
                 StudentId = grade.StudentId,
-                SubjectInstanceId = grade.SubjectInstanceId
+                SubjectInstanceId = grade.SubjectInstanceId,
+                GradeGroupId = grade.GradeGroupId,
             };
-            g.SetGradeValue(grade.Value);
+            try
+            {
+                int internalGradeValue = Int16.Parse(grade.Value);
+                try
+                {
+                    g.SetGradeValue(internalGradeValue);
+                }
+                catch (ArgumentOutOfRangeException e)
+                {
+                    return BadRequest(new ErrorObject() { Message = e.Message });
+                }
+
+            }
+            catch (FormatException e)
+            {
+                return BadRequest(new ErrorObject() { Message = e.Message });
+            }
             try
             {
                 await gradeService.AddGradeAsync(g, Grade.USERTYPE.Teacher);
@@ -191,7 +240,25 @@ namespace SchoolGradebook.API.Grades
                 Name = grade.Name,
                 StudentId = grade.StudentId,
                 SubjectInstanceId = grade.SubjectInstanceId,
+                GradeGroupId = grade.GradeGroupId,
             };
+            try
+            {
+                int internalGradeValue = Int16.Parse(grade.Value);
+                try
+                {
+                    g.SetGradeValue(internalGradeValue);
+                }
+                catch (ArgumentOutOfRangeException e)
+                {
+                    return BadRequest(new ErrorObject() { Message = e.Message });
+                }
+
+            }
+            catch (FormatException e)
+            {
+                return BadRequest(new ErrorObject() { Message = e.Message });
+            }
             try
             {
                 await gradeService.UpdateGradeAsync(g);
@@ -237,9 +304,26 @@ namespace SchoolGradebook.API.Grades
                     Added = DateTime.UtcNow,
                     Name = g.Name,
                     StudentId = g.StudentId,
-                    SubjectInstanceId = g.SubjectInstanceId
+                    SubjectInstanceId = g.SubjectInstanceId,
+                    GradeGroupId = g.GradeGroupId,
                 };
-                newGrade.SetGradeValue(g.Value);
+                try
+                {
+                    int internalGradeValue = Int16.Parse(g.Value);
+                    try
+                    {
+                        newGrade.SetGradeValue(internalGradeValue);
+                    }
+                    catch (ArgumentOutOfRangeException e)
+                    {
+                        return BadRequest(new ErrorObject() { Message = e.Message });
+                    }
+
+                }
+                catch (FormatException e)
+                {
+                    return BadRequest(new ErrorObject() { Message = e.Message });
+                }
                 gradesToCreate.Add(newGrade);
                 if (!subjectInstanceIdsToCheck.Contains(g.SubjectInstanceId))
                 {
@@ -303,7 +387,8 @@ namespace SchoolGradebook.API.Grades
                     Added = DateTime.UtcNow,
                     Name = g.Name,
                     StudentId = g.StudentId,
-                    SubjectInstanceId = g.SubjectInstanceId
+                    SubjectInstanceId = g.SubjectInstanceId,
+                    GradeGroupId = g.GradeGroupId,
                 };
                 newGrade.SetGradeValue(g.Value);
                 gradesToUpdate.Add(newGrade);
@@ -382,7 +467,7 @@ namespace SchoolGradebook.API.Grades
         /// Gets all grades by the selected filter for students
         /// </summary>
         /// <param name="subjectInstanceId"></param>
-        /// <param name="formatGrades">True for grade value format 1+, 3- or 2 (falls back to decimal if not found), False (default) for format 0.6; 3,4; 2</param>
+        /// <param name="gradeValueFormat">0 = "internal" (default) from -10 to 110, 1 = "decimal" from 0.6 to 5.0, 2 = "display" from 1+ to 5- (falls back to decimal)</param>
         /// <returns>Grades</returns>
         /// <response code="200">Returns grades</response>
         /// <response code="403">If the user is not a student, or is not allowed to view the selected subject</response>
@@ -390,7 +475,7 @@ namespace SchoolGradebook.API.Grades
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [Authorize(policy: "OnlyStudent")]
-        public async Task<ActionResult<IEnumerable<GradeObject>>> StudentGetGrades(int? subjectInstanceId, bool formatGrades = false)
+        public async Task<ActionResult<IEnumerable<GradeObject>>> StudentGetGrades(int? subjectInstanceId, int gradeValueFormat = 0)
         {
             List<GradeObject> gradeObjects = new List<GradeObject>();
             int loggedInStudentId = await studentService.GetStudentId(UserId);
@@ -416,16 +501,20 @@ namespace SchoolGradebook.API.Grades
                         Id = g.Id,
                         Name = g.Name,
                         StudentId = g.StudentId,
-                        SubjectInstanceId = g.SubjectInstanceId
+                        SubjectInstanceId = g.SubjectInstanceId,
+                        GradeGroupId = g.GradeGroupId,
+                        GradeGroupName = g.GradeGroup?.Name,
                     };
-                    if (formatGrades)
+                    newGrade.Value = gradeValueFormat switch
                     {
-                        newGrade.Value = g.GetGradeValue();
-                    }
-                    else
-                    {
-                        newGrade.Value = g.GetGradeValueInDecimal().ToString();
-                    }
+                        //Internal
+                        0 => g.GetInternalGradeValue().ToString(),
+                        //Decimal
+                        1 => g.GetGradeValueInDecimal().ToString(),
+                        //Display
+                        2 => g.GetGradeValue(),
+                        _ => g.GetInternalGradeValue().ToString(),
+                    };
                     gradeObjects.Add(newGrade);
                 }
                 return gradeObjects;
@@ -444,7 +533,9 @@ namespace SchoolGradebook.API.Grades
                         Name = g.Name,
                         StudentId = g.StudentId,
                         SubjectInstanceId = g.SubjectInstanceId,
-                        Value = g.GetGradeValueInDecimal().ToString()
+                        Value = g.GetGradeValueInDecimal().ToString(),
+                        GradeGroupId = g.GradeGroupId,
+                        GradeGroupName = g.GradeGroup?.Name,
                     };
                     gradeObjects.Add(newGrade);
                 }
@@ -456,7 +547,7 @@ namespace SchoolGradebook.API.Grades
         /// <summary>
         /// Adds a single grade for a student
         /// </summary>
-        /// <param name="grade"></param>
+        /// <param name="grade">Expecting internal grade value (-10 to 110)</param>
         /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status201Created)]
         [HttpPost("Student")]
@@ -479,7 +570,25 @@ namespace SchoolGradebook.API.Grades
                 StudentId = studentId,
                 SubjectInstanceId = grade.SubjectInstanceId
             };
-            g.SetGradeValue(grade.Value);
+
+            try
+            {
+                int internalGradeValue = Int16.Parse(grade.Value);
+                try
+                {
+                    g.SetGradeValue(internalGradeValue);
+                }
+                catch (ArgumentOutOfRangeException e)
+                {
+                    return BadRequest(new ErrorObject() { Message = e.Message });
+                }
+
+            }
+            catch (FormatException e)
+            {
+                return BadRequest(new ErrorObject() { Message = e.Message });
+            }
+
             try
             {
                 await gradeService.AddGradeAsync(g, Grade.USERTYPE.Student);
@@ -543,6 +652,8 @@ namespace SchoolGradebook.API.Grades
         public string Value { get; set; }
         public int SubjectInstanceId { get; set; }
         public int StudentId { get; set; }
+        public int? GradeGroupId { get; set; }
+        public string GradeGroupName { get; set; }
         public string Name { get; set; }
         public DateTime Added { get; set; }
         public USERTYPE? AddedBy { get; set; }

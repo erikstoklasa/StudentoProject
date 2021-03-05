@@ -96,7 +96,7 @@ namespace SchoolGradebook.Models
                 10 => "5+",
                 0 => "5",
                 -10 => "5-",
-                _ => (5 - (value / 25f)).ToString("f1")
+                _ => (5 - (value / 25f)).ToString("f2")
             };
         }
         /// <summary>
@@ -108,7 +108,7 @@ namespace SchoolGradebook.Models
         {
             if (value <= 110 && value >= 0)
             {
-                return 5 - (value / 25f);
+                return (float)Math.Round(5 - (value / 25f), 2);
             }
             if (value > 110)
             {

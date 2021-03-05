@@ -25,6 +25,7 @@ namespace SchoolGradebook.Services
                 .Include(g => g.Student)
                 .Include(g => g.SubjectInstance.Teacher)
                 .Include(g => g.SubjectInstance.SubjectType)
+                .Include(g => g.GradeGroup)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
             return grade;
@@ -43,6 +44,7 @@ namespace SchoolGradebook.Services
         {
             Grade[] grades = await context.Grades
                 .Where(g => g.SubjectInstanceId == subjectInstanceId && g.StudentId == studentId)
+                .Include(g => g.GradeGroup)
                 .OrderByDescending(g => g.Added)
                 .AsNoTracking()
                 .ToArrayAsync();
@@ -52,6 +54,7 @@ namespace SchoolGradebook.Services
         {
             Grade[] grades = await context.Grades
                 .Where(g => g.SubjectInstanceId == subjectInstanceId && g.AddedBy == USERTYPE.Teacher)
+                .Include(g => g.GradeGroup)
                 .AsNoTracking()
                 .ToArrayAsync();
             return grades;
@@ -64,6 +67,7 @@ namespace SchoolGradebook.Services
             .Include(g => g.SubjectInstance)
             .Include(g => g.SubjectInstance.Teacher)
             .Include(g => g.SubjectInstance.SubjectType)
+            .Include(g => g.GradeGroup)
             .OrderByDescending(g => g.Added)
             .AsNoTracking()
             .ToArrayAsync();
@@ -90,6 +94,7 @@ namespace SchoolGradebook.Services
             .Include(g => g.SubjectInstance)
             .Include(g => g.SubjectInstance.Teacher)
             .Include(g => g.SubjectInstance.SubjectType)
+            .Include(g => g.GradeGroup)
             .OrderByDescending(g => g.Added)
             .AsNoTracking()
             .ToArrayAsync();
@@ -102,6 +107,7 @@ namespace SchoolGradebook.Services
             .Where(g => g.StudentId == studentId && g.AddedBy == USERTYPE.Teacher)
             .OrderByDescending(g => g.Added)
             .Include(g => g.SubjectInstance.SubjectType)
+            .Include(g => g.GradeGroup)
             .AsNoTracking()
             .Skip(skip)
             .Take(take)

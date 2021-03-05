@@ -38,7 +38,6 @@ const GradePage = () => {
             }).then(res => res.json()).then(data => {               
                 updateBulkGradeData(data)
 
-                console.log(data)
             })
 
             fetch(`${apiAdress}/SubjectInstances/Teacher/${InstanceId}`, {

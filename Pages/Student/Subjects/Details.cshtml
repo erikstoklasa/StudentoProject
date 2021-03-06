@@ -5,3 +5,185 @@
 @section Scripts {
     <script src="~/dist/SubjectDetail.js"></script>
 }
+<<<<<<< HEAD
+=======
+
+<div class="main-container">
+    @if (Model.SubjectAverage.CompareTo(Double.NaN) == 0)
+    {
+        <div class="d-flex flex-column">
+            <h1>@Model.Subject.SubjectType.Name</h1>
+            <h4>@Model.Subject.Teacher.GetFullName()</h4>
+        </div>
+
+
+    }
+    else
+    {
+        <div class="d-flex flex-column">
+            <h1>@Model.Subject.SubjectType.Name</h1>
+            <h4>@Model.Subject.Teacher.GetFullName()</h4>
+        </div>
+        <div class="d-flex flex-column">
+            <h3 class="text-left" style="font-weight: 400;">
+                Průměr: <strong>
+                    @(Model.SubjectAverage.ToString("f2"))
+                </strong>
+            </h3>
+            @Html.Raw(ViewData["ComparisonString"])
+        </div>
+    }
+</div>
+<div class="main-container">
+    <div class="d-flex flex-column">
+        <p class="table-heading">Známky od vyučující/ho</p>
+        @if (Model.Grades.Length == 0)
+        {
+            <p class="alert alert-info my-1">Zatím ti vyučující nepřidal žádné známky 🙁</p>
+        }
+        else
+        {
+            <table class="table table-responsive table-white">
+                <tbody>
+                    @foreach (Grade x in Model.Grades)
+                    {
+                        string gradeBackgroundColor = "black";
+                        string gradeTextColor = "dark";
+                        @if (x.GetGradeValueInDecimal() < 2)
+                        {
+                            gradeBackgroundColor = "green";
+                        }
+                        else if (x.GetGradeValueInDecimal() < 3)
+                        {
+                            gradeBackgroundColor = "grey";
+                        }
+                        else if (x.GetGradeValueInDecimal() < 4)
+                        {
+                            gradeBackgroundColor = "yellow";
+                        }
+                        else if (x.GetGradeValueInDecimal() < 5)
+                        {
+                            gradeBackgroundColor = "red";
+                        }
+                        if (gradeBackgroundColor == "black")
+                        {
+                            gradeTextColor = "light";
+                        }
+
+                        <tr>
+                            <td>
+                                <div class="grade-circle background-@(gradeBackgroundColor) text-@(gradeTextColor)">
+                                    @x.GetGradeValue()
+                                </div>
+                            </td>
+                            <td>
+                                <a asp-page="/Student/Grades/Details" asp-route-gradeId="@x.Id">
+                                    @LanguageHelper.getShorterString(x.Name, 25)
+                                </a>
+                            </td>
+                            <td>
+                                @LanguageHelper.getRelativeTime(x.Added)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        <div class="table-heading-group">
+            <p class="table-heading">Známky přidány mnou</p>
+            <a asp-page="/Student/Grades/Create" asp-route-SubjectInstanceId="@Model.Subject.Id" class="btn btn-primary"><img src="~/images/add.svg" alt="Přidat" height="20px" class="btn-icon" />Přidat známku</a>
+        </div>
+        @if (Model.GradesAddedByStudent.Length == 0)
+        {
+            <p class="alert alert-info mb-4">Tady si můžeš přidat svoje známky. Budou se ti počítat jen do tvého průměru (učitel tyhle známky neuvidí).</p>
+        }
+        else
+        {
+            <table class="table table-responsive table-white">
+                <tbody>
+                    @foreach (Grade x in Model.GradesAddedByStudent)
+                    {
+                        string gradeBackgroundColor = "black";
+                        string gradeTextColor = "dark";
+                        @if (x.GetGradeValueInDecimal() < 2)
+                        {
+                            gradeBackgroundColor = "green";
+                        }
+                        else if (x.GetGradeValueInDecimal() < 3)
+                        {
+                            gradeBackgroundColor = "grey";
+                        }
+                        else if (x.GetGradeValueInDecimal() < 4)
+                        {
+                            gradeBackgroundColor = "yellow";
+                        }
+                        else if (x.GetGradeValueInDecimal() < 5)
+                        {
+                            gradeBackgroundColor = "red";
+                        }
+                        if (gradeBackgroundColor == "black")
+                        {
+                            gradeTextColor = "light";
+                        }
+
+                        <tr>
+                            <td>
+                                <div class="grade-circle background-@(gradeBackgroundColor) text-@(gradeTextColor)">
+                                    @x.GetGradeValue()
+                                </div>
+                            </td>
+                            <td>
+                                <a asp-page="/Student/Grades/Details" asp-route-gradeId="@x.Id">
+                                    @LanguageHelper.getShorterString(x.Name, 25)
+                                </a>
+                            </td>
+                            <td>
+                                @LanguageHelper.getRelativeTime(x.Added)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+    <div class="d-flex flex-column">
+        <div class="d-flex flex-row flex-wrap">
+            <p class="table-heading">Materiály</p>
+            @if (Model.SubjectMaterials.Count > 0)
+            {
+                <table class="table table-responsive table-white">
+                    <tbody>
+                        @foreach (SchoolGradebook.Models.SubjectMaterial subjectMaterial in Model.SubjectMaterials)
+                        {
+                            <tr>
+                                <td>
+                                    <img alt="Extension icon" src="~/images/icons/@(MimeTypeMap.GetExtension(MimeTypeMap.GetMimeType(subjectMaterial.FileExt)).Substring(1)).png" />
+                                </td>
+                                <td>@subjectMaterial.Name</td>
+                                <td class="text-muted">@subjectMaterial.Added.ToLocalTime().ToString("d. MMMM")</td>
+                                <td><a class="btn btn-primary" asp-page="Materials/Details" asp-route-id="@subjectMaterial.Id">Otevřít</a></td>
+                            </tr>
+
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p class="alert alert-info my-1 w-100">Zatím ti vyučující nepřidal žádné materiály 🙁</p>
+            }
+        </div>
+    </div>
+</div>
+
+
+
+<div>
+    <a asp-page="/Student/Index">Všechny předměty</a>
+</div>
+
+<div id="root"></div>
+@section Scripts {
+    <script src="~/dist/SubjectDetail.js"></script>
+}
+>>>>>>> 89343a738292aeaf8ba9b36a41b3a020e8303e65

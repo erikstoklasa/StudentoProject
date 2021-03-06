@@ -5,14 +5,13 @@
 }
 
 .heading-container{
-    flex-grow: 1.2;
-    flex-basis: 100px;
-    min-width: 400px;    
+    flex-grow: 1;
+    flex-basis: 470px;    
 }
 
 .average-container{
     flex-grow: 1;
-    flex-basis: 100px;
+    flex-basis: 470px;
     display: flex;
     justify-content: start;
     align-items: center;
@@ -20,15 +19,17 @@
 
 .grades-heading-container{
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
-    align-items: center;  
-    max-width: 650px;
+    align-items: center;     
     margin: 16px 0px 16px 0px; 
 }
 
 .grades-heading{
     margin-top: 1rem;
     margin-bottom: 1rem;
+    white-space: nowrap;
+    margin-right: 25px;
 }
 
 .grade-container{
@@ -38,9 +39,31 @@
 }
 
 .grade-child{
-    margin: 0px 50px 0px 50px
+    margin: 0px 25px 0px 25px
 }
 
-.grade-table{
-    max-width: 650px;
+.grades-material-container{
+    display: flex;
+    flex-wrap: wrap;    
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.student-grades-container{
+    flex-grow: 1;
+    flex-basis: 470px;        
+}
+
+.student-material-container{
+    flex-grow: 1;
+    flex-basis: 470px;    
+}
+
+@media (min-width: 960px){
+    .student-material-container {
+        padding-left: 50px !important;
+    }
+    .average-container {
+        padding-left: 50px !important;
+    }
 }

@@ -1,7 +1,8 @@
 import React from 'react'
 
 const GradeView = ({ grades }) => {
-    console.log(grades)
+    
+    //create an html element for each grade recieved in props, put them into an array
     const gradeList = grades.map(grade => { 
         return (
             <div className="grade-container">
@@ -12,8 +13,9 @@ const GradeView = ({ grades }) => {
         )
     })
 
+    //display array of grade html elements
     return (
-        <div className="table table-responsive table-white grade-table">
+        <div className="table table-responsive table-white">
             {gradeList}
         </div>
     )

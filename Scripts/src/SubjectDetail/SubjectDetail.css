@@ -32,14 +32,29 @@
     margin-right: 25px;
 }
 
-.grade-container{
+.grade-container{   
+    padding: 15px 0px 15px 0px;
     display: flex;
     justify-content: space-between;
-    padding: 15px 0px 15px 0px
+    width: 100%
+}
+
+.grade-sub-container{
+    display: flex;
+    width: 70%;
+    justify-content: space-between;
+}
+
+.grade-value{
+    margin-left: 25px !important;
+}
+
+.grade-time{
+    margin-right: 25px !important;
 }
 
 .grade-child{
-    margin: 0px 25px 0px 25px
+    margin: 0px 10px 0px 10px;    
 }
 
 .grades-material-container{

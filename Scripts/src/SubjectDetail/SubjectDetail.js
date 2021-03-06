@@ -119,11 +119,12 @@ function SubjectDetail() {
                  })
         }        
     }
-
+    
+    //initialize effect hook chain
     useEffect(determineSubjectID, [])
     useEffect(fetchData, subjectId)
 
-
+    //display everything
     return (
         <div>
             {subjectInfo && studentAverage ? <SubjectTitle info={subjectInfo} average={studentAverage} /> : null}

@@ -35,14 +35,16 @@ const GradePage = () => {
                 headers: {
                     'Cache-Control': 'no-cache'
                 }
-            }).then(res => res.json()).then(data => {               
+            }).then(res => res.json()).then(data => { 
+                console.log(data)
                 updateBulkGradeData(data)
 
             })
 
             fetch(`${apiAdress}/SubjectInstances/Teacher/${InstanceId}`, {
                 method: 'GET',
-            }).then(res => res.json()).then(data => {                   
+            }).then(res => res.json()).then(data => { 
+                console.log(data)
                 updateBulkStudentData(data)                
             }) 
         

@@ -2,8 +2,9 @@
 
 module.exports = {
     entry: {        
-        Grades: "./Scripts/src/Grades/index.js",
-        TimeTable: "./Scripts/src/TimeTable/index.js"
+        SubjectDetail: "./Scripts/src/SubjectDetail/index.js",
+       
+        
     },
     output: {
         path: path.resolve(__dirname, "./wwwroot/dist"),

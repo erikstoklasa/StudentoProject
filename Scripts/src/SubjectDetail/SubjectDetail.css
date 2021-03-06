@@ -1,0 +1,46 @@
+.subject-title-container{
+    
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.heading-container{
+    flex-grow: 1.2;
+    flex-basis: 100px;
+    min-width: 400px;    
+}
+
+.average-container{
+    flex-grow: 1;
+    flex-basis: 100px;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+
+.grades-heading-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;  
+    max-width: 650px;
+    margin: 16px 0px 16px 0px; 
+}
+
+.grades-heading{
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.grade-container{
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 0px 15px 0px
+}
+
+.grade-child{
+    margin: 0px 50px 0px 50px
+}
+
+.grade-table{
+    max-width: 650px;
+}

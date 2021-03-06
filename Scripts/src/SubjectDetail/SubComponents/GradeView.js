@@ -6,10 +6,14 @@ const GradeView = ({ grades }) => {
     const gradeList = grades.map(grade => { 
         return (
             <div className="grade-container">
-                <p className="grade-child">{grade.displayValue}</p>
+                
+                <p className="grade-child grade-value">{grade.displayValue}</p>
+                <div className="grade-sub-container">
                 <p className="grade-child">{grade.name}</p>
-                <p className="grade-child">{grade.addedRelative}</p>
-            </div>
+                
+                    <p className="grade-child grade-time">{grade.addedRelative}</p>
+                </div>
+            </div> 
         )
     })
 

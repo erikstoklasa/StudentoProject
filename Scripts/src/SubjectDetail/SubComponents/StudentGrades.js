@@ -2,17 +2,21 @@
 import React from 'react'
 import GradeView from './GradeView.js'
 
-const StudentGrades = ({ grades }) => {    
+const StudentGrades = ({ grades }) => {
+    
+    //filter grades for grades added by student
     const studentGrades = grades.filter(grade => { 
         return grade.addedBy === 1
     })
 
+    //filter grades for grades added by teacher
     const teacherGrades = grades.filter(grade => { 
         return grade.addedBy === 0
     })
 
+    // display grades
     return (
-        <div>
+        <div className="student-grades-container">
             <p className="grades-heading">Známky od vyučující/ho</p>
             <div>
                 <GradeView grades={teacherGrades}/>

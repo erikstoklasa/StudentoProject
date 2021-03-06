@@ -2,21 +2,27 @@ import React, { useState, useEffect } from 'react';
 import apiAddress from './variables.js'
 import SubjectTitle from './SubComponents/SubjectTitle'
 import StudentGrades from './SubComponents/StudentGrades'
+import StudentMaterial from './SubComponents/StudentMaterial'
+import './SubjectDetail.css'
 import moment from 'moment';
 
   
 function SubjectDetail() {
+    //initialize state
     const [subjectId, updateSubjectId] = useState();
     const [subjectInfo, updateSubjectInfo] = useState();
     const [studentAverage, updateAverage] = useState();
     const [grades, updateGrades] = useState();
+    const [material, updateMaterial] = useState();
 
+    //get subject instance id from url
     const determineSubjectID = () => { 
         const location = window.location.href
         const subjectId = location.split("Details?id=").pop()
         updateSubjectId(subjectId)
     }
 
+    //format grades from internal to display value
     const getGradeDisplayValue = (grade) => {        
         if (grade === 110) {
             return '1+'
@@ -64,6 +70,7 @@ function SubjectDetail() {
         }        
     }
 
+    //calculate student average from internal value, then store it in state
     const calculateStudentAverage = (gradeData) => {
         let sum = 0;
         let gradeNum = gradeData.length;
@@ -77,16 +84,28 @@ function SubjectDetail() {
     }
  
 
+    // fetch grades, subject info and student material(in the future)
     const fetchData = () => {
         if (subjectId) { 
-            fetch(`${apiAddress}/SubjectInstances/Student/${subjectId}`)
+            fetch(`${apiAddress}/SubjectInstances/Student/${subjectId}`, {
+                method: 'GET',
+                headers: {
+                    'Cache-Control': 'no-cache'
+                }
+            })
                 .then(res => res.json())
                 .then(data => updateSubjectInfo(data))
         }
         if (subjectId) {
-            fetch(`${apiAddress}/Grades/Student?subjectInstanceId=${subjectId}`)
+            fetch(`${apiAddress}/Grades/Student?subjectInstanceId=${subjectId}`, {
+                method: 'GET',
+                headers: {
+                    'Cache-Control': 'no-cache'
+                }
+            })
                 .then(res => res.json())
-                .then(data => {                    
+                .then(data => {
+                    //format fetched grades data(add display value, add relative time using moment.js library)
                     calculateStudentAverage(data)
                     const gradesWithDisplayValue = data.map(grade => {
                         const displayValue = getGradeDisplayValue(parseInt(grade.value))
@@ -98,7 +117,7 @@ function SubjectDetail() {
                     })
                     updateGrades(gradesWithDisplayValue)
                  })
-        }
+        }        
     }
 
     useEffect(determineSubjectID, [])
@@ -107,8 +126,14 @@ function SubjectDetail() {
 
     return (
         <div>
-            <SubjectTitle info={subjectInfo} average={studentAverage} />
-            {grades? <StudentGrades grades={grades} /> : null}
+            {subjectInfo && studentAverage ? <SubjectTitle info={subjectInfo} average={studentAverage} /> : null}
+            
+            {grades ?
+                <div className="grades-material-container">
+                    <StudentGrades grades={grades} />
+                    <StudentMaterial material={material}/>                    
+                </div>                
+                : null}
         </div>
     );
 }

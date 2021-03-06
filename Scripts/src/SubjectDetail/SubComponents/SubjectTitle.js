@@ -2,6 +2,8 @@ import React from 'react'
 import '../SubjectDetail.css'
 
 const SubjectTitle = ({ info, average }) => {
+    
+    //display subject title, student average and teacher name
     if (info) {
         return (
             <div className="subject-title-container">

@@ -1,20 +1,11 @@
 import React from 'react'
+import GradeRow from './GradeRow'
 
-const GradeView = ({ grades }) => {
+const GradeView = ({ grades, info }) => {
     
     //create an html element for each grade recieved in props, put them into an array
     const gradeList = grades.map(grade => { 
-        return (
-            <div className="grade-container">
-                
-                <p className="grade-child grade-value">{grade.displayValue}</p>
-                <div className="grade-sub-container">
-                <p className="grade-child">{grade.name}</p>
-                
-                    <p className="grade-child grade-time">{grade.addedRelative}</p>
-                </div>
-            </div> 
-        )
+        return <GradeRow grade={grade} info={info}/>
     })
 
     //display array of grade html elements

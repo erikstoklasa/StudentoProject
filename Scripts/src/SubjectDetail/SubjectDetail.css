@@ -30,31 +30,62 @@
     margin-bottom: 1rem;
     white-space: nowrap;
     margin-right: 25px;
+    color: var(--grey);
 }
 
 .grade-container{   
-    padding: 15px 0px 15px 0px;
+    padding: 15px 25px 15px 25px;
     display: flex;
     justify-content: space-between;
     width: 100%
 }
 
+.grade-info-container{
+    padding: 15px 25px 15px 25px;
+}
+
+.grade-info-row{
+    display: flex;
+    justify-content: space-between;
+}
+
+.grade-info-detail-text{
+    width:70%;
+    text-align: left;
+}
+
+.grade-container-hover{
+    background-color: gray;
+}
+
 .grade-sub-container{
     display: flex;
+    min-width: 150px;
     width: 70%;
     justify-content: space-between;
 }
 
-.grade-value{
-    margin-left: 25px !important;
+.grade-name{   
+    display:flex;
+    justify-content: start;
+    align-items: center;
+    color: #0366d6 !important;
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-.grade-time{
-    margin-right: 25px !important;
+.grade-time{    
+    white-space: nowrap;
+    display:flex;
+    justify-content: start;
+    align-items: center
 }
 
 .grade-child{
-    margin: 0px 10px 0px 10px;    
+    margin: 0px 10px 0px 10px;
+   
 }
 
 .grades-material-container{

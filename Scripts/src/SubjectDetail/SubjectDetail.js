@@ -129,9 +129,9 @@ function SubjectDetail() {
         <div>
             {subjectInfo && studentAverage ? <SubjectTitle info={subjectInfo} average={studentAverage} /> : null}
             
-            {grades ?
+            {grades && subjectInfo?
                 <div className="grades-material-container">
-                    <StudentGrades grades={grades} />
+                    <StudentGrades grades={grades} info={subjectInfo}/>
                     <StudentMaterial material={material}/>                    
                 </div>                
                 : null}

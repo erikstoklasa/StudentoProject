@@ -25,8 +25,7 @@ const GradePage = () => {
     const getInstanceId = () => {       
         const idContainer = document.querySelector("#subjectInstanceId")
         updateInstanceId(idContainer.value);
-    }   
-    
+    }       
 
     const fetchData = () => {
         if (InstanceId) {
@@ -35,8 +34,13 @@ const GradePage = () => {
                 headers: {
                     'Cache-Control': 'no-cache'
                 }
-            }).then(res => res.json()).then(data => { 
+            }).then(res => res.json()).then(data => {
+                data.forEach(grade => { 
+                    const displayValue = getGradeDisplayValue(parseInt(grade.value))
+                    Object.assign(grade, { displayValue: displayValue })
+                })
                 console.log(data)
+               
                 updateBulkGradeData(data)
 
             })
@@ -44,7 +48,7 @@ const GradePage = () => {
             fetch(`${apiAdress}/SubjectInstances/Teacher/${InstanceId}`, {
                 method: 'GET',
             }).then(res => res.json()).then(data => { 
-                console.log(data)
+                
                 updateBulkStudentData(data)                
             }) 
         
@@ -76,6 +80,7 @@ const GradePage = () => {
     }
 
     const sortGrades = () => {
+        console.log(bulkGradeData)
         if (bulkGradeData.length === 0) {
             updateOrderedGrades([])
         }
@@ -85,8 +90,7 @@ const GradePage = () => {
             const sortedGrades = bulkGradeData;
             let gradeSum = 0;
             const gradeNum = bulkGradeData.length;
-
-                   
+            
             sortedGrades.sort((a, b) => { 
                 if (a.added > b.added) { 
                     return 1
@@ -103,10 +107,12 @@ const GradePage = () => {
                 }
                 gradeSum = gradeSum + grade.value
             })
+
+
            
             studentGrades.reverse();
             updateOrderedGrades(studentGrades)
-            const average = (gradeSum / gradeNum).toFixed(2);
+            const average =  5 - (gradeSum / gradeNum) / 25;
             updateBigAverage(average)
         }
     }
@@ -124,7 +130,8 @@ const GradePage = () => {
                     }
                 })
     
-                let formatedAvearage = (total / gradeNum).toFixed(2)
+                const average = 5 - (total / gradeNum) / 25
+                const formatedAvearage = average.toFixed(2)
             
                 if (!isNaN(formatedAvearage)) {
                     Object.assign(student, { average: formatedAvearage })
@@ -154,9 +161,57 @@ const GradePage = () => {
     useEffect(calculateAverages, [bulkGradeData, bulkStudentData])
     useEffect(sortStudents, [formattedStudentData, sortByAverage])
     useEffect(sortGrades, [bulkGradeData])
+
+    const getGradeDisplayValue = (grade) => {        
+        if (grade === 110) {
+            return '1+'
+        }
+        if (grade === 100) {
+            return 1
+        }
+        if (grade === 90) { 
+            return '1-'
+        }
+        if (grade === 85) {
+            return '2+'
+        }
+        if (grade === 75) { 
+            return 2
+        }
+        if (grade === 65) { 
+            return '2-'
+        }
+        if (grade === 60) {
+            return '3+'
+        }
+        if (grade === 50) { 
+            return 3
+        }
+        if (grade === 40) { 
+            return '3-'
+        }
+        if (grade === 35) {
+            return '4+'
+        }
+        if (grade === 25) { 
+            return 4
+        }
+        if (grade === 15) { 
+            return '4-'
+        }
+        if (grade === 10) {
+            return '5+'
+        }
+        if (grade === 0) { 
+            return 5
+        }        if (grade === -10) { 
+            return '5-'
+        }        
+    }
   
   
     const modifyGrade = (gradeId, gradeValue, studentId, gradeName) => {
+        console.log('modify')
         if (gradeId) {
             if (gradeValue === 0) {
                 const gradeArr = [gradeId]
@@ -175,13 +230,16 @@ const GradePage = () => {
                 })
             }
             else {
+                console.log('put')
                 const reqBody = {
                     id: gradeId,
-                    value: gradeValue,
+                    value: 100 - (gradeValue * 25),
                     subjectInstanceId: InstanceId,
                     studentId: studentId,
                     name: gradeName
                 }
+
+                console.log(reqBody)
                 fetch(`${apiAdress}/Grades/Teacher`, {
                     method: 'PUT',
                     headers: {
@@ -210,13 +268,16 @@ const GradePage = () => {
                 }).catch(err => {})
             }
         } else if (!gradeId) {
+            console.log('post')
             
             const reqBody = {
-                value: gradeValue,
+                value: 100 - (gradeValue * 25),
                 subjectInstanceId: InstanceId,
                 studentId: studentId,
                 name: gradeName
             }
+
+           
 
             fetch(`${apiAdress}/Grades/Teacher`, {
                 method: 'POST',
@@ -243,7 +304,7 @@ const GradePage = () => {
 
     const trackNewGradeValues = (grade, id) => {
         const newGrade = {
-            value: grade,
+            value: 100 - (grade * 25),
             subjectInstanceId: InstanceId,
             studentId: id,
         }
@@ -255,7 +316,7 @@ const GradePage = () => {
         else {
             newGrades.forEach(grade => {
                 if (grade.studentId === newGrade.studentId) {
-                    grade.value = newGrade.value;
+                    grade.value = 100 - (newGrade.value * 25);
                 }
             })
         }
@@ -269,6 +330,7 @@ const GradePage = () => {
         newGrades.forEach(grade => {
             Object.assign(grade, {name: newGradeName})
         })
+        console.log(newGrades)
         fetch(`${apiAdress}/Grades/Teacher/Batch`, {
             method: 'POST',
             headers: {

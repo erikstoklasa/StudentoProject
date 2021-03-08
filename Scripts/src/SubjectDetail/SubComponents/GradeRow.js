@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import '../SubjectDetail.css'
 
 const GradeRow = ({ grade, info }) => {
+    console.log(grade)
     console.log(info)
     const [showDetail, updateShowDetail] = useState(false);
     
@@ -24,32 +25,44 @@ const GradeRow = ({ grade, info }) => {
         }
     } 
 
-    return (
-        <div>
-            <div className='grade-container'>                
-                <p className={`grade-child grade-value grade-circle ${getGradeClass(grade.value)}`}>{grade.displayValue}</p>
-                <div className="grade-sub-container">
-                    <a className="grade-child grade-name">{grade.name}</a>                    
-                    <p className="grade-child grade-time">{grade.addedRelative}</p>
-                </div>            
-            </div>
+    if (!showDetail) {
+        return (
+            <div>
+                <div className='grade-container'>
+                    <p className={`grade-child grade-value grade-circle ${getGradeClass(grade.value)}`}>{grade.displayValue}</p>
+                    <div className="grade-sub-container" onClick={() => { updateShowDetail(true) }}>
+                        <p className="grade-child grade-name">{grade.name}</p>
+                        <p className="grade-child grade-time">{grade.addedRelative}</p>
+                    </div>
+                </div>
          
-        </div>    
-    )
+            </div>
+        )
+    } else { 
+        return (
+            <div className="grade-info-container">
+                <p className="grade-info-name">{grade.name}</p>
+                <div className="grade-info-information-container">
+                    <div>
+                        <p className="grade-child">Známka :</p>
+                        <p className="grade-child">Předmět :</p>
+                        <p className="grade-child">Datum přidání :</p>
+                        <p className="grade-child">Vyučujicí :</p>
+                    </div>    
+                    <div className="grade-info-sub-container" onClick={() => { updateShowDetail(true) }}>
+                        <p className="grade-child">{grade.displayValue}</p>
+                        <p className="grade-child">{info.name}</p>
+                        <p className="grade-child">{grade.addedDisplay}</p>
+                        <p className="grade-child">{`${info.teacher.firstName} ${info.teacher.lastName}`}</p>
+                    </div> 
+                </div>
+                <div className="close-button-container">
+                    <div class="btn btn-primary" onClick={() => { updateShowDetail(false) }}>Zavřít</div>
+                </div>
+            </div>
+        )
+    }
 }
 
 export default GradeRow
 
-/*
-   {showDetail ?
-            
-                <div className="grade-info-container">
-                    <div className="grade-info-row">
-                        <p className="grade-child">Předmět :</p>                        
-                        <p className="grade-child grade-info-detail-text">{info.name}</p>                        
-                    </div>
-                </div>
-                
-            : null}
-             onClick={() => { updateShowDetail(!showDetail) }
-            */

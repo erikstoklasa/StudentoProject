@@ -76,7 +76,7 @@ function SubjectDetail() {
         let gradeNum = gradeData.length;
         gradeData.forEach(grade => {
             sum = sum + parseInt(grade.value)
-            gradeNum = gradeNum++
+          
         });
         const average = sum / gradeNum      
         const formattedAverage = 5 - (average / 25)
@@ -113,8 +113,10 @@ function SubjectDetail() {
                         return grade
                     })
                     gradesWithDisplayValue.forEach(grade => {
-                        Object.assign(grade, {addedRelative: moment(grade.added).locale('cs').fromNow()})                     
+                        Object.assign(grade, { addedRelative: moment(grade.added).locale('cs').fromNow() })
+                        Object.assign(grade, {addedDisplay: moment(grade.added).format("L")})
                     })
+                    console.log(gradesWithDisplayValue)
                     updateGrades(gradesWithDisplayValue)
                  })
         }

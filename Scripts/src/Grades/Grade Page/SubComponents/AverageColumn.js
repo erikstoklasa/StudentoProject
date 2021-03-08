@@ -9,8 +9,7 @@ const AverageColumn = ({ students, onClickHeader }) => {
         }
         else {
             return <AverageGrade key={index} grade={''} />
-        }
-        
+        }        
     })
 
 

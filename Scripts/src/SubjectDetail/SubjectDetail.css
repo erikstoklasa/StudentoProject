@@ -34,17 +34,19 @@
 }
 
 .grade-container{   
-    padding: 15px 25px 15px 25px;
+    padding: 15px 5% 15px 5%;
     display: flex;
-    justify-content: space-between;
-    width: 100%
+    justify-content: space-between;  
 }
 
 .grade-info-container{
-    padding: 15px 25px 15px 25px;
+    margin: 15px 2% 15px 2%;
+    padding: 10px 3% 10px 3%;    
+    border: 1px solid black;
+    border-radius: 5px;    
 }
 
-.grade-info-row{
+.grade-info-information-container{
     display: flex;
     justify-content: space-between;
 }
@@ -52,6 +54,7 @@
 .grade-info-detail-text{
     width:70%;
     text-align: left;
+    margin-right: 0 !important;
 }
 
 .grade-container-hover{
@@ -65,15 +68,24 @@
     justify-content: space-between;
 }
 
+.grade-info-sub-container{   
+    min-width: 150px;
+    width: 70%;    
+}
+
 .grade-name{   
-    display:flex;
-    justify-content: start;
-    align-items: center;
+    display: inline-block;
     color: #0366d6 !important;
-    max-width: 250px;
+    min-width: 100px;   
+    max-width: 150px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.grade-info-name{
+    margin: 10px 10px 10px 10px;
+    font-weight: bold;
 }
 
 .grade-time{    
@@ -85,13 +97,13 @@
 
 .grade-child{
     margin: 0px 10px 0px 10px;
+    white-space: nowrap;
    
 }
 
 .grades-material-container{
     display: flex;
-    flex-wrap: wrap;    
-    align-items: flex-start;
+    flex-wrap: wrap;     
     justify-content: space-between;
 }
 
@@ -103,6 +115,16 @@
 .student-material-container{
     flex-grow: 1;
     flex-basis: 470px;    
+}
+
+.close-button-container{  
+    display: flex;
+    justify-content: flex-end;
+    margin: 5px 0 5px 0;
+}
+
+.close-info-button{
+    margin-left: auto !important;   
 }
 
 @media (min-width: 960px){

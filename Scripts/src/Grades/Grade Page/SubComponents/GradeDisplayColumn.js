@@ -12,7 +12,7 @@ const GradeDisplayColumn = ({ grade, students, studentGrades, modifyGrade }) => 
             gradeList.forEach(grade => {
                 if (grade.studentId === student.id) {
                     gId = grade.id;
-                    gValue = grade.value;
+                    gValue = grade.displayValue;
                 }        
             }           
         )

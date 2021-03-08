@@ -33,7 +33,7 @@ namespace SchoolGradebook.API.SubjectMaterials
         /// </summary>
         /// <param name="subjectMaterialId"></param>
         /// <returns></returns>
-        [HttpGet("Material/Teacher/{id}")]
+        [HttpGet("Teacher/Material/{id}")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [Authorize(policy: "OnlyTeacher")]
@@ -74,7 +74,7 @@ namespace SchoolGradebook.API.SubjectMaterials
         /// </summary>
         /// <param name="subjectInstanceId"></param>
         /// <returns></returns>
-        [HttpGet("Material/Teacher")]
+        [HttpGet("Teacher/Material")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [Authorize(policy: "OnlyTeacher")]
@@ -147,11 +147,29 @@ namespace SchoolGradebook.API.SubjectMaterials
 
         //    return CreatedAtAction("PostSubjectMaterial", new { Id = toAdd.Id });
         //}
-        //[HttpGet("Teacher")]
-        //public async Task<ActionResult<IEnumerable<SubjectMaterialObject>>> UpdateSubjectMaterial(int subjectInstanceId)
-        //{
-        //    return Ok();
-        //}
+        /// <summary>
+        /// Updates subject material
+        /// </summary>
+        /// <param name="sm">Needs to have a specified id</param>
+        /// <returns></returns>
+        [HttpPut("Teacher/Material")]
+        public async Task<ActionResult> UpdateSubjectMaterial(SubjectMaterialObject sm)
+        {
+            await subjectMaterialService.UpdateMaterialAsync(new SubjectMaterial()
+            {
+                Id = Guid.Parse(sm.Id),
+                Name = sm.Name,
+                Description = sm.Description,
+                FileExt = sm.FileExt,
+                FileType = sm.FileType,
+                Added = DateTime.UtcNow,
+                AddedBy = (SubjectMaterial.USERTYPE)sm.AddedBy,
+                SubjectTypeId = sm.SubjectTypeId,
+                TeacherId = sm.TeacherId,
+                SubjectMaterialGroupId = sm.SubjectMaterialGroupId
+            });
+            return Ok();
+        }
         //[HttpGet("Teacher")]
         //public async Task<ActionResult<IEnumerable<SubjectMaterialObject>>> DeleteSubjectMaterial(int subjectInstanceId)
         //{
@@ -162,7 +180,7 @@ namespace SchoolGradebook.API.SubjectMaterials
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        [HttpPost("MaterialGroup/Teacher")]
+        [HttpPost("Teacher/MaterialGroup")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [Authorize(policy: "OnlyTeacher")]
@@ -191,7 +209,7 @@ namespace SchoolGradebook.API.SubjectMaterials
         /// <param name="subjectMaterialGroupId"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        [HttpPut("MaterialGroup/Teacher")]
+        [HttpPut("Teacher/MaterialGroup")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [Authorize(policy: "OnlyTeacher")]
@@ -210,7 +228,7 @@ namespace SchoolGradebook.API.SubjectMaterials
         /// </summary>
         /// <param name="subjectMaterialGroupId"></param>
         /// <returns></returns>
-        [HttpDelete("MaterialGroupTeacher")]
+        [HttpDelete("Teacher/MaterialGroup")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [Authorize(policy: "OnlyTeacher")]

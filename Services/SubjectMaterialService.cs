@@ -77,6 +77,11 @@ namespace SchoolGradebook.Services
 
             return true;
         }
+        public async Task UpdateMaterialAsync(SubjectMaterial subjectMaterial)
+        {
+            context.Attach(subjectMaterial).State = EntityState.Modified;
+            await context.SaveChangesAsync();
+        }
         public async Task<bool> AddMaterialGroupAsync(SubjectMaterialGroup subjectMaterialGroup)
         {
             if (subjectMaterialGroup.Name == null)

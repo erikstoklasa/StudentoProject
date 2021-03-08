@@ -21,13 +21,14 @@ namespace SchoolGradebook.Services
             SubjectMaterial subjectMaterial = await context.SubjectMaterials
                 .Where(sm => sm.Id == subjectMaterialId)
                 .Include(sm => sm.SubjectType)
+                .Include(sm => sm.SubjectMaterialGroup)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
             return subjectMaterial;
         }
         public async Task<List<SubjectMaterial>> GetAllMaterialsBySubjectInstance(int subjectInstanceId, int take = 0)
         {
-            if(take <= 0)
+            if (take <= 0)
             {
                 int subjectTypeId = await context.SubjectInstances
                 .Where(s => s.Id == subjectInstanceId)
@@ -35,11 +36,13 @@ namespace SchoolGradebook.Services
                 .FirstOrDefaultAsync();
                 List<SubjectMaterial> subjectMaterials = await context.SubjectMaterials
                     .Where(sm => sm.SubjectTypeId == subjectTypeId)
+                    .Include(sm => sm.SubjectMaterialGroup)
                     .AsNoTracking()
                     .OrderByDescending(sm => sm.Added)
                     .ToListAsync();
                 return subjectMaterials;
-            } else
+            }
+            else
             {
                 int subjectTypeId = await context.SubjectInstances
                 .Where(s => s.Id == subjectInstanceId)
@@ -47,13 +50,14 @@ namespace SchoolGradebook.Services
                 .FirstOrDefaultAsync();
                 List<SubjectMaterial> subjectMaterials = await context.SubjectMaterials
                     .Where(sm => sm.SubjectTypeId == subjectTypeId)
+                    .Include(sm => sm.SubjectMaterialGroup)
                     .AsNoTracking()
                     .OrderByDescending(sm => sm.Added)
                     .Take(take)
                     .ToListAsync();
                 return subjectMaterials;
             }
-            
+
         }
         public async Task<bool> AddMaterialAsync(SubjectMaterial subjectMaterial)
         {
@@ -72,6 +76,39 @@ namespace SchoolGradebook.Services
             }
 
             return true;
+        }
+        public async Task<bool> AddMaterialGroupAsync(SubjectMaterialGroup subjectMaterialGroup)
+        {
+            if (subjectMaterialGroup.Name == null)
+            {
+                return false;
+            }
+            try
+            {
+                await context.SubjectMaterialGroups.AddAsync(subjectMaterialGroup);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return true;
+        }
+        public async Task UpdateMaterialGroupAsync(SubjectMaterialGroup subjectMaterialGroup)
+        {
+            context.Attach(subjectMaterialGroup).State = EntityState.Modified;
+            await context.SaveChangesAsync();
+        }
+        public async Task<bool> DeleteMaterialGroupAsync(int subjectMaterialGroupId)
+        {
+            SubjectMaterialGroup SubjectMaterialGroup = await context.SubjectMaterialGroups.FindAsync(subjectMaterialGroupId);
+
+            if (SubjectMaterialGroup != null)
+            {
+                context.SubjectMaterialGroups.Remove(SubjectMaterialGroup);
+                await context.SaveChangesAsync();
+                return true;
+            }
+            return false;
         }
         public async Task<bool> DeleteMaterialAsync(Guid subjectMaterialId)
         {

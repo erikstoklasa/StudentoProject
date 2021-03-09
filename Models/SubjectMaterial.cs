@@ -24,6 +24,7 @@ namespace SchoolGradebook.Models
         public string FileType { get; set; } //MIME Media type https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
         public DateTime Added { get; set; }
         public USERTYPE AddedBy { get; set; }
+        public bool ToDelete { get; set; }
 
         public SubjectType SubjectType { get; set; }
         public SubjectMaterialGroup SubjectMaterialGroup { get; set; }

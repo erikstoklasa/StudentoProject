@@ -35,7 +35,7 @@ namespace SchoolGradebook.Services
                 .Select(s => s.SubjectTypeId)
                 .FirstOrDefaultAsync();
                 List<SubjectMaterial> subjectMaterials = await context.SubjectMaterials
-                    .Where(sm => sm.SubjectTypeId == subjectTypeId)
+                    .Where(sm => sm.SubjectTypeId == subjectTypeId && sm.ToDelete == false)
                     .Include(sm => sm.SubjectMaterialGroup)
                     .AsNoTracking()
                     .OrderByDescending(sm => sm.Added)
@@ -49,7 +49,7 @@ namespace SchoolGradebook.Services
                 .Select(s => s.SubjectTypeId)
                 .FirstOrDefaultAsync();
                 List<SubjectMaterial> subjectMaterials = await context.SubjectMaterials
-                    .Where(sm => sm.SubjectTypeId == subjectTypeId)
+                    .Where(sm => sm.SubjectTypeId == subjectTypeId && sm.ToDelete == false)
                     .Include(sm => sm.SubjectMaterialGroup)
                     .AsNoTracking()
                     .OrderByDescending(sm => sm.Added)
@@ -81,6 +81,39 @@ namespace SchoolGradebook.Services
         {
             context.Attach(subjectMaterial).State = EntityState.Modified;
             await context.SaveChangesAsync();
+        }
+        public async Task<List<SubjectMaterial>> GetAllDeletedMaterials(int subjectInstanceId, int take = 0)
+        {
+            if (take <= 0)
+            {
+                int subjectTypeId = await context.SubjectInstances
+                .Where(s => s.Id == subjectInstanceId)
+                .Select(s => s.SubjectTypeId)
+                .FirstOrDefaultAsync();
+                List<SubjectMaterial> subjectMaterials = await context.SubjectMaterials
+                    .Where(sm => sm.SubjectTypeId == subjectTypeId && sm.ToDelete == true)
+                    .Include(sm => sm.SubjectMaterialGroup)
+                    .AsNoTracking()
+                    .OrderByDescending(sm => sm.Added)
+                    .ToListAsync();
+                return subjectMaterials;
+            }
+            else
+            {
+                int subjectTypeId = await context.SubjectInstances
+                .Where(s => s.Id == subjectInstanceId)
+                .Select(s => s.SubjectTypeId)
+                .FirstOrDefaultAsync();
+                List<SubjectMaterial> subjectMaterials = await context.SubjectMaterials
+                    .Where(sm => sm.SubjectTypeId == subjectTypeId && sm.ToDelete == true)
+                    .Include(sm => sm.SubjectMaterialGroup)
+                    .AsNoTracking()
+                    .OrderByDescending(sm => sm.Added)
+                    .Take(take)
+                    .ToListAsync();
+                return subjectMaterials;
+            }
+
         }
         public async Task<bool> AddMaterialGroupAsync(SubjectMaterialGroup subjectMaterialGroup)
         {
@@ -126,6 +159,12 @@ namespace SchoolGradebook.Services
                 return true;
             }
             return false;
+        }
+        public async Task SoftDeleteMaterialAsync(Guid subjectMaterialId)
+        {
+            SubjectMaterial subjectMaterial = await context.SubjectMaterials.FindAsync(subjectMaterialId);
+            subjectMaterial.ToDelete = true;
+            await context.SaveChangesAsync();
         }
         //VALIDATIONS
         public static bool HasRequiredFields(SubjectMaterial subjectMaterial)

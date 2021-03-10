@@ -1,7 +1,6 @@
 import React, {useState} from 'react'
 import ColumnHeader from './ColumnHeader';
 import NewGrade from './NewGrade';
-import apiAdress from './Variables.js'
 import '../GradePage.css'
 
 const NewGradeColumn = ({ students, trackNewGradeValues, removeNewGrade, handleSubmitNewGrades }) => {

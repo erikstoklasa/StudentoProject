@@ -78,6 +78,7 @@ const GradePage = () => {
     const sortGrades = () => {      
         if (bulkGradeData.length === 0) {
             updateOrderedGrades([])
+            updateBigAverage('Zatím žádné známky')
         }
 
         if (bulkGradeData.length > 0) {
@@ -106,9 +107,7 @@ const GradePage = () => {
 
            
             studentGrades.reverse();
-            updateOrderedGrades(studentGrades)
-            console.log('sum ' + gradeSum)
-            console.log('num ' + gradeNum)
+            updateOrderedGrades(studentGrades)            
             const average =  5 - ((gradeSum / gradeNum) / 25);
             updateBigAverage(average.toFixed(2))
         }
@@ -301,14 +300,12 @@ const GradePage = () => {
             value: 100 - ((parseInt(grade) * 25) - 25),
             subjectInstanceId: InstanceId,
             studentId: id,
-        }
-        console.log(grade)
-        console.log(newGrade)
+        } 
 
         if (!newGrades.some(e => e.studentId === newGrade.studentId)) {
             const newArr = [...newGrades, newGrade]            
             updateNewGrades(newArr)            
-            console.log(newArr)
+           
         } else {
             const newArr = [...newGrades]
             newArr.forEach(grade => {

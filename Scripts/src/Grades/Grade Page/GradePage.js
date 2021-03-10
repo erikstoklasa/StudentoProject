@@ -38,11 +38,8 @@ const GradePage = () => {
                 data.forEach(grade => { 
                     const displayValue = getGradeDisplayValue(parseInt(grade.value))
                     Object.assign(grade, { displayValue: displayValue })
-                })
-                console.log(data)
-               
+                })                           
                 updateBulkGradeData(data)
-
             })
 
             fetch(`${apiAdress}/SubjectInstances/Teacher/${InstanceId}`, {
@@ -78,9 +75,7 @@ const GradePage = () => {
         }
         
     }
-
-    const sortGrades = () => {
-        console.log(bulkGradeData)
+    const sortGrades = () => {      
         if (bulkGradeData.length === 0) {
             updateOrderedGrades([])
         }
@@ -112,7 +107,9 @@ const GradePage = () => {
            
             studentGrades.reverse();
             updateOrderedGrades(studentGrades)
-            const average =  5 - (gradeSum / gradeNum) / 25;
+            console.log('sum ' + gradeSum)
+            console.log('num ' + gradeNum)
+            const average =  5 - ((gradeSum / gradeNum) / 25);
             updateBigAverage(average)
         }
     }
@@ -210,8 +207,7 @@ const GradePage = () => {
     }
   
   
-    const modifyGrade = (gradeId, gradeValue, studentId, gradeName) => {
-        console.log('modify')
+    const modifyGrade = (gradeId, gradeValue, studentId, gradeName) => {        
         if (gradeId) {
             if (gradeValue === 0) {
                 const gradeArr = [gradeId]
@@ -229,17 +225,15 @@ const GradePage = () => {
                     }
                 })
             }
-            else {
-                console.log('put')
+            else {                
                 const reqBody = {
                     id: gradeId,
-                    value: 100 - (gradeValue * 25),
+                    value: 100 - ((gradeValue * 25) - 25),
                     subjectInstanceId: InstanceId,
                     studentId: studentId,
                     name: gradeName
                 }
-
-                console.log(reqBody)
+               
                 fetch(`${apiAdress}/Grades/Teacher`, {
                     method: 'PUT',
                     headers: {
@@ -251,11 +245,13 @@ const GradePage = () => {
                     if (res.ok) {
                         return res.json()
                     }
-                }).then(data => {
-                    const newGrades = [];
+                }).then(data => {                    
+                    const newGrades = [];                 
                     if (data.id) {
-                        bulkGradeData.forEach(grade => {
+                        bulkGradeData.forEach(grade => {                            
                             if (grade.id === data.id) {
+                                const displayValue = getGradeDisplayValue(parseInt(data.value))
+                                Object.assign(data, {displayValue : displayValue})
                                 newGrades.push(data)
                             }
                             else {
@@ -267,17 +263,14 @@ const GradePage = () => {
                     }              
                 }).catch(err => {})
             }
-        } else if (!gradeId) {
-            console.log('post')
+        } else if (!gradeId) {          
             
             const reqBody = {
-                value: 100 - (gradeValue * 25),
+                value: 100 - ((gradeValue * 25) - 25),
                 subjectInstanceId: InstanceId,
                 studentId: studentId,
                 name: gradeName
-            }
-
-           
+            }           
 
             fetch(`${apiAdress}/Grades/Teacher`, {
                 method: 'POST',
@@ -289,22 +282,22 @@ const GradePage = () => {
                 if (res.ok) {
                     return res.json()
                 }
-            }).then(data => {
+            }).then(data => {                
                 let array;
+                const displayValue = getGradeDisplayValue(parseInt(data.value))
+                Object.assign(data, {displayValue : displayValue})
                 array = [...bulkGradeData, data]    
                 return array
             }).then(array => {
                 updateBulkGradeData(array)
                 renderNotificationBar()
             }).catch()
-
-
         }
     }
 
     const trackNewGradeValues = (grade, id) => {
         const newGrade = {
-            value: 100 - (grade * 25),
+            value: 100 - ((grade * 25) - 25),
             subjectInstanceId: InstanceId,
             studentId: id,
         }
@@ -330,7 +323,7 @@ const GradePage = () => {
         newGrades.forEach(grade => {
             Object.assign(grade, {name: newGradeName})
         })
-        console.log(newGrades)
+        
         fetch(`${apiAdress}/Grades/Teacher/Batch`, {
             method: 'POST',
             headers: {
@@ -338,20 +331,21 @@ const GradePage = () => {
                 // 'Content-Type': 'application/x-www-form-urlencoded',
               },
             body: JSON.stringify(newGrades)
-        }).then(res => {            
+        }).then(res => {
+        
             if (res.ok) {
                return res.json()
             }
         }).then(data => {
-
+            data.forEach(grade => {
+                const displayValue = getGradeDisplayValue(parseInt(grade.value))
+                Object.assign(grade, {displayValue : displayValue})                
+            })
             let array;
-            array = [...bulkGradeData, ...data]
-    
+            array = [...bulkGradeData, ...data]    
             updateBulkGradeData(array)
             renderNotificationBar()
-        })
-        
-   
+        })   
     }
 
     const onClickHeader = () => {

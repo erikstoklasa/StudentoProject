@@ -1,9 +1,8 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
+import apiAddress from '../variables'
 import '../SubjectDetail.css'
 
-const GradeRow = ({ grade, info }) => {
-    console.log(grade)
-    console.log(info)
+const GradeRow = ({ grade, info }) => {    
     const [showDetail, updateShowDetail] = useState(false);
     
     //returns grades css class based on value
@@ -25,13 +24,29 @@ const GradeRow = ({ grade, info }) => {
         }
     } 
 
+    const deleteStudentGrade = () => {        
+        const reqBody = [grade.id];
+        fetch(`${apiAddress}/Grades/Student/Batch`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: JSON.stringify(reqBody)
+        })
+    }
+
     if (!showDetail) {
         return (
             <div>
                 <div className='grade-container'>
-                    <p className={`grade-child grade-value grade-circle ${getGradeClass(grade.value)}`}>{grade.displayValue}</p>
+                    <div className="grade-name-container">
+                        <p className={`grade-child grade-value grade-circle ${getGradeClass(grade.value)}`}>{grade.displayValue}</p>
+                    </div>
                     <div className="grade-sub-container" onClick={() => { updateShowDetail(true) }}>
-                        <p className="grade-child grade-name">{grade.name}</p>
+                        
+                            <p className="grade-child grade-name">{grade.name}</p>
+                       
                         <p className="grade-child grade-time">{grade.addedRelative}</p>
                     </div>
                 </div>
@@ -57,6 +72,7 @@ const GradeRow = ({ grade, info }) => {
                     </div> 
                 </div>
                 <div className="close-button-container">
+                    <div class="btn btn-danger rm" onClick={() => { deleteStudentGrade() }}>Smazat</div>
                     <div class="btn btn-primary" onClick={() => { updateShowDetail(false) }}>Zavřít</div>
                 </div>
             </div>

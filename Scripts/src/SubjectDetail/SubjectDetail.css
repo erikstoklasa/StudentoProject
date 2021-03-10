@@ -36,14 +36,17 @@
 .grade-container{   
     padding: 15px 5% 15px 5%;
     display: flex;
-    justify-content: space-between;  
+    justify-content: space-between; 
+    align-items: center; 
 }
 
 .grade-info-container{
     margin: 15px 2% 15px 2%;
     padding: 10px 3% 10px 3%;    
-    border: 1px solid black;
-    border-radius: 5px;    
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    overflow: hidden;
+    background-color: lightgray;    
 }
 
 .grade-info-information-container{
@@ -55,10 +58,6 @@
     width:70%;
     text-align: left;
     margin-right: 0 !important;
-}
-
-.grade-container-hover{
-    background-color: gray;
 }
 
 .grade-sub-container{
@@ -81,9 +80,22 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.grade-name-container{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 }
 
 .grade-info-name{
+    max-width: 80vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    white-space: nowrap;
     margin: 10px 10px 10px 10px;
     font-weight: bold;
 }
@@ -127,11 +139,18 @@
     margin-left: auto !important;   
 }
 
+.rm{
+    margin-right: 10px;
+}
+
 @media (min-width: 960px){
     .student-material-container {
         padding-left: 50px !important;
     }
     .average-container {
         padding-left: 50px !important;
+    }
+    .grade-info-name{
+        max-width: 500px;
     }
 }

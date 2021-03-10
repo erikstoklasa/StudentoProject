@@ -20,7 +20,7 @@ const GradePage = () => {
         show: false,
         text: '',
     });
-    const newGrades = [];
+    const [newGrades, updateNewGrades] =useState([])  
 
     const getInstanceId = () => {       
         const idContainer = document.querySelector("#subjectInstanceId")
@@ -100,7 +100,7 @@ const GradePage = () => {
                 if (!studentGrades.some(g => g.name === grade.name)) {
                     studentGrades.push(grade)
                 }
-                gradeSum = gradeSum + grade.value
+                gradeSum = gradeSum + parseInt(grade.value)
             })
 
 
@@ -110,7 +110,7 @@ const GradePage = () => {
             console.log('sum ' + gradeSum)
             console.log('num ' + gradeNum)
             const average =  5 - ((gradeSum / gradeNum) / 25);
-            updateBigAverage(average)
+            updateBigAverage(average.toFixed(2))
         }
     }
 
@@ -122,7 +122,7 @@ const GradePage = () => {
                     
                 bulkGradeData.forEach(grade => {
                     if (grade.studentId === student.id) {
-                        total = total + grade.value
+                        total = total + parseInt(grade.value)
                         gradeNum = gradeNum + 1
                     }
                 })
@@ -246,19 +246,19 @@ const GradePage = () => {
                         return res.json()
                     }
                 }).then(data => {                    
-                    const newGrades = [];                 
+                    const newResponseGrades = [];                 
                     if (data.id) {
                         bulkGradeData.forEach(grade => {                            
                             if (grade.id === data.id) {
                                 const displayValue = getGradeDisplayValue(parseInt(data.value))
                                 Object.assign(data, {displayValue : displayValue})
-                                newGrades.push(data)
+                                newResponseGrades.push(data)
                             }
                             else {
-                                newGrades.push(grade)
+                                newResponseGrades.push(grade)
                             }
                         })
-                        updateBulkGradeData(newGrades)
+                        updateBulkGradeData(newResponseGrades)
                         renderNotificationBar()
                     }              
                 }).catch(err => {})
@@ -296,56 +296,72 @@ const GradePage = () => {
     }
 
     const trackNewGradeValues = (grade, id) => {
+        
         const newGrade = {
-            value: 100 - ((grade * 25) - 25),
+            value: 100 - ((parseInt(grade) * 25) - 25),
             subjectInstanceId: InstanceId,
             studentId: id,
         }
+        console.log(grade)
+        console.log(newGrade)
 
-        if (!newGrades.some(e => e.studentId === newGrade.studentId )) {
-            newGrades.push(newGrade)
-        }
-
-        else {
-            newGrades.forEach(grade => {
+        if (!newGrades.some(e => e.studentId === newGrade.studentId)) {
+            const newArr = [...newGrades, newGrade]            
+            updateNewGrades(newArr)            
+            console.log(newArr)
+        } else {
+            const newArr = [...newGrades]
+            newArr.forEach(grade => {
                 if (grade.studentId === newGrade.studentId) {
-                    grade.value = 100 - (newGrade.value * 25);
+                    grade.value = 100 - ((newGrade.value * 25) - 25);
                 }
             })
+            updateNewGrades(newArr)
         }
     }
 
     const removeNewGrade = (studentId) => {
-        newGrades.splice(newGrades.findIndex(grade => grade.studentId === studentId), 1)
+        const newArr = [...newGrades]
+        newArr.splice(newGrades.findIndex(grade => grade.studentId === studentId), 1)
+        updateNewGrades(newArr)
     }
 
     const handleSubmitNewGrades = (newGradeName) => {
-        newGrades.forEach(grade => {
-            Object.assign(grade, {name: newGradeName})
-        })
-        
-        fetch(`${apiAdress}/Grades/Teacher/Batch`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-                // 'Content-Type': 'application/x-www-form-urlencoded',
-              },
-            body: JSON.stringify(newGrades)
-        }).then(res => {
-        
-            if (res.ok) {
-               return res.json()
-            }
-        }).then(data => {
-            data.forEach(grade => {
-                const displayValue = getGradeDisplayValue(parseInt(grade.value))
-                Object.assign(grade, {displayValue : displayValue})                
+        if (!orderedGrades.some(grade => grade.name === newGradeName)) {
+            const newArr = [...newGrades]
+            newArr.forEach(grade => {
+                Object.assign(grade, { name: newGradeName })
             })
-            let array;
-            array = [...bulkGradeData, ...data]    
-            updateBulkGradeData(array)
-            renderNotificationBar()
-        })   
+            if (newArr.length > 0) {
+                fetch(`${apiAdress}/Grades/Teacher/Batch`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                        // 'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: JSON.stringify(newArr)
+                }).then(res => {
+                    if (res.ok) {
+                        return res.json()
+                    }
+                }).then(data => {
+                    data.forEach(grade => {
+                        const displayValue = getGradeDisplayValue(parseInt(grade.value))
+                        Object.assign(grade, { displayValue: displayValue })
+                    })
+                    let array;
+                    array = [...bulkGradeData, ...data]
+                    updateBulkGradeData(array)
+                    updateNewGrades([])
+                    renderNotificationBar()
+                })
+                return 'success'
+            } else {
+                return 'failed'
+            }
+        } else {
+            alert('Prosím neopakujte jména známek')
+        }
     }
 
     const onClickHeader = () => {

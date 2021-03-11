@@ -459,6 +459,123 @@ namespace SchoolGradebook.API.Grades
             return StatusCode(200);
         }
 
+        //-------------------
+        //GradeGroup SECTION
+        //-------------------
+
+        /// <summary>
+        /// Adds a grade group
+        /// </summary>
+        /// <param name="gradeGroup"></param>
+        /// <returns></returns>
+        [HttpPost("Teacher/GradeGroup")]
+        [Authorize(policy: "OnlyTeacher")]
+        public async Task<IActionResult> TeacherPostGradeGroup(GradeGroupObject gradeGroup)
+        {
+            int teacherId = await teacherService.GetTeacherId(UserId);
+            if (teacherId == -1)
+            {
+                return StatusCode(403);
+            }
+            GradeGroup g = new GradeGroup()
+            {
+                Name = gradeGroup.Name,
+                AddedById = teacherId,
+                AddedBy = GradeGroup.USERTYPE.Teacher,
+                Weight = gradeGroup.Weight
+            };
+            try
+            {
+                await gradeService.AddGradeGroupAsync(g);
+            }
+            catch (ArgumentNullException e)
+            {
+                return BadRequest(new ErrorObject() { Message = e.Message });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new ErrorObject() { Message = e.Message });
+            }
+
+            return CreatedAtAction("PostGradeGroup", new { id = g.Id });
+        }
+
+        /// <summary>
+        /// Updates a single grade group for teacher
+        /// </summary>
+        /// <param name="gradeGroup"></param>
+        /// <returns></returns>
+        [HttpPut("Teacher/GradeGroup")]
+        [Authorize(policy: "OnlyTeacher")]
+        public async Task<IActionResult> TeacherUpdateGradeGroup(GradeGroupObject gradeGroup)
+        {
+            int teacherId = await teacherService.GetTeacherId(UserId);
+            if (teacherId == -1)
+            {
+                return StatusCode(403);
+            }
+            if (!await teacherAccessValidation.HasAccessToGradeGroup(teacherId, gradeGroup.Id))
+            {
+                return StatusCode(403);
+            }
+            GradeGroup gg = new GradeGroup()
+            {
+                Id = gradeGroup.Id,
+                AddedBy = GradeGroup.USERTYPE.Teacher,
+                AddedById = teacherId,
+                Name = gradeGroup.Name,
+                Weight = gradeGroup.Weight
+            };
+
+            try
+            {
+                await gradeService.UpdateGradeGroupAsync(gg);
+            }
+            catch (ArgumentNullException e)
+            {
+                return BadRequest(new ErrorObject() { Message = e.Message });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new ErrorObject() { Message = e.Message });
+            }
+
+            return CreatedAtAction("PutGradeGroup", new { id = gg.Id });
+        }
+
+        /// <summary>
+        /// Deletes grade groups for teacher in batch
+        /// </summary>
+        /// <param name="gradeGroupIds"></param>
+        /// <returns></returns>
+        [HttpDelete("Teacher/GradeGroup/Batch")]
+        [Authorize(policy: "OnlyTeacher")]
+        public async Task<IActionResult> TeacherDeleteGradeGroups(ICollection<int> gradeGroupIds)
+        {
+            int teacherId = await teacherService.GetTeacherId(UserId);
+            if (teacherId == -1)
+            {
+                return StatusCode(403);
+            }
+            foreach (int ggId in gradeGroupIds)
+            {
+                if (!await teacherAccessValidation.HasAccessToGradeGroup(teacherId, ggId))
+                {
+                    return StatusCode(403);
+                }
+            }
+            try
+            {
+                await gradeService.DeleteGradeGroupsAsync(gradeGroupIds);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new ErrorObject() { Message = e.Message });
+            }
+
+            return StatusCode(200);
+        }
+
         //****************
         //Student requests
         //****************
@@ -658,6 +775,15 @@ namespace SchoolGradebook.API.Grades
         public DateTime Added { get; set; }
         public USERTYPE? AddedBy { get; set; }
 
+    }
+    public class GradeGroupObject
+    {
+        public enum USERTYPE { Teacher, Student }
+        public int Id { get; set; }
+        public int Weight { get; set; }
+        public string Name { get; set; }
+        public int AddedById { get; set; }
+        public USERTYPE AddedBy { get; set; }
     }
     public class ErrorObject
     {

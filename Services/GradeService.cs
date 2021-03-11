@@ -166,7 +166,6 @@ namespace SchoolGradebook.Services
             }
             await context.SaveChangesAsync();
         }
-
         public async Task AddGradesAsync(IEnumerable<Grade> grades)
         {
             foreach (var grade in grades)
@@ -195,11 +194,62 @@ namespace SchoolGradebook.Services
             context.Grades.RemoveRange(grades);
             await context.SaveChangesAsync();
         }
+        //-------------------
+        //GradeGroup SECTION
+        //-------------------
+
+        public async Task AddGradeGroupAsync(GradeGroup gradeGroup, bool saveChanges = true)
+        {
+            if (!HasRequiredFields(gradeGroup))
+            {
+                throw new ArgumentNullException("Grade Group","Not all required properties were set");
+            }
+            await context.GradeGroups.AddAsync(gradeGroup);
+
+            if (saveChanges)
+                await context.SaveChangesAsync();
+        }
+        public async Task UpdateGradeGroupAsync(GradeGroup gradeGroup)
+        {
+            if (!HasRequiredFields(gradeGroup))
+            {
+                throw new ArgumentNullException("Grade Group", "Not all required properties were set");
+            }
+
+            context.Attach(gradeGroup).State = EntityState.Modified;
+            await context.SaveChangesAsync();
+        }
+        public async Task DeleteGradeGroupsAsync(ICollection<int> gradeGroupIds)
+        {
+            List<GradeGroup> gradeGroups = new List<GradeGroup>();
+            foreach (int ggId in gradeGroupIds)
+            {
+                gradeGroups.Add(new GradeGroup() { Id = ggId });
+            }
+            context.GradeGroups.RemoveRange(gradeGroups);
+            await context.SaveChangesAsync();
+        }
 
         //VALIDATIONS
         public static bool HasRequiredFields(Grade grade)
         {
             if (string.IsNullOrWhiteSpace(grade.Name))
+            {
+                return false;
+            }
+            return true;
+        }
+        public static bool HasRequiredFields(GradeGroup gradeGroup)
+        {
+            if (string.IsNullOrWhiteSpace(gradeGroup.Name))
+            {
+                return false;
+            }
+            if (gradeGroup.Weight <= 0)
+            {
+                return false;
+            }
+            if (gradeGroup.AddedById <= 0)
             {
                 return false;
             }

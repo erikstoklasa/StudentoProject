@@ -70,14 +70,14 @@ namespace SchoolGradebook.Services
         public async Task<bool> HasAccessToSubjectMaterial(int teacherId, Guid subjectMaterialId)
         {
             SubjectMaterial subjectMaterial = await context.SubjectMaterials
-                .Where(sm => sm.Id == subjectMaterialId)
+                .Where(sm => sm.Id == subjectMaterialId && sm.AddedById == teacherId && sm.AddedBy == SubjectMaterial.USERTYPE.Teacher)
                 .Select(sm => new SubjectMaterial()
                 {
-                    SubjectTypeId = sm.SubjectTypeId
+                    Id = sm.Id
                 })
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
-            return await HasAccessToSubjectType(teacherId, subjectMaterial.SubjectTypeId);
+            return subjectMaterial != null;
         }
     }
 }

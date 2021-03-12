@@ -25,55 +25,20 @@ namespace SchoolGradebook.API.SubjectMaterials
         private readonly TeacherService teacherService;
         private readonly TeacherAccessValidation teacherAccessValidation;
         private readonly IConfiguration configuration;
+        private readonly StudentService studentService;
+        private readonly StudentAccessValidation studentAccessValidation;
 
         private string UserId { get; set; }
 
-        public SubjectMaterialsController(SubjectMaterialService subjectMaterialService, IHttpContextAccessor httpContextAccessor, TeacherService teacherService, TeacherAccessValidation teacherAccessValidation, IConfiguration configuration)
+        public SubjectMaterialsController(SubjectMaterialService subjectMaterialService, IHttpContextAccessor httpContextAccessor, TeacherService teacherService, TeacherAccessValidation teacherAccessValidation, IConfiguration configuration, StudentService studentService, StudentAccessValidation studentAccessValidation)
         {
             this.subjectMaterialService = subjectMaterialService;
             this.teacherService = teacherService;
             this.teacherAccessValidation = teacherAccessValidation;
             this.configuration = configuration;
+            this.studentService = studentService;
+            this.studentAccessValidation = studentAccessValidation;
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-        }
-        /// <summary>
-        /// Gets a single subject material
-        /// </summary>
-        /// <param name="subjectMaterialId"></param>
-        /// <returns></returns>
-        [HttpGet("Teacher/Material/{id}")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [Authorize(policy: "OnlyTeacher")]
-        public async Task<ActionResult<SubjectMaterialObject>> GetSubjectMaterial(Guid subjectMaterialId)
-        {
-            int teacherId = await teacherService.GetTeacherId(UserId);
-            if (!await teacherAccessValidation.HasAccessToSubjectMaterial(teacherId, subjectMaterialId))
-            {
-                return Forbid();
-            }
-            SubjectMaterial subjectMaterial = await subjectMaterialService.GetMaterialAsync(subjectMaterialId);
-            SubjectMaterialObject output;
-
-
-            output = new SubjectMaterialObject()
-            {
-                Id = subjectMaterial.Id.ToString(),
-                Name = subjectMaterial.Name,
-                Description = subjectMaterial.Description,
-                FileExt = subjectMaterial.FileExt,
-                FileType = subjectMaterial.FileType,
-                Added = subjectMaterial.Added,
-                AddedBy = (SubjectMaterialObject.USERTYPE)subjectMaterial.AddedBy,
-                SubjectMaterialGroupName = subjectMaterial.SubjectMaterialGroup?.Name,
-                SubjectTypeId = subjectMaterial.SubjectTypeId,
-                TeacherId = subjectMaterial.TeacherId,
-                SubjectMaterialGroupId = subjectMaterial.SubjectMaterialGroupId,
-                SubjectMaterialGroupAddedBy = (SubjectMaterialObject.USERTYPE)subjectMaterial.SubjectMaterialGroup?.AddedBy,
-                SubjectMaterialGroupAddedById = subjectMaterial.SubjectMaterialGroup?.AddedById
-            };
-
-            return output;
         }
 
 
@@ -93,7 +58,7 @@ namespace SchoolGradebook.API.SubjectMaterials
             {
                 return Forbid();
             }
-            IEnumerable<SubjectMaterial> subjectMaterials = await subjectMaterialService.GetAllMaterialsBySubjectInstance(subjectInstanceId);
+            IEnumerable<SubjectMaterial> subjectMaterials = await subjectMaterialService.GetAllMaterialsBySubjectInstanceForTeacher(subjectInstanceId);
             List<SubjectMaterialObject> output = new List<SubjectMaterialObject>();
             foreach (var sm in subjectMaterials)
             {
@@ -108,7 +73,7 @@ namespace SchoolGradebook.API.SubjectMaterials
                     AddedBy = (SubjectMaterialObject.USERTYPE)sm.AddedBy,
                     SubjectMaterialGroupName = sm.SubjectMaterialGroup?.Name,
                     SubjectTypeId = sm.SubjectTypeId,
-                    TeacherId = sm.TeacherId,
+                    AddedById = sm.AddedById,
                     SubjectMaterialGroupId = sm.SubjectMaterialGroupId,
                     SubjectMaterialGroupAddedBy = sm.SubjectMaterialGroup != null ? (SubjectMaterialObject.USERTYPE?)sm.SubjectMaterialGroup?.AddedBy : null,
                     SubjectMaterialGroupAddedById = sm.SubjectMaterialGroup?.AddedById
@@ -124,20 +89,27 @@ namespace SchoolGradebook.API.SubjectMaterials
         /// </summary>
         /// <param name="formFileObject"></param>
         /// <returns></returns>
-        [HttpPost("Material/Teacher")]
+        [HttpPost("Teacher/Material")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [Authorize(policy: "OnlyTeacher")]
         public async Task<ActionResult> AddSubjectMaterial([FromForm] FormFileObject formFileObject)
         {
             int teacherId = await teacherService.GetTeacherId(UserId);
-            if (!await teacherAccessValidation.HasAccessToSubjectType(teacherId, formFileObject.material.SubjectTypeId))
+            if (formFileObject.Material.SubjectTypeId != null)
+            {
+                if (!await teacherAccessValidation.HasAccessToSubjectType(teacherId, (int)formFileObject.Material.SubjectTypeId))
+                {
+                    return Forbid();
+                }
+            }
+            if (!await teacherAccessValidation.HasAccessToSubject(teacherId, formFileObject.Material.SubjectInstanceId))
             {
                 return Forbid();
             }
-            if (formFileObject.formFile.Length > 0)
+            if (formFileObject.FormFile.Length > 0)
             {
-                string fileExt = Path.GetExtension(formFileObject.formFile.FileName);
+                string fileExt = Path.GetExtension(formFileObject.FormFile.FileName);
                 Guid materialId = Guid.NewGuid();
                 Response<BlobContentInfo> response = null;
                 try
@@ -148,11 +120,11 @@ namespace SchoolGradebook.API.SubjectMaterials
                     BlobServiceClient blobServiceClient = new BlobServiceClient(connectionString);
                     BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient("subjectmaterials");
                     //using FileStream uploadFileStream = System.IO.File.OpenRead(filePath);
-                    using Stream uploadStream = formFileObject.formFile.OpenReadStream();
+                    using Stream uploadStream = formFileObject.FormFile.OpenReadStream();
                     BlobClient blobClient = containerClient.GetBlobClient($"{materialId}{fileExt}");
                     response = await blobClient.UploadAsync(uploadStream, true);
                 }
-                catch (RequestFailedException e)
+                catch (Exception)
                 {
                     return BadRequest();
                 }
@@ -167,13 +139,13 @@ namespace SchoolGradebook.API.SubjectMaterials
                             Id = materialId,
                             Added = DateTime.UtcNow,
                             AddedBy = SubjectMaterial.USERTYPE.Teacher,
-                            Name = formFileObject.material.Name,
-                            Description = formFileObject.material.Description,
+                            Name = formFileObject.Material.Name,
+                            Description = formFileObject.Material.Description,
                             FileExt = fileExt,
                             FileType = MimeTypeMap.GetMimeType(fileExt),
-                            SubjectTypeId = formFileObject.material.SubjectTypeId,
-                            SubjectMaterialGroupId = formFileObject.material.SubjectMaterialGroupId,
-                            TeacherId = teacherId
+                            SubjectTypeId = formFileObject.Material.SubjectTypeId,
+                            SubjectMaterialGroupId = formFileObject.Material.SubjectMaterialGroupId,
+                            AddedById = teacherId
                         };
                 bool successfullyAdded = await subjectMaterialService.AddMaterialAsync(toAdd);
                 if (!successfullyAdded)
@@ -193,6 +165,11 @@ namespace SchoolGradebook.API.SubjectMaterials
         [HttpPut("Teacher/Material")]
         public async Task<ActionResult> UpdateSubjectMaterial(SubjectMaterialObject sm)
         {
+            int teacherId = await teacherService.GetTeacherId(UserId);
+            if (!await teacherAccessValidation.HasAccessToSubjectMaterial(teacherId, Guid.Parse(sm.Id)))
+            {
+                return Forbid();
+            }
             try
             {
                 await subjectMaterialService.UpdateMaterialAsync(new SubjectMaterial()
@@ -205,7 +182,7 @@ namespace SchoolGradebook.API.SubjectMaterials
                     Added = DateTime.UtcNow,
                     AddedBy = (SubjectMaterial.USERTYPE)sm.AddedBy,
                     SubjectTypeId = sm.SubjectTypeId,
-                    TeacherId = sm.TeacherId,
+                    AddedById = sm.AddedById,
                     SubjectMaterialGroupId = sm.SubjectMaterialGroupId
                 });
 
@@ -216,12 +193,19 @@ namespace SchoolGradebook.API.SubjectMaterials
             }
             return Ok();
         }
+
+        /// <summary>
+        /// Soft deletes subject material
+        /// </summary>
+        /// <param name="subjectMaterialId"></param>
+        /// <returns></returns>
         [HttpDelete("Teacher/Material")]
         public async Task<ActionResult> DeleteSubjectMaterial(Guid subjectMaterialId)
         {
             await subjectMaterialService.SoftDeleteMaterialAsync(subjectMaterialId);
             return Ok();
         }
+
         /// <summary>
         /// Adds subject material group
         /// </summary>
@@ -250,6 +234,7 @@ namespace SchoolGradebook.API.SubjectMaterials
                 return BadRequest();
             }
         }
+
         /// <summary>
         /// Updates subject material group
         /// </summary>
@@ -270,6 +255,7 @@ namespace SchoolGradebook.API.SubjectMaterials
             await subjectMaterialService.UpdateMaterialGroupAsync(smg);
             return Ok();
         }
+
         /// <summary>
         /// Deletes subject material group
         /// </summary>
@@ -285,26 +271,217 @@ namespace SchoolGradebook.API.SubjectMaterials
             return Ok();
         }
 
+        //----------------
+        //Student section
+        //----------------
 
-        //[HttpGet("Student")]
-        //public async Task<ActionResult<IEnumerable<SubjectMaterialObject>>> StudentDeleteSubjectMaterialGroup(int subjectInstanceId)
-        //{
-        //    return Ok();
+        /// <summary>
+        /// Gets all subject materials in a subject
+        /// </summary>
+        /// <param name="subjectInstanceId"></param>
+        /// <returns></returns>
+        [HttpGet("Student/Material")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [Authorize(policy: "OnlyStudent")]
+        public async Task<ActionResult<IEnumerable<SubjectMaterialObject>>> StudentGetSubjectMaterials(int subjectInstanceId)
+        {
+            int studentId = await studentService.GetStudentId(UserId);
+            if (!await studentAccessValidation.HasAccessToSubject(studentId, subjectInstanceId))
+            {
+                return Forbid();
+            }
+            IEnumerable<SubjectMaterial> subjectMaterials = await subjectMaterialService.GetAllMaterialsBySubjectInstance(subjectInstanceId);
+            List<SubjectMaterialObject> output = new List<SubjectMaterialObject>();
+            foreach (var sm in subjectMaterials)
+            {
+                SubjectMaterialObject smo = new SubjectMaterialObject
+                {
+                    Id = sm.Id.ToString(),
+                    Name = sm.Name,
+                    Description = sm.Description,
+                    FileExt = sm.FileExt,
+                    FileType = sm.FileType,
+                    Added = sm.Added,
+                    AddedBy = (SubjectMaterialObject.USERTYPE)sm.AddedBy,
+                    SubjectMaterialGroupName = sm.SubjectMaterialGroup?.Name,
+                    SubjectTypeId = sm.SubjectTypeId,
+                    AddedById = sm.AddedById,
+                    SubjectMaterialGroupId = sm.SubjectMaterialGroupId,
+                    SubjectMaterialGroupAddedBy = sm.SubjectMaterialGroup != null ? (SubjectMaterialObject.USERTYPE?)sm.SubjectMaterialGroup?.AddedBy : null,
+                    SubjectMaterialGroupAddedById = sm.SubjectMaterialGroup?.AddedById
+                };
+                output.Add(smo);
+            }
+            return output;
+        }
 
-        //}
+        /// <summary>
+        /// Adds a subject material
+        /// </summary>
+        /// <param name="formFileObject"></param>
+        /// <returns></returns>
+        [HttpPost("Student/Material")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [Authorize(policy: "OnlyStudent")]
+        public async Task<ActionResult> StudentAddSubjectMaterial([FromForm] FormFileObject formFileObject)
+        {
+            int studentId = await studentService.GetStudentId(UserId);
+            if (formFileObject.Material.SubjectTypeId != null)
+            {
+                if (!await studentAccessValidation.HasAccessToSubjectType(studentId, (int)formFileObject.Material.SubjectTypeId))
+                {
+                    return Forbid();
+                }
+            }
+            if (!await studentAccessValidation.HasAccessToSubject(studentId, formFileObject.Material.SubjectInstanceId))
+            {
+                return Forbid();
+            }
+
+            if (formFileObject.FormFile.Length > 0)
+            {
+                string fileExt = Path.GetExtension(formFileObject.FormFile.FileName);
+                Guid materialId = Guid.NewGuid();
+                Response<BlobContentInfo> response = null;
+                try
+                {
+                    //Uploading to blob storage
+
+                    string connectionString = configuration.GetConnectionString("AZURE_STORAGE_CONNECTION_STRING");
+                    BlobServiceClient blobServiceClient = new BlobServiceClient(connectionString);
+                    BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient("subjectmaterials");
+                    //using FileStream uploadFileStream = System.IO.File.OpenRead(filePath);
+                    using Stream uploadStream = formFileObject.FormFile.OpenReadStream();
+                    BlobClient blobClient = containerClient.GetBlobClient($"{materialId}{fileExt}");
+                    response = await blobClient.UploadAsync(uploadStream, true);
+                }
+                catch (Exception)
+                {
+                    return BadRequest();
+                }
+                if (response == null)
+                {
+                    return BadRequest();
+                }
+                //Adding to our db
+                SubjectMaterial toAdd =
+                        new SubjectMaterial()
+                        {
+                            Id = materialId,
+                            Added = DateTime.UtcNow,
+                            AddedBy = SubjectMaterial.USERTYPE.Student,
+                            Name = formFileObject.Material.Name,
+                            Description = formFileObject.Material.Description,
+                            FileExt = fileExt,
+                            FileType = MimeTypeMap.GetMimeType(fileExt),
+                            SubjectTypeId = formFileObject.Material.SubjectTypeId,
+                            SubjectInstanceId = formFileObject.Material.SubjectInstanceId,
+                            SubjectMaterialGroupId = formFileObject.Material.SubjectMaterialGroupId,
+                            AddedById = studentId
+                        };
+                bool successfullyAdded = await subjectMaterialService.AddMaterialAsync(toAdd);
+                if (!successfullyAdded)
+                {
+                    return BadRequest();
+                }
+                return CreatedAtAction("PostSubjectMaterial", new { Id = toAdd.Id });
+            }
+            return BadRequest();
+        }
+
+
+        /// <summary>
+        /// Adds subject material group for student
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        [HttpPost("Student/MaterialGroup")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [Authorize(policy: "OnlyStudent")]
+        public async Task<ActionResult> StudentAddSubjectMaterialGroup(string name)
+        {
+            int studentId = await studentService.GetStudentId(UserId);
+            SubjectMaterialGroup smg = new SubjectMaterialGroup()
+            {
+                Name = name,
+                AddedById = studentId,
+                AddedBy = SubjectMaterialGroup.USERTYPE.Student
+            };
+            if (await subjectMaterialService.AddMaterialGroupAsync(smg))
+            {
+
+                return CreatedAtAction("PostSubjectMaterialGroup", new { Id = smg.Id });
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        /// <summary>
+        /// Updates subject material group
+        /// </summary>
+        /// <param name="subjectMaterialGroupId"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        [HttpPut("Student/MaterialGroup")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [Authorize(policy: "OnlyStudent")]
+        public async Task<ActionResult<IEnumerable<SubjectMaterialObject>>> StudentUpdateSubjectMaterialGroup(int subjectMaterialGroupId, string name)
+        {
+            int studentId = await studentService.GetStudentId(UserId);
+            if (!await studentAccessValidation.HasAccessToSubjectMaterialGroup(studentId, subjectMaterialGroupId))
+            {
+                return Forbid();
+            }
+            SubjectMaterialGroup smg = new SubjectMaterialGroup()
+            {
+                Id = subjectMaterialGroupId,
+                Name = name,
+                AddedBy = SubjectMaterialGroup.USERTYPE.Student,
+                AddedById = studentId
+            };
+            await subjectMaterialService.UpdateMaterialGroupAsync(smg);
+            return Ok();
+        }
+
+        /// <summary>
+        /// Deletes subject material group
+        /// </summary>
+        /// <param name="subjectMaterialGroupId"></param>
+        /// <returns></returns>
+        [HttpDelete("Student/MaterialGroup")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [Authorize(policy: "OnlyStudent")]
+        public async Task<ActionResult> StudentDeleteSubjectMaterialGroup(int subjectMaterialGroupId)
+        {
+            int studentId = await studentService.GetStudentId(UserId);
+            if (!await studentAccessValidation.HasAccessToSubjectMaterialGroup(studentId, subjectMaterialGroupId))
+            {
+                return Forbid();
+            }
+            await subjectMaterialService.DeleteMaterialGroupAsync(subjectMaterialGroupId);
+            return Ok();
+        }
     }
     public class FormFileObject
     {
-        public IFormFile formFile { get; set; }
-        public SubjectMaterialUploadObject material { get; set; }
+        public IFormFile FormFile { get; set; }
+        public SubjectMaterialUploadObject Material { get; set; }
     }
     public class SubjectMaterialUploadObject
     {
 #nullable enable
         public string Name { get; set; }
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
-        public int SubjectTypeId { get; set; }
+        public int? SubjectTypeId { get; set; }
+        public int SubjectInstanceId { get; set; }
         public int? SubjectMaterialGroupId { set; get; }
     }
     public class SubjectMaterialObject
@@ -320,12 +497,13 @@ namespace SchoolGradebook.API.SubjectMaterials
         public string? FileType { get; set; } //MIME Media type https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
         public DateTime? Added { get; set; }
         public USERTYPE? AddedBy { get; set; }
+        public int AddedById { set; get; }
         public string? SubjectMaterialGroupName { set; get; }
         public USERTYPE? SubjectMaterialGroupAddedBy { set; get; }
         public int? SubjectMaterialGroupAddedById { set; get; }
 
-        public int SubjectTypeId { get; set; }
-        public int TeacherId { set; get; }
+        public int? SubjectTypeId { get; set; }
+        public int SubjectInstanceId { get; set; }
         public int? SubjectMaterialGroupId { set; get; }
     }
 }

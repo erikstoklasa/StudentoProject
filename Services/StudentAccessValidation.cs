@@ -51,5 +51,34 @@ namespace SchoolGradebook.Services
 
             return instances.Where(i => i.SubjectTypeId == subjectMaterial.SubjectTypeId).Any();
         }
+
+        public async Task<bool> HasAccessToSubjectType(int studentId, int subjectTypeId)
+        {
+            List<SubjectInstance> instances = await context.SubjectInstances.Where(si => si.SubjectTypeId == subjectTypeId).AsNoTracking().ToListAsync();
+            //If has access to any of the subject instances that has access to the subject type
+            foreach (var i in instances)
+            {
+                if (await HasAccessToSubject(studentId, i.Id))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public async Task<bool> HasAccessToSubjectMaterialGroup(int studentId, int subjectMaterialGroupId)
+        {
+            SubjectMaterialGroup subjectMaterialGroup = await context.SubjectMaterialGroups
+                .Where(smg => smg.Id == subjectMaterialGroupId && smg.AddedById == studentId && smg.AddedBy == SubjectMaterialGroup.USERTYPE.Student)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+            if (subjectMaterialGroup == null)
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }

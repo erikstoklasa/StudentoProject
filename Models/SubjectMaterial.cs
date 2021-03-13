@@ -11,10 +11,8 @@ namespace SchoolGradebook.Models
         public enum USERTYPE { Teacher, Student }
 
         public Guid Id { get; set; }
-        [Required]
-        public int SubjectTypeId { get; set; }
-        [Required]
-        public int TeacherId { set; get; }
+        public int? SubjectTypeId { get; set; } //If set, then you will be able to see the material in a subject type overview
+        public int SubjectInstanceId { set; get; }
         public int? SubjectMaterialGroupId { set; get; }
 
         [Required(ErrorMessage = "Zadejte název materiálu")]
@@ -24,6 +22,7 @@ namespace SchoolGradebook.Models
         public string FileType { get; set; } //MIME Media type https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
         public DateTime Added { get; set; }
         public USERTYPE AddedBy { get; set; }
+        public int AddedById { get; set; }
         public bool ToDelete { get; set; }
 
         public SubjectType SubjectType { get; set; }

@@ -30,12 +30,8 @@ namespace SchoolGradebook.Services
         {
             if (take <= 0)
             {
-                int subjectTypeId = await context.SubjectInstances
-                .Where(s => s.Id == subjectInstanceId)
-                .Select(s => s.SubjectTypeId)
-                .FirstOrDefaultAsync();
                 List<SubjectMaterial> subjectMaterials = await context.SubjectMaterials
-                    .Where(sm => sm.SubjectTypeId == subjectTypeId && sm.ToDelete == false)
+                    .Where(sm => sm.SubjectInstanceId == subjectInstanceId && sm.ToDelete == false)
                     .Include(sm => sm.SubjectMaterialGroup)
                     .AsNoTracking()
                     .OrderByDescending(sm => sm.Added)
@@ -44,12 +40,33 @@ namespace SchoolGradebook.Services
             }
             else
             {
-                int subjectTypeId = await context.SubjectInstances
-                .Where(s => s.Id == subjectInstanceId)
-                .Select(s => s.SubjectTypeId)
-                .FirstOrDefaultAsync();
                 List<SubjectMaterial> subjectMaterials = await context.SubjectMaterials
-                    .Where(sm => sm.SubjectTypeId == subjectTypeId && sm.ToDelete == false)
+                    .Where(sm => sm.SubjectInstanceId == subjectInstanceId && sm.ToDelete == false)
+                    .Include(sm => sm.SubjectMaterialGroup)
+                    .AsNoTracking()
+                    .OrderByDescending(sm => sm.Added)
+                    .Take(take)
+                    .ToListAsync();
+                return subjectMaterials;
+            }
+
+        }
+        public async Task<List<SubjectMaterial>> GetAllMaterialsBySubjectInstanceForTeacher(int subjectInstanceId, int take = 0)
+        {
+            if (take <= 0)
+            {
+                List<SubjectMaterial> subjectMaterials = await context.SubjectMaterials
+                    .Where(sm => sm.SubjectInstanceId == subjectInstanceId && sm.ToDelete == false && sm.AddedBy == SubjectMaterial.USERTYPE.Teacher)
+                    .Include(sm => sm.SubjectMaterialGroup)
+                    .AsNoTracking()
+                    .OrderByDescending(sm => sm.Added)
+                    .ToListAsync();
+                return subjectMaterials;
+            }
+            else
+            {
+                List<SubjectMaterial> subjectMaterials = await context.SubjectMaterials
+                    .Where(sm => sm.SubjectInstanceId == subjectInstanceId && sm.ToDelete == false && sm.AddedBy == SubjectMaterial.USERTYPE.Teacher)
                     .Include(sm => sm.SubjectMaterialGroup)
                     .AsNoTracking()
                     .OrderByDescending(sm => sm.Added)
@@ -86,12 +103,8 @@ namespace SchoolGradebook.Services
         {
             if (take <= 0)
             {
-                int subjectTypeId = await context.SubjectInstances
-                .Where(s => s.Id == subjectInstanceId)
-                .Select(s => s.SubjectTypeId)
-                .FirstOrDefaultAsync();
                 List<SubjectMaterial> subjectMaterials = await context.SubjectMaterials
-                    .Where(sm => sm.SubjectTypeId == subjectTypeId && sm.ToDelete == true)
+                    .Where(sm => sm.SubjectInstanceId == subjectInstanceId && sm.ToDelete == true)
                     .Include(sm => sm.SubjectMaterialGroup)
                     .AsNoTracking()
                     .OrderByDescending(sm => sm.Added)
@@ -100,12 +113,8 @@ namespace SchoolGradebook.Services
             }
             else
             {
-                int subjectTypeId = await context.SubjectInstances
-                .Where(s => s.Id == subjectInstanceId)
-                .Select(s => s.SubjectTypeId)
-                .FirstOrDefaultAsync();
                 List<SubjectMaterial> subjectMaterials = await context.SubjectMaterials
-                    .Where(sm => sm.SubjectTypeId == subjectTypeId && sm.ToDelete == true)
+                    .Where(sm => sm.SubjectInstanceId == subjectInstanceId && sm.ToDelete == true)
                     .Include(sm => sm.SubjectMaterialGroup)
                     .AsNoTracking()
                     .OrderByDescending(sm => sm.Added)
@@ -124,6 +133,7 @@ namespace SchoolGradebook.Services
             try
             {
                 await context.SubjectMaterialGroups.AddAsync(subjectMaterialGroup);
+                await context.SaveChangesAsync();
             }
             catch (Exception)
             {

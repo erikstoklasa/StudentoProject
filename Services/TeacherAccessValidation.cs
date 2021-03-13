@@ -46,6 +46,21 @@ namespace SchoolGradebook.Services
                 .FirstOrDefaultAsync();
             return await HasAccessToSubject(teacherId, grade.SubjectInstanceId);
         }
+        public async Task<bool> HasAccessToGradeGroup(int teacherId, int gradeGroupId)
+        {
+            GradeGroup gradeGroup = await context.GradeGroups
+                .Where(g => g.Id == gradeGroupId)
+                .Select(g => new GradeGroup()
+                {
+                    AddedById = g.AddedById,
+                    AddedBy = g.AddedBy
+                })
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+            bool isAddedByTeacher = gradeGroup.AddedBy == GradeGroup.USERTYPE.Teacher;
+            bool isAddedBySpecifiedTeacherId = gradeGroup.AddedById == teacherId;
+            return isAddedBySpecifiedTeacherId && isAddedByTeacher;
+        }
         public async Task<bool> HasAccessToStudent(int teacherId, int studentId)
         {
             List<SubjectInstance> instances = await context.GetService<SubjectService>().GetAllSubjectInstancesByStudentAsync(studentId);
@@ -55,14 +70,14 @@ namespace SchoolGradebook.Services
         public async Task<bool> HasAccessToSubjectMaterial(int teacherId, Guid subjectMaterialId)
         {
             SubjectMaterial subjectMaterial = await context.SubjectMaterials
-                .Where(sm => sm.Id == subjectMaterialId)
+                .Where(sm => sm.Id == subjectMaterialId && sm.AddedById == teacherId && sm.AddedBy == SubjectMaterial.USERTYPE.Teacher)
                 .Select(sm => new SubjectMaterial()
                 {
-                    SubjectTypeId = sm.SubjectTypeId
+                    Id = sm.Id
                 })
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
-            return await HasAccessToSubjectType(teacherId, subjectMaterial.SubjectTypeId);
+            return subjectMaterial != null;
         }
     }
 }

@@ -143,7 +143,7 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
             //Image picture = new Image(ImageDataFactory.Create("wwwroot/images/girl.png"));
             //picture.ScaleToFit(100,150);
             //doc.Add(new Paragraph().Add(picture).SetHorizontalAlignment(HorizontalAlignment.RIGHT));
-            doc.Add(new Paragraph(Subject.GetFullName())).SetFont(defaultFont).SetFont(defaultFont);
+            doc.Add(new Paragraph(Subject.GetFullName())).SetFont(defaultFont);
             doc.Add(new Paragraph(String.Join(" + ", StudentGroupNames))).SetFont(defaultFont);
             doc.Add(new Paragraph($"Počet studentů: {Students.Length}")).SetFont(defaultFont);
             Text t = new Text($"Aktuální k: {DateTime.UtcNow.ToLocalTime()}");

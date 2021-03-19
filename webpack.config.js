@@ -25,10 +25,7 @@ module.exports = {
                 use: ["style-loader", "css-loader"],
                 exclude: /node_modules/
             },
-        ],
-       
-         
-        
+        ],        
     },
     plugins: [       
         new MomentLocalesPlugin({

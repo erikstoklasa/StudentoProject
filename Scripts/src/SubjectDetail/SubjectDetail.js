@@ -6,7 +6,7 @@ import StudentMaterial from './SubComponents/StudentMaterial'
 import AddGradePopup from './SubComponents/AddGradePopup'
 import './SubjectDetail.css'
 import moment from 'moment';
-  
+
   
 function SubjectDetail() {
     //initialize state
@@ -88,7 +88,7 @@ function SubjectDetail() {
 
     // fetch grades, subject info and student material(in the future)
     const fetchData = () => {
-        if (subjectId) {
+        if (subjectId) { 
             fetch(`${apiAddress}/SubjectInstances/Student/${subjectId}`, {
                 method: 'GET',
                 headers: {
@@ -120,9 +120,9 @@ function SubjectDetail() {
                     })                   
                     updateGrades(gradesWithDisplayValue)
                  })
-        }
+        }        
     }
-
+    
     //initialize effect hook chain
     useEffect(determineSubjectID, [])
     useEffect(fetchData, subjectId)

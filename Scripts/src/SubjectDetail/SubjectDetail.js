@@ -3,6 +3,7 @@ import apiAddress from './variables.js'
 import SubjectTitle from './SubComponents/SubjectTitle'
 import StudentGrades from './SubComponents/StudentGrades'
 import StudentMaterial from './SubComponents/StudentMaterial'
+import AddGradePopup from './SubComponents/AddGradePopup'
 import './SubjectDetail.css'
 import moment from 'moment';
 
@@ -11,9 +12,10 @@ function SubjectDetail() {
     //initialize state
     const [subjectId, updateSubjectId] = useState();
     const [subjectInfo, updateSubjectInfo] = useState();
-    const [studentAverage, updateAverage] = useState();
+    const [studentAverage, updateAverage] = useState();    
     const [grades, updateGrades] = useState();
     const [material, updateMaterial] = useState();
+    const [showAddPopup, updateShowAddPopup] = useState(false)
 
     //get subject instance id from url
     const determineSubjectID = () => { 
@@ -23,8 +25,8 @@ function SubjectDetail() {
     }
 
     //format grades from internal to display value
-    const getGradeDisplayValue = (grade) => {        
-        if (grade === 110) {
+    const getGradeDisplayValue = (grade) => {       
+        if (grade == 110) {
             return '1+'
         }
         if (grade === 100) {
@@ -115,8 +117,7 @@ function SubjectDetail() {
                     gradesWithDisplayValue.forEach(grade => {
                         Object.assign(grade, { addedRelative: moment(grade.added).locale('cs').fromNow() })
                         Object.assign(grade, {addedDisplay: moment(grade.added).format("L")})
-                    })
-                    console.log(gradesWithDisplayValue)
+                    })                   
                     updateGrades(gradesWithDisplayValue)
                  })
         }        
@@ -126,6 +127,69 @@ function SubjectDetail() {
     useEffect(determineSubjectID, [])
     useEffect(fetchData, subjectId)
 
+    //update state to display add grade popup
+    const showPopup = () => {
+        updateShowAddPopup(true)
+    }
+
+     //update state to hide add grade popup
+    const hidePopup = () => {
+        updateShowAddPopup(false)
+    }
+
+    //send a request to post student grade
+    const addStudentGrade = (name, value) => {        
+        const actualValue = 125 - (parseInt(value) * 25)
+        fetch(`${apiAddress}/Grades/Student`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'               
+            },
+            body: JSON.stringify({
+                value: actualValue,
+                name: name,
+                subjectInstanceId: subjectId
+            })
+        }).then(res => {
+            if (res.ok) {
+                return res.json()
+                }
+            }
+        ).then(
+            data => {
+                if (data) {
+                    Object.assign(data, {
+                        displayValue: getGradeDisplayValue(parseInt(data.value)),
+                        addedRelative: moment(data.added).locale('cs').fromNow(),
+                        addedDisplay: moment(data.added).format("L")
+                    })
+                    console.log(data)
+                    const newArr = [...grades, data]
+                    updateGrades(newArr)
+                }
+            }
+        )
+    }
+
+    const deleteStudentGrade = (id) => {      
+        const reqBody = [id];
+        fetch(`${apiAddress}/Grades/Student/Batch`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: JSON.stringify(reqBody)
+        })
+            .then(res => {
+            if (res.ok) {
+                const newArr = grades.filter(grade => grade.id != id)
+                updateGrades(newArr)
+                }
+            })
+            
+    }
+
     //display everything
     return (
         <div>
@@ -133,8 +197,9 @@ function SubjectDetail() {
             
             {grades && subjectInfo?
                 <div className="grades-material-container">
-                    <StudentGrades grades={grades} info={subjectInfo}/>
-                    <StudentMaterial material={material}/>                    
+                    <StudentGrades grades={grades} info={subjectInfo} showPopup={showPopup} deleteGrade={ deleteStudentGrade }/>
+                    <StudentMaterial material={material} />
+                    {showAddPopup ? <AddGradePopup addGrade={addStudentGrade} hidePopup={ hidePopup } /> : null}
                 </div>                
                 : null}
         </div>

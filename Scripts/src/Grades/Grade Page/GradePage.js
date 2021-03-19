@@ -385,8 +385,7 @@ const GradePage = () => {
                     {(bulkStudentData ? <h1 className="subject-heading">{bulkStudentData.name}</h1> : null)}
                     {(bulkGradeData ? <h2 className="subject-average-text">Průměr: <span className="average-header-number">{bigAverage}</span></h2> : null)}
                     {(bulkStudentData.students ? <div>{`${bulkStudentData.students.length} studentů`}</div> : null)}
-                </div>
-                      
+                </div>                      
            
                 <div className="empty-grade-table">
                     <div>Zatím žádní studenti</div>                  
@@ -413,13 +412,10 @@ const GradePage = () => {
                     {(orderedStudents ? <NewGradeColumn students={orderedStudents} trackNewGradeValues={trackNewGradeValues} removeNewGrade={removeNewGrade} handleSubmitNewGrades={handleSubmitNewGrades} /> : null)}
                     {(orderedStudents && orderedGrades && bulkGradeData ? <GradeDisplaySection orderedGrades={orderedGrades} orderedStudents={orderedStudents} bulkGradeData={bulkGradeData} modifyGrade={modifyGrade} /> : null)}
                     {(orderedStudents ? <FillerColumn students={orderedStudents} /> : null)}
-                  
-                </div>
-               
+                </div>               
             </div>
         )
     }
-
 }
 
 

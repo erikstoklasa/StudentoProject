@@ -1,5 +1,4 @@
-.subject-title-container{
-    
+.subject-title-container{    
     display: flex;
     flex-wrap: wrap;
 }
@@ -42,11 +41,10 @@
 
 .grade-info-container{
     margin: 15px 2% 15px 2%;
-    padding: 10px 3% 10px 3%;    
-    border: 1px solid lightgray;
-    border-radius: 5px;
-    overflow: hidden;
-    background-color: lightgray;    
+    padding: 10px 3% 10px 3%;     
+    overflow: hidden; 
+    border: solid 2px var(--primaryYellowStrong) !important;
+    border-radius: 10px;   
 }
 
 .grade-info-information-container{
@@ -88,6 +86,7 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
+   
 }
 
 .grade-info-name{
@@ -137,6 +136,70 @@
 
 .close-info-button{
     margin-left: auto !important;   
+}
+
+.add-grade-popup-container{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    right: 0;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    margin: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 5;
+}
+
+.popup-inner-container{
+    width: 100%;
+    max-width: 400px;
+    margin: 20px;   
+    background-color: white;
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;   
+}
+
+.popup-title-container{
+    padding:15px 15px 0px 15px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.popup-input-container{
+    margin: 20px 15px 0px 15px;
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.popup-title{
+    margin: 0;
+    color: var(--grey);
+}
+
+.number-input{
+    width: 100%;
+    max-width: 50px;
+    margin-left: 10px;
+   
+}
+
+.add-grade-div{
+    margin-top: 20px;
+    background: var(--primaryYellowStrong);
+    width: 100%;
+}
+
+.add-grade-text{
+    margin: 0px 0px 0px 0px;
+    padding: 10px 5px 10px 5px;
+    text-align: center;
 }
 
 .rm{

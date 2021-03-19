@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import apiAddress from '../variables'
 import '../SubjectDetail.css'
 
-const GradeRow = ({ grade, info }) => {    
+const GradeRow = ({ grade, info, type, deleteGrade }) => {    
     const [showDetail, updateShowDetail] = useState(false);
     
     //returns grades css class based on value
@@ -22,19 +22,7 @@ const GradeRow = ({ grade, info }) => {
         if (value >= -10 && value < 15) {
             return ' background-black text-light'
         }
-    } 
-
-    const deleteStudentGrade = () => {        
-        const reqBody = [grade.id];
-        fetch(`${apiAddress}/Grades/Student/Batch`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-                // 'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: JSON.stringify(reqBody)
-        })
-    }
+    }  
 
     if (!showDetail) {
         return (
@@ -72,7 +60,7 @@ const GradeRow = ({ grade, info }) => {
                     </div> 
                 </div>
                 <div className="close-button-container">
-                    <div class="btn btn-danger rm" onClick={() => { deleteStudentGrade() }}>Smazat</div>
+                    {type === 'studentGrades' ? <div class="btn btn-danger rm" onClick={() => { updateShowDetail(false); deleteGrade(grade.id) }}>Smazat</div> : null}
                     <div class="btn btn-primary" onClick={() => { updateShowDetail(false) }}>Zavřít</div>
                 </div>
             </div>

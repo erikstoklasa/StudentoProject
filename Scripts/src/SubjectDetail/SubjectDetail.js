@@ -162,9 +162,8 @@ function SubjectDetail() {
                         displayValue: getGradeDisplayValue(parseInt(data.value)),
                         addedRelative: moment(data.added).locale('cs').fromNow(),
                         addedDisplay: moment(data.added).format("L")
-                    })
-                    console.log(data)
-                    const newArr = [...grades, data]
+                    })                  
+                    const newArr = [data, ...grades]
                     updateGrades(newArr)
                 }
             }

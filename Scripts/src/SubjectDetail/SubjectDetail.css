@@ -202,6 +202,17 @@
     text-align: center;
 }
 
+.add-warning-container{
+    margin: 10px 0px 0px 0px
+    
+}
+
+.add-warning-text{
+    color: var(--pastelRed);
+    font-size: 0.85rem;
+    margin: 0px 15px -5px 15px;
+}
+
 .rm{
     margin-right: 10px;
 }

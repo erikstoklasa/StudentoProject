@@ -4,6 +4,7 @@ import '../SubjectDetail.css'
 const addGradePopup = ({ addGrade, hidePopup }) => {    
     const [gradeName, updateGradeName] = useState()
     const [gradeValue, updateGradeStateValue] = useState()
+    const [showWarning, updateShowWarning] = useState(false)
 
     useEffect(() => {
         document.body.style.overflow = 'hidden';
@@ -13,6 +14,10 @@ const addGradePopup = ({ addGrade, hidePopup }) => {
     const onAddClick = () => {        
         if (gradeName && gradeValue) {
             addGrade(gradeName, gradeValue)
+            if (showWarning) { updateShowWarning(false) }
+        }
+        else {
+           updateShowWarning(true)          
         }
     }
     
@@ -33,6 +38,9 @@ const addGradePopup = ({ addGrade, hidePopup }) => {
                     <input className="name-input form-control" placeholder="Test" value={gradeName} onChange={(event) => {updateGradeName(event.target.value)}}></input>
                     <input className="number-input form-control" type="number" placeholder="1" value={gradeValue} onChange={(event) => { updateGradeValue(event.target.value)} }></input>
                 </div>
+                { showWarning? <div className="add-warning-container">
+                    <p className="add-warning-text">Chybí údaje</p>
+                </div> : null}
                 <div className="add-grade-div">
                     <p className="add-grade-text" onClick={onAddClick}>Přidat</p>
                 </div>

@@ -28,6 +28,7 @@ namespace SchoolGradebook.Services
 					.Include(g => g.Value)
 					.Include(g => g.TeacherId)
 					.Include(g => g.Added)
+					.OrderByDescending(p => p.Added);
 					.AsNoTracking()
 					.FirstOrDefaultAsync();
 			return gradeAverage;

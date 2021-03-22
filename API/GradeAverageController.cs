@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using SchoolGradebook.Services;
+using SchoolGradebook.Models;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,7 +14,11 @@ namespace SchoolGradebook.API.GradeAverage
     [ApiController]
     public class GradeAverageController : ControllerBase
     {
-        //connections to grades so I can make repository commands - fields
+        
+
+        private readonly TeacherService teacherService;
+        private readonly GradeAverageService gradeAverageService;
+        private readonly GradeGroupService gradeGroupService;
 
 
         //constructor

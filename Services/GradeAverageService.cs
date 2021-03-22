@@ -33,22 +33,17 @@ namespace SchoolGradebook.Services
 			return gradeAverage;
 
 		}
-
+		/// <summary>
+        /// Adds a grade average for subject instance
+        /// </summary>
+        /// <param name="gradeAverage"></param>
+        /// <returns></returns>
 		public async Task AddGradeAverageForSubjectInstace(GradeAverage gradeAverage) { 
 
 
-			
-
-            //Grading scale is relative to the country of school
-            if (grade.GetInternalGradeValue() < -10 || grade.GetInternalGradeValue() > 110)
-            {
-                throw new ArgumentOutOfRangeException("Grade value");
-            }
-            grade.AddedBy = usertype;
-            await context.Grades.AddAsync(grade);
-
-            if (saveChanges)
+			await context.GradeAverages.AddAsync(gradeAverage);            
             await context.SaveChangesAsync();
+			//no necessary checks as this is internal calculation happening on previously verified data
 		}
 		
 

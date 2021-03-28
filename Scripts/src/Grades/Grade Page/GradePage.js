@@ -204,7 +204,25 @@ const GradePage = () => {
             return '5-'
         }        
     }
-  
+    
+    const getInternalGradeValue = (displayValue) => {
+        if (displayValue === '1+') return 110
+        if (displayValue === '1') return 100
+        if (displayValue === '1-') return 90
+        if (displayValue === '2+') return 85
+        if (displayValue === '2') return 75
+        if (displayValue === '2-') return 65
+        if(displayValue === '3+') return 60
+        if (displayValue === '3') return 50
+        if (displayValue === '3-') return 40
+        if (displayValue === '4+') return 35
+        if (displayValue === '4') return 25
+        if (displayValue === '4-') return 15
+        if (displayValue === '5+') return 10
+        if (displayValue === '5') return 0
+        if (displayValue === '5-') return -10
+        
+    }
   
     const modifyGrade = (gradeId, gradeValue, studentId, gradeName) => {        
         if (gradeId) {
@@ -227,7 +245,7 @@ const GradePage = () => {
             else {                
                 const reqBody = {
                     id: gradeId,
-                    value: 100 - ((gradeValue * 25) - 25),
+                    value: getInternalGradeValue(gradeValue),
                     subjectInstanceId: InstanceId,
                     studentId: studentId,
                     name: gradeName
@@ -265,7 +283,7 @@ const GradePage = () => {
         } else if (!gradeId) {          
             
             const reqBody = {
-                value: 100 - ((gradeValue * 25) - 25),
+                value: getInternalGradeValue(gradeValue),
                 subjectInstanceId: InstanceId,
                 studentId: studentId,
                 name: gradeName
@@ -297,7 +315,7 @@ const GradePage = () => {
     const trackNewGradeValues = (grade, id) => {
         
         const newGrade = {
-            value: 100 - ((parseInt(grade) * 25) - 25),
+            value: getInternalGradeValue(grade),
             subjectInstanceId: InstanceId,
             studentId: id,
         } 
@@ -310,7 +328,7 @@ const GradePage = () => {
             const newArr = [...newGrades]
             newArr.forEach(grade => {
                 if (grade.studentId === newGrade.studentId) {
-                    grade.value = 100 - ((newGrade.value * 25) - 25);
+                    grade.value = getInternalGradeValue(value);
                 }
             })
             updateNewGrades(newArr)

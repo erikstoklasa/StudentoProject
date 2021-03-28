@@ -22,7 +22,7 @@ const addGradePopup = ({ addGrade, hidePopup }) => {
     }
     
     const updateGradeValue = (value) => {
-        if (parseInt(value) > 0 && parseInt(value) < 6) {
+        if (parseInt(value) > 0 && parseInt(value) < 6 || value === '') {
             updateGradeStateValue(value)
         }
     }
@@ -36,7 +36,7 @@ const addGradePopup = ({ addGrade, hidePopup }) => {
                 </div>              
                 <div className="popup-input-container">               
                     <input className="name-input form-control" placeholder="Test" value={gradeName} onChange={(event) => {updateGradeName(event.target.value)}}></input>
-                    <input className="number-input form-control" type="number" placeholder="1" value={gradeValue} onChange={(event) => { updateGradeValue(event.target.value)} }></input>
+                    <input className="number-input form-control" placeholder="1" value={gradeValue} maxlength="2" onChange={(event) => { updateGradeValue(event.target.value)} }></input>
                 </div>
                 { showWarning? <div className="add-warning-container">
                     <p className="add-warning-text">Chybí údaje</p>

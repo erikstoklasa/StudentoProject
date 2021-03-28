@@ -28,7 +28,6 @@ const AddMaterialPopup = ({ upload, hidePopup }) => {
             })
         }
         if (type === 'file') {
-            console.log(data)
             Object.assign(newData[referenceId], {
                 materialFile: data
             })

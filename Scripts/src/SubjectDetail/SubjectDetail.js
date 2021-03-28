@@ -87,6 +87,25 @@ function SubjectDetail() {
         const formattedAverage = 5 - (average / 25)
         updateAverage(formattedAverage)
     }
+
+    const getInternalGradeValue = (displayValue) => {
+        if (displayValue === '1+') return 110
+        if (displayValue === '1') return 100
+        if (displayValue === '1-') return 90
+        if (displayValue === '2+') return 85
+        if (displayValue === '2') return 75
+        if (displayValue === '2-') return 65
+        if(displayValue === '3+') return 60
+        if (displayValue === '3') return 50
+        if (displayValue === '3-') return 40
+        if (displayValue === '4+') return 35
+        if (displayValue === '4') return 25
+        if (displayValue === '4-') return 15
+        if (displayValue === '5+') return 10
+        if (displayValue === '5') return 0
+        if (displayValue === '5-') return -10
+        
+    }
  
 
     const fetchMaterials = () => {
@@ -157,8 +176,7 @@ function SubjectDetail() {
         updateShowAddPopup(false)
     }
 
-    const uploadMaterials = (groupName, materials) => {
-        console.log('upload fired')
+    const uploadMaterials = (groupName, materials) => {        
         const materialList = [...materials]
         if (groupName) {
             fetch(`${apiAddress}/SubjectMaterials/Student/MaterialGroup?name=${groupName}`, {
@@ -185,8 +203,7 @@ function SubjectDetail() {
                         })
                     })
         } else {            
-            materialList.forEach(material => {
-                console.log('single fired')
+            materialList.forEach(material => {              
                 
                 const formData = new FormData();
                 formData.append('FormFile', material.materialFile, material.materialFile.name)
@@ -213,7 +230,7 @@ function SubjectDetail() {
 
     //send a request to post student grade
     const addStudentGrade = (name, value) => {        
-        const actualValue = 125 - (parseInt(value) * 25)
+        const actualValue = getInternalGradeValue(value)
         fetch(`${apiAddress}/Grades/Student`, {
             method: 'POST',
             headers: {

@@ -1,7 +1,7 @@
 import React from 'react'
 import apiAddress from '../variables'
 
-const MaterialView = ({ material, info }) => {  
+const MaterialView = ({ material, deleteMaterial, info }) => {  
 
     return (
         <div className="material-view-container">
@@ -13,7 +13,7 @@ const MaterialView = ({ material, info }) => {
                 </div>                
             </div>
             <div className="material-button-container">
-               
+                <div class="btn btn-danger rm" onClick={() => {deleteMaterial(material.id)}}>Smazat</div>
                 <a className="btn btn-primary" href={`/Student/Subjects/Materials/Details?id=${material.id}`}>Stáhnout</a>
             </div>
         </div>

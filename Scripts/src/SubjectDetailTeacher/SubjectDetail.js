@@ -3,8 +3,9 @@ import apiAddress from './variables.js'
 import SubjectTitle from './SubComponents/SubjectTitle'
 import StudentGrades from './SubComponents/StudentGrades'
 import StudentMaterial from './SubComponents/StudentMaterial'
-import AddGradePopup from './SubComponents/AddGradePopup'
+import AddMaterialPopup from './SubComponents/addMaterialPopup'
 import './SubjectDetail.css'
+import moment from 'moment';
   
 function SubjectDetail() {
     //initialize state
@@ -12,7 +13,8 @@ function SubjectDetail() {
     const [subjectInfo, updateSubjectInfo] = useState();
     const [studentAverage, updateAverage] = useState();   
     const [students, updateStudents] = useState();
-    const [material, updateMaterial] = useState();    
+    const [showMaterialPopup, updateShowMaterialPopup] = useState(false);
+    const [material, updateMaterials] = useState();    
 
     //get subject instance id from url
     const determineSubjectID = () => { 
@@ -84,8 +86,7 @@ function SubjectDetail() {
  
     
     // fetch grades, subject info and student material(in the future)
-    const fetchData = () => {
-        console.log('fetch data fired')
+    const fetchData = () => {        
         if (subjectId) { 
             fetch(`${apiAddress}/SubjectInstances/Teacher/${subjectId}`, {
                 method: 'GET',
@@ -100,6 +101,22 @@ function SubjectDetail() {
                 }
             )
         }              
+    }
+
+    const fetchMaterials = () => {
+        fetch(`${apiAddress}/SubjectMaterials/Teacher/Material?subjectInstanceId=1`)
+            .then(res => res.json())
+            .then(data => {
+                data.forEach(material => {
+                    const linkText = material.fileExt.substring(1);
+                    Object.assign(material, {
+                        addedRelative: moment(material.added).locale('cs').fromNow(),
+                        addedDisplay: moment(material.added).format("L"),
+                        link: linkText
+                    })
+                })
+                updateMaterials(data)
+            })
     }
 
     const fetchGrades = () => {
@@ -154,11 +171,63 @@ function SubjectDetail() {
             updateStudents(newStudents)
         }
     }
+
+    const uploadMaterials = (groupName, materials) => {   
+        const materialList = [...materials]
+        if (groupName) {
+            fetch(`${apiAddress}/SubjectMaterials/Teacher/MaterialGroup?name=${groupName}`, {
+                method: 'POST',
+            })
+                .then(res => res.json())
+                .then(
+                    data => {
+                        materialList.forEach(material => {
+                            Object.assign(material, { materialGroupId: data.id })
+                        })
+                        materialList.forEach(material => {
+                            const formData = new FormData();
+                            formData.append('FormFile', material.materialFile, material.materialFile.name)
+                            formData.append('Material.Name', material.materialName)
+                            formData.append('Material.Description', material.materialDescription)
+                            formData.append('Material.SubjectInstanceId', subjectId)
+                            formData.append('Material.SubjectMaterialGroupId', material.materialGroupId)                            
+                            fetch(`${apiAddress}/SubjectMaterials/Teacher/Material`, {
+                                method: 'POST',
+                                body: formData
+                            }).then(res => res.json())
+                                .then(data => { fetchMaterials() })
+                        })
+                    })
+        } else {            
+            materialList.forEach(material => {                             
+                const formData = new FormData();
+                formData.append('FormFile', material.materialFile, material.materialFile.name)
+                formData.append('Material.Name', material.materialName)
+                formData.append('Material.Description', material.materialDescription)
+                formData.append('Material.SubjectInstanceId', subjectId)                                          
+                fetch(`${apiAddress}/SubjectMaterials/Teacher/Material`, {
+                    method: 'POST',
+                    body: formData
+                }).then(res => res.json())
+                    .then(data => { fetchMaterials()})
+            })
+        }
+    }
+
+    const displayMaterialPopup = () => {
+        updateShowMaterialPopup(true)
+    }
+
+    const hideMaterialPopup = () => {
+        updateShowMaterialPopup(false)
+    }
     
     //initialize effect hook chain
     useEffect(determineSubjectID, [])
     useEffect(fetchData, subjectId)
+    useEffect(fetchMaterials, subjectId)
     useEffect(fetchGrades, students)
+    
 
     //display everything
     return (
@@ -166,13 +235,13 @@ function SubjectDetail() {
             {subjectInfo && studentAverage ? <SubjectTitle info={subjectInfo} average={studentAverage} /> : null}            
             {students && subjectInfo?
                 <div className="grades-material-container">
-                    <StudentGrades students={students} info={subjectInfo}/>
-                    <StudentMaterial material={material} />                   
+                    <StudentGrades students={students} info={subjectInfo} />
+                    <StudentMaterial material={material} info={subjectInfo} showPopup={displayMaterialPopup}/>
                 </div>                
             : null}
             <a href="/Teacher">Všechny předměty</a>
-        </div>
-        
+            { showMaterialPopup ? <AddMaterialPopup upload={uploadMaterials} hidePopup={ hideMaterialPopup}/> : null}
+        </div>        
     );
 }
 

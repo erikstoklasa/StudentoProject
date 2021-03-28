@@ -15,6 +15,7 @@ namespace SchoolGradebook.Models
         public int SubjectInstanceId { get; set; }
         public double Value { get; private set; } //For table in the db
         public int TeacherId { get; set; }
+        public int StudentId { get; set; }
         public DateTime Added { get; set; }
 
     }

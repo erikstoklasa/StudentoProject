@@ -23,12 +23,14 @@ namespace SchoolGradebook.Services
 
 			GradeAverage gradeAverage = await context.GradeAverages
 					.Where(s => s.SubjectInstanceId == subjectInstanceId)
+					.Where(s => s.StudentId == -1);
 					.Include(g => g.Id)
 					.Include(g => g.SubjectInstanceId)
 					.Include(g => g.Value)
 					.Include(g => g.TeacherId)
+					.Include(g => g.StudentId)
 					.Include(g => g.Added)
-					.OrderByDescending(p => p.Added);
+					.OrderByDescending(p => p.Added)
 					.AsNoTracking()
 					.FirstOrDefaultAsync();
 			return gradeAverage;
@@ -45,6 +47,29 @@ namespace SchoolGradebook.Services
 			await context.GradeAverages.AddAsync(gradeAverage);            
             await context.SaveChangesAsync();
 			//no necessary checks as this is internal calculation happening on previously verified data
+		}
+
+		public async Task<GradeAverage> getGradeAverageForStudent(int subjectInstanceId, int studentId) {
+	
+			GradeAverage gradeAverage = await context.GradeAverages
+				.Where(s => s.SubjectInstanceId == subjectInstanceId)
+				.Where(s => s.TeacherId == -1)
+				.Include(g => g.Id)
+				.Include(g => g.SubjectInstanceId)
+				.Include(g => g.Value)
+				.Include(g => g.TeacherId)
+				.Include(g => g.StudentId)
+				.Include(g => g.Added)
+				.OrderByDescending(p => p.Added)
+				.AsNoTracking()
+				.FirstOrDefaultAsync();
+			return gradeAverage;
+	
+	
+	
+	
+	
+	
 		}
 		
 

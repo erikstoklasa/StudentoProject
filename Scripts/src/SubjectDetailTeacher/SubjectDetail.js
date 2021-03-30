@@ -252,4 +252,4 @@ function SubjectDetail() {
     );
 }
 
-export default SubjectDetail;
+export default SubjectDetail

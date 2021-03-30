@@ -14,65 +14,65 @@ function SubjectDetail() {
     //initialize state
     const [subjectId, updateSubjectId] = useState();
     const [subjectInfo, updateSubjectInfo] = useState();
-    const [studentAverage, updateAverage] = useState();    
+    const [studentAverage, updateAverage] = useState();
     const [grades, updateGrades] = useState();
     const [showMaterialPopup, updateShowMaterialPopup] = useState(false);
-    const [material, updateMaterials] = useState();    
+    const [material, updateMaterials] = useState();
     const [showAddPopup, updateShowAddPopup] = useState(false)
 
     //get subject instance id from url
-    const determineSubjectID = () => { 
+    const determineSubjectID = () => {
         const location = window.location.href
         const subjectId = location.split("Details?id=").pop()
         updateSubjectId(subjectId)
     }
 
     //format grades from internal to display value
-    const getGradeDisplayValue = (grade) => {       
+    const getGradeDisplayValue = (grade) => {
         if (grade == 110) {
             return '1+'
         }
         if (grade === 100) {
             return 1
         }
-        if (grade === 90) { 
+        if (grade === 90) {
             return '1-'
         }
         if (grade === 85) {
             return '2+'
         }
-        if (grade === 75) { 
+        if (grade === 75) {
             return 2
         }
-        if (grade === 65) { 
+        if (grade === 65) {
             return '2-'
         }
         if (grade === 60) {
             return '3+'
         }
-        if (grade === 50) { 
+        if (grade === 50) {
             return 3
         }
-        if (grade === 40) { 
+        if (grade === 40) {
             return '3-'
         }
         if (grade === 35) {
             return '4+'
         }
-        if (grade === 25) { 
+        if (grade === 25) {
             return 4
         }
-        if (grade === 15) { 
+        if (grade === 15) {
             return '4-'
         }
         if (grade === 10) {
             return '5+'
         }
-        if (grade === 0) { 
+        if (grade === 0) {
             return 5
-        }        if (grade === -10) { 
+        } if (grade === -10) {
             return '5-'
-        }        
+        }
     }
 
     //calculate student average from internal value, then store it in state
@@ -83,7 +83,7 @@ function SubjectDetail() {
             sum = sum + parseInt(grade.value)
           
         });
-        const average = sum / gradeNum      
+        const average = sum / gradeNum
         const formattedAverage = 5 - (average / 25)
         updateAverage(formattedAverage)
     }
@@ -95,7 +95,7 @@ function SubjectDetail() {
         if (displayValue === '2+') return 85
         if (displayValue === '2') return 75
         if (displayValue === '2-') return 65
-        if(displayValue === '3+') return 60
+        if (displayValue === '3+') return 60
         if (displayValue === '3') return 50
         if (displayValue === '3-') return 40
         if (displayValue === '4+') return 35
@@ -126,7 +126,7 @@ function SubjectDetail() {
 
     // fetch grades, subject info and student material(in the future)
     const fetchData = () => {
-        if (subjectId) { 
+        if (subjectId) {
             fetch(`${apiAddress}/SubjectInstances/Student/${subjectId}`, {
                 method: 'GET',
                 headers: {
@@ -154,11 +154,11 @@ function SubjectDetail() {
                     })
                     gradesWithDisplayValue.forEach(grade => {
                         Object.assign(grade, { addedRelative: moment(grade.added).locale('cs').fromNow() })
-                        Object.assign(grade, {addedDisplay: moment(grade.added).format("L")})
-                    })                   
+                        Object.assign(grade, { addedDisplay: moment(grade.added).format("L") })
+                    })
                     updateGrades(gradesWithDisplayValue)
-                 })
-        }        
+                })
+        }
     }
     
     //initialize effect hook chain
@@ -171,12 +171,12 @@ function SubjectDetail() {
         updateShowAddPopup(true)
     }
 
-     //update state to hide add grade popup
+    //update state to hide add grade popup
     const hidePopup = () => {
         updateShowAddPopup(false)
     }
 
-    const uploadMaterials = (groupName, materials) => {        
+    const uploadMaterials = (groupName, materials) => {
         const materialList = [...materials]
         if (groupName) {
             fetch(`${apiAddress}/SubjectMaterials/Student/MaterialGroup?name=${groupName}`, {
@@ -194,16 +194,16 @@ function SubjectDetail() {
                             formData.append('Material.Name', material.materialName)
                             formData.append('Material.Description', material.materialDescription)
                             formData.append('Material.SubjectInstanceId', subjectId)
-                            formData.append('Material.SubjectMaterialGroupId', material.materialGroupId)                            
+                            formData.append('Material.SubjectMaterialGroupId', material.materialGroupId)
                             fetch(`${apiAddress}/SubjectMaterials/Student/Material`, {
                                 method: 'POST',
                                 body: formData
                             }).then(res => res.json())
-                                .then(data => {fetchMaterials()})
+                                .then(data => { fetchMaterials() })
                         })
                     })
-        } else {            
-            materialList.forEach(material => {              
+        } else {
+            materialList.forEach(material => {
                 
                 const formData = new FormData();
                 formData.append('FormFile', material.materialFile, material.materialFile.name)
@@ -215,95 +215,95 @@ function SubjectDetail() {
                     method: 'POST',
                     body: formData
                 }).then(res => res.json())
-                    .then(data => { fetchMaterials()})
+                    .then(data => { fetchMaterials() })
             })
         }
     }
 
     const deleteMaterial = (id) => {
         fetch(`${apiAddress}/SubjectMaterials/Student/Material?subjectMaterialId=${id}`, {
-            method: 'DELETE'           
+            method: 'DELETE'
         }).then(res => {
-            
-                fetchMaterials()
+            fetchMaterials()
         })
             
 
-    const displayMaterialPopup = () => {
-        updateShowMaterialPopup(true)
-    }
+        const displayMaterialPopup = () => {
+            updateShowMaterialPopup(true)
+        }
 
-    const hideMaterialPopup = () => {
-        updateShowMaterialPopup(false)
-    }
+        const hideMaterialPopup = () => {
+            updateShowMaterialPopup(false)
+        }
 
-    //send a request to post student grade
-    const addStudentGrade = (name, value) => {        
-        const actualValue = getInternalGradeValue(value)
-        fetch(`${apiAddress}/Grades/Student`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'               
-            },
-            body: JSON.stringify({
-                value: actualValue,
-                name: name,
-                subjectInstanceId: subjectId
-            })
-        }).then(res => {
-            if (res.ok) {
-                return res.json()
+        //send a request to post student grade
+        const addStudentGrade = (name, value) => {
+            const actualValue = getInternalGradeValue(value)
+            fetch(`${apiAddress}/Grades/Student`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    value: actualValue,
+                    name: name,
+                    subjectInstanceId: subjectId
+                })
+            }).then(res => {
+                if (res.ok) {
+                    return res.json()
                 }
             }
-        ).then(
-            data => {
-                if (data) {
-                    Object.assign(data, {
-                        displayValue: getGradeDisplayValue(parseInt(data.value)),
-                        addedRelative: moment(data.added).locale('cs').fromNow(),
-                        addedDisplay: moment(data.added).format("L")
-                    })                  
-                    const newArr = [data, ...grades]
-                    updateGrades(newArr)
+            ).then(
+                data => {
+                    if (data) {
+                        Object.assign(data, {
+                            displayValue: getGradeDisplayValue(parseInt(data.value)),
+                            addedRelative: moment(data.added).locale('cs').fromNow(),
+                            addedDisplay: moment(data.added).format("L")
+                        })
+                        const newArr = [data, ...grades]
+                        updateGrades(newArr)
+                    }
                 }
-            }
-        )
-    }
+            )
+        }
 
-    const deleteStudentGrade = (id) => {      
-        const reqBody = [id];
-        fetch(`${apiAddress}/Grades/Student/Batch`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-                // 'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: JSON.stringify(reqBody)
-        })
-            .then(res => {
-            if (res.ok) {
-                const newArr = grades.filter(grade => grade.id != id)
-                updateGrades(newArr)
-                }
+        const deleteStudentGrade = (id) => {
+            const reqBody = [id];
+            fetch(`${apiAddress}/Grades/Student/Batch`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: JSON.stringify(reqBody)
             })
+                .then(res => {
+                    if (res.ok) {
+                        const newArr = grades.filter(grade => grade.id != id)
+                        updateGrades(newArr)
+                    }
+                })
             
-    }
+        }
 
-    //display everything
-    return (
-        <div>
-            {subjectInfo && studentAverage ? <SubjectTitle info={subjectInfo} average={studentAverage} /> : null}
+        //display everything
+        return (
+            <div>
+                {subjectInfo && studentAverage ? <SubjectTitle info={subjectInfo} average={studentAverage} /> : null}
             
-            {grades && subjectInfo?
-                <div className="grades-material-container">
-                    <StudentGrades grades={grades} info={subjectInfo} showPopup={showPopup} deleteGrade={ deleteStudentGrade }/>
-                    <StudentMaterial material={material} showPopup={displayMaterialPopup} deleteMaterial={ deleteMaterial}/>
-                    {showAddPopup ? <AddGradePopup addGrade={addStudentGrade} hidePopup={ hidePopup } /> : null}
-                </div>                
-                : null}
-              { showMaterialPopup ? <AddMaterialPopup upload={uploadMaterials} hidePopup={ hideMaterialPopup}/> : null}
-        </div>
-    );
+                {grades && subjectInfo ?
+                    <div className="grades-material-container">
+                        <StudentGrades grades={grades} info={subjectInfo} showPopup={showPopup} deleteGrade={deleteStudentGrade} />
+                        <StudentMaterial material={material} showPopup={displayMaterialPopup} deleteMaterial={deleteMaterial} />
+                        {showAddPopup ? <AddGradePopup addGrade={addStudentGrade} hidePopup={hidePopup} /> : null}
+                    </div>
+                    : null}
+                { showMaterialPopup ? <AddMaterialPopup upload={uploadMaterials} hidePopup={hideMaterialPopup} /> : null}
+            </div>
+        );
+    }
 }
 
-export default SubjectDetail;
+export default SubjectDetail

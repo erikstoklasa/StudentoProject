@@ -145,7 +145,8 @@ namespace SchoolGradebook.API.SubjectMaterials
                             FileType = MimeTypeMap.GetMimeType(fileExt),
                             SubjectTypeId = formFileObject.Material.SubjectTypeId,
                             SubjectMaterialGroupId = formFileObject.Material.SubjectMaterialGroupId,
-                            AddedById = teacherId
+                            AddedById = teacherId,
+                            SubjectInstanceId = formFileObject.Material.SubjectInstanceId
                         };
                 bool successfullyAdded = await subjectMaterialService.AddMaterialAsync(toAdd);
                 if (!successfullyAdded)

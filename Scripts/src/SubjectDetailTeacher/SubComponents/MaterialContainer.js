@@ -1,10 +1,10 @@
 import React from 'react'
 import MaterialView from './MaterialView'
 
-const MaterialContainer = ({ materials, info }) => {
+const MaterialContainer = ({ materials, deleteMaterial, info }) => {
     
     const materialsList = materials.map(material => {
-        return <MaterialView material={ material } info={ info }/>
+        return <MaterialView material={material} info={info} deleteMaterial={ deleteMaterial}/>
     })
 
     return (

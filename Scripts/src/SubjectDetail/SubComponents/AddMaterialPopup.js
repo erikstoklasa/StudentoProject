@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import InputMaterialList from './InputMaterialList'
 
 
@@ -14,6 +14,10 @@ const AddMaterialPopup = ({ upload, hidePopup }) => {
             materialFile: null
         }
     ])
+        useEffect(() => {
+            document.body.style.overflow = 'hidden';
+            return ()=> document.body.style.overflow = 'unset';
+        }, []);
     
     const trackInputData = (referenceId, data , type) => {
         const newData = [...inputData]        

@@ -220,6 +220,15 @@ function SubjectDetail() {
         }
     }
 
+    const deleteMaterial = (id) => {
+        fetch(`${apiAddress}/SubjectMaterials/Student/Material?subjectMaterialId=${id}`, {
+            method: 'DELETE'           
+        }).then(res => {
+            
+                fetchMaterials()
+        })
+            
+
     const displayMaterialPopup = () => {
         updateShowMaterialPopup(true)
     }
@@ -288,7 +297,7 @@ function SubjectDetail() {
             {grades && subjectInfo?
                 <div className="grades-material-container">
                     <StudentGrades grades={grades} info={subjectInfo} showPopup={showPopup} deleteGrade={ deleteStudentGrade }/>
-                    <StudentMaterial material={material} showPopup={displayMaterialPopup}/>
+                    <StudentMaterial material={material} showPopup={displayMaterialPopup} deleteMaterial={ deleteMaterial}/>
                     {showAddPopup ? <AddGradePopup addGrade={addStudentGrade} hidePopup={ hidePopup } /> : null}
                 </div>                
                 : null}

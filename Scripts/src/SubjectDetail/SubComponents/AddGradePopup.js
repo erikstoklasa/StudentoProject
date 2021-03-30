@@ -14,6 +14,7 @@ const addGradePopup = ({ addGrade, hidePopup }) => {
     const onAddClick = () => {        
         if (gradeName && gradeValue) {
             addGrade(gradeName, gradeValue)
+            hidePopup()
             if (showWarning) { updateShowWarning(false) }
         }
         else {

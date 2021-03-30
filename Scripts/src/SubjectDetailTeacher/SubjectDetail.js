@@ -104,7 +104,7 @@ function SubjectDetail() {
     }
 
     const fetchMaterials = () => {
-        fetch(`${apiAddress}/SubjectMaterials/Teacher/Material?subjectInstanceId=1`)
+        fetch(`${apiAddress}/SubjectMaterials/Teacher/Material?subjectInstanceId=${subjectId}`)
             .then(res => res.json())
             .then(data => {
                 data.forEach(material => {

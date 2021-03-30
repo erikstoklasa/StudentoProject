@@ -12,7 +12,7 @@ const SubjectTitle = ({ info, average }) => {
                     <h4>{`${info.teacher.firstName} ${info.teacher.lastName}`}</h4>
                 </div>
                 <div className="average-container ">
-                    <h3>{`Průměr: `}<b>{average.toFixed(2)}</b></h3>
+                    {isNaN(average) ? null : <h3>{`Průměr: `}<b>{average.toFixed(2)}</b></h3>}
                 </div>
             </div>
         )

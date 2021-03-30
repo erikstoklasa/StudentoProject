@@ -5,7 +5,6 @@ import StudentGrades from './SubComponents/StudentGrades'
 import StudentMaterial from './SubComponents/StudentMaterial'
 import AddGradePopup from './SubComponents/AddGradePopup'
 import AddMaterialPopup from './SubComponents/addMaterialPopup'
-
 import './SubjectDetail.css'
 import moment from 'moment';
 
@@ -24,6 +23,7 @@ function SubjectDetail() {
     const determineSubjectID = () => {
         const location = window.location.href
         const subjectId = location.split("Details?id=").pop()
+        
         updateSubjectId(subjectId)
     }
 
@@ -109,7 +109,7 @@ function SubjectDetail() {
  
 
     const fetchMaterials = () => {
-        fetch(`${apiAddress}/SubjectMaterials/Student/Material?subjectInstanceId=1`)
+        fetch(`${apiAddress}/SubjectMaterials/Student/Material?subjectInstanceId=${subjectId}`)
             .then(res => res.json())
             .then(data => {
                 data.forEach(material => {
@@ -225,85 +225,87 @@ function SubjectDetail() {
             method: 'DELETE'
         }).then(res => {
             fetchMaterials()
-        })
-            
+        }) 
+        
+    }
 
-        const displayMaterialPopup = () => {
-            updateShowMaterialPopup(true)
+    const displayMaterialPopup = () => {
+        updateShowMaterialPopup(true)
+    }
+
+    const hideMaterialPopup = () => {
+        updateShowMaterialPopup(false)
+    }
+
+    //send a request to post student grade
+    const addStudentGrade = (name, value) => {
+        const actualValue = getInternalGradeValue(value)
+        fetch(`${apiAddress}/Grades/Student`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                value: actualValue,
+                name: name,
+                subjectInstanceId: subjectId
+            })
+        }).then(res => {
+            if (res.ok) {
+                return res.json()
+            }
         }
-
-        const hideMaterialPopup = () => {
-            updateShowMaterialPopup(false)
-        }
-
-        //send a request to post student grade
-        const addStudentGrade = (name, value) => {
-            const actualValue = getInternalGradeValue(value)
-            fetch(`${apiAddress}/Grades/Student`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    value: actualValue,
-                    name: name,
-                    subjectInstanceId: subjectId
-                })
-            }).then(res => {
-                if (res.ok) {
-                    return res.json()
+        ).then(
+            data => {
+                if (data) {
+                    Object.assign(data, {
+                        displayValue: getGradeDisplayValue(parseInt(data.value)),
+                        addedRelative: moment(data.added).locale('cs').fromNow(),
+                        addedDisplay: moment(data.added).format("L")
+                    })
+                    const newArr = [data, ...grades]
+                    updateGrades(newArr)
                 }
             }
-            ).then(
-                data => {
-                    if (data) {
-                        Object.assign(data, {
-                            displayValue: getGradeDisplayValue(parseInt(data.value)),
-                            addedRelative: moment(data.added).locale('cs').fromNow(),
-                            addedDisplay: moment(data.added).format("L")
-                        })
-                        const newArr = [data, ...grades]
-                        updateGrades(newArr)
-                    }
-                }
-            )
-        }
-
-        const deleteStudentGrade = (id) => {
-            const reqBody = [id];
-            fetch(`${apiAddress}/Grades/Student/Batch`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                    // 'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: JSON.stringify(reqBody)
-            })
-                .then(res => {
-                    if (res.ok) {
-                        const newArr = grades.filter(grade => grade.id != id)
-                        updateGrades(newArr)
-                    }
-                })
-            
-        }
-
-        //display everything
-        return (
-            <div>
-                {subjectInfo && studentAverage ? <SubjectTitle info={subjectInfo} average={studentAverage} /> : null}
-            
-                {grades && subjectInfo ?
-                    <div className="grades-material-container">
-                        <StudentGrades grades={grades} info={subjectInfo} showPopup={showPopup} deleteGrade={deleteStudentGrade} />
-                        <StudentMaterial material={material} showPopup={displayMaterialPopup} deleteMaterial={deleteMaterial} />
-                        {showAddPopup ? <AddGradePopup addGrade={addStudentGrade} hidePopup={hidePopup} /> : null}
-                    </div>
-                    : null}
-                { showMaterialPopup ? <AddMaterialPopup upload={uploadMaterials} hidePopup={hideMaterialPopup} /> : null}
-            </div>
-        );
+        )
     }
+
+    const deleteStudentGrade = (id) => {
+        const reqBody = [id];
+        fetch(`${apiAddress}/Grades/Student/Batch`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: JSON.stringify(reqBody)
+        })
+            .then(res => {
+                if (res.ok) {
+                    const newArr = grades.filter(grade => grade.id != id)
+                    updateGrades(newArr)
+                }
+            })
+        
+    }
+
+
+
+       //display everything
+    return (
+        <div>
+            {subjectInfo ? <SubjectTitle info={subjectInfo} average={studentAverage} /> : null}
+        
+            {grades && subjectInfo ?
+                <div className="grades-material-container">
+                    <StudentGrades grades={grades} info={subjectInfo} showPopup={showPopup} deleteGrade={deleteStudentGrade} />
+                    <StudentMaterial material={material} showPopup={displayMaterialPopup} deleteMaterial={deleteMaterial} />
+                    {showAddPopup ? <AddGradePopup addGrade={addStudentGrade} hidePopup={hidePopup} /> : null}
+                </div>
+                : null}
+            { showMaterialPopup ? <AddMaterialPopup upload={uploadMaterials} hidePopup={hideMaterialPopup} /> : null}
+        </div>
+    );
 }
 
 export default SubjectDetail

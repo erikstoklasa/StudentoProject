@@ -149,7 +149,7 @@
 .add-selection-container{
     display: flex;
     justify-content: space-around;
-    margin: 10px 0px 10px 0px;
+    margin: 20px 0px 0px 0px;
 }
 
 .add-group-container{
@@ -167,7 +167,7 @@
 }
 
 .popup-inner-padding{
-    padding:15px 15px 5px 15px;
+    padding:15px 15px 15px 15px;
 }
 
 .popup-title-container{
@@ -216,6 +216,10 @@
 .next-material-button{
     padding: 0.4rem 0.7rem !important;
     width: 100% !important;
+}
+
+.pointer{
+    cursor: pointer;
 }
 
 .mr5{

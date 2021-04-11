@@ -2,9 +2,6 @@ import React from 'react'
 import MaterialContainer from './MaterialContainer'
 
 const StudentMaterial = ({ material, deleteMaterial, info, showPopup}) => {
-
-  
-
     return (       
         <div class="student-material-container">
             <div className="student-heading-container">

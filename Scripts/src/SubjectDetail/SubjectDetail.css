@@ -80,6 +80,7 @@
     white-space: nowrap;
     margin-top: auto;
     margin-bottom: auto;
+    cursor: pointer;
 }
 
 .grade-name-container{
@@ -165,16 +166,15 @@
     overflow: hidden;   
 }
 
-.popup-title-container{
-    padding:15px 15px 0px 15px;
+.popup-title-container{   
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.popup-input-container{
-    margin: 20px 15px 0px 15px;
+.popup-input-container{  
+    margin: 20px 0px 10px 0px; 
     display: flex;
     flex-wrap: nowrap;
 }
@@ -197,21 +197,11 @@
     width: 100%;
 }
 
-.add-grade-text{
-    margin: 0px 0px 0px 0px;
-    padding: 10px 5px 10px 5px;
-    text-align: center;
-}
-
-.add-warning-container{
-    margin: 10px 0px 0px 0px
-    
-}
 
 .add-warning-text{
     color: var(--pastelRed);
     font-size: 0.85rem;
-    margin: 0px 15px -5px 15px;
+    margin: 0px 0px 10px 0px;
 }
 
 .rm{
@@ -265,7 +255,7 @@
 .add-selection-container{
     display: flex;
     justify-content: space-around;
-    margin: 10px 0px 10px 0px;
+    margin: 20px 0px 0px 0px;
 }
 
 .add-group-container{
@@ -283,7 +273,7 @@
 }
 
 .popup-inner-padding{
-    padding:15px 15px 5px 15px;
+    padding:15px 15px 15px 15px;
 }
 
 .material-popup-title-container{
@@ -321,11 +311,11 @@
 .add-material-div{   
     background: var(--primaryYellowStrong);
     width: 100%;
+    margin: 10px;
 }
 
 .add-grade-text{
-    margin: 0px 0px 0px 0px;
-    padding: 10px 5px 10px 5px;
+    margin: 0px 0px 0px 0px;   
     text-align: center;
 }
 
@@ -344,6 +334,10 @@
 
 .mb10{
     margin-bottom: 10px;
+}
+
+.pointer{
+    cursor: pointer;
 }
 
 .student-heading-container{

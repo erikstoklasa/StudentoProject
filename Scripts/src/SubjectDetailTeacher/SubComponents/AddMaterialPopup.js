@@ -57,7 +57,7 @@ const AddMaterialPopup = ({ upload, hidePopup }) => {
                 <div className="popup-inner-padding">
                 <div className="popup-title-container">
                     <h4 className="popup-title">{headingText}</h4>
-                        <img src="/images/close.svg" alt="zavřít" height="25px" onClick={() => { hidePopup()}}></img>
+                        <img className="pointer" src="/images/close.svg" alt="zavřít" height="25px" onClick={() => { hidePopup()}}></img>
                 </div> 
                 {currentDisplay === 'selection' ?
                     <div className="add-selection-container">
@@ -77,12 +77,11 @@ const AddMaterialPopup = ({ upload, hidePopup }) => {
                     <InputMaterialList data={inputData} trackInputData={trackInputData} type={'single'}/>                
                 </div>
                 : null}
-                </div>
                 {currentDisplay !== 'selection' ?
-                    <div className="add-grade-div" onClick={handleUploadClick}>
-                        <p className="add-grade-text" >Přidat</p>
-                    </div>
-                : null}
+                    <button className="btn btn-primary next-material-button" onClick={handleUploadClick}>Přidat</button>
+                    : null}  
+                </div>
+               
             </div>           
         </div>
     )

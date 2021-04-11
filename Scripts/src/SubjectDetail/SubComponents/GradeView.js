@@ -1,8 +1,7 @@
 import React from 'react'
 import GradeRow from './GradeRow'
 
-const GradeView = ({ grades, info, type, deleteGrade }) => {
-    console.log(grades.length)
+const GradeView = ({ grades, info, type, deleteGrade }) => {  
  
     //create an html element for each grade recieved in props, put them into an array
     const gradeList = grades.map(grade => { 

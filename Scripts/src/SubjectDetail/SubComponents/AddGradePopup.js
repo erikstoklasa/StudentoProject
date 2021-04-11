@@ -22,28 +22,36 @@ const addGradePopup = ({ addGrade, hidePopup }) => {
         }
     }
     
-    const updateGradeValue = (value) => {
-        if (parseInt(value) > 0 && parseInt(value) < 6 || value === '') {
-            updateGradeStateValue(value)
-        }
+    const updateGradeValue = (value) => {      
+        if (value.length === 1) {
+            if (parseInt(value) > 0 && parseInt(value) < 6) {
+                updateGradeStateValue(value)
+            }
+        } else if (value.length === 2) {
+            if (value.charAt(1) === '+' || value.charAt(1) === '-' || value.charAt(0) === '1' && value.charAt(1) === '*') {
+                updateGradeStateValue(value)
+            }
+        } else if (value === '') {
+            updateGradeStateValue('')
+        }   
     }
 
     return (
         <div className="add-grade-popup-container">
             <div className="popup-inner-container">
-                <div className="popup-title-container">
-                    <h4 className="popup-title">Nová známka</h4>
-                    <img src="/images/close.svg" alt="zavřít" height="25px" onClick={() => { hidePopup()}}></img>
-                </div>              
-                <div className="popup-input-container">               
-                    <input className="name-input form-control" placeholder="Test" value={gradeName} onChange={(event) => {updateGradeName(event.target.value)}}></input>
-                    <input className="number-input form-control" placeholder="1" value={gradeValue} maxlength="2" onChange={(event) => { updateGradeValue(event.target.value)} }></input>
-                </div>
-                { showWarning? <div className="add-warning-container">
-                    <p className="add-warning-text">Chybí údaje</p>
-                </div> : null}
-                <div className="add-grade-div">
-                    <p className="add-grade-text" onClick={onAddClick}>Přidat</p>
+                <div className="popup-inner-padding">
+                    <div className="popup-title-container">
+                        <h4 className="popup-title">Nová známka</h4>
+                        <img className="pointer" src="/images/close.svg" alt="zavřít" height="25px" onClick={() => { hidePopup()}}></img>
+                    </div>              
+                    <div className="popup-input-container">               
+                        <input className="name-input form-control" placeholder="Test" value={gradeName} onChange={(event) => {updateGradeName(event.target.value)}}></input>
+                        <input className="number-input form-control" placeholder="1" value={gradeValue} maxlength="2" onChange={(event) => { updateGradeValue(event.target.value)} }></input>
+                    </div>
+                    { showWarning? 
+                        <p className="add-warning-text">Chybí údaje</p>
+                   : null}
+                        <button className="btn btn-primary next-material-button" onClick={onAddClick}>Přidat</button>
                 </div>
             </div>
         </div>

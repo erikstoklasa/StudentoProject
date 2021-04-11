@@ -9,19 +9,14 @@ import moment from 'moment';
   
 function SubjectDetail() {
     //initialize state
-    const [subjectId, updateSubjectId] = useState();
+    const [subjectId, updateSubjectId] = useState(window.location.href.split("Details?id=").pop());
     const [subjectInfo, updateSubjectInfo] = useState();
     const [studentAverage, updateAverage] = useState();   
     const [students, updateStudents] = useState();
     const [showMaterialPopup, updateShowMaterialPopup] = useState(false);
     const [material, updateMaterials] = useState();    
 
-    //get subject instance id from url
-    const determineSubjectID = () => { 
-        const location = window.location.href
-        const subjectId = location.split("Details?id=").pop()
-        updateSubjectId(subjectId)
-    }
+   
 
     //format grades from internal to display value
     const getGradeDisplayValue = (grade) => {       
@@ -115,7 +110,11 @@ function SubjectDetail() {
                         link: linkText
                     })
                 })
-                updateMaterials(data)
+                if (data.length > 0) {
+                    updateMaterials(data)
+                }else {
+                    updateMaterials(null)
+                }   
             })
     }
 
@@ -229,8 +228,7 @@ function SubjectDetail() {
         updateShowMaterialPopup(false)
     }
     
-    //initialize effect hook chain
-    useEffect(determineSubjectID, [])
+    //initialize effect hook chain    
     useEffect(fetchData, subjectId)
     useEffect(fetchMaterials, subjectId)
     useEffect(fetchGrades, students)

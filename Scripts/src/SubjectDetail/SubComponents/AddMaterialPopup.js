@@ -31,8 +31,7 @@ const AddMaterialPopup = ({ upload, hidePopup }) => {
                 materialDescription: data
             })
         }
-        if (type === 'file') {
-            console.log(data)
+        if (type === 'file') {            
             Object.assign(newData[referenceId], {
                 materialFile: data
             })
@@ -62,7 +61,7 @@ const AddMaterialPopup = ({ upload, hidePopup }) => {
                 <div className="popup-inner-padding">
                 <div className="material-popup-title-container">
                     <h4 className="popup-title">{headingText}</h4>
-                        <img src="/images/close.svg" alt="zavřít" height="25px" onClick={() => { hidePopup()}}></img>
+                        <img className="pointer" src="/images/close.svg" alt="zavřít" height="25px" onClick={() => { hidePopup()}}></img>
                 </div> 
                 {currentDisplay === 'selection' ?
                     <div className="add-selection-container">
@@ -78,16 +77,14 @@ const AddMaterialPopup = ({ upload, hidePopup }) => {
                     </div>
                     : null}
                 {currentDisplay === 'material-single' ?
-                <div className="add-group-container">               
-                    <InputMaterialList data={inputData} trackInputData={trackInputData} type={'single'}/>                
-                </div>
-                : null}
-                </div>
-                {currentDisplay !== 'selection' ?
-                    <div className="add-material-div" onClick={handleUploadClick}>
-                        <p className="add-grade-text" >Přidat</p>
+                    <div className="add-group-container">               
+                        <InputMaterialList data={inputData} trackInputData={trackInputData} type={'single'}/>                
                     </div>
-                : null}
+                    : null}
+                {currentDisplay !== 'selection' ?
+                    <button className="btn btn-primary next-material-button" onClick={handleUploadClick}>Přidat</button>
+                    : null}
+                </div>               
             </div>           
         </div>
     )

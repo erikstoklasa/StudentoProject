@@ -30,9 +30,17 @@ const GradeDisplay = ({ gradeId, studentId, value, modifyGrade, gradeName }) => 
     }
 
     const handleGradeChange = (value) => {
-     
-        if (parseInt(value) > 0 && parseInt(value) < 6 || value === '') {
-            updateGradeValue(value)
+
+        if (value.length === 1) {
+            if (parseInt(value) > 0 && parseInt(value) < 6) {
+                updateGradeValue(value)
+            }
+        } else if (value.length === 2) {
+            if (value.charAt(1) === '+' || value.charAt(1) === '-' || value.charAt(0) === '1' && value.charAt(1) === '*') {
+                updateGradeValue(value)
+            }
+        } else if (value === '') {
+            updateGradeValue('')
         }    
         
     }

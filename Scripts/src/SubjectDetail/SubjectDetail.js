@@ -11,21 +11,13 @@ import moment from 'moment';
   
 function SubjectDetail() {
     //initialize state
-    const [subjectId, updateSubjectId] = useState();
+    const [subjectId, updateSubjectId] = useState(window.location.href.split("Details?id=").pop());
     const [subjectInfo, updateSubjectInfo] = useState();
     const [studentAverage, updateAverage] = useState();
     const [grades, updateGrades] = useState();
     const [showMaterialPopup, updateShowMaterialPopup] = useState(false);
     const [material, updateMaterials] = useState();
     const [showAddPopup, updateShowAddPopup] = useState(false)
-
-    //get subject instance id from url
-    const determineSubjectID = () => {
-        const location = window.location.href
-        const subjectId = location.split("Details?id=").pop()
-        
-        updateSubjectId(subjectId)
-    }
 
     //format grades from internal to display value
     const getGradeDisplayValue = (grade) => {
@@ -76,19 +68,33 @@ function SubjectDetail() {
     }
 
     //calculate student average from internal value, then store it in state
-    const calculateStudentAverage = (gradeData) => {
-        let sum = 0;
-        let gradeNum = gradeData.length;
-        gradeData.forEach(grade => {
-            sum = sum + parseInt(grade.value)
+    const calculateStudentAverage = (gradeData) => {       
+        if (gradeData) {
+            let sum = 0;
+            let gradeNum = gradeData.length;
+            gradeData.forEach(grade => {
+                sum = sum + parseInt(grade.value)
           
-        });
-        const average = sum / gradeNum
-        const formattedAverage = 5 - (average / 25)
-        updateAverage(formattedAverage)
+            });
+            const average = sum / gradeNum
+            const formattedAverage = 5 - (average / 25)
+            updateAverage(formattedAverage)
+        }
+        else if (grades) {
+            let sum = 0;
+            let gradeNum = grades.length;
+            grades.forEach(grade => {
+                sum = sum + parseInt(grade.value)
+          
+            });
+            const average = sum / gradeNum
+            const formattedAverage = 5 - (average / 25)
+            updateAverage(formattedAverage)
+        }
     }
 
     const getInternalGradeValue = (displayValue) => {
+        if (displayValue === '1*') return 110
         if (displayValue === '1+') return 110
         if (displayValue === '1') return 100
         if (displayValue === '1-') return 90
@@ -109,6 +115,7 @@ function SubjectDetail() {
  
 
     const fetchMaterials = () => {
+       
         fetch(`${apiAddress}/SubjectMaterials/Student/Material?subjectInstanceId=${subjectId}`)
             .then(res => res.json())
             .then(data => {
@@ -120,12 +127,17 @@ function SubjectDetail() {
                         link: linkText
                     })
                 })
-                updateMaterials(data)
+                if (data.length > 0) {
+                    updateMaterials(data)
+                } else {
+                    updateMaterials(null)
+                }                
             })
     }
 
     // fetch grades, subject info and student material(in the future)
     const fetchData = () => {
+       
         if (subjectId) {
             fetch(`${apiAddress}/SubjectInstances/Student/${subjectId}`, {
                 method: 'GET',
@@ -161,10 +173,10 @@ function SubjectDetail() {
         }
     }
     
-    //initialize effect hook chain
-    useEffect(determineSubjectID, [])
-    useEffect(fetchData, subjectId)
+    //initialize effect hook chain   
+    useEffect(fetchData, subjectId)   
     useEffect(fetchMaterials, subjectId)
+    useEffect(calculateStudentAverage, [grades])
 
     //update state to display add grade popup
     const showPopup = () => {
@@ -263,8 +275,9 @@ function SubjectDetail() {
                         addedRelative: moment(data.added).locale('cs').fromNow(),
                         addedDisplay: moment(data.added).format("L")
                     })
-                    const newArr = [data, ...grades]
+                    const newArr = [data, ...grades]                   
                     updateGrades(newArr)
+                  
                 }
             }
         )
@@ -283,7 +296,7 @@ function SubjectDetail() {
             .then(res => {
                 if (res.ok) {
                     const newArr = grades.filter(grade => grade.id != id)
-                    updateGrades(newArr)
+                    updateGrades(newArr)                   
                 }
             })
         
@@ -304,7 +317,9 @@ function SubjectDetail() {
                 </div>
                 : null}
             { showMaterialPopup ? <AddMaterialPopup upload={uploadMaterials} hidePopup={hideMaterialPopup} /> : null}
+           
         </div>
+
     );
 }
 

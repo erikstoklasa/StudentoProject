@@ -207,6 +207,7 @@ const GradePage = () => {
     
     const getInternalGradeValue = (displayValue) => {
         if (displayValue === '1+') return 110
+        if (displayValue === '1*') return 110
         if (displayValue === '1') return 100
         if (displayValue === '1-') return 90
         if (displayValue === '2+') return 85

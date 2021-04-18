@@ -110,7 +110,7 @@ function SubjectDetail() {
                         link: linkText
                     })
                 })
-                if (data.length > 0) {
+                if (data.length > 0) {                    
                     updateMaterials(data)
                 }else {
                     updateMaterials(null)
@@ -193,8 +193,10 @@ function SubjectDetail() {
                             fetch(`${apiAddress}/SubjectMaterials/Teacher/Material`, {
                                 method: 'POST',
                                 body: formData
-                            }).then(res => res.json())
-                                .then(data => { fetchMaterials() })
+                            }).then(res => {
+                                if (res.ok) {
+                                    fetchMaterials()
+                            } })
                         })
                     })
         } else {            
@@ -207,8 +209,10 @@ function SubjectDetail() {
                 fetch(`${apiAddress}/SubjectMaterials/Teacher/Material`, {
                     method: 'POST',
                     body: formData
-                }).then(res => res.json())
-                    .then(data => { fetchMaterials()})
+                }).then(res => {
+                    if (res.ok) {
+                        fetchMaterials()
+                } })                
             })
         }
     }
@@ -216,8 +220,12 @@ function SubjectDetail() {
     const deleteMaterial = (id) => {
         fetch(`${apiAddress}/SubjectMaterials/Teacher/Material?subjectMaterialId=${id}`, {
             method: 'DELETE'           
-        }).then(res => res.json())
-            .then(data => { fetchMaterials()})
+        }).then(res => {
+            if (res.ok) {
+                fetchMaterials()
+            }
+        })
+            
     }
 
     const displayMaterialPopup = () => {

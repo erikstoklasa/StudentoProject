@@ -123,7 +123,7 @@ function SubjectDetail() {
                     const linkText = material.fileExt.substring(1);
                     Object.assign(material, {
                         addedRelative: moment(material.added).locale('cs').fromNow(),
-                        addedDisplay: moment(material.added).format("L"),
+                        addedDisplay: moment(material.added).format("D.M.Y"),
                         link: linkText
                     })
                 })
@@ -166,7 +166,7 @@ function SubjectDetail() {
                     })
                     gradesWithDisplayValue.forEach(grade => {
                         Object.assign(grade, { addedRelative: moment(grade.added).locale('cs').fromNow() })
-                        Object.assign(grade, { addedDisplay: moment(grade.added).format("L") })
+                        Object.assign(grade, { addedDisplay: moment(grade.added).format("D.M.Y") })
                     })
                     updateGrades(gradesWithDisplayValue)
                 })
@@ -236,7 +236,9 @@ function SubjectDetail() {
         fetch(`${apiAddress}/SubjectMaterials/Student/Material?subjectMaterialId=${id}`, {
             method: 'DELETE'
         }).then(res => {
-            fetchMaterials()
+            if (res.ok) {
+                fetchMaterials()
+            }
         }) 
         
     }
@@ -273,7 +275,7 @@ function SubjectDetail() {
                     Object.assign(data, {
                         displayValue: getGradeDisplayValue(parseInt(data.value)),
                         addedRelative: moment(data.added).locale('cs').fromNow(),
-                        addedDisplay: moment(data.added).format("L")
+                        addedDisplay: moment(data.added).format("D.M.Y")
                     })
                     const newArr = [data, ...grades]                   
                     updateGrades(newArr)

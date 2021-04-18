@@ -31,6 +31,6 @@ module.exports = {
     plugins: [       
         new MomentLocalesPlugin({
             localesToKeep: ['cs'],
-        }),
+        })       
     ],
 }

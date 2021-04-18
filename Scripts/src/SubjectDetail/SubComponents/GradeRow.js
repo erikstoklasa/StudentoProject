@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import apiAddress from '../variables'
+import GradeDetailPopup from './GradeDetailPopup'
 import '../SubjectDetail.css'
 
 const GradeRow = ({ grade, info, type, deleteGrade }) => {    
@@ -24,7 +24,6 @@ const GradeRow = ({ grade, info, type, deleteGrade }) => {
         }
     }  
 
-    if (!showDetail) {
         return (
             <div>
                 <div className='grade-container'>
@@ -38,34 +37,11 @@ const GradeRow = ({ grade, info, type, deleteGrade }) => {
                         <p className="grade-child grade-time">{grade.addedRelative}</p>
                     </div>
                 </div>
-         
+                {showDetail? <GradeDetailPopup grade={grade} info={info} deleteGrade={deleteGrade} hidePopup={() => { updateShowDetail(false) }}/> : null}
             </div>
-        )
-    } else { 
-        return (
-            <div className="grade-info-container">
-                <p className="grade-info-name">{grade.name}</p>
-                <div className="grade-info-information-container">
-                    <div>
-                        <p className="grade-child">Známka :</p>
-                        <p className="grade-child">Předmět :</p>
-                        <p className="grade-child">Datum přidání :</p>
-                        <p className="grade-child">Vyučujicí :</p>
-                    </div>    
-                    <div className="grade-info-sub-container" onClick={() => { updateShowDetail(true) }}>
-                        <p className="grade-child">{grade.displayValue}</p>
-                        <p className="grade-child">{info.name}</p>
-                        <p className="grade-child">{grade.addedDisplay}</p>
-                        <p className="grade-child">{`${info.teacher.firstName} ${info.teacher.lastName}`}</p>
-                    </div> 
-                </div>
-                <div className="close-button-container">
-                    {type === 'studentGrades' ? <div class="btn btn-danger rm" onClick={() => { updateShowDetail(false); deleteGrade(grade.id) }}>Smazat</div> : null}
-                    <div class="btn btn-primary" onClick={() => { updateShowDetail(false) }}>Zavřít</div>
-                </div>
-            </div>
-        )
-    }
+        )        
+     
+    
 }
 
 export default GradeRow

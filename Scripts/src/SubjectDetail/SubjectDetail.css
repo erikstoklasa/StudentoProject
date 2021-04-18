@@ -58,10 +58,22 @@
     margin-right: 0 !important;
 }
 
+.detail-grade-circle{
+    margin: 20px auto 25px auto !important;
+    background: #FEC368;
+    font-size: 2rem;
+    color: white;
+    height: 4rem;
+    width: 4rem;
+    line-height: 4rem;
+    border-radius: 50%;
+    text-align: center;
+}
+
 .grade-sub-container{
     display: flex;
-    min-width: 150px;
-    width: 70%;
+    min-width: 100px;
+    width: 80%;
     justify-content: space-between;
 }
 
@@ -73,14 +85,23 @@
 .grade-name{   
     display: inline-block;
     color: #0366d6 !important;
-    min-width: 100px;   
-    max-width: 150px;
+    min-width: 30px;  
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     margin-top: auto;
     margin-bottom: auto;
     cursor: pointer;
+}
+
+
+.material-name{
+    margin: 0 !important;
+    font-weight: 500;
+    min-width: 30px;
+    margin-right: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .grade-name-container{
@@ -104,29 +125,37 @@
     white-space: nowrap;
     display:flex;
     justify-content: start;
-    align-items: center
+    align-items: center;
+    margin: 0 !important;
 }
 
 .grade-child{
     margin: 0px 10px 0px 10px;
     white-space: nowrap;
    
+
+}
+
+.grade-value{
+    margin: 0 !important;
 }
 
 .grades-material-container{
     display: flex;
     flex-wrap: wrap;     
     justify-content: space-between;
+    width: 100%;
 }
 
 .student-grades-container{
-    flex-grow: 1;
-    flex-basis: 470px;        
+    width: 100%;
+    max-width: 650px;        
 }
 
 .student-material-container{
-    flex-grow: 1;
-    flex-basis: 470px;    
+    width: 100%;
+    max-width: 650px;        
+ 
 }
 
 .close-button-container{  
@@ -184,6 +213,16 @@
     color: var(--grey);
 }
 
+.detail-popup-title{
+    max-width: 70%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.detail-relative-time{
+    margin: 0px 0px 10px 0px;
+}
+
 .number-input{
     width: 100%;
     max-width: 50px;
@@ -218,16 +257,17 @@
 .material-heading-container{
     display: flex;
     align-items: center;
+    width: 65%; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+
 }
 
 .material-name-container{
-    margin-left: 10px;  
+    margin-left: 10px;
+ 
 }
 
-.material-name{
-    margin: 0;
-    font-weight: 500;
-}
 
 .material-added{
     margin: 0;
@@ -319,6 +359,11 @@
     text-align: center;
 }
 
+.material-button-container{
+    white-space: nowrap;
+   
+}
+
 .next-material-button{
     padding: 0.4rem 0.7rem !important;
     width: 100% !important;
@@ -348,14 +393,49 @@
     margin: 10px 0px 10px 0px;
 }
 
-@media (min-width: 960px){
-    .student-material-container {
-        padding-left: 50px !important;
+.main-pd{
+    padding: 0px 10px 0px 10px;
+}
+
+
+
+
+
+@media(max-width: 1320px){
+    .student-material-container{
+        max-width: 1300px;
     }
-    .average-container {
-        padding-left: 50px !important;
+    .student-grades-container{
+        max-width: 1300px;
+    }  
+}
+
+@media (max-width: 800px){
+ 
+    .grade-name{
+        max-width: 250px;
     }
-    .grade-info-name{
-        max-width: 500px;
+    .material-name{
+        max-width: 250px;
+    }
+}
+
+@media (max-width: 500px){
+ 
+    .grade-name{
+        max-width: 150px;
+    }
+    .material-name{
+        max-width: 150px;
+    }
+}
+
+@media (max-width: 350px){
+ 
+    .grade-name{
+        max-width: 120px;
+    }
+    .material-name{
+        max-width: 120px;
     }
 }

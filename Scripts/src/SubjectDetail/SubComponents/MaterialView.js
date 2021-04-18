@@ -4,6 +4,7 @@ import apiAddress from '../variables'
 const MaterialView = ({ material, deleteMaterial, info }) => {  
 
     return (
+        <div>
         <div className="material-view-container">
             <div className="material-heading-container">               
                 <img src={`/images/icons/${material.link}.png`} alt="icon" height="50px"></img>
@@ -16,7 +17,8 @@ const MaterialView = ({ material, deleteMaterial, info }) => {
                 <div class="btn btn-danger rm" onClick={() => {deleteMaterial(material.id)}}>Smazat</div>
                 <a className="btn btn-primary" href={`/Student/Subjects/Materials/Details?id=${material.id}`}>Stáhnout</a>
             </div>
-        </div>
+            </div>
+            </div>
     )
 }
 

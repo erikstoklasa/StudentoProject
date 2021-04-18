@@ -15,7 +15,7 @@ const StudentGrades = ({ grades, info, showPopup, deleteGrade }) => {
 
     // display grades
     return (
-        <div className="student-grades-container">
+        <div className="student-grades-container main-pd">
             <p className="grades-heading">Známky od vyučující/ho</p>
             <div>
                 <GradeView grades={teacherGrades} info={info} type={'teacherGrades'}/>

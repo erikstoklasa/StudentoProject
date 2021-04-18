@@ -3,7 +3,7 @@ import '../SubjectDetail.css'
 
 const addGradePopup = ({ addGrade, hidePopup }) => {    
     const [gradeName, updateGradeName] = useState()
-    const [gradeValue, updateGradeStateValue] = useState()
+    const [gradeValue, updateGradeStateValue] = useState('')
     const [showWarning, updateShowWarning] = useState(false)
 
     useEffect(() => {
@@ -22,16 +22,17 @@ const addGradePopup = ({ addGrade, hidePopup }) => {
         }
     }
     
-    const updateGradeValue = (value) => {      
+    const updateGradeValue = (value) => {        
         if (value.length === 1) {
             if (parseInt(value) > 0 && parseInt(value) < 6) {
+                
                 updateGradeStateValue(value)
             }
         } else if (value.length === 2) {
             if (value.charAt(1) === '+' || value.charAt(1) === '-' || value.charAt(0) === '1' && value.charAt(1) === '*') {
-                updateGradeStateValue(value)
+                updateGradeStateValue(value)            
             }
-        } else if (value === '') {
+        } else if (value === '') {           
             updateGradeStateValue('')
         }   
     }
@@ -46,7 +47,7 @@ const addGradePopup = ({ addGrade, hidePopup }) => {
                     </div>              
                     <div className="popup-input-container">               
                         <input className="name-input form-control" placeholder="Test" value={gradeName} onChange={(event) => {updateGradeName(event.target.value)}}></input>
-                        <input className="number-input form-control" placeholder="1" value={gradeValue} maxlength="2" onChange={(event) => { updateGradeValue(event.target.value)} }></input>
+                        <input className="number-input form-control" value={gradeValue} maxlength="2" onChange={(event) => { updateGradeValue(event.target.value)} }></input>
                     </div>
                     { showWarning? 
                         <p className="add-warning-text">Chybí údaje</p>
@@ -54,6 +55,7 @@ const addGradePopup = ({ addGrade, hidePopup }) => {
                         <button className="btn btn-primary next-material-button" onClick={onAddClick}>Přidat</button>
                 </div>
             </div>
+            <button onClick={()=>{console.log(gradeValue)}}>check</button>
         </div>
     )
 }

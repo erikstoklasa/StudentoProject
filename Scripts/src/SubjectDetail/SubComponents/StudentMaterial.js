@@ -4,7 +4,7 @@ import MaterialContainer from './MaterialContainer'
 const StudentMaterial = ({ material, info, showPopup, deleteMaterial}) => {
     return (
        
-        <div class="student-material-container">
+        <div class="student-material-container main-pd">
             <div className="student-heading-container">
                 <p class="table-heading">Studijní materiály</p>
                 <a class="btn btn-primary" onClick={showPopup}><img src="/images/add.svg" alt="Přidat" height="18px" class="btn-icon" />Přidat studijní materiál</a>

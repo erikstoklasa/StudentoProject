@@ -39,7 +39,9 @@ const TimeTable = () => {
             .then(res => res.json())
                 .then(data => {
                     sortData(data)
-                }).then(() => { updateCurrentWeek(weekNumber) })
+                }).then(() => {                    
+                    updateCurrentWeek(weekNumber)
+                })
         }
 
     }
@@ -66,7 +68,6 @@ const TimeTable = () => {
                 })
                 weekObject.timeFrames = daysSorted
             });
-            console.log(newData)
             updateSortedData(newData)
             updateInitialWeek(newData[0].week)
         } else if (data) {            
@@ -88,6 +89,7 @@ const TimeTable = () => {
                 })
                 weekObject.timeFrames = daysSorted
             });
+
             const finalData = sortedData.concat(newData) 
             updateSortedData(finalData)            
         }

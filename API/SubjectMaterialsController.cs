@@ -145,7 +145,8 @@ namespace SchoolGradebook.API.SubjectMaterials
                             FileType = MimeTypeMap.GetMimeType(fileExt),
                             SubjectTypeId = formFileObject.Material.SubjectTypeId,
                             SubjectMaterialGroupId = formFileObject.Material.SubjectMaterialGroupId,
-                            AddedById = teacherId
+                            AddedById = teacherId,
+                            SubjectInstanceId = formFileObject.Material.SubjectInstanceId
                         };
                 bool successfullyAdded = await subjectMaterialService.AddMaterialAsync(toAdd);
                 if (!successfullyAdded)
@@ -391,6 +392,25 @@ namespace SchoolGradebook.API.SubjectMaterials
             return BadRequest();
         }
 
+        /// <summary>
+        /// Soft deletes subject material group
+        /// </summary>
+        /// <param name="subjectMaterialId"></param>
+        /// <returns></returns>
+        [HttpDelete("Student/Material")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [Authorize(policy: "OnlyStudent")]
+        public async Task<ActionResult> StudentDeleteSubjectMaterial(Guid subjectMaterialId)
+        {
+            int studentId = await studentService.GetStudentId(UserId);
+            if (!await studentAccessValidation.HasAccessToSubjectMaterial(studentId, subjectMaterialId))
+            {
+                return StatusCode(403);
+            }
+            await subjectMaterialService.SoftDeleteMaterialAsync(subjectMaterialId);
+            return Ok();
+        }
 
         /// <summary>
         /// Adds subject material group for student

@@ -49,7 +49,7 @@ namespace SchoolGradebook.Services
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
 
-            return instances.Where(i => i.SubjectTypeId == subjectMaterial.SubjectTypeId).Any();
+            return instances.Where(i => i.SubjectTypeId == subjectMaterial.SubjectTypeId || i.Id == subjectMaterial.SubjectInstanceId).Any();
         }
 
         public async Task<bool> HasAccessToSubjectType(int studentId, int subjectTypeId)

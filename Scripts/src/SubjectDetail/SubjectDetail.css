@@ -1,0 +1,441 @@
+.subject-title-container{    
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.heading-container{
+    flex-grow: 1;
+    flex-basis: 470px;    
+}
+
+.average-container{
+    flex-grow: 1;
+    flex-basis: 470px;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+
+.grades-heading-container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;     
+    margin: 16px 0px 16px 0px; 
+}
+
+.grades-heading{
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    white-space: nowrap;
+    margin-right: 25px;
+    color: var(--grey);
+}
+
+.grade-container{   
+    padding: 15px 5% 15px 5%;
+    display: flex;
+    justify-content: space-between; 
+    align-items: center; 
+}
+
+.grade-info-container{
+    margin: 15px 2% 15px 2%;
+    padding: 10px 3% 10px 3%;     
+    overflow: hidden; 
+    border: solid 2px var(--primaryYellowStrong) !important;
+    border-radius: 10px;   
+}
+
+.grade-info-information-container{
+    display: flex;
+    justify-content: space-between;
+}
+
+.grade-info-detail-text{
+    width:70%;
+    text-align: left;
+    margin-right: 0 !important;
+}
+
+.detail-grade-circle{
+    margin: 20px auto 25px auto !important;
+    background: #FEC368;
+    font-size: 2rem;
+    color: white;
+    height: 4rem;
+    width: 4rem;
+    line-height: 4rem;
+    border-radius: 50%;
+    text-align: center;
+}
+
+.grade-sub-container{
+    display: flex;
+    min-width: 100px;
+    width: 80%;
+    justify-content: space-between;
+}
+
+.grade-info-sub-container{   
+    min-width: 150px;
+    width: 70%;    
+}
+
+.grade-name{   
+    display: inline-block;
+    color: #0366d6 !important;
+    min-width: 30px;  
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-top: auto;
+    margin-bottom: auto;
+    cursor: pointer;
+}
+
+
+.material-name{
+    margin: 0 !important;
+    font-weight: 500;
+    min-width: 30px;
+    margin-right: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.grade-name-container{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+   
+}
+
+.grade-info-name{
+    max-width: 80vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    white-space: nowrap;
+    margin: 10px 10px 10px 10px;
+    font-weight: bold;
+}
+
+.grade-time{    
+    white-space: nowrap;
+    display:flex;
+    justify-content: start;
+    align-items: center;
+    margin: 0 !important;
+}
+
+.grade-child{
+    margin: 0px 10px 0px 10px;
+    white-space: nowrap;
+   
+
+}
+
+.grade-value{
+    margin: 0 !important;
+}
+
+.grades-material-container{
+    display: flex;
+    flex-wrap: wrap;     
+    justify-content: space-between;
+    width: 100%;
+}
+
+.student-grades-container{
+    width: 100%;
+    max-width: 650px;        
+}
+
+.student-material-container{
+    width: 100%;
+    max-width: 650px;        
+ 
+}
+
+.close-button-container{  
+    display: flex;
+    justify-content: flex-end;
+    margin: 5px 0 5px 0;
+}
+
+.close-info-button{
+    margin-left: auto !important;   
+}
+
+.add-grade-popup-container{
+    min-width: 250px;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    right: 0;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    margin: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 5;
+}
+
+.popup-inner-container{
+    width: 100%;
+    max-width: 400px;
+    margin: 20px;   
+    background-color: white;
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;   
+}
+
+.popup-title-container{   
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.popup-input-container{  
+    margin: 20px 0px 10px 0px; 
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.popup-title{
+    margin: 0;
+    color: var(--grey);
+}
+
+.detail-popup-title{
+    max-width: 70%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.detail-relative-time{
+    margin: 0px 0px 10px 0px;
+}
+
+.number-input{
+    width: 100%;
+    max-width: 50px;
+    margin-left: 10px;
+   
+}
+
+.add-grade-div{
+    margin-top: 20px;
+    background: var(--primaryYellowStrong);
+    width: 100%;
+}
+
+
+.add-warning-text{
+    color: var(--pastelRed);
+    font-size: 0.85rem;
+    margin: 0px 0px 10px 0px;
+}
+
+.rm{
+    margin-right: 10px;
+}
+
+.material-view-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 5% 8px 5%;
+}
+
+.material-heading-container{
+    display: flex;
+    align-items: center;
+    width: 65%; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+}
+
+.material-name-container{
+    margin-left: 10px;
+ 
+}
+
+
+.material-added{
+    margin: 0;
+    font-size: 0.8rem;    
+    color: var(--grey);
+}
+
+.add-material-container{
+    min-width: 250px;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    right: 0;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    margin: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 5;
+}
+
+.add-selection-container{
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0px 0px 0px;
+}
+
+.add-group-container{
+    margin: 20px 0px 10px 0px;
+}
+
+.popup-inner-container{
+    width: 100%;
+    max-width: 400px;    
+    margin: 20px;   
+    background-color: white;
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;   
+}
+
+.popup-inner-padding{
+    padding:15px 15px 15px 15px;
+}
+
+.material-popup-title-container{
+    
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.popup-title{
+    margin: 0;
+    color: var(--grey);
+}
+
+.add-selection-button{
+    flex-grow: 1;
+}
+
+.material-group-name-input{
+    width: 100%;
+}
+
+.single-material-input{
+    margin: 10px 0px 0px 0px;
+}
+
+.border-container{
+    width: calc(100% - 10px);
+    margin: 10px auto 10px auto;
+    border-width: 1px 0 0 0; /* top right bottom left */
+    border-style: solid;
+    border-color: lightgray;
+}
+
+.add-material-div{   
+    background: var(--primaryYellowStrong);
+    width: 100%;
+    margin: 10px;
+}
+
+.add-grade-text{
+    margin: 0px 0px 0px 0px;   
+    text-align: center;
+}
+
+.material-button-container{
+    white-space: nowrap;
+   
+}
+
+.next-material-button{
+    padding: 0.4rem 0.7rem !important;
+    width: 100% !important;
+}
+
+.mr5{
+    margin-right: 5px;
+}
+
+.ml5{
+    margin-left: 5px;
+}
+
+.mb10{
+    margin-bottom: 10px;
+}
+
+.pointer{
+    cursor: pointer;
+}
+
+.student-heading-container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0px 10px 0px;
+}
+
+.main-pd{
+    padding: 0px 10px 0px 10px;
+}
+
+
+
+
+
+@media(max-width: 1320px){
+    .student-material-container{
+        max-width: 1300px;
+    }
+    .student-grades-container{
+        max-width: 1300px;
+    }  
+}
+
+@media (max-width: 800px){
+ 
+    .grade-name{
+        max-width: 250px;
+    }
+    .material-name{
+        max-width: 250px;
+    }
+}
+
+@media (max-width: 500px){
+ 
+    .grade-name{
+        max-width: 150px;
+    }
+    .material-name{
+        max-width: 150px;
+    }
+}
+
+@media (max-width: 350px){
+ 
+    .grade-name{
+        max-width: 120px;
+    }
+    .material-name{
+        max-width: 120px;
+    }
+}

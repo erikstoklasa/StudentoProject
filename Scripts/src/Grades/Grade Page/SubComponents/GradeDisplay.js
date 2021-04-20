@@ -17,7 +17,7 @@ const GradeDisplay = ({ gradeId, studentId, value, modifyGrade, gradeName }) => 
 
     const hideInput = () => {
         updateDisplayInput(false)
-        if (gradeValue > 0 && gradeValue < 6 && gradeValue !== initialValue) {
+        if (parseInt(gradeValue) > 0 && parseInt(gradeValue) < 6 && gradeValue !== initialValue) {
             updateInitialValue(gradeValue);
             modifyGrade(gradeId, gradeValue, studentId, gradeName)
         }
@@ -30,13 +30,19 @@ const GradeDisplay = ({ gradeId, studentId, value, modifyGrade, gradeName }) => 
     }
 
     const handleGradeChange = (value) => {
-        const intValue = parseInt(value)
-        if (value > 0 && value < 6) {
-            updateGradeValue(intValue)
-        }
-        else if (value === '') {
+
+        if (value.length === 1) {
+            if (parseInt(value) > 0 && parseInt(value) < 6) {
+                updateGradeValue(value)
+            }
+        } else if (value.length === 2) {
+            if (value.charAt(1) === '+' || value.charAt(1) === '-' || value.charAt(0) === '1' && value.charAt(1) === '*') {
+                updateGradeValue(value)
+            }
+        } else if (value === '') {
             updateGradeValue('')
-        }
+        }    
+        
     }
 
     if (!displayInput) {
@@ -49,7 +55,7 @@ const GradeDisplay = ({ gradeId, studentId, value, modifyGrade, gradeName }) => 
     if (displayInput) {
         return (
             <div className="grade-cell">
-                <input className="form-control grade-input" maxLength="1" tabIndex="0" autoFocus onBlur={hideInput} value={gradeValue} onChange={(event) => { handleGradeChange(event.target.value) }}></input>
+                <input className="form-control grade-input" maxLength="2" tabIndex="0" autoFocus onBlur={hideInput} value={gradeValue} onChange={(event) => { handleGradeChange(event.target.value) }}></input>
             </div>
         )
     }

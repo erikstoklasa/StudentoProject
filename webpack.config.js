@@ -1,9 +1,12 @@
 ﻿const path = require("path");
+const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 
 module.exports = {
     entry: {        
-        Grades: "./Scripts/src/Grades/index.js",
-        TimeTable: "./Scripts/src/TimeTable/index.js"
+        TimeTable: "./Scripts/src/TimeTable/index.js",
+      
+       
+        
     },
     output: {
         path: path.resolve(__dirname, "./wwwroot/dist"),
@@ -23,6 +26,11 @@ module.exports = {
                 use: ["style-loader", "css-loader"],
                 exclude: /node_modules/
             },
-        ]
-    }
+        ],        
+    },
+    plugins: [       
+        new MomentLocalesPlugin({
+            localesToKeep: ['cs'],
+        })       
+    ],
 }

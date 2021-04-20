@@ -1,7 +1,6 @@
 import React, {useState} from 'react'
 import ColumnHeader from './ColumnHeader';
 import NewGrade from './NewGrade';
-import apiAdress from './Variables.js'
 import '../GradePage.css'
 
 const NewGradeColumn = ({ students, trackNewGradeValues, removeNewGrade, handleSubmitNewGrades }) => {
@@ -27,8 +26,11 @@ const NewGradeColumn = ({ students, trackNewGradeValues, removeNewGrade, handleS
             <ColumnHeader title={'Přidat známku'} type={'New Grade'} handleClick={handleHeaderClick} displayInput={displayGradeNameInput} onInputChange={ onGradeNameInputChange} />
             {inputList}
             {(displayGradeNameInput ? <div className="button-cell"><button className="btn btn-primary" onClick={() => {
-                handleHeaderClick();
-                handleSubmitNewGrades(newGradeName)
+                
+                const response = handleSubmitNewGrades(newGradeName)
+                if (response === 'success') {
+                    handleHeaderClick();
+                }
             }}>Přidat</button></div> : null)}
             
         </div>

@@ -152,15 +152,9 @@
     <None Include="node_modules\scheduler\unstable_post_task.js" />
   </ItemGroup>
 
-
   <ItemGroup>
     <None Include="wwwroot\site.webmanifest" />
   </ItemGroup>
-
-  <Target Name="RunWebpack" BeforeTargets="Build">
-    <Exec Command="npm run build" />
-  </Target>
-
 
   <ProjectExtensions>
     <VisualStudio>
@@ -172,4 +166,9 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <PublishWithAspNetCoreTargetManifest>false</PublishWithAspNetCoreTargetManifest>
+  </PropertyGroup>
+
 </Project>

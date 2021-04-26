@@ -8,22 +8,25 @@ using System.Threading.Tasks;
 using static SchoolGradebook.Models.GradeAverage;
 
 namespace SchoolGradebook.Services
+{
 
-	public class GradeAverageService {
-
-	private readonly SchoolContext context;
-
-	public GradeAverageService(SchoolContext context)
+	public class GradeAverageService
 	{
-		this.context = context;
-	}
 
-		public async Task<GradeAverage> getGradeAverageForSubjectInstance(int subjectInstanceId) {
+		private readonly SchoolContext context;
+
+		public GradeAverageService(SchoolContext context)
+		{
+			this.context = context;
+		}
+
+		public async Task<GradeAverage> getGradeAverageForSubjectInstance(int subjectInstanceId)
+		{
 
 
 			GradeAverage gradeAverage = await context.GradeAverages
 					.Where(s => s.SubjectInstanceId == subjectInstanceId)
-					.Where(s => s.StudentId == -1);
+					.Where(s => s.StudentId == -1)
 					.Include(g => g.Id)
 					.Include(g => g.SubjectInstanceId)
 					.Include(g => g.Value)
@@ -37,20 +40,22 @@ namespace SchoolGradebook.Services
 
 		}
 		/// <summary>
-        /// Adds a grade average for subject instance
-        /// </summary>
-        /// <param name="gradeAverage"></param>
-        /// <returns></returns>
-		public async Task AddGradeAverageForSubjectInstace(GradeAverage gradeAverage) { 
+		/// Adds a grade average for subject instance
+		/// </summary>
+		/// <param name="gradeAverage"></param>
+		/// <returns></returns>
+		public async Task AddGradeAverageForSubjectInstace(GradeAverage gradeAverage)
+		{
 
 
-			await context.GradeAverages.AddAsync(gradeAverage);            
-            await context.SaveChangesAsync();
+			await context.GradeAverages.AddAsync(gradeAverage);
+			await context.SaveChangesAsync();
 			//no necessary checks as this is internal calculation happening on previously verified data
 		}
 
-		public async Task<GradeAverage> getGradeAverageForStudent(int subjectInstanceId, int studentId) {
-	
+		public async Task<GradeAverage> getGradeAverageForStudent(int subjectInstanceId, int studentId)
+		{
+
 			GradeAverage gradeAverage = await context.GradeAverages
 				.Where(s => s.SubjectInstanceId == subjectInstanceId)
 				.Where(s => s.TeacherId == -1)
@@ -64,13 +69,14 @@ namespace SchoolGradebook.Services
 				.AsNoTracking()
 				.FirstOrDefaultAsync();
 			return gradeAverage;
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 		}
-		
+
 
 	}
+}

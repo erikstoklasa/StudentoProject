@@ -1,14 +1,17 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using SchoolGradebook.Services;
 using SchoolGradebook.Models;
+using System.Security.Claims;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SchoolGradebook.API.GradeAverage
+namespace SchoolGradebook.API.GradeAverages
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -20,10 +23,26 @@ namespace SchoolGradebook.API.GradeAverage
         private readonly GradeAverageService gradeAverageService;
         private readonly GradeGroupService gradeGroupService;
         private readonly StudentService studentService;
+        private readonly TeacherAccessValidation teacherAccessValidation;
+        private readonly GradeService gradeService;
 
 
-        //constructor
+        private string UserId { get; set; }
+        
 
+        public GradeAverageController(GradeService gradeService, TeacherService teacherService, GradeAverageService gradeAverageService, GradeGroupService gradeGroupService, StudentService studentService, IHttpContextAccessor httpContextAccessor, TeacherAccessValidation teacherAccessValidation) {
+
+            this.gradeService = gradeService;
+            this.teacherService = teacherService;
+            this.gradeAverageService = gradeAverageService;
+            this.gradeGroupService = gradeGroupService;
+            this.studentService = studentService;
+            this.teacherAccessValidation = teacherAccessValidation;
+            UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+
+
+        }
 
         /// <summary>
         /// Gets an average for subject instance
@@ -36,62 +55,68 @@ namespace SchoolGradebook.API.GradeAverage
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [Authorize(policy: "OnlyTeacher")]
-        public async Task<ActionResult<GradeAverageObject>> GetSubjectInstanceAverage(Guid subjectInstanceId)
+        public async Task<ActionResult<GradeAverage>> GetSubjectInstanceAverage(int subjectInstanceId)
         {
             
             int teacherId = await teacherService.GetTeacherId(UserId);
 
-            if (!await teacherAccessValidation.HasAccessToSubjectInstance(teacherId, subjectInstanceId))
+            if (!await teacherAccessValidation.HasAccessToSubject(teacherId, subjectInstanceId))
             {
                 return Forbid();
             }
             
-            GradeAverage gradeAverage = await gradeAverageService.getGradeAverageForSubjectInstance(subjectInstanceId);
-            GradeAverageObject output;
+            var gradeAverage = await gradeAverageService.getGradeAverageForSubjectInstance(subjectInstanceId);
+            //GradeAverageObject output;
 
 
-            output = new GradeAverageObject()
-            {
-                Id = gradeAverage.Id,
-                SubjectInstanceId = subjectInstanceId,
-                Value = gradeAverage.Value,
-                TeacherId = gradeAverage.teacherId,
-                StudentId = gradeAverage.studentId,
-                Added = gradeAverage.Added;
+            //output = new GradeAverageObject()
+            //{
+            //    Id = gradeAverage.Id,
+            //    SubjectInstanceId = subjectInstanceId,
+            //    Value = gradeAverage.Value,
+            //    TeacherId = gradeAverage.TeacherId,
+            //    StudentId = gradeAverage.StudentId,
+            //    Added = gradeAverage.Added,
 
                 
 
-            };
+            //};
  
-            return output;
+            return gradeAverage;
         }
-
+        /// <summary>
+        /// Gets an average for a subject for a student
+        /// </summary>
+        /// <param name="subjectInstanceId"></param>
+        /// <returns>
+        /// Returns the newest grade average for subject instance/student id combination
+        /// </returns>
         [HttpGet("SubjectInstanceStudent/{Id}")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [Authorize(policy: "OnlyStudent")]
-        public async Task<ActionResult<GradeAverageObject>> GetSubjectInstanceStudentAverage(Guid subjectInstanceId) {
-    
-            int studentId = await StudentService.GetStudentId(UserId);
+        public async Task<ActionResult<GradeAverage>> GetSubjectInstanceStudentAverage(int subjectInstanceId) {
 
-            GradeAverage gradeAverage = await GradeAverageService.getGradeAverageForStudent(subjectInstanceId, studentId);
+            int studentId = await studentService.GetStudentId(UserId);
 
-            GradeAverageObject output;
+            var gradeAverage = await gradeAverageService.getGradeAverageForStudent(subjectInstanceId, studentId);
 
-            output = new GradeAverageObject()
-                Id = gradeAverage.Id,
-                SubjectInstanceId = subjectInstanceId,
-                Value = gradeAverage.Value,
-                TeacherId = gradeAverage.teacherId,
-                StudentId = gradeAverage.studentId,
-                Added = gradeAverage.Added;
-    
-    
-    
-    
-    
-    
-    
+            //GradeAverageObject output;
+
+            //output = new GradeAverageObject() {
+            //    Id = gradeAverage.Id,
+            //    SubjectInstanceId = subjectInstanceId,
+            //    Value = gradeAverage.Value,
+            //    TeacherId = gradeAverage.TeacherId,
+            //    StudentId = gradeAverage.StudentId,
+            //    Added = gradeAverage.Added,
+
+
+
+            //};
+
+
+            return gradeAverage;
         }
 
 
@@ -107,31 +132,34 @@ namespace SchoolGradebook.API.GradeAverage
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [Authorize(policy: "OnlyTeacher")]
-        public async Task<ActionResult<GradeAverageObject>> CalculateGradeAverageForSubjectInstance(Guid subjectInstanceId)
+        public async Task<ActionResult<GradeAverageObject>> CalculateGradeAverageForSubjectInstance(int subjectInstanceId)
         {
             int teacherId = await teacherService.GetTeacherId(UserId);
 
-            if (!await teacherAccessValidation.HasAccessToSubjectInstance(teacherId, subjectInstanceId))
+            if (!await teacherAccessValidation.HasAccessToSubject(teacherId, subjectInstanceId))
             {
                 return Forbid();
             }
-            var grades = await gradeService.GetAllGradesBySubjectInstance(subjectInstanceId);
+            var grades = await gradeService.GetAllGradesAddedByTeacherAsync(subjectInstanceId);
             double average = 0;
             int totalWeight = 0;
             IDictionary<int, int> rememberMap = new Dictionary<int, int>(); // map/dictionary to remember grade groups - first arg is id to prevent having to find gradeGroup for every grade (we find once per group)
             foreach (var g in grades) { 
-                var newGrade = new GradeObject { Added = g.Added, Id = g.Id, Name = g.Name, StudentId = g.StudentId, SubjectInstanceId = g.SubjectInstanceId, GradeGroupId = g.GradeGroupId, GradeGroupName = g.GradeGroup?.Name };
+                
                 int weight = 0;
-                if (rememberMap.Contains(g.GradeGroupId)) {
-                    weight = rememberMap[g.gradeGroupId];
-                
-                
+
+                if (rememberMap.TryGetValue(g.GradeGroupId.Value, out weight)) {
+                    weight = rememberMap[g.GradeGroupId.Value];
+
                 }
-                else {
-                    var gradeGroup = await gradeGroupService.GetGradeGroupAsyncv(g.GradeGroupId);
+                else { 
+                    var gradeGroup = await gradeGroupService.GetGradeGroupAsync(g.GradeGroupId.Value);
                     weight = gradeGroup.Weight;
-                    rememberMap[g.GradeGroupId] = weight;
+                    rememberMap[g.GradeGroupId.Value] = weight;
+
                 }
+                
+                
                 average = average + g.Value;
                 totalWeight = totalWeight + weight;
                 
@@ -149,23 +177,24 @@ namespace SchoolGradebook.API.GradeAverage
             
             
             };
-            await gradeAverageService.storeGradeAverageSubjectInstance(gradeAverage);
+            await gradeAverageService.AddGradeAverageForSubjectInstace(gradeAverage);
 
 
-
+            return Ok();
 
         }
         
         /// <summary>
         /// Calculates an average for a student for a given subjectInstance
         /// </summary>
+        /// /
         /// <param name="subjectInstanceId"></param>
         /// <returns>Action result</returns>
         [HttpPost("CalculateStudentSubjectInstanceAverage/{id}")]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCose.Status)]
+        
         [Authorize(policy : "OnlyStudent")]
-        public async Task<ActionResult<GradeAverageObject>> CalculateGradeAverageForStudentsOnSubjectInstance(Guid subjectInstanceId) {
+        public async Task<ActionResult<GradeAverageObject>> CalculateGradeAverageForStudentsOnSubjectInstance(int subjectInstanceId) {
 
 
             int studentId = await studentService.GetStudentId(UserId);
@@ -173,9 +202,9 @@ namespace SchoolGradebook.API.GradeAverage
             double average = 0;
             int totalWeight = 0;
             foreach(var g in grades) {
-                var gradeGroup = await gradeGroupService.GetGradeGroupAsyncv(g.GradeGroupId);
+                var gradeGroup = await gradeGroupService.GetGradeGroupAsync(g.GradeGroupId.Value);
                 int weight = gradeGroup.Weight;
-                grades = grades + g.Value * weight;    
+                average = average + g.Value * weight;    
                 totalWeight = totalWeight + weight;
     
             }
@@ -190,9 +219,25 @@ namespace SchoolGradebook.API.GradeAverage
             
             
             };
-            await gradeAverageService.storeGradeAverageSubjectInstance(gradeAverage);
+            await gradeAverageService.AddGradeAverageForSubjectInstace(gradeAverage);
 
+            return Ok();
         }
 
     }
+
+    public class GradeAverageObject
+    {
+        public enum USERTYPE { Teacher, Student }
+
+        public int Id { get; set; }
+
+        public int SubjectInstanceId { get; set; }
+        public double Value { get; set; } //For table in the db
+        public int TeacherId { get; set; }
+        public int StudentId { get; set; }
+        public DateTime Added { get; set; }
+
+    }
+
 }

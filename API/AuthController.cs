@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SchoolGradebook.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace SchoolGradebook.API
@@ -14,11 +17,18 @@ namespace SchoolGradebook.API
     {
         private readonly SignInManager<IdentityUser> signInManager;
         private readonly UserManager<IdentityUser> userManager;
+        private readonly StudentService studentService;
+        private readonly TeacherService teacherService;
 
-        public AuthController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)
+        public string UserAuthId { get; set; }
+
+        public AuthController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, IHttpContextAccessor httpContextAccessor, StudentService studentService, TeacherService teacherService)
         {
             this.signInManager = signInManager;
             this.userManager = userManager;
+            this.studentService = studentService;
+            this.teacherService = teacherService;
+            UserAuthId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
         }
         /// <summary>
         /// Gets the auth session cookie
@@ -59,6 +69,48 @@ namespace SchoolGradebook.API
             await signInManager.SignOutAsync();
             return Ok();
         }
+        /// <summary>
+        /// Gets the information of a user's role and id, only if logged in
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("GetUserInfo")]
+        public async Task<ActionResult<UserObject>> GetUserInfo()
+        {
+            int userId = await studentService.GetStudentId(UserAuthId);
+            //Checking for student
+            if (userId == -1)
+            {
+                //Checking for teacher
+                userId = await teacherService.GetTeacherId(UserAuthId);
+                if (userId == -1)
+                {
+                    return BadRequest();
+                }
+                //Is teacher
+                var teacher = await teacherService.GetTeacherAsync(userId);
+                UserObject user = new()
+                {
+                    UserId = userId,
+                    UserType = "teacher",
+                    FirstName = teacher.FirstName,
+                    LastName = teacher.LastName
+                };
+                return user;
+            }
+            else
+            {
+                //Is student
+                var student = await studentService.GetStudentBasicInfoAsync(userId);
+                UserObject user = new()
+                {
+                    UserId = userId,
+                    UserType = "student",
+                    FirstName = student.FirstName,
+                    LastName = student.LastName
+                };
+                return user;
+            }
+        }
     }
     public class InputModelObject
     {
@@ -70,5 +122,12 @@ namespace SchoolGradebook.API
     {
         public string UserType { get; set; }
         public string Error { get; set; }
+    }
+    public class UserObject
+    {
+        public int UserId { get; set; }
+        public string UserType { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
     }
 }

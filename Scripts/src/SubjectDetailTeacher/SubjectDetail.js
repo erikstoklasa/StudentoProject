@@ -105,8 +105,8 @@ function SubjectDetail() {
                 data.forEach(material => {
                     const linkText = material.fileExt.substring(1);
                     Object.assign(material, {
-                        addedRelative: moment(material.added).locale('cs').fromNow(),
-                        addedDisplay: moment(material.added).format("L"),
+                        addedRelative: moment.utc(material.added).locale('cs').fromNow(),
+                        addedDisplay: moment.utc(material.added).format("L"),
                         link: linkText
                     })
                 })

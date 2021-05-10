@@ -6,7 +6,7 @@ const MaterialView = ({ material, deleteMaterial, info }) => {
     return (
         <div className="material-view-container">
             <div className="material-heading-container">               
-                <img src={`/images/icons/${material.link}.png`} alt="icon" height="50px"></img>
+                <img src={`/images/icons/${material.link}.png`} alt="icon" height="50px" onError={(e) => { e.target.onerror = null; e.target.src = "/images/icons/fallback.png" }}></img>
                  <div className="material-name-container">
                     <p className="material-name">{material.name}</p>
                     <p className="material-added">{material.addedRelative}</p>

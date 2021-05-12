@@ -3,16 +3,8 @@ const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 
 module.exports = {
     entry: {        
-<<<<<<< HEAD
-        TimeTable: "./Scripts/src/TimeTable/index.js",
-        Grades: "./Scripts/src/Grades/index.js",
-        SubjectDetail: "./Scripts/src/SubjectDetail/index.js",
-        SubjectDetailTeacher: "./Scripts/src/SubjectDetailTeacher/index.js",
-=======
-        SubjectDetail: "./Scripts/src/SubjectDetail/index.js",
-      
->>>>>>> 80898f7b13b6b75082827493175415ad854812d7
-       
+
+        SubjectDetail: "./Scripts/src/SubjectDetail/index.js",       
         
     },
     output: {

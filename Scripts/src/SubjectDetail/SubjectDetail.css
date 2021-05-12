@@ -186,13 +186,14 @@
 }
 
 .popup-inner-container{
+    max-height: 95vh;
     width: 100%;
     max-width: 400px;
     margin: 20px;   
     background-color: white;
     border: none;
     border-radius: 10px;
-    overflow: hidden;   
+    overflow-y: auto !important;   
 }
 
 .popup-title-container{   
@@ -276,7 +277,7 @@
     color: var(--grey);
 }
 
-.add-material-container{
+.add-material-container{   
     min-width: 250px;
     position: fixed;
     width: 100%;
@@ -314,7 +315,7 @@
 }
 
 .popup-inner-padding{
-    padding:15px 15px 15px 15px;
+    padding:15px 15px 15px 15px;  
 }
 
 .material-popup-title-container{

@@ -137,7 +137,7 @@ function SubjectDetail() {
 
     // fetch grades, subject info and student material(in the future)
     const fetchData = () => {
-       
+        
         if (subjectId) {
             fetch(`${apiAddress}/SubjectInstances/Student/${subjectId}`, {
                 method: 'GET',

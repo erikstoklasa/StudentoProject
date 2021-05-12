@@ -54,8 +54,7 @@ const addGradePopup = ({ addGrade, hidePopup }) => {
                    : null}
                         <button className="btn btn-primary next-material-button" onClick={onAddClick}>Přidat</button>
                 </div>
-            </div>
-            <button onClick={()=>{console.log(gradeValue)}}>check</button>
+            </div>           
         </div>
     )
 }

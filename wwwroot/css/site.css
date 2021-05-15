@@ -124,7 +124,7 @@ h2 {
 }
 
 .landing-page .main-image {
-    width: 200px;
+    max-width: 80vw;
     margin: 0 auto;
 }
 
@@ -136,47 +136,91 @@ h2 {
     background: #272727;
 }
 
-.info-section {
-    padding: 4rem 0;
-    max-width: 850px;
-    margin: 2rem auto;
+.landing-page {
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    text-align: start;
 }
 
-.info-section-left {
-    position: absolute;
-    height: 320px;
-    width: 100%;
-    z-index: -1;
-}
-
-.info-section img {
-    margin: 0 auto;
-}
-
-.landing-page {
-    max-width: 850px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column-reverse;
-    justify-content: space-between;
-}
-
-    .landing-page div {
+    .landing-page > div {
         display: flex;
         flex-direction: column;
         justify-content: space-around;
+        text-align: start;
+        padding: 0 1rem;
+    }
+
+    .landing-page a {
         padding: 0;
     }
 
-    .landing-page h1 {
-        font-size: 2.5rem;
-        font-weight: bold;
-        text-align: start;
-        padding-bottom: 1rem;
+.store-badge img {
+    width: 200px;
+}
+
+.store-badge:hover {
+    background: none;
+}
+
+.only-desktop {
+    display: none;
+}
+
+.landing-page h1 {
+    font-size: 2.5rem;
+    font-weight: 600;
+}
+
+#changingText:before {
+    animation: change 7s infinite;
+    animation-timing-function: linear;
+    content: "";
+}
+
+@keyframes change {
+    0% {
+        content: "studentům";
+    }
+
+    33% {
+        content: "učitelům";
+    }
+
+    66% {
+        content: "ředitelům";
+    }
+
+    100% {
+        content: "studentům";
+    }
+}
+
+.feature-section {
+    margin: 5rem 0;
+    text-align: start;
+}
+
+    .feature-section h3 {
+        font-size: 1.5rem;
+    }
+
+    .feature-section h2 {
+        margin-bottom: 3rem;
+    }
+
+.feature-list {
+    display: flex;
+    flex-flow: wrap;
+}
+
+    .feature-list > div {
+        margin: 0 1rem 1rem 0;
+        flex-grow: 1;
+    }
+
+    .feature-list img {
+        width: 100%;
     }
 
 .table-heading {
@@ -548,94 +592,18 @@ html {
     font-size: 14px;
 }
 
-@media (min-width: 768px) {
-
-
-    html {
-        font-size: 16px;
-    }
-
-    .container {
-        max-width: initial;
-    }
-
-    .main-container > div:nth-child(2) {
-        padding-left: 0 !important;
-    }
-
-    .table td {
-        padding: 0.75rem;
-    }
-
-    .timeframe {
-        font-size: 10px;
-    }
-
-    .info-section {
+@media(min-width:370px) {
+    .card-body {
         flex-direction: row;
-        padding: 4rem 2rem;
-        margin: 5rem auto;
-    }
-
-    .info-section-left {
-        border-radius: 0 10px 10px 0;
-        padding: 4rem 2rem 4rem calc(((100vw - 850px) / 2) + 18px) !important;
-        margin: 0;
-        width: 70vw;
-    }
-}
-
-@media (min-width: 960px) {
-
-    .container {
-        max-width: 960px !important;
-    }
-
-    .main-container > div {
-        width: 50%;
-    }
-
-    .subject-container .card {
-        width: 20rem;
-    }
-
-    .table-white {
-        padding: 1rem 0.5rem;
-    }
-
-    a {
-        padding: 5px 10px;
-    }
-
-    .main-container {
-        flex-direction: row;
-    }
-
-        .main-container > div:nth-child(2) {
-            padding-left: 50px !important;
-        }
-
-    .side-pane {
-        max-width: 12rem;
-        flex-direction: column !important;
-    }
-}
-
-@media (min-width: 1120px) {
-
-    .container {
-        max-width: 1120px !important;
-    }
-}
-
-@media (min-width: 1332px) {
-
-    .container {
-        max-width: 1332px !important;
     }
 }
 
 @media (min-width: 576px) {
+
+    .feature-list > div {
+        max-width: 45%;
+    }
+
     .btn-section {
         flex-direction: row;
         flex-wrap: wrap;
@@ -644,6 +612,14 @@ html {
         .btn-section .btn {
             margin: 0.15rem;
         }
+
+    .only-mobile {
+        display: none;
+    }
+
+    .only-desktop {
+        display: initial;
+    }
 
     .side-pane {
         flex-direction: row;
@@ -700,21 +676,12 @@ html {
 
     .landing-page {
         flex-direction: row;
-        padding: 4rem 2rem;
+        margin-top: 7rem;
     }
 
         .landing-page .main-image {
-            width: 200px;
-            margin: 0 auto;
-        }
-
-        .landing-page div {
-            height: 400px;
-        }
-
-        .landing-page h1 {
-            font-size: 3rem;
-            padding-bottom: 0;
+            width: 350px;
+            margin: 0 0 0 auto;
         }
 
     footer .container {
@@ -722,9 +689,97 @@ html {
     }
 }
 
-@media(min-width:370px) {
-    .card-body {
+@media (min-width: 768px) {
+
+
+    html {
+        font-size: 16px;
+    }
+
+    .container {
+        max-width: initial;
+    }
+
+    .main-container > div:nth-child(2) {
+        padding-left: 0 !important;
+    }
+
+    .table td {
+        padding: 0.75rem;
+    }
+
+    .timeframe {
+        font-size: 10px;
+    }
+}
+
+@media (min-width: 960px) {
+    .landing-page .main-image {
+        width: 450px !important;
+    }
+
+    .store-badge img {
+        width: 200px;
+        position: relative;
+        left: -10px;
+    }
+
+    .feature-list img {
+        width: auto !important;
+    }
+
+    .container {
+        max-width: 960px !important;
+    }
+
+    .main-container > div {
+        width: 50%;
+    }
+
+    .subject-container .card {
+        width: 20rem;
+    }
+
+    .table-white {
+        padding: 1rem 0.5rem;
+    }
+
+    a {
+        padding: 5px 10px;
+    }
+
+    .main-container {
         flex-direction: row;
+    }
+
+        .main-container > div:nth-child(2) {
+            padding-left: 50px !important;
+        }
+
+    .side-pane {
+        max-width: 12rem;
+        flex-direction: column !important;
+    }
+}
+
+@media (min-width: 1120px) {
+    .landing-page {
+        margin: 7rem 5rem 0;
+    }
+
+        .landing-page .main-image {
+            width: 580px !important;
+        }
+
+    .container {
+        max-width: 1120px !important;
+    }
+}
+
+@media (min-width: 1332px) {
+
+    .container {
+        max-width: 1332px !important;
     }
 }
 

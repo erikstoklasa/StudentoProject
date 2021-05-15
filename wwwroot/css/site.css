@@ -223,6 +223,14 @@ h2 {
         width: 100%;
     }
 
+.contact-section {
+    margin: 10rem 0;
+}
+
+    .contact-section h2 {
+        line-height: 1.5;
+    }
+
 .table-heading {
     color: var(--grey);
     margin: 1rem 0;

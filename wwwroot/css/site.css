@@ -124,7 +124,7 @@ h2 {
 }
 
 .landing-page .main-image {
-    max-width: 80vw;
+    max-width: 90vw;
     margin: 0 auto;
 }
 
@@ -230,6 +230,10 @@ h2 {
     .contact-section h2 {
         line-height: 1.5;
     }
+
+.contact-email {
+    font-size: 2.5rem;
+}
 
 .table-heading {
     color: var(--grey);
@@ -562,6 +566,10 @@ a:hover {
     font-size: 1.5rem;
 }
 
+.login-link {
+    font-weight: 600;
+}
+
 /*Tables*/
 .table td,
 .table th {
@@ -772,7 +780,7 @@ html {
 
 @media (min-width: 1120px) {
     .landing-page {
-        margin: 7rem 5rem 0;
+        margin: 7rem 5rem;
     }
 
         .landing-page .main-image {
@@ -826,7 +834,6 @@ button.accept-policy {
 
     .navbar-yellow div {
         display: flex;
-        width: 15rem;
         justify-content: space-around;
     }
 

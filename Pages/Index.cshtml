@@ -16,35 +16,44 @@ User.Identity.IsAuthenticated
     }
     else
     {
-        <div class="landing-page">
-            <div class="px-3">
-                <h1>Moderní škola<br>je za dveřmi</h1>
-                <a href="https://studento.typeform.com/to/f7yRqd5T" class="btn-lg btn-primary box-shadow">Vyzkoušet beta verzi</a>
-            </div>
-            <div class="flex-row">
-                <img class="main-image" src="~/images/girl.png" alt="Cartoon girl holding a book">
-            </div>
-
-        </div>
-        <div class="background-yellow">
-            <div class="info-section">
-                <div class="px-3">
-                    <h2>Studento je intuitivní</h2>
-                    <p>Vše, co potřebujete máte vždy po ruce. Studenti své známky a studijní materiály, učitelé své podklady k výuce, správci školní matriku a ředitelé důkladnou analýzu všeho, co se šustne ve škole.</p>
+        <div class="container">
+            <div class="landing-page">
+                <div>
+                    <div>
+                        <h1>Konečně&nbsp;aplikace, která pomáhá <span id="changingText"></span></h1>
+                        <p>Vše, co potřebujete máte vždy po ruce. Studenti své známky a studijní materiály, učitelé své podklady k výuce, správci školní matriku a ředitelé důkladnou analýzu všeho, co se ve škole šustne.</p>
+                    </div>
+                    <div>
+                        <a class="store-badge only-desktop" href='https://play.google.com/store/apps/details?id=cz.studento&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Nyní na Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/cs_badge_web_generic.png' /></a>
+                    </div>
                 </div>
-                <img src="/images/landingPage-analysis.png" alt="Studento Analysis" height="154" />
+                <img class="main-image" src="~/images/devices.png" alt="Zařízení s webovou a mobilní aplikací Studento.cz">
             </div>
-        </div>
-        <div id="special-unicorn"></div>
-        <div class="info-section-left background-black">
-
-        </div>
-        <div class="info-section">
-            <div class="px-3">
-                <h2 class="text-light">Dozvíte se vše, co normálně nevidíte</h2>
-                <p class="text-light">Analyzujte výkon Vašich studentů, podívejte se na nejvýkonnější studenty. Studento poskytuje široké možnosti analýzy dat na škole, díky tomu se můžete rozhodovat jako vedení moderních firem.</p>
+            <div>
+                <a class="store-badge only-mobile" href='https://play.google.com/store/apps/details?id=cz.studento&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Nyní na Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/cs_badge_web_generic.png' /></a>
             </div>
-            <img src="/images/landingPage-chart.png" alt="Studento Analysis" height="220" />
+            <div class="feature-section">
+                <h2>Tohle všechno umíme</h2>
+                <div class="feature-list">
+                    <div>
+                        <h3>Rozvrhy hodin</h3>
+                        <img src="~/images/rozvrh-hodin.png" alt="Rozvrh hodin" />
+                    </div>
+                    <div>
+                        <h3>Studijní materiály</h3>
+                        <img src="~/images/materialy.png" alt="Studijní materiály" />
+                    </div>
+                    <div>
+                        <h3>Absence studentů</h3>
+                        <img src="~/images/absence.png" alt="Absence studentů" />
+                    </div>
+                    <div>
+                        <h3>Známky</h3>
+                        <img src="~/images/znamky.png" alt="Známky" />
+                    </div>
+                </div>
+            </div>
+            <div class="contact-section"><h3>Napište nám na</h3><h2 class="contact-email">moje@studento.cz</h2></div>
         </div>
     }
 </div>

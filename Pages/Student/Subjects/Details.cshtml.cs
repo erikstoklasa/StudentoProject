@@ -15,12 +15,9 @@ namespace SchoolGradebook.Pages.Student.Subjects
 {
     public class DetailsModel : PageModel
     {
-        private readonly Analytics analytics;
         private readonly SubjectService subjectService;
         private readonly StudentAccessValidation studentAccessValidation;
         private readonly StudentService studentService;
-        private readonly SubjectMaterialService subjectMaterialService;
-        private readonly GradeService gradeService;
 
         public Grade[] Grades { get; set; }
 
@@ -36,17 +33,13 @@ namespace SchoolGradebook.Pages.Student.Subjects
                             GradeService gradeService)
         {
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            this.analytics = analytics;
             this.subjectService = subjectService;
             this.studentAccessValidation = studentAccessValidation;
             this.studentService = studentService;
-            this.subjectMaterialService = subjectMaterialService;
-            this.gradeService = gradeService;
         }
 
         public string UserId { get; private set; }
         public SubjectInstance Subject { get; set; }
-        public Grade[] GradesAddedByStudent { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -73,15 +66,6 @@ namespace SchoolGradebook.Pages.Student.Subjects
             {
                 return BadRequest();
             }
-
-            Grades = await gradeService.GetGradesAddedByTeacherAsync((int)studentId, (int)id);
-            GradesAddedByStudent = await gradeService.GetGradesAddedByStudentAsync((int)studentId, (int)id);
-            SubjectMaterials = await subjectMaterialService.GetAllMaterialsBySubjectInstance((int)id);
-            SubjectAverage = await analytics.GetSubjectAverageForStudentAsync((int)studentId, Subject.Id);
-
-            double comparisonAvg = await analytics.GetSubjectAverageForStudentAsync((int)studentId, Subject.Id, 365, 30);
-            ViewData["ComparisonString"] = LanguageHelper.getAverageComparisonString(SubjectAverage, comparisonAvg);
-
 
             return Page();
         }

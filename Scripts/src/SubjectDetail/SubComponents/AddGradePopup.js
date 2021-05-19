@@ -5,6 +5,7 @@ const addGradePopup = ({ addGrade, hidePopup }) => {
     const [gradeName, updateGradeName] = useState()
     const [gradeValue, updateGradeStateValue] = useState('')
     const [showWarning, updateShowWarning] = useState(false)
+    const [warningMessage, updateWarning] = useState('')
 
     useEffect(() => {
         document.body.style.overflow = 'hidden';
@@ -18,7 +19,14 @@ const addGradePopup = ({ addGrade, hidePopup }) => {
             if (showWarning) { updateShowWarning(false) }
         }
         else {
-           updateShowWarning(true)          
+            if (!gradeName && !gradeValue) {
+                updateWarning('Prosím zadej všechny údaje')
+            } else if (!gradeName) {
+                updateWarning('Prosím zadej název známky')
+            } else if (!gradeValue) {
+                updateWarning('Prosím zadej známku')
+            }
+                updateShowWarning(true)          
         }
     }
     
@@ -50,12 +58,11 @@ const addGradePopup = ({ addGrade, hidePopup }) => {
                         <input className="number-input form-control" value={gradeValue} maxlength="2" onChange={(event) => { updateGradeValue(event.target.value)} }></input>
                     </div>
                     { showWarning? 
-                        <p className="add-warning-text">Chybí údaje</p>
+                        <p className="add-warning-text">{warningMessage}</p>
                    : null}
                         <button className="btn btn-primary next-material-button" onClick={onAddClick}>Přidat</button>
                 </div>
-            </div>
-            <button onClick={()=>{console.log(gradeValue)}}>check</button>
+            </div>           
         </div>
     )
 }

@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import InputMaterialList from './InputMaterialList'
 
 
@@ -6,6 +6,8 @@ const AddMaterialPopup = ({ upload, hidePopup }) => {
     const [currentDisplay, updateCurrentDisplay] = useState('selection')
     const [headingText, updateHeadingText] = useState('Přidat materiály')
     const [inputGroupName, updateInputName] = useState('')
+    const [showWarning, updateShowWarning] = useState(false)
+    const [warningMessage, updateWarning] = useState('')
     const [inputData, updateInputData] = useState(
     [
         {
@@ -15,6 +17,12 @@ const AddMaterialPopup = ({ upload, hidePopup }) => {
         }
     ])
     
+    useEffect(() => {
+        document.body.style.overflow = 'hidden';
+        return ()=> document.body.style.overflow = 'unset';
+    }, []);
+
+
     const trackInputData = (referenceId, data , type) => {
         const newData = [...inputData]        
         if (type === 'name') {
@@ -35,20 +43,72 @@ const AddMaterialPopup = ({ upload, hidePopup }) => {
         updateInputData(newData)
     }
 
-    const addNextMaterial = () => {
-        const newInputList = [...inputData,
-            {
-            materialName: null,
-            materialDescription: null,
-            materialFile: null
+    const addNextMaterial = () => {   
+        if (inputData.length <= 5) {
+            if (checkSingularInput(inputData[inputData.length-1])) {
+                const newInputList = [...inputData,
+                {
+                    materialName: null,
+                    materialDescription: null,
+                    materialFile: null
+                }
+                ]
+                updateInputData(newInputList)
+                if (showWarning) updateShowWarning(false);
+            } else {
+                updateWarning('Vyplň prosím údaje k předchozím materiálům')
+                updateShowWarning(true)
             }
-        ]
-        updateInputData(newInputList)
+        } else {
+            updateWarning('Najednou lze přidat pouze 5 materiálu')
+            updateShowWarning(true)
+        }
     }
 
-    const handleUploadClick = () => {       
-        upload(inputGroupName, inputData)
-        hidePopup()
+    const checkInputList = (data) => {
+        for (let i = 0; i < data.length; i++){
+            if (!data[i].materialFile || !data[i].materialName) {
+                return false
+            }
+        }
+        return true
+    }
+
+    const checkSingularInput = (element) => {
+        if (element.materialName && element.materialFile) {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    const handleUploadClick = () => {
+        if (inputData.length === 1) {
+            if (inputData[0].materialName && inputData[0].materialFile) {
+                upload(inputGroupName, inputData)
+                if (showWarning) { updateShowWarning(false); updateWarning(null) }
+                hidePopup()
+            } else if (!inputData[0].materialName && !inputData[0].materialFile) {
+                updateWarning('Prosím zadej název a vyber soubor')
+                updateShowWarning(true)
+            } else if (!inputData[0].materialName) {
+                updateWarning('Prosím zadej název')
+                updateShowWarning(true)
+            } else if (!inputData[0].materialFile) {
+                updateWarning('Prosím vyber soubor')
+                updateShowWarning(true)
+            }
+        } else{
+            if (checkInputList(inputData)) {
+                upload(inputGroupName, inputData)
+                if (showWarning) { updateShowWarning(false); updateWarning(null) }
+                hidePopup()
+            } else {
+                updateWarning('Zadej prosím názvy a soubory ke všem materálům')
+                updateShowWarning(true)
+            }
+        }
+        
     }
 
     return (
@@ -76,7 +136,10 @@ const AddMaterialPopup = ({ upload, hidePopup }) => {
                 <div className="add-group-container">               
                     <InputMaterialList data={inputData} trackInputData={trackInputData} type={'single'}/>                
                 </div>
-                : null}
+                        : null}
+                { showWarning? 
+                        <p className="add-warning-text">{warningMessage}</p>
+                   : null}
                 {currentDisplay !== 'selection' ?
                     <button className="btn btn-primary next-material-button" onClick={handleUploadClick}>Přidat</button>
                     : null}  

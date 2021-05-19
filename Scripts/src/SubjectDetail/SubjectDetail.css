@@ -186,13 +186,14 @@
 }
 
 .popup-inner-container{
+    max-height: 95vh;
     width: 100%;
     max-width: 400px;
     margin: 20px;   
     background-color: white;
     border: none;
     border-radius: 10px;
-    overflow: hidden;   
+    overflow-y: auto !important;   
 }
 
 .popup-title-container{   
@@ -239,7 +240,8 @@
 
 .add-warning-text{
     color: var(--pastelRed);
-    font-size: 0.85rem;
+    font-size: 1rem;
+    font-weight: 600;  
     margin: 0px 0px 10px 0px;
 }
 
@@ -275,7 +277,7 @@
     color: var(--grey);
 }
 
-.add-material-container{
+.add-material-container{   
     min-width: 250px;
     position: fixed;
     width: 100%;
@@ -313,7 +315,7 @@
 }
 
 .popup-inner-padding{
-    padding:15px 15px 15px 15px;
+    padding:15px 15px 15px 15px;  
 }
 
 .material-popup-title-container{

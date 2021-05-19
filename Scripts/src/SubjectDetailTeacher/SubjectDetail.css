@@ -129,6 +129,13 @@
     color: var(--grey);
 }
 
+.add-warning-text{
+    color: var(--pastelRed);
+    font-size: 1rem;
+    font-weight: 600;  
+    margin: 0px 0px 10px 0px;
+}
+
 .add-material-container{
     min-width: 250px;
     position: fixed;

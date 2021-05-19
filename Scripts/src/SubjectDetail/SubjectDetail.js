@@ -122,8 +122,8 @@ function SubjectDetail() {
                 data.forEach(material => {
                     const linkText = material.fileExt.substring(1);
                     Object.assign(material, {
-                        addedRelative: moment(material.added).locale('cs').fromNow(),
-                        addedDisplay: moment(material.added).format("D.M.Y"),
+                        addedRelative: moment.utc(material.added).locale('cs').fromNow(),
+                        addedDisplay: moment.utc(material.added).format("D.M.Y"),
                         link: linkText
                     })
                 })
@@ -137,7 +137,7 @@ function SubjectDetail() {
 
     // fetch grades, subject info and student material(in the future)
     const fetchData = () => {
-       
+        
         if (subjectId) {
             fetch(`${apiAddress}/SubjectInstances/Student/${subjectId}`, {
                 method: 'GET',
@@ -165,8 +165,8 @@ function SubjectDetail() {
                         return grade
                     })
                     gradesWithDisplayValue.forEach(grade => {
-                        Object.assign(grade, { addedRelative: moment(grade.added).locale('cs').fromNow() })
-                        Object.assign(grade, { addedDisplay: moment(grade.added).format("D.M.Y") })
+                        Object.assign(grade, { addedRelative: moment.utc(grade.added).locale('cs').fromNow() })
+                        Object.assign(grade, { addedDisplay: moment.utc(grade.added).format("D.M.Y") })
                     })
                     updateGrades(gradesWithDisplayValue)
                 })
@@ -274,8 +274,8 @@ function SubjectDetail() {
                 if (data) {
                     Object.assign(data, {
                         displayValue: getGradeDisplayValue(parseInt(data.value)),
-                        addedRelative: moment(data.added).locale('cs').fromNow(),
-                        addedDisplay: moment(data.added).format("D.M.Y")
+                        addedRelative: moment.utc(data.added).locale('cs').fromNow(),
+                        addedDisplay: moment.utc(data.added).format("D.M.Y")
                     })
                     const newArr = [data, ...grades]                   
                     updateGrades(newArr)

@@ -227,7 +227,8 @@ const GradePage = () => {
         
     }
   
-    const modifyGrade = (gradeId, gradeValue, studentId, gradeName, grade, gradeGroupId) => {        
+    const modifyGrade = (gradeId, gradeValue, studentId, gradeName, grade, gradeGroupId) => {
+       
         if (gradeId) {
             if (gradeValue === 0) {
                 const gradeArr = [gradeId]

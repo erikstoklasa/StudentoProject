@@ -4,6 +4,7 @@ import AverageColumn from './SubComponents/AverageColumn.js';
 import NewGradeColumn from './SubComponents/NewGradeColumn.js';
 import GradeDisplaySection from './SubComponents/GradeDisplaySection.js';
 import FillerColumn from './SubComponents/FillerColumn.js'
+import GradePopup from './SubComponents/GradePopup'
 import NotificationBar from './SubComponents/NotificationBar.js'
 import apiAdress from './SubComponents/Variables'
 import './GradePage.css';
@@ -15,7 +16,7 @@ const GradePage = () => {
     const [bulkStudentData, updateBulkStudentData] = useState([]);
     const [InstanceId, updateInstanceId] = useState();
     const [orderedStudents, updateOrderedStudents] = useState();
-    const [orderedGrades, updateOrderedGrades] = useState();
+    const [orderedGrades, updateOrderedGrades] = useState();  
     const [notificationData, updateNotificationData] = useState({
         show: false,
         text: '',
@@ -38,7 +39,8 @@ const GradePage = () => {
                 data.forEach(grade => { 
                     const displayValue = getGradeDisplayValue(parseInt(grade.value))
                     Object.assign(grade, { displayValue: displayValue })
-                })                           
+                })
+              
                 updateBulkGradeData(data)
             })
 
@@ -225,7 +227,7 @@ const GradePage = () => {
         
     }
   
-    const modifyGrade = (gradeId, gradeValue, studentId, gradeName) => {        
+    const modifyGrade = (gradeId, gradeValue, studentId, gradeName, grade, gradeGroupId) => {        
         if (gradeId) {
             if (gradeValue === 0) {
                 const gradeArr = [gradeId]
@@ -249,7 +251,8 @@ const GradePage = () => {
                     value: getInternalGradeValue(gradeValue),
                     subjectInstanceId: InstanceId,
                     studentId: studentId,
-                    name: gradeName
+                    name: gradeName,
+                    gradeGroupId: grade.gradeGroupId,                
                 }
                
                 fetch(`${apiAdress}/Grades/Teacher`, {
@@ -287,7 +290,8 @@ const GradePage = () => {
                 value: getInternalGradeValue(gradeValue),
                 subjectInstanceId: InstanceId,
                 studentId: studentId,
-                name: gradeName
+                name: gradeName,
+                gradeGroupId: gradeGroupId,
             }           
 
             fetch(`${apiAdress}/Grades/Teacher`, {
@@ -311,6 +315,30 @@ const GradePage = () => {
                 renderNotificationBar()
             }).catch()
         }
+    }
+
+    const modifyGradeGroup = (id, name, weight) => {
+        fetch(`${apiAdress}/Grades/Teacher/GradeGroup`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: JSON.stringify({
+                id: id,
+                weight: weight,
+                name: name,              
+                addedBy: 1
+            })
+        })
+        .then((res) => {
+            if (res.ok) {
+                return res.json()
+            }
+        })
+        .then((data) => {
+            console.log(data)
+        })
     }
 
     const trackNewGradeValues = (grade, id) => {
@@ -342,39 +370,62 @@ const GradePage = () => {
         updateNewGrades(newArr)
     }
 
-    const handleSubmitNewGrades = (newGradeName) => {
+    const handleSubmitNewGrades = (newGradeName, newGradeWeight) => {
         if (!orderedGrades.some(grade => grade.name === newGradeName)) {
             const newArr = [...newGrades]
             newArr.forEach(grade => {
-                Object.assign(grade, { name: newGradeName })
+                Object.assign(grade, { name: newGradeName})
             })
             if (newArr.length > 0) {
-                fetch(`${apiAdress}/Grades/Teacher/Batch`, {
+                fetch(`${apiAdress}/Grades/Teacher/GradeGroup`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                         // 'Content-Type': 'application/x-www-form-urlencoded',
                     },
-                    body: JSON.stringify(newArr)
-                }).then(res => {
-                    if (res.ok) {
-                        return res.json()
-                    }
-                }).then(data => {
-                    data.forEach(grade => {
-                        const displayValue = getGradeDisplayValue(parseInt(grade.value))
-                        Object.assign(grade, { displayValue: displayValue })
+                    body: JSON.stringify({
+                        weight: newGradeWeight,
+                        name: newGradeName,
+                        addedBy: 1
                     })
-                    let array;
-                    array = [...bulkGradeData, ...data]
-                    updateBulkGradeData(array)
-                    updateNewGrades([])
-                    renderNotificationBar()
                 })
-                return 'success'
-            } else {
-                return 'failed'
-            }
+                .then((res) => {
+                        if (res.ok) {
+                            return res.json()
+                        }
+                    }
+                ).then(data => {                    
+                    newArr.forEach(grade => {
+                        Object.assign(grade, { gradeGroupId: data.id})
+                    })
+                    fetch(`${apiAdress}/Grades/Teacher/Batch`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                            // 'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: JSON.stringify(newArr)
+                    }).then(res => {
+                        if (res.ok) {
+                            return res.json()
+                        }
+                    }).then(data => {
+                        data.forEach(grade => {
+                            const displayValue = getGradeDisplayValue(parseInt(grade.value))
+                            Object.assign(grade, { displayValue: displayValue, gradeGroupName : grade.name })
+                        })
+                        let array;
+                        array = [...bulkGradeData, ...data]
+                        
+                        updateBulkGradeData(array)
+                        updateNewGrades([])
+                        renderNotificationBar()                       
+                    })
+                    
+                })
+                } else {
+                    return 'failed'
+                }
         } else {
             alert('Prosím neopakujte jména známek')
         }
@@ -429,9 +480,10 @@ const GradePage = () => {
                     {(orderedStudents ? <StudentColumn students={orderedStudents} /> : null)}
                     {(orderedStudents && bulkGradeData ? <AverageColumn students={orderedStudents} onClickHeader={onClickHeader} /> : null)}
                     {(orderedStudents ? <NewGradeColumn students={orderedStudents} trackNewGradeValues={trackNewGradeValues} removeNewGrade={removeNewGrade} handleSubmitNewGrades={handleSubmitNewGrades} /> : null)}
-                    {(orderedStudents && orderedGrades && bulkGradeData ? <GradeDisplaySection orderedGrades={orderedGrades} orderedStudents={orderedStudents} bulkGradeData={bulkGradeData} modifyGrade={modifyGrade} /> : null)}
+                    {(orderedStudents && orderedGrades && bulkGradeData ? <GradeDisplaySection orderedGrades={orderedGrades} orderedStudents={orderedStudents} bulkGradeData={bulkGradeData} modifyGrade={modifyGrade} modifyGradeGroup={modifyGradeGroup}/> : null)}
                     {(orderedStudents ? <FillerColumn students={orderedStudents} /> : null)}
-                </div>               
+                </div>
+           
             </div>
         )
     }

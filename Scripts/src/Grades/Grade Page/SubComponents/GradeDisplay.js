@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import '../GradePage.css'
 
-const GradeDisplay = ({ gradeId, studentId, value, modifyGrade, gradeName }) => {
+const GradeDisplay = ({ gradeId, studentId, value, modifyGrade, gradeName, grade, gradeGroupId }) => {
     const [initialValue, updateInitialValue] = useState();
     const [gradeValue, updateGradeValue] = useState();
     const [displayInput, updateDisplayInput] = useState(false);
@@ -19,7 +19,7 @@ const GradeDisplay = ({ gradeId, studentId, value, modifyGrade, gradeName }) => 
         updateDisplayInput(false)
         if (parseInt(gradeValue) > 0 && parseInt(gradeValue) < 6 && gradeValue !== initialValue) {
             updateInitialValue(gradeValue);
-            modifyGrade(gradeId, gradeValue, studentId, gradeName)
+            modifyGrade(gradeId, gradeValue, studentId, gradeName, grade, gradeGroupId)
         }
         else if (gradeValue === '' && gradeValue !== initialValue) {
             if (gradeId) {

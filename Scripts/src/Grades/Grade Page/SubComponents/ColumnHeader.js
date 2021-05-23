@@ -1,8 +1,9 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
+
 import '../GradePage.css';
 
-const ColumnHeader = ({ title, type, handleClick, displayInput, onInputChange, onClickHeader }) => {
-    const [displayArrow, updateDisplayArrow] = useState(false)
+const ColumnHeader = ({ title, type, handleClick, displayInput, onClickHeader, grade, gradeName, displayName, activatePopup }) => {
+    const [displayArrow, updateDisplayArrow] = useState(false)    
 
     const handleAverageHeaderClick = () => {
         updateDisplayArrow(!displayArrow)
@@ -14,7 +15,7 @@ const ColumnHeader = ({ title, type, handleClick, displayInput, onInputChange, o
             <div className="column-header">
             
                 {(!displayInput ? <div className=" column-header-container"><div className=" btn btn-primary btn-display" onClick={handleClick}><img src="/images/add.svg" alt="Přidat" height="18px" className="plus"></img><p className="column-header-text">{title}</p></div></div>
-                    : <div className="column-header-container"><input className="form-control column-header-input" onChange={onInputChange} /></div>)}
+                    : <div className="column-header-container">{displayName? gradeName : null}</div>)}
             
             </div>
         )
@@ -44,7 +45,9 @@ const ColumnHeader = ({ title, type, handleClick, displayInput, onInputChange, o
 
     else {
         return (
-            <div className="column-header"><p className="column-header-text">{title}</p></div>
+            <div className="column-header" onClick={activatePopup}><p className="column-header-text">{title}</p></div>
+               
+            
         )
     }
 }

@@ -6,8 +6,7 @@ const GradePopup = ({ grade, onNameChange, onWeightChange, newGrade, closePopup,
     const [displayWarning, updateDisplayWarning] = useState(false)
 
     useEffect(() => {
-        if (!newGrade) {
-            console.log(grade)
+        if (!newGrade) {          
             updateGradeName(grade.gradeGroupName)            
         }
         document.body.style.overflow = 'hidden';

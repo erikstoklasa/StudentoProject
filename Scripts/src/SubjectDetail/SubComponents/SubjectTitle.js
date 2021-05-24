@@ -17,7 +17,8 @@ const SubjectTitle = ({ info, average }) => {
             </div>
         )
     } else { 
-        return(<div></div>)
+        return (<div>
+        </div>)
     }
 }
 

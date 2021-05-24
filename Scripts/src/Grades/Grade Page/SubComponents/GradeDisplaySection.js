@@ -2,11 +2,11 @@ import React from 'react'
 import GradeDisplayColumn from './GradeDisplayColumn'
 import '../GradePage.css'
 
-const GradeDisplaySection = ({ orderedGrades, orderedStudents, bulkGradeData, modifyGrade }) => { 
+const GradeDisplaySection = ({ orderedGrades, orderedStudents, bulkGradeData, modifyGrade, modifyGradeGroup }) => { 
  
         
     const gradeColumnList = orderedGrades.map((grade, index) => {
-            return <GradeDisplayColumn key={index} grade={grade} students={orderedStudents} studentGrades={bulkGradeData} modifyGrade={modifyGrade} />
+        return <GradeDisplayColumn key={index} grade={grade} students={orderedStudents} studentGrades={bulkGradeData} modifyGrade={modifyGrade} modifyGradeGroup={modifyGradeGroup}/>
     })        
            
     return (

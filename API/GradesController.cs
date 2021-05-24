@@ -65,7 +65,7 @@ namespace SchoolGradebook.API.Grades
                 foreach (var g in grades)
                 {
 
-                    var newGrade = new GradeObject { Added = g.Added, Id = g.Id, Name = g.Name, StudentId = g.StudentId, SubjectInstanceId = g.SubjectInstanceId, GradeGroupId = g.GradeGroupId, GradeGroupName = g.GradeGroup?.Name };
+                    var newGrade = new GradeObject { Added = g.Added, Id = g.Id, Name = g.Name, StudentId = g.StudentId, SubjectInstanceId = g.SubjectInstanceId, GradeGroupId = g.GradeGroupId, GradeGroupName = g.GradeGroup?.Name, GradeGroupWeight = g.GradeGroup?.Weight };
                     newGrade.Value = gradeValueFormat switch
                     {
                         //Internal
@@ -89,7 +89,7 @@ namespace SchoolGradebook.API.Grades
                 var grades = await gradeService.GetAllGradesAddedByTeacherAsync((int)subjectInstanceId);
                 foreach (var g in grades)
                 {
-                    var newGrade = new GradeObject { Added = g.Added, Id = g.Id, Name = g.Name, StudentId = g.StudentId, SubjectInstanceId = g.SubjectInstanceId, GradeGroupId = g.GradeGroupId, GradeGroupName = g.GradeGroup?.Name };
+                    var newGrade = new GradeObject { Added = g.Added, Id = g.Id, Name = g.Name, StudentId = g.StudentId, SubjectInstanceId = g.SubjectInstanceId, GradeGroupId = g.GradeGroupId, GradeGroupName = g.GradeGroup?.Name, GradeGroupWeight = g.GradeGroup?.Weight };
                     newGrade.Value = gradeValueFormat switch
                     {
                         //Internal
@@ -138,7 +138,7 @@ namespace SchoolGradebook.API.Grades
                 return StatusCode(404);
             }
             var newGrade = new GradeObject
-            { Added = g.Added, Id = g.Id, Name = g.Name, StudentId = g.StudentId, SubjectInstanceId = g.SubjectInstanceId, Value = g.GetInternalGradeValue().ToString(), GradeGroupId = g.GradeGroupId, GradeGroupName = g.GradeGroup?.Name };
+            { Added = g.Added, Id = g.Id, Name = g.Name, StudentId = g.StudentId, SubjectInstanceId = g.SubjectInstanceId, Value = g.GetInternalGradeValue().ToString(), GradeGroupId = g.GradeGroupId, GradeGroupName = g.GradeGroup?.Name, GradeGroupWeight = g.GradeGroup?.Weight };
             newGrade.Value = gradeValueFormat switch
             {
                 //Internal
@@ -355,11 +355,21 @@ namespace SchoolGradebook.API.Grades
             {
                 return BadRequest(new ErrorObject() { Message = e.Message });
             }
+            List<GradeObject> gradesOutput = new();
             foreach (var g in gradesToCreate)
             {
+                gradesOutput.Add(new GradeObject()
+                {
+                    Added = g.Added,
+                    Id = g.Id,
+                    StudentId = g.StudentId,
+                    SubjectInstanceId = g.SubjectInstanceId,
+                    Value = g.GetInternalGradeValue().ToString(),
+                    GradeGroupId = g.GradeGroupId
+                });
                 gradeIds.Add(g.Id);
             }
-            return CreatedAtAction("PostGrade", gradeIds, gradesToCreate);
+            return CreatedAtAction("PostGrade", gradeIds, gradesOutput);
         }
 
         /// <summary>
@@ -771,6 +781,7 @@ namespace SchoolGradebook.API.Grades
         public int StudentId { get; set; }
         public int? GradeGroupId { get; set; }
         public string GradeGroupName { get; set; }
+        public int? GradeGroupWeight { get; set; }
         public string Name { get; set; }
         public DateTime Added { get; set; }
         public USERTYPE? AddedBy { get; set; }

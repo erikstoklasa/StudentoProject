@@ -116,11 +116,7 @@ namespace SchoolGradebook.Services
         }
         public async Task AddGradeAsync(Grade grade, USERTYPE usertype, bool saveChanges = true)
         {
-            if (!HasRequiredFields(grade))
-            {
-                throw new ArgumentNullException("Grade name");
-            }
-
+            grade.Name ??= "";
             //Grading scale is relative to the country of school
             if (grade.GetInternalGradeValue() < -10 || grade.GetInternalGradeValue() > 110)
             {
@@ -134,10 +130,6 @@ namespace SchoolGradebook.Services
         }
         public async Task UpdateGradeAsync(Grade grade)
         {
-            if (!HasRequiredFields(grade))
-            {
-                throw new ArgumentNullException("Grade name");
-            }
 
             //Grading scale is relative to the country of school
             if (grade.GetInternalGradeValue() < -10 || grade.GetInternalGradeValue() > 110)
@@ -153,10 +145,7 @@ namespace SchoolGradebook.Services
         {
             foreach (var grade in grades)
             {
-                if (!HasRequiredFields(grade))
-                {
-                    throw new ArgumentNullException("Grade name");
-                }
+                grade.Name ??= ""; 
                 //Grading scale is relative to the country of school
                 if (grade.GetInternalGradeValue() < -10 || grade.GetInternalGradeValue() > 110)
                 {
@@ -170,11 +159,7 @@ namespace SchoolGradebook.Services
         {
             foreach (var grade in grades)
             {
-                if (!HasRequiredFields(grade))
-                {
-                    throw new ArgumentNullException("Grade name");
-                }
-
+                grade.Name ??= "";
                 //Grading scale is relative to the country of school
                 if (grade.GetInternalGradeValue() < -10 || grade.GetInternalGradeValue() > 110)
                 {
@@ -231,14 +216,6 @@ namespace SchoolGradebook.Services
         }
 
         //VALIDATIONS
-        public static bool HasRequiredFields(Grade grade)
-        {
-            if (string.IsNullOrWhiteSpace(grade.Name))
-            {
-                return false;
-            }
-            return true;
-        }
         public static bool HasRequiredFields(GradeGroup gradeGroup)
         {
             if (string.IsNullOrWhiteSpace(gradeGroup.Name))

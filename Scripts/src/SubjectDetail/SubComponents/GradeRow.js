@@ -4,6 +4,8 @@ import '../SubjectDetail.css'
 
 const GradeRow = ({ grade, info, deleteGrade }) => {    
     const [showDetail, updateShowDetail] = useState(false);
+
+    console.log(grade)
     
     //returns grades css class based on value
         const getGradeClass = (value) => { 
@@ -25,7 +27,7 @@ const GradeRow = ({ grade, info, deleteGrade }) => {
     }
     
     const getGradeName = () => {
-        if (grade.gradeGroupName === null) {
+        if (!grade.gradeGroupName) {
             return grade.name
         } else {
             return grade.gradeGroupName

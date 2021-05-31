@@ -22,27 +22,8 @@ const AddMaterialPopup = ({ upload, hidePopup }) => {
             updateShowGroupNameInput(false)
         }
 
-    }, [inputData])
-    
-    const trackInputData = (referenceId, data , type) => {
-        const newData = [...inputData]        
-        if (type === 'name') {
-            Object.assign(newData[referenceId], {
-                materialName: data
-            })
-        }
-        if (type === 'description') {
-            Object.assign(newData[referenceId], {
-                materialDescription: data
-            })
-        }
-        if (type === 'file') {            
-            Object.assign(newData[referenceId], {
-                materialFile: data
-            })
-        }      
-        updateInputData(newData)
-    } 
+    }, [inputData]) 
+
 
     const checkInputList = (data) => {
         for (let i = 0; i < data.length; i++){
@@ -54,7 +35,7 @@ const AddMaterialPopup = ({ upload, hidePopup }) => {
     }
 
     const handleUploadClick = () => {
-       /* if (inputData.length === 1) {
+     if (inputData.length === 1) {
             if (inputData[0].materialName && inputData[0].materialFile) {
                 upload(inputGroupName, inputData)
                 if (showWarning) { updateShowWarning(false); updateWarning(null) }
@@ -70,17 +51,21 @@ const AddMaterialPopup = ({ upload, hidePopup }) => {
                 updateShowWarning(true)
             }
         } else{
-            if (checkInputList(inputData)) {
-                upload(inputGroupName, inputData)
-                if (showWarning) { updateShowWarning(false); updateWarning(null) }
-                hidePopup()
+         if (checkInputList(inputData)) {
+             if (inputGroupName) {
+                 upload(inputGroupName, inputData)
+                 if (showWarning) { updateShowWarning(false); updateWarning(null) }
+                    hidePopup()
+             } else {
+                 updateShowWarning(true)
+                 updateWarning('Prosím zadej jméno skupiny materiálu')
+             }
+                
             } else {
                 updateWarning('Zadej prosím názvy a soubory ke všem materálům')
                 updateShowWarning(true)
             }
-        }*/
-
-        console.log(inputData)
+        } 
         
     }
 
@@ -121,14 +106,15 @@ const AddMaterialPopup = ({ upload, hidePopup }) => {
                     <h4 className="popup-title">{headingText}</h4>
                         <img className="pointer" src="/images/close.svg" alt="zavřít" height="25px" onClick={() => { hidePopup()}}></img>
                     </div>
-                    {inputData.length > 0 ? <MaterialInputList materials={inputData} removeFile={removeFile} changeName={changeMaterialName}/> : null}
-                <div className="add-group-container">
-                        {showGroupNameInput ?
+                    {showGroupNameInput ?
                             <div>
-                            <input className="form-control mb10 mt10" placeholder="Jméno skupiny materiálu, např. příprava na test" />
+                            <input className="form-control mb10 mt10" placeholder="Jméno skupiny materiálu, např. příprava na test" onChange={(event)=>{updateInputName(event.target.value)}}/>
                                 <div className="hline"></div>
                             </div>
                             : null}
+                    {inputData.length > 0 ? <MaterialInputList materials={inputData} removeFile={removeFile} changeName={changeMaterialName}/> : null}
+                <div className="add-group-container">
+                        
                         <input className="multiple-file-input" type="file" name="materialy" id="materialy" multiple onChange={(event) => { handleFileInput(event.target.files)}}/>
                         <label className="btn btn-outline-primary w100" for="materialy">Vybrat soubory</label>    
                 </div>                       

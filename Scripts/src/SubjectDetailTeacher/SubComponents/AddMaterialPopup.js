@@ -1,69 +1,30 @@
 import React, {useState, useEffect} from 'react'
-import InputMaterialList from './InputMaterialList'
+import MaterialInputList from './MaterialInputList'
 
 
-const AddMaterialPopup = ({ upload, hidePopup }) => {
-    const [currentDisplay, updateCurrentDisplay] = useState('selection')
+const AddMaterialPopup = ({ upload, hidePopup }) => {    
     const [headingText, updateHeadingText] = useState('Přidat materiály')
+    const [showGroupNameInput, updateShowGroupNameInput] = useState(false)
     const [inputGroupName, updateInputName] = useState('')
     const [showWarning, updateShowWarning] = useState(false)
     const [warningMessage, updateWarning] = useState('')
-    const [inputData, updateInputData] = useState(
-    [
-        {
-            materialName: null,
-            materialDescription: null,
-            materialFile: null
-        }
-    ])
+    const [inputData, updateInputData] = useState([])
     
     useEffect(() => {
         document.body.style.overflow = 'hidden';
         return ()=> document.body.style.overflow = 'unset';
     }, []);
-
-
-    const trackInputData = (referenceId, data , type) => {
-        const newData = [...inputData]        
-        if (type === 'name') {
-            Object.assign(newData[referenceId], {
-                materialName: data
-            })
-        }
-        if (type === 'description') {
-            Object.assign(newData[referenceId], {
-                materialDescription: data
-            })
-        }
-        if (type === 'file') {
-            Object.assign(newData[referenceId], {
-                materialFile: data
-            })
-        }      
-        updateInputData(newData)
-    }
-
-    const addNextMaterial = () => {   
-        if (inputData.length <= 5) {
-            if (checkSingularInput(inputData[inputData.length-1])) {
-                const newInputList = [...inputData,
-                {
-                    materialName: null,
-                    materialDescription: null,
-                    materialFile: null
-                }
-                ]
-                updateInputData(newInputList)
-                if (showWarning) updateShowWarning(false);
-            } else {
-                updateWarning('Vyplň prosím údaje k předchozím materiálům')
-                updateShowWarning(true)
-            }
+    
+    useEffect(() => {
+        
+        if (inputData.length > 1) {
+           updateShowGroupNameInput(true) 
         } else {
-            updateWarning('Najednou lze přidat pouze 5 materiálu')
-            updateShowWarning(true)
+            updateShowGroupNameInput(false)
         }
-    }
+
+    }, [inputData]) 
+
 
     const checkInputList = (data) => {
         for (let i = 0; i < data.length; i++){
@@ -72,15 +33,7 @@ const AddMaterialPopup = ({ upload, hidePopup }) => {
             }
         }
         return true
-    }
-
-    const checkSingularInput = (element) => {
-        if (element.materialName && element.materialFile) {
-            return true
-        } else {
-            return false
-        }
-    }
+    }  
 
     const handleUploadClick = () => {
         if (inputData.length === 1) {
@@ -100,15 +53,49 @@ const AddMaterialPopup = ({ upload, hidePopup }) => {
             }
         } else{
             if (checkInputList(inputData)) {
-                upload(inputGroupName, inputData)
-                if (showWarning) { updateShowWarning(false); updateWarning(null) }
-                hidePopup()
+                if (inputGroupName) {
+                    upload(inputGroupName, inputData)
+                    if (showWarning) { updateShowWarning(false); updateWarning(null) }
+                       hidePopup()
+                } else {
+                    updateShowWarning(true)
+                    updateWarning('Prosím zadej jméno skupiny materiálu')
+                }
             } else {
                 updateWarning('Zadej prosím názvy a soubory ke všem materálům')
                 updateShowWarning(true)
             }
         }
         
+    }
+
+    const handleFileInput = (files) => {
+
+        //converting filelist object to a proper array
+        const filesArr = [...files]
+        
+        const inputList = filesArr.map(file => {
+            return ({
+                materialName: file.name,
+                materialDescription: null,
+                materialFile: file
+            })
+        })
+
+        const newData = inputData.concat(inputList)
+        updateInputData(newData)
+    }
+
+    const changeMaterialName = ( name, index) => { 
+        const newData = [...inputData]       
+        Object.assign(newData[index], { materialName: name })
+        updateInputData(newData)
+    }
+    
+    const removeFile = (index) => {
+        const newData = [...inputData]
+        newData.splice(index, 1)
+        updateInputData(newData)
     }
 
     return (
@@ -118,31 +105,25 @@ const AddMaterialPopup = ({ upload, hidePopup }) => {
                 <div className="popup-title-container">
                     <h4 className="popup-title">{headingText}</h4>
                         <img className="pointer" src="/images/close.svg" alt="zavřít" height="25px" onClick={() => { hidePopup()}}></img>
-                </div> 
-                {currentDisplay === 'selection' ?
-                    <div className="add-selection-container">
-                        <div className="btn btn-primary add-selection-button mr5" onClick={() => { updateCurrentDisplay('material-group'); updateHeadingText('Nová skupina')}}>Skupina materiálu</div>
-                            <div className="btn btn-outline-primary add-selection-button ml5" onClick={() => { updateCurrentDisplay('material-single')}}>Samotný materiál</div>                           
                     </div>
-                : null}
-                {currentDisplay === 'material-group' ?
-                    <div className="add-group-container">
-                            <input className="material-group-name-input form-control" placeholder="Jméno skupiny" onChange={(event) => { updateInputName(event.target.value)}}></input>
-                            <InputMaterialList data={inputData} trackInputData={trackInputData} type={'group'}/>
-                        <button className="btn btn-outline-primary next-material-button" onClick={addNextMaterial}>Další materiál</button>
-                    </div>
-                    : null}
-                {currentDisplay === 'material-single' ?
-                <div className="add-group-container">               
-                    <InputMaterialList data={inputData} trackInputData={trackInputData} type={'single'}/>                
-                </div>
-                        : null}
+                    {showGroupNameInput ?
+                            <div>
+                            <input className="form-control mb10 mt10" placeholder="Jméno skupiny materiálu, např. příprava na test" onChange={(event)=>{updateInputName(event.target.value)}}/>
+                                <div className="hline"></div>
+                            </div>
+                            : null}
+               {inputData.length > 0 ? <MaterialInputList materials={inputData} removeFile={removeFile} changeName={changeMaterialName}/> : null}
+                <div className="add-group-container">
+                        
+                        <input className="multiple-file-input" type="file" name="materialy" id="materialy" multiple onChange={(event) => { handleFileInput(event.target.files)}}/>
+                        <label className="btn btn-outline-primary w100" for="materialy">Vybrat soubory</label>    
+                </div>    
                 { showWarning? 
                         <p className="add-warning-text">{warningMessage}</p>
                    : null}
-                {currentDisplay !== 'selection' ?
+            
                     <button className="btn btn-primary next-material-button" onClick={handleUploadClick}>Přidat</button>
-                    : null}  
+                  
                 </div>
                
             </div>           

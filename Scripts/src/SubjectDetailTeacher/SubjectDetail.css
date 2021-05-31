@@ -160,7 +160,7 @@
 }
 
 .add-group-container{
-    margin: 20px 0px 10px 0px;
+    margin: 10px 0px 0px 0px;
 }
 
 .popup-inner-container{
@@ -224,6 +224,32 @@
     padding: 0.4rem 0.7rem !important;
     width: 100% !important;
 }
+
+.w100{
+    width: 100% !important;
+}
+
+.multiple-file-input{
+    width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+.single-material-input-container{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.material-name-input{
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
 
 .pointer{
     cursor: pointer;

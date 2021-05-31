@@ -3,9 +3,7 @@ import GradeDetailPopup from './GradeDetailPopup'
 import '../SubjectDetail.css'
 
 const GradeRow = ({ grade, info, deleteGrade }) => {    
-    const [showDetail, updateShowDetail] = useState(false);
-
-    console.log(grade)
+    const [showDetail, updateShowDetail] = useState(false); 
     
     //returns grades css class based on value
         const getGradeClass = (value) => { 
@@ -41,8 +39,7 @@ const GradeRow = ({ grade, info, deleteGrade }) => {
                         <p className={`grade-child grade-value grade-circle ${getGradeClass(grade.value)}`}>{grade.displayValue}</p>
                     </div>
                     <div className="grade-sub-container" onClick={() => { updateShowDetail(true) }}>                        
-                            <p className="grade-child grade-name">{getGradeName()}</p>
-                            
+                            <p className="grade-child grade-name">{getGradeName()}</p>                            
                         <p className="grade-child grade-time">{grade.addedRelative}</p>
                     </div>
                 </div>

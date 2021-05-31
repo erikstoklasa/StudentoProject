@@ -41,17 +41,11 @@ const AddMaterialPopup = ({ upload, hidePopup }) => {
                 upload(inputGroupName, inputData)
                 if (showWarning) { updateShowWarning(false); updateWarning(null) }
                 hidePopup()
-            } else if (!inputData[0].materialName && !inputData[0].materialFile) {
-                updateWarning('Prosím zadej název a vyber soubor')
-                updateShowWarning(true)
-            } else if (!inputData[0].materialName) {
-                updateWarning('Prosím zadej název')
-                updateShowWarning(true)
-            } else if (!inputData[0].materialFile) {
-                updateWarning('Prosím vyber soubor')
+            }else if (!inputData[0].materialName) {
+                updateWarning('Prosím zadej název souboru')
                 updateShowWarning(true)
             }
-        } else{
+        } else if(inputData.length > 1){
             if (checkInputList(inputData)) {
                 if (inputGroupName) {
                     upload(inputGroupName, inputData)
@@ -62,9 +56,12 @@ const AddMaterialPopup = ({ upload, hidePopup }) => {
                     updateWarning('Prosím zadej jméno skupiny materiálu')
                 }
             } else {
-                updateWarning('Zadej prosím názvy a soubory ke všem materálům')
+                updateWarning('Zadej prosím názvy ke všem novým materiálům')
                 updateShowWarning(true)
             }
+        } else {
+            updateWarning('Prosím vyber alespoň jeden soubor')
+            updateShowWarning(true)
         }
         
     }
@@ -84,6 +81,10 @@ const AddMaterialPopup = ({ upload, hidePopup }) => {
 
         const newData = inputData.concat(inputList)
         updateInputData(newData)
+        if (showWarning && warningMessage === 'Prosím vyber alespoň jeden soubor') {
+            updateShowWarning(false)
+            updateWarning(null)
+        }
     }
 
     const changeMaterialName = ( name, index) => { 
@@ -96,6 +97,10 @@ const AddMaterialPopup = ({ upload, hidePopup }) => {
         const newData = [...inputData]
         newData.splice(index, 1)
         updateInputData(newData)
+        if (newData.length === 0) {
+            updateShowWarning(false)
+            updateWarning(null)
+        }
     }
 
     return (
@@ -113,14 +118,15 @@ const AddMaterialPopup = ({ upload, hidePopup }) => {
                             </div>
                             : null}
                {inputData.length > 0 ? <MaterialInputList materials={inputData} removeFile={removeFile} changeName={changeMaterialName}/> : null}
-                <div className="add-group-container">
+               { showWarning? 
+                        <p className="add-warning-text">{warningMessage}</p>
+                   : null}
+                    <div className="add-group-container">
                         
                         <input className="multiple-file-input" type="file" name="materialy" id="materialy" multiple onChange={(event) => { handleFileInput(event.target.files)}}/>
                         <label className="btn btn-outline-primary w100" for="materialy">Vybrat soubory</label>    
                 </div>    
-                { showWarning? 
-                        <p className="add-warning-text">{warningMessage}</p>
-                   : null}
+               
             
                     <button className="btn btn-primary next-material-button" onClick={handleUploadClick}>Přidat</button>
                   

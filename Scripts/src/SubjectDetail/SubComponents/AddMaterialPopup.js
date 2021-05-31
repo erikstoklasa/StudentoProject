@@ -1,25 +1,28 @@
-import React, {useState, useEffect} from 'react'
-import InputMaterialList from './InputMaterialList'
-
+import React, { useState, useEffect } from 'react'
+import MaterialInputList from './MaterialInputList'
 
 const AddMaterialPopup = ({ upload, hidePopup }) => {
-    const [currentDisplay, updateCurrentDisplay] = useState('selection')
     const [headingText, updateHeadingText] = useState('Přidat materiály')
     const [inputGroupName, updateInputName] = useState('')
+    const [showGroupNameInput, updateShowGroupNameInput] = useState(false)
     const [showWarning, updateShowWarning] = useState(false)
     const [warningMessage, updateWarning] = useState('')
-    const [inputData, updateInputData] = useState(
-    [
-        {
-            materialName: null,
-            materialDescription: null,
-            materialFile: null
+    const [inputData, updateInputData] = useState([])
+    
+    useEffect(() => {
+        document.body.style.overflow = 'hidden';
+        return ()=> document.body.style.overflow = 'unset';
+    }, []);
+
+    useEffect(() => {
+        
+        if (inputData.length > 1) {
+           updateShowGroupNameInput(true) 
+        } else {
+            updateShowGroupNameInput(false)
         }
-    ])
-        useEffect(() => {
-            document.body.style.overflow = 'hidden';
-            return ()=> document.body.style.overflow = 'unset';
-        }, []);
+
+    }, [inputData])
     
     const trackInputData = (referenceId, data , type) => {
         const newData = [...inputData]        
@@ -39,29 +42,7 @@ const AddMaterialPopup = ({ upload, hidePopup }) => {
             })
         }      
         updateInputData(newData)
-    }
-
-    const addNextMaterial = () => {   
-        if (inputData.length <= 5) {
-            if (checkSingularInput(inputData[inputData.length-1])) {
-                const newInputList = [...inputData,
-                {
-                    materialName: null,
-                    materialDescription: null,
-                    materialFile: null
-                }
-                ]
-                updateInputData(newInputList)
-                if (showWarning) updateShowWarning(false);
-            } else {
-                updateWarning('Vyplň prosím údaje k předchozím materiálům')
-                updateShowWarning(true)
-            }
-        } else {
-            updateWarning('Najednou lze přidat pouze 5 materiálu')
-            updateShowWarning(true)
-        }
-    }
+    } 
 
     const checkInputList = (data) => {
         for (let i = 0; i < data.length; i++){
@@ -72,16 +53,8 @@ const AddMaterialPopup = ({ upload, hidePopup }) => {
         return true
     }
 
-    const checkSingularInput = (element) => {
-        if (element.materialName && element.materialFile) {
-            return true
-        } else {
-            return false
-        }
-    }
-
     const handleUploadClick = () => {
-        if (inputData.length === 1) {
+       /* if (inputData.length === 1) {
             if (inputData[0].materialName && inputData[0].materialFile) {
                 upload(inputGroupName, inputData)
                 if (showWarning) { updateShowWarning(false); updateWarning(null) }
@@ -105,8 +78,39 @@ const AddMaterialPopup = ({ upload, hidePopup }) => {
                 updateWarning('Zadej prosím názvy a soubory ke všem materálům')
                 updateShowWarning(true)
             }
-        }
+        }*/
+
+        console.log(inputData)
         
+    }
+
+    const handleFileInput = (files) => {
+
+        //converting filelist object to a proper array
+        const filesArr = [...files]
+        
+        const inputList = filesArr.map(file => {
+            return ({
+                materialName: file.name,
+                materialDescription: null,
+                materialFile: file
+            })
+        })
+
+        const newData = inputData.concat(inputList)
+        updateInputData(newData)
+    }
+
+    const changeMaterialName = ( name, index) => { 
+        const newData = [...inputData]       
+        Object.assign(newData[index], { materialName: name })
+        updateInputData(newData)
+    }
+    
+    const removeFile = (index) => {
+        const newData = [...inputData]
+        newData.splice(index, 1)
+        updateInputData(newData)
     }
 
     return (
@@ -116,31 +120,22 @@ const AddMaterialPopup = ({ upload, hidePopup }) => {
                 <div className="material-popup-title-container">
                     <h4 className="popup-title">{headingText}</h4>
                         <img className="pointer" src="/images/close.svg" alt="zavřít" height="25px" onClick={() => { hidePopup()}}></img>
-                </div> 
-                {currentDisplay === 'selection' ?
-                    <div className="add-selection-container">
-                        <div className="btn btn-primary add-selection-button mr5" onClick={() => { updateCurrentDisplay('material-group'); updateHeadingText('Nová skupina')}}>Skupina materiálu</div>
-                            <div className="btn btn-outline-primary add-selection-button ml5" onClick={() => { updateCurrentDisplay('material-single')}}>Samotný materiál</div>                           
                     </div>
-                : null}
-                {currentDisplay === 'material-group' ?
-                    <div className="add-group-container">
-                            <input className="material-group-name-input form-control" placeholder="Jméno skupiny" onChange={(event) => { updateInputName(event.target.value)}}></input>
-                            <InputMaterialList data={inputData} trackInputData={trackInputData} type={'group'}/>
-                        <button className="btn btn-outline-primary next-material-button" onClick={addNextMaterial}>Další materiál</button>
-                    </div>
-                    : null}
-                {currentDisplay === 'material-single' ?
-                    <div className="add-group-container">               
-                        <InputMaterialList data={inputData} trackInputData={trackInputData} type={'single'}/>                
-                    </div>
-                        : null}
-                 { showWarning? 
+                    {inputData.length > 0 ? <MaterialInputList materials={inputData} removeFile={removeFile} changeName={changeMaterialName}/> : null}
+                <div className="add-group-container">
+                        {showGroupNameInput ?
+                            <div>
+                            <input className="form-control mb10 mt10" placeholder="Jméno skupiny materiálu, např. příprava na test" />
+                                <div className="hline"></div>
+                            </div>
+                            : null}
+                        <input className="multiple-file-input" type="file" name="materialy" id="materialy" multiple onChange={(event) => { handleFileInput(event.target.files)}}/>
+                        <label className="btn btn-outline-primary w100" for="materialy">Vybrat soubory</label>    
+                </div>                       
+                {showWarning? 
                         <p className="add-warning-text">{warningMessage}</p>
-                   : null}
-                {currentDisplay !== 'selection' ?
-                    <button className="btn btn-primary next-material-button" onClick={handleUploadClick}>Přidat</button>
-                    : null}
+                   : null}              
+                <button className="btn btn-primary next-material-button" onClick={handleUploadClick}>Přidat</button>                    
                 </div>               
             </div>           
         </div>

@@ -180,8 +180,10 @@
     margin: auto;
     background-color: rgba(0, 0, 0, 0.5);
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding: 20px;
     z-index: 5;
 }
 
@@ -242,7 +244,7 @@
     color: var(--pastelRed);
     font-size: 1rem;
     font-weight: 600;  
-    margin: 0px 0px 10px 0px;
+    margin: 10px 0px -5px 0px;
 }
 
 .rm{
@@ -301,13 +303,13 @@
 }
 
 .add-group-container{
-    margin: 20px 0px 10px 0px;
+    margin: 10px 0px 0px 0px;
 }
 
-.popup-inner-container{
+.add-grade-popup-inner-container{
     width: 100%;
     max-width: 400px;    
-    margin: 20px;   
+    margin: 20px 20px 0px 20px;   
     background-color: white;
     border: none;
     border-radius: 10px;
@@ -361,6 +363,21 @@
     text-align: center;
 }
 
+.grade-info-box{
+    font-size: 0.8rem;
+    border-radius: 10px;
+    margin-top: 20px;
+    width: 100%;
+    padding: 15px;
+    max-width: 400px;    
+    font-weight: 600; 
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+
+
 .material-button-container{
     white-space: nowrap;
    
@@ -378,6 +395,8 @@
 .ml5{
     margin-left: 5px;
 }
+
+.mt10{margin-top: 10px;}
 
 .mb10{
     margin-bottom: 10px;
@@ -399,8 +418,30 @@
     padding: 0px 10px 0px 10px;
 }
 
+.w100{
+    width: 100% !important;
+}
 
+.multiple-file-input{
+    width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
 
+.single-material-input-container{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.material-name-input{
+    margin-left: 20px;
+    margin-right: 20px;
+}
 
 
 @media(max-width: 1320px){

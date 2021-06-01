@@ -7,7 +7,7 @@ module.exports = {
         TimeTable: "./Scripts/src/TimeTable/index.js",
         Grades: "./Scripts/src/Grades/index.js",
         SubjectDetail: "./Scripts/src/SubjectDetail/index.js",
-        SubjectDetailTeacher: "./Scripts/src/SubjectDetailTeacher/index.js",
+        SubjectDetailTeacher: "./Scripts/src/SubjectDetailTeacher/index.js"
 
         
     },

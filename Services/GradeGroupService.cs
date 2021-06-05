@@ -18,11 +18,9 @@ namespace SchoolGradebook.Services {
 		}
 		public async Task<GradeGroup> GetGradeGroupAsync(int gradeGroupId) {
 
-			GradeGroup gradeGroup = await.context.GradeGroup
-				.Where(s=> s.Id == gradeGroupId);
-				.Include(g => g.Name);
-				.Include(g => g.Weight);
-				.AsNoTracking(); //what does this do ?
+			GradeGroup gradeGroup = await context.GradeGroups
+				.Where(s => s.Id == gradeGroupId)
+				.AsNoTracking()//what does this do ?
 				.FirstOrDefaultAsync();
 
 			return gradeGroup;

@@ -23,8 +23,12 @@ namespace SchoolGradebook.Services
                 .Where(si => si.Id == subjectInstanceId)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
+            if (subject == null) {
+                return false;
+            }
             return subject.TeacherId == teacherId;
         }
+        
         public async Task<bool> HasAccessToSubjectType(int teacherId, int subjectTypeId)
         {
             SubjectType subjectType = await context.SubjectTypes

@@ -66,21 +66,7 @@ namespace SchoolGradebook.API.GradeAverages
             }
             
             var gradeAverage = await gradeAverageService.GetGradeAverageForSubjectInstance(subjectInstanceId);
-            //GradeAverageObject output;
-
-
-            //output = new GradeAverageObject()
-            //{
-            //    Id = gradeAverage.Id,
-            //    SubjectInstanceId = subjectInstanceId,
-            //    Value = gradeAverage.Value,
-            //    TeacherId = gradeAverage.TeacherId,
-            //    StudentId = gradeAverage.StudentId,
-            //    Added = gradeAverage.Added,
-
-                
-
-            //};
+            
  
             return gradeAverage;
         }
@@ -101,19 +87,7 @@ namespace SchoolGradebook.API.GradeAverages
 
             var gradeAverage = await gradeAverageService.GetGradeAverageForStudent(subjectInstanceId, studentId);
 
-            //GradeAverageObject output;
-
-            //output = new GradeAverageObject() {
-            //    Id = gradeAverage.Id,
-            //    SubjectInstanceId = subjectInstanceId,
-            //    Value = gradeAverage.Value,
-            //    TeacherId = gradeAverage.TeacherId,
-            //    StudentId = gradeAverage.StudentId,
-            //    Added = gradeAverage.Added,
-
-
-
-            //};
+            
 
 
             return gradeAverage;

@@ -9,8 +9,7 @@ namespace SchoolGradebook.Models
 {
     public class GradeAverage
     {
-        public enum USERTYPE { Teacher, Student }
-
+        
         public int Id { get; set; }
         public int SubjectInstanceId { get; set; }
         public double Value { get; set; } //For table in the db

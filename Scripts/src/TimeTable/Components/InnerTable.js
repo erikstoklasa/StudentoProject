@@ -3,6 +3,7 @@ import TableRow from './TableRow'
 import TimeRow from './TimeRow'
 import TableColumn from './TableColumn' 
 import TimeColumn from './TimeColumn'
+import DayColumn from './DayColumn.js'
 
 const InnerTable = ({ sortedData, week, type, displayVertical }) => {
     if (sortedData && week) {
@@ -21,24 +22,31 @@ const InnerTable = ({ sortedData, week, type, displayVertical }) => {
 
         if (!displayVertical) {
             return (
-                <div className="inner-table">
-                    <TimeRow frameArray={actualWeek[0].timeFrames[0]} />
-                    <TableRow frameArray={actualWeek[0].timeFrames[0]} dayName={'Pondělí'} type={type}  dateModifier={0} dateArray={dateArray} />
-                    <TableRow frameArray={actualWeek[0].timeFrames[1]} dayName={'Úterý'} type={type}  dateModifier={1} dateArray={dateArray}/>
-                    <TableRow frameArray={actualWeek[0].timeFrames[2]} dayName={'Středa'} type={type}  dateModifier={2} dateArray={dateArray}/>
-                    <TableRow frameArray={actualWeek[0].timeFrames[3]} dayName={'Čtvrtek'} type={type}  dateModifier={3} dateArray={dateArray}/>
-                    <TableRow frameArray={actualWeek[0].timeFrames[4]} dayName={'Pátek'} type={type} dateModifier={4} dateArray={dateArray}/>
+                <div className="inner-table">                  
+                    
+                        <DayColumn data={actualWeek} dates={dateArray} />
+                        <div className="lessons-table-horizontal">
+                        <TimeRow frameArray={actualWeek[0].timeFrames[0]} /> 
+                        <TableRow frameArray={actualWeek[0].timeFrames[0]} dayName={'Pondělí'} type={type}  dateModifier={0} dateArray={dateArray} />
+                        <TableRow frameArray={actualWeek[0].timeFrames[1]} dayName={'Úterý'} type={type}  dateModifier={1} dateArray={dateArray}/>
+                        <TableRow frameArray={actualWeek[0].timeFrames[2]} dayName={'Středa'} type={type}  dateModifier={2} dateArray={dateArray}/>
+                        <TableRow frameArray={actualWeek[0].timeFrames[3]} dayName={'Čtvrtek'} type={type}  dateModifier={3} dateArray={dateArray}/>
+                        <TableRow frameArray={actualWeek[0].timeFrames[4]} dayName={'Pátek'} type={type} dateModifier={4} dateArray={dateArray} />
+                        </div>
+                    
                 </div>
             )
         } else { 
             return (
-                <div className="inner-table inner-table-vertical">
+                <div className="inner-table">
                     <TimeColumn frameArray={actualWeek[0].timeFrames[0]} />
+                    <div className="lessons-table-vertical">
                     <TableColumn frameArray={actualWeek[0].timeFrames[0]} dayName={'Pondělí'} type={type} dateModifier={0} dateArray={dateArray} />
                     <TableColumn frameArray={actualWeek[0].timeFrames[1]} dayName={'Úterý'} type={type} dateModifier={1} dateArray={dateArray} />
                     <TableColumn frameArray={actualWeek[0].timeFrames[2]} dayName={'Středa'} type={type} dateModifier={2} dateArray={dateArray} />
                     <TableColumn frameArray={actualWeek[0].timeFrames[3]} dayName={'Čtvrtek'} type={type} dateModifier={3} dateArray={dateArray} />
                     <TableColumn frameArray={actualWeek[0].timeFrames[4]} dayName={'Pátek'} type={type} dateModifier={4} dateArray={dateArray} />
+                    </div>
                 </div>
             )
         }

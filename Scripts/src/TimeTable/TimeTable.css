@@ -13,12 +13,24 @@
     margin-left: auto;
     margin-right: auto;
     overflow: auto;
-}
-
-.inner-table-vertical{ 
-
     display: flex;
 }
+
+
+
+.lessons-table-horizontal{
+    overflow: auto;
+    width: 100%;
+    overflow-x: overlay;
+}
+
+.lessons-table-vertical{ 
+    display: flex;
+    width: 100%;
+    overflow-x: overlay;
+    
+}
+  
 
 .table-column{
     display: flex;
@@ -28,7 +40,6 @@
 
 .time-column{
     display: flex;
-    flex: 0.7 1 0px;
     flex-direction: column;
 }
 
@@ -48,7 +59,6 @@
     margin: 3px;
     flex: 1 1 0px;
     min-width: 100px;
-    min-height: 100px;
     padding: 10px;
     display: flex;
     flex-direction: column;
@@ -56,8 +66,9 @@
 }
 
 .table-cell-vertical{
-    min-height: 100px;
+    min-height: 85px;
     min-width: 0px;
+    
 }
 
 .table-cell-change {
@@ -73,19 +84,21 @@
 
 .day-cell {
     position: relative;
-    margin: 3px;
+    margin-right: 12px;
     flex: 0.7 1 0;
-    min-width: 100px;
-    padding: 10px;
+    min-width: 75px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-.day-cell-vertical {
-    min-height: 100px;
-    
+.day-cell-vertical {      
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;        
     min-width: 0px !important;
 }
 
@@ -99,8 +112,7 @@
 
 .teacher-name {
     overflow: hidden;
-    text-overflow: ellipsis;
-    margin-bottom: 10px;
+    text-overflow: ellipsis;    
 }
 
 .time-cell {
@@ -116,7 +128,6 @@
 }
 
 .time-cell-vertical{
-    min-height: 100px;
     min-width: 0px !important;
     flex: 0.7 1 0px 
 }
@@ -138,23 +149,20 @@
     flex-wrap: nowrap;
     width: 100%;
     justify-content: flex-end;
-    align-items: center;
-    padding-right: 5px;
-    
-    margin-top: 20px;
+    align-items: center;    
 }
 
 .table-heading {
-    margin: 0px 0px 0px 15px
-
+    margin: 0px 0px 0px 15px;
+    display:none
 }
 
 .week-button-left{
-    margin-right: 20px !important;
+    margin-right: 0px;
 }
 
 .week-button {
-    margin-right: 10px;
+    padding: 0px;
 }
 
     .week-button:hover {
@@ -179,6 +187,7 @@
 .button-container {
     display: flex;
     align-items: center;
+    margin: 0px 0px 0px 10px !important;
 }
 
 .flip-horizontally {
@@ -188,10 +197,6 @@
 .row-date{
     position: absolute;
     bottom: 0px;
-}
-
-.back-button{
-    margin: 0px 0px 0px 10px !important;   
 }
 
 .time-text2{
@@ -212,14 +217,51 @@
 }
 .control-button-container{
     margin-right: auto;
-    margin-left: 20px;
+    margin-left: 0px;
     display: flex;
     flex-wrap: nowrap;
 }
 
-.time-table-button{
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    min-width: 120px;
+.timetable-button{   
+    white-space: nowrap;  
+}
+
+.day-column-container{
+    display: flex;
+    flex-direction: column;
+}
+
+.day-column-cell-empty {
+    margin: 3px;
+    border: 2px solid transparent;
+    padding: 10px 10px 5px 10px;
+    display: flex;
+    flex-direction: column;    
+    justify-content: center;
+    align-items: center;
+    visibility: hidden;
+}
+
+.hidden{
+    visibility: hidden;
+}
+
+.mr5{
+    margin-right: 5px;
+}
+
+.mb0{
+    margin-bottom: 0px;
+}
+
+@media(min-width: 450px){
+    .table-heading{
+        display: initial;
+    }
+    .control-button-container{
+        margin-left: 20px;
+    }
+    .week-button-left{
+        margin-right: 10px;
+    }
 }

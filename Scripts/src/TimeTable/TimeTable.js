@@ -113,13 +113,14 @@ const TimeTable = () => {
     
     return (
         <div className="outer-table">
-            <h1 className="table-heading">Můj rozvrh</h1>
+            
             <div className="top-bar">
+            <h1 className="table-heading">Můj rozvrh</h1>
                 <div className="control-button-container">
-                    <a className="btn btn-primary timetable-button" onClick={() => { updateDisplayVertical(!displayVertical) }}>Změnit zobrazení</a>                    
+                    <a className="btn btn-primary timetable-button mr5" onClick={() => { updateDisplayVertical(!displayVertical) }}>Změnit zobrazení</a>                    
                     {currentWeek !== initialWeek ? <a className="btn btn-primary back-button timetable-button" onClick={() => { updateCurrentWeek(initialWeek) }}>Aktualní týden</a> : null}
                 </div>
-                <div className="button-container back-button">                    
+                <div className="button-container">                    
                     <a className="week-button week-button-left" onClick={() => { changeWeek(-1) }}><img className="arrow flip-horizontally" src='/images/rightarrow.svg'></img></a>                    
                     <a className="week-button" onClick={() => {                     
                         changeWeek(+1)

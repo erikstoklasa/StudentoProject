@@ -10,12 +10,12 @@ const TableColumn = ({ frameArray, dayName, type, dateArray, dateModifier }) => 
 
     const determineDate = () => { 
         if (dateArray[2] + dateModifier <= dateArray[3]) {
-            updateActualDate(`${dateArray[2] + dateModifier}.${dateArray[1]}`)
+            updateActualDate(`${dateArray[2] + dateModifier}.${dateArray[1]}.`)
         } else {           
             const spillOverToTheNextMonth = dateArray[3] - (dateArray[2] + dateModifier)
             const nextMonthDay = 0 - spillOverToTheNextMonth;
 
-            updateActualDate(`${nextMonthDay}.${dateArray[1] + 1}`)
+            updateActualDate(`${nextMonthDay}.${dateArray[1] + 1}.`)
         }
     }
 
@@ -23,9 +23,9 @@ const TableColumn = ({ frameArray, dayName, type, dateArray, dateModifier }) => 
 
     return (
         <div className="table-column">
-            <div className="day-cell day-cell-vertical">
+            <div className="day-cell-vertical">
                 <h5 >{dayName}</h5>
-                <p className="row-date">{actualDate}</p>
+                <p className="mb0">{actualDate}</p>
         </div>
             {cellArray}
         </div>

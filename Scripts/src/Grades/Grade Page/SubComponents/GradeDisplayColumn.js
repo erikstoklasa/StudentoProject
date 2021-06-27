@@ -27,8 +27,7 @@ const GradeDisplayColumn = ({ grade, students, studentGrades, modifyGrade, modif
     const closePopup = () => {        
         updateDisplayPopup(false)
     }
-    console.log('column')
-    console.log(grade)
+    
 
     return (
         <div className="">

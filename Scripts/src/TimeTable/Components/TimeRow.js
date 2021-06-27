@@ -14,10 +14,6 @@ const TimeRow = ({ frameArray }) => {
         )
     })
 
-    cellArray.unshift(<div className="day-cell">
-        
-    </div>)
-
     return (
         <div className="time-row">
             {cellArray}

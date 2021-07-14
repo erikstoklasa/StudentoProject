@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29519.181
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudentoMainProject", "StudentoMainProject\StudentoMainProject.csproj", "{B3BCAE35-7077-4EF2-B9F4-B79A0894F2FE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimetableServiceProject", "TimetableServiceProject\TimetableServiceProject.csproj", "{69E781BA-73C3-4B57-8B95-DC7423271141}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B3BCAE35-7077-4EF2-B9F4-B79A0894F2FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3BCAE35-7077-4EF2-B9F4-B79A0894F2FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3BCAE35-7077-4EF2-B9F4-B79A0894F2FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3BCAE35-7077-4EF2-B9F4-B79A0894F2FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69E781BA-73C3-4B57-8B95-DC7423271141}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69E781BA-73C3-4B57-8B95-DC7423271141}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69E781BA-73C3-4B57-8B95-DC7423271141}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69E781BA-73C3-4B57-8B95-DC7423271141}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FECC89C2-40FE-449C-960F-47F1453A229C}
+	EndGlobalSection
+EndGlobal

@@ -4,6 +4,7 @@ import '../SubjectDetail.css'
 const addGradePopup = ({ addGrade, hidePopup }) => {    
     const [gradeName, updateGradeName] = useState()
     const [gradeValue, updateGradeStateValue] = useState('')
+    const [gradeWeight, updateGradeWeight] = useState('')
     const [showWarning, updateShowWarning] = useState(false)
     const [warningMessage, updateWarning] = useState('')
 
@@ -13,18 +14,20 @@ const addGradePopup = ({ addGrade, hidePopup }) => {
     }, []);
 
     const onAddClick = () => {        
-        if (gradeName && gradeValue) {
-            addGrade(gradeName, gradeValue)
+        if (gradeName && gradeValue && gradeWeight) {
+            addGrade(gradeName, gradeValue, gradeWeight)
             hidePopup()
             if (showWarning) { updateShowWarning(false) }
         }
         else {
-            if (!gradeName && !gradeValue) {
+            if (!gradeName && !gradeValue || !gradeName && !gradeWeight || !gradeValue && !gradeWeight || !gradeWeight && !gradeValue && !gradeName)  {
                 updateWarning('Prosím zadej všechny údaje')
             } else if (!gradeName) {
                 updateWarning('Prosím zadej název známky')
             } else if (!gradeValue) {
                 updateWarning('Prosím zadej známku')
+            } else if (!gradeWeight) {
+                updateWarning('Prosím zadej váhu známky')
             }
                 updateShowWarning(true)          
         }
@@ -45,7 +48,53 @@ const addGradePopup = ({ addGrade, hidePopup }) => {
         }   
     }
 
+    const checkWeightValue = (value) => {
+        const val = parseInt(value)
+        if (val >= 0 && val <= 10) {
+            updateGradeWeight(val)
+        } else if (value === '') {
+            updateGradeWeight(value)
+        }
+    }
+
+
     return (
+        <div>
+            <div className="add-grade-popup-container">
+            <div className="add-grade-popup-inner-container">               
+                    <div className="popup-title-container">
+                        <h4 className="popup-title">Přidat známku</h4>
+                        <img className="pointer" src="/images/icons/Delete icon.svg" alt="zavřít" height="30px" onClick={() => { hidePopup()}}></img>
+                    </div>              
+                    <div className="popup-input-container">
+                        <div className="popup-input-row">
+                            <p className="input-label">Název známky</p>
+                            <input className="popup-input-field" value={gradeName} onChange={(event) => {updateGradeName(event.target.value)}}></input>
+                        </div>
+                        <div className="popup-input-row">
+                            <p className="input-label">Známka</p>
+                            <div className="input-grade-value-weight">                               
+                                <input className="popup-input-field popup-input-small" value={gradeValue} onChange={(event) => { updateGradeValue(event.target.value) }}></input>
+                                <div className="popup-weight-input">
+                                <p className="input-label">Váha</p>
+                                <input className="popup-input-field popup-input-small" value={gradeWeight} onChange={(event) => { checkWeightValue(event.target.value) }}></input>
+                                </div>
+                            </div>
+                        </div>                       
+                    </div>
+                    { showWarning? 
+                        <p className="add-warning-text">{warningMessage}</p>
+                   : null}
+                        <button className="btn btn-primary next-material-button" onClick={onAddClick}>Přidat</button>                
+            </div>
+            <div className="grade-info-box">
+                Tuhle známku učitel neuvidí, je jen pro tebe, nemá vliv na průměr, který vidí učitel.
+            </div>
+        </div>
+        </div>
+    )
+
+   /* return (
         <div className="add-grade-popup-container">
             <div className="add-grade-popup-inner-container">
                 <div className="popup-inner-padding">
@@ -67,7 +116,7 @@ const addGradePopup = ({ addGrade, hidePopup }) => {
                 Tuhle známku učitel neuvidí, je jen pro tebe, nemá vliv na průměr, který vidí učitel.
             </div>
         </div>
-    )
+    )*/
 }
 
 export default addGradePopup

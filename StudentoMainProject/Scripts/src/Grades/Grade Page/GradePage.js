@@ -72,7 +72,7 @@ const GradePage = () => {
                     studentsWithAverage.push(student)
                 }
             })
-            const finalStudentArray = studentsWithAverage.concat(studentsWithoutAverage);
+            const finalStudentArray = studentsWithAverage.concat(studentsWithoutAverage);           
             updateOrderedStudents(finalStudentArray)
         }
         
@@ -337,8 +337,17 @@ const GradePage = () => {
                 return res.json()
             }
         })
-        .then((data) => {
-            console.log(data)
+            .then((data) => {
+                const newGrades = [...bulkGradeData]
+                newGrades.forEach(grade => {
+                    if (grade.gradeGroupId === data.id) {
+                        Object.assign(grade, {
+                            gradeGroupName: name,
+                            gradeGroupWeight: weight
+                        })
+                    }
+                })
+                updateBulkGradeData(newGrades)
         })
     }
 
@@ -412,8 +421,8 @@ const GradePage = () => {
                         }
                     }).then(data => {
                         data.forEach(grade => {
-                            const displayValue = getGradeDisplayValue(parseInt(grade.value))
-                            Object.assign(grade, { displayValue: displayValue, gradeGroupName : grade.name })
+                            const displayValue = getGradeDisplayValue(parseInt(grade.value))                            
+                            Object.assign(grade, { displayValue: displayValue, gradeGroupName : newGradeName })
                         })
                         let array;
                         array = [...bulkGradeData, ...data]

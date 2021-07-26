@@ -59,5 +59,6 @@ namespace SchoolGradebook.Models
         public ICollection<Approbation>? Approbations { set; get; }
         public ICollection<SubjectMaterial>? SubjectMaterials { set; get; }
         public School? School { get; set; }
+        public Class? Class { get; set; }
     }
 }

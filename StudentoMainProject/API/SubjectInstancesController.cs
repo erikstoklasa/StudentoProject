@@ -125,6 +125,35 @@ namespace SchoolGradebook.API.SubjectInstances
             }
             return output;
         }
+        /// <summary>
+        /// Get all subject instances for teacher
+        /// </summary>
+        /// <remarks>
+        /// Does not retrive teacher (because the caller is the teacher) or students enrolled
+        /// </remarks>
+        /// <returns></returns>
+        [HttpGet("Teacher")]
+        [Authorize(policy: "OnlyTeacher")]
+        public async Task<ActionResult<ICollection<SubjectInstanceObject>>> TeacherGetAllSubjectInstances()
+        {
+            int teacherId = await teacherService.GetTeacherId(UserId);
+            if (teacherId == -1)
+            {
+                return StatusCode(403);
+            }
+            List<SubjectInstance> subjectInstances = await subjectService.GetAllSubjectInstancesByTeacherAsync(teacherId);
+            List<SubjectInstanceObject> subjectInstanceObjects = new();
+            foreach (var si in subjectInstances)
+            {
+                subjectInstanceObjects.Add(
+                    new SubjectInstanceObject()
+                    {
+                        Id = si.Id,
+                        Name = si.SubjectType.Name
+                    });
+            }
+            return subjectInstanceObjects;
+        }
     }
 
 

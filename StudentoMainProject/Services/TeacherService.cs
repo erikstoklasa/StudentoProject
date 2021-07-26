@@ -143,6 +143,15 @@ namespace SchoolGradebook.Services
 
             return true;
         }
+        //Additional methods
+
+        public async Task<bool> TeacherIsClassmaster(int teacherId) {
+            var hasAnyClassesAsClassmaster = await context.Classes
+                .Where(c => c.TeacherId == teacherId)
+                .AnyAsync();
+            return hasAnyClassesAsClassmaster;
+        }
+
         //VALIDATIONS
         public static bool HasRequiredFields(Teacher teacher)
         {

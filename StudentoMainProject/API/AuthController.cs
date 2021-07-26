@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SchoolGradebook.Models;
 using SchoolGradebook.Services;
 using System;
 using System.Collections.Generic;
@@ -77,29 +78,43 @@ namespace SchoolGradebook.API
         public async Task<ActionResult<UserObject>> GetUserInfo()
         {
             int userId = await studentService.GetStudentId(UserAuthId);
-            //Checking for student
-            if (userId == -1)
+            //Is user a student?
+            if (userId == -1) //User auth id was not found in our student table
             {
-                //Checking for teacher
+                //Is user a teacher?
                 userId = await teacherService.GetTeacherId(UserAuthId);
                 if (userId == -1)
                 {
                     return BadRequest();
+                    //User auth id was not found in our teacher table
                 }
-                //Is teacher
+                
                 var teacher = await teacherService.GetTeacherAsync(userId);
-                UserObject user = new()
+                if (await teacherService.TeacherIsClassmaster(userId)) //UserId is teacherId in this case
+                                                                       //User is a teacher and has one or more assigned classes
                 {
-                    UserId = userId,
-                    UserType = "teacher",
-                    FirstName = teacher.FirstName,
-                    LastName = teacher.LastName
-                };
-                return user;
+                    return new UserObject()
+                    {
+                        UserId = userId,
+                        UserType = "teacher classmaster",
+                        FirstName = teacher.FirstName,
+                        LastName = teacher.LastName
+                    };
+                }
+                else //User is a teacher, but has no assigned classes
+                {
+                    return new UserObject()
+                    {
+                        UserId = userId,
+                        UserType = "teacher",
+                        FirstName = teacher.FirstName,
+                        LastName = teacher.LastName
+                    };
+                }
             }
-            else
+            else //User is a student
             {
-                //Is student
+                
                 var student = await studentService.GetStudentBasicInfoAsync(userId);
                 UserObject user = new()
                 {
@@ -126,7 +141,7 @@ namespace SchoolGradebook.API
     public class UserObject
     {
         public int UserId { get; set; }
-        public string UserType { get; set; }
+        public string UserType { get; set; } //Either student, teacher, or classmaster teacher 
         public string FirstName { get; set; }
         public string LastName { get; set; }
     }

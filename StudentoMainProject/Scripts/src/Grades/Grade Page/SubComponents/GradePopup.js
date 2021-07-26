@@ -19,8 +19,8 @@ const GradePopup = ({ grade, onNameChange, onWeightChange, newGrade, closePopup,
             updateGradeWeight(i)
             if(newGrade) onWeightChange(i)
         } else if (input === '') {
-            onWeightChange(input)
-            if(newGrade) updateGradeWeight(input)
+            updateGradeWeight(input)
+            if(newGrade) onWeightChange(input)
         }
     }
 
@@ -36,6 +36,7 @@ const GradePopup = ({ grade, onNameChange, onWeightChange, newGrade, closePopup,
             if (gradeName && gradeWeight) {
                 modifyGradeGroup(grade.gradeGroupId, gradeName, gradeWeight)
                 updateDisplayWarning(false)
+                closePopup()
             } else {
                 updateDisplayWarning(true)
             }

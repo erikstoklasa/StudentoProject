@@ -252,7 +252,7 @@ function SubjectDetail() {
     }
 
     //send a request to post student grade
-    const addStudentGrade = (name, value) => {
+    const addStudentGrade = (name, value, weight) => {
         const actualValue = getInternalGradeValue(value)
         fetch(`${apiAddress}/Grades/Student`, {
             method: 'POST',
@@ -262,6 +262,8 @@ function SubjectDetail() {
             body: JSON.stringify({
                 value: actualValue,
                 name: name,
+                gradeGroupName: name,
+                gradeGroupWeight: parseInt(weight),
                 subjectInstanceId: subjectId
             })
         }).then(res => {

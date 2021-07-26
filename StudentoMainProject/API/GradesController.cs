@@ -48,7 +48,7 @@ namespace SchoolGradebook.API.Grades
         [Authorize(policy: "OnlyTeacher")]
         public async Task<ActionResult<IEnumerable<GradeObject>>> TeacherGetGrades(int? studentId, int? subjectInstanceId, int gradeValueFormat = 0)
         {
-            List<GradeObject> gradeObjects = new List<GradeObject>();
+            List<GradeObject> gradeObjects = new();
             int teacherId = await teacherService.GetTeacherId(UserId);
             if (teacherId == -1)
             {
@@ -65,7 +65,7 @@ namespace SchoolGradebook.API.Grades
                 foreach (var g in grades)
                 {
 
-                    var newGrade = new GradeObject { Added = g.Added, Id = g.Id, Name = g.Name, StudentId = g.StudentId, SubjectInstanceId = g.SubjectInstanceId, GradeGroupId = g.GradeGroupId, GradeGroupName = g.GradeGroup?.Name, GradeGroupWeight = g.GradeGroup?.Weight };
+                    GradeObject newGrade = new(){ Added = g.Added, Id = g.Id, Name = g.Name, StudentId = g.StudentId, SubjectInstanceId = g.SubjectInstanceId, GradeGroupId = g.GradeGroupId, GradeGroupName = g.GradeGroup?.Name, GradeGroupWeight = g.GradeGroup?.Weight };
                     newGrade.Value = gradeValueFormat switch
                     {
                         //Internal
@@ -89,7 +89,7 @@ namespace SchoolGradebook.API.Grades
                 var grades = await gradeService.GetAllGradesAddedByTeacherAsync((int)subjectInstanceId);
                 foreach (var g in grades)
                 {
-                    var newGrade = new GradeObject { Added = g.Added, Id = g.Id, Name = g.Name, StudentId = g.StudentId, SubjectInstanceId = g.SubjectInstanceId, GradeGroupId = g.GradeGroupId, GradeGroupName = g.GradeGroup?.Name, GradeGroupWeight = g.GradeGroup?.Weight };
+                    GradeObject newGrade = new() { Added = g.Added, Id = g.Id, Name = g.Name, StudentId = g.StudentId, SubjectInstanceId = g.SubjectInstanceId, GradeGroupId = g.GradeGroupId, GradeGroupName = g.GradeGroup?.Name, GradeGroupWeight = g.GradeGroup?.Weight };
                     newGrade.Value = gradeValueFormat switch
                     {
                         //Internal
@@ -137,7 +137,7 @@ namespace SchoolGradebook.API.Grades
             {
                 return StatusCode(404);
             }
-            var newGrade = new GradeObject
+            GradeObject newGrade = new()
             { Added = g.Added, Id = g.Id, Name = g.Name, StudentId = g.StudentId, SubjectInstanceId = g.SubjectInstanceId, Value = g.GetInternalGradeValue().ToString(), GradeGroupId = g.GradeGroupId, GradeGroupName = g.GradeGroup?.Name, GradeGroupWeight = g.GradeGroup?.Weight };
             newGrade.Value = gradeValueFormat switch
             {
@@ -170,9 +170,9 @@ namespace SchoolGradebook.API.Grades
             {
                 return StatusCode(403);
             }
-            Grade g = new Grade()
+            Grade g = new()
             {
-                Added = DateTime.UtcNow,
+                Added = grade.Added,
                 Name = grade.Name,
                 StudentId = grade.StudentId,
                 SubjectInstanceId = grade.SubjectInstanceId,
@@ -233,10 +233,10 @@ namespace SchoolGradebook.API.Grades
             {
                 return StatusCode(403);
             }
-            Grade g = new Grade()
+            Grade g = new()
             {
                 Id = grade.Id,
-                Added = DateTime.UtcNow,
+                Added = grade.Added,
                 Name = grade.Name,
                 StudentId = grade.StudentId,
                 SubjectInstanceId = grade.SubjectInstanceId,
@@ -293,15 +293,15 @@ namespace SchoolGradebook.API.Grades
             {
                 return StatusCode(403);
             }
-            List<int> subjectInstanceIdsToCheck = new List<int>();
-            List<Grade> gradesToCreate = new List<Grade>();
-            List<int> gradeIds = new List<int>();
+            List<int> subjectInstanceIdsToCheck = new();
+            List<Grade> gradesToCreate = new();
+            List<int> gradeIds = new();
 
             foreach (var g in grades)
             {
                 var newGrade = new Grade()
                 {
-                    Added = DateTime.UtcNow,
+                    Added = g.Added,
                     Name = g.Name,
                     StudentId = g.StudentId,
                     SubjectInstanceId = g.SubjectInstanceId,
@@ -386,15 +386,15 @@ namespace SchoolGradebook.API.Grades
             {
                 return StatusCode(403);
             }
-            List<int> subjectInstanceIdsToCheck = new List<int>();
-            List<Grade> gradesToUpdate = new List<Grade>();
+            List<int> subjectInstanceIdsToCheck = new();
+            List<Grade> gradesToUpdate = new();
 
             foreach (var g in grades)
             {
-                var newGrade = new Grade()
+                Grade newGrade = new()
                 {
                     Id = g.Id,
-                    Added = DateTime.UtcNow,
+                    Added = g.Added,
                     Name = g.Name,
                     StudentId = g.StudentId,
                     SubjectInstanceId = g.SubjectInstanceId,

@@ -12,8 +12,6 @@ namespace SchoolGradebook.Models
         public enum USERTYPE { Teacher, Student }
 
         public int Id { get; set; }
-        [Display(Name = "Název")]
-        [Required(ErrorMessage = "Zadejte prosím název")]
         public string Name { get; set; }
         [Display(Name = "Známka")]
         [Range(1, 5, ErrorMessage = "Zadejte známku mezi 1 a 5")]

@@ -171,7 +171,7 @@ namespace SchoolGradebook.Services
         }
         public async Task DeleteGradesAsync(ICollection<int> gradeIds)
         {
-            List<Grade> grades = new List<Grade>();
+            List<Grade> grades = new();
             foreach (int gId in gradeIds)
             {
                 grades.Add(new Grade() { Id = gId });

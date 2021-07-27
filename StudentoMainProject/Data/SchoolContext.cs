@@ -37,7 +37,7 @@ namespace SchoolGradebook.Data
         public DbSet<Approbation> Approbations { get; set; }
         public DbSet<School> Schools { get; set; }
         public DbSet<TimetableChange> TimetableChanges { get; set; }
-        public DbSet<GradeAverage> GradeAverages {get; set;}
+        public DbSet<GradeAverage> GradeAverages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -70,6 +70,11 @@ namespace SchoolGradebook.Data
             {
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
+
+            modelBuilder.Entity<Student>()
+                .HasMany(e => e.Grades)
+                .WithOne(e => e.Student)
+                .OnDelete(DeleteBehavior.ClientCascade);
         }
     }
 }

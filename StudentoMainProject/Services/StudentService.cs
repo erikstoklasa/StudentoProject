@@ -95,6 +95,7 @@ namespace SchoolGradebook.Services
                 .Include(s => s.StudentGroupEnrollments)
                     .ThenInclude(sge => sge.StudentGroup)
                 .Include(s => s.Class)
+                .Include(s => s.Grades)
                 .Include(s => s.Class.Teacher)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
@@ -241,6 +242,21 @@ namespace SchoolGradebook.Services
             }
 
             return true;
+        }
+        public async Task RemoveStudentsAsync(ICollection<int> studentIds)
+        {
+            List<Student> students = new();
+            foreach (int studentId in studentIds)
+            {
+                Student s = await context.Students
+                    .Where(s => s.Id == studentId)
+                    .Include(s => s.Grades)
+                    .Include(s => s.StudentGroupEnrollments)
+                    .FirstOrDefaultAsync();
+                students.Add(s);
+            }
+            context.RemoveRange(students);
+            await context.SaveChangesAsync();
         }
         public async Task<bool> AddStudentToClassAsync(int studentId, int classId)
         {

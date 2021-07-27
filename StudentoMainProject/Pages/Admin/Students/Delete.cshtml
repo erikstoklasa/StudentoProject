@@ -10,12 +10,6 @@
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            UserAuthId
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Student.UserAuthId
-        </dd>
-        <dt class="col-sm-2">
             Jméno
         </dt>
         <dd class="col-sm-10">
@@ -90,7 +84,38 @@
             @Model.Student.PhoneNumber
         </dd>
     </dl>
-    
+    @if (Model.Student.Grades?.Count > 0)
+    {
+        <div class="alert alert-danger">Se studentem/kou bude odstraněno také @Model.Student.Grades.Count známek</div>
+    }
+    else
+    {
+        <div class="alert alert-info">Student/ka nemá přiřazené žádné známky</div>
+    }
+
+    @if (Model.Student.StudentGroupEnrollments?.Count > 0)
+    {
+        <div class="alert alert-danger">
+            Student/ka bude odstraněn/a z těchto skupin:
+        </div>
+        <dl>
+            @foreach (var sge in Model.Student.StudentGroupEnrollments)
+            {
+                <dt class="col-sm-2">
+                    Název skupiny:
+                </dt>
+                <dd class="col-sm-10">
+                    @sge.StudentGroup.Name
+                </dd>
+            }
+        </dl>
+    }
+    else
+    {
+        <div class="alert alert-info">Student/ka není přiřazený/á v žádných skupinách</div>
+    }
+
+
     <form method="post">
         <input type="hidden" asp-for="Student.Id" />
         <input type="submit" value="Odstranit" class="btn btn-danger" /> |

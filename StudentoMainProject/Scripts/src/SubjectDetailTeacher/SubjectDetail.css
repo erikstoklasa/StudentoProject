@@ -164,13 +164,15 @@
 }
 
 .popup-inner-container{
+    max-height: 95vh;
     width: 100%;
-    max-width: 400px;    
-    margin: 20px;   
+    max-width: 400px;
+    margin: 20px;
+    padding: 15px;   
     background-color: white;
     border: none;
     border-radius: 10px;
-    overflow: hidden;   
+    overflow-y: auto !important;     
 }
 
 .popup-inner-padding{
@@ -221,8 +223,8 @@
 }
 
 .next-material-button{
-    padding: 0.4rem 0.7rem !important;
-    width: 100% !important;
+    padding: 0.2rem 0.5rem !important;  
+    margin-left: auto;
 }
 
 .w100{
@@ -242,12 +244,24 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .material-name-input{
-    margin-left: 20px;
-    margin-right: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.file-input-label{
+    background: #FFFFFF;
+    box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.1);
+    border: transparent;
+    outline: none;
+    border-radius: 10px;
+    min-height: 150px;
+    cursor: pointer;
+    margin-top: 10px;
+    padding: 10px 10px 40px 10px;
 }
 
 

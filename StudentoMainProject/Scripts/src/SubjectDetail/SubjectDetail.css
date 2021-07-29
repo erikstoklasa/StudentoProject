@@ -472,14 +472,14 @@
     border-radius: 10px;
     min-height: 150px;
     cursor: pointer;
-    padding: 10px;
+    padding: 10px 10px 40px 10px;
 }
 
 .single-material-input-container{
     display: flex;
     justify-content: space-around;
     align-items: center;
-    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .material-name-input{

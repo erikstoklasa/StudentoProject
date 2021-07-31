@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SchoolGradebook.Services;
+using System;
 using System.Threading.Tasks;
 
 namespace SchoolGradebook.Pages.Admin.Teachers
@@ -16,6 +17,7 @@ namespace SchoolGradebook.Pages.Admin.Teachers
 
         [BindProperty]
         public Models.Teacher Teacher { get; set; }
+        public string ErrorMessage { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -24,7 +26,7 @@ namespace SchoolGradebook.Pages.Admin.Teachers
                 return NotFound();
             }
 
-            Teacher = await teacherService.GetTeacherAsync((int)id);
+            Teacher = await teacherService.GetTeacherFullProfileAsync((int)id);
 
             if (Teacher == null)
             {
@@ -39,8 +41,15 @@ namespace SchoolGradebook.Pages.Admin.Teachers
             {
                 return NotFound();
             }
-
-            await teacherService.DeleteTeacherAsync((int)id);
+            try
+            {
+                await teacherService.DeleteTeacherAsync((int)id);
+            }
+            catch (Exception)
+            {
+                ErrorMessage = "Bohožel se nepodařilo odstranit daného vyučujícího, pro odstranění kontaktujte prosím podporu";
+                return Page();
+            }
 
             return RedirectToPage("./Index");
         }

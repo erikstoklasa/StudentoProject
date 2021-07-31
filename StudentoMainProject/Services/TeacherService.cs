@@ -64,6 +64,18 @@ namespace SchoolGradebook.Services
                 .FirstOrDefaultAsync();
             return teacher;
         }
+        public async Task<Teacher> GetTeacherFullProfileAsync(int teacherId)
+        {
+            Teacher teacher = await context.Teachers
+                .Where(s => s.Id == teacherId)
+                .Include(t => t.SubjectInstances)
+                    .ThenInclude(si => si.SubjectType)
+                .Include(t => t.SubjectMaterials)
+                .Include(t => t.Approbations)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+            return teacher;
+        }
         public async Task<Teacher> GetTeacherByEmailAsync(string email)
         {
             Teacher teacher = await context.Teachers
@@ -86,7 +98,16 @@ namespace SchoolGradebook.Services
         }
         public async Task<bool> DeleteTeacherAsync(int teacherId)
         {
-            Teacher teacher = await context.Teachers.FindAsync(teacherId);
+            Teacher teacher = await context.Teachers
+                .Where(t => t.Id == teacherId)
+                .Include(t => t.SubjectInstances)
+                    .ThenInclude(si => si.Enrollments)
+                .Include(t => t.SubjectInstances)
+                    .ThenInclude(si => si.Grades)
+                .Include(t => t.SubjectInstances)
+                    .ThenInclude(si => si.TimetableRecords)
+                .Include(t => t.SubjectMaterials)
+                .FirstOrDefaultAsync();
 
             if (teacher != null)
             {
@@ -143,6 +164,16 @@ namespace SchoolGradebook.Services
 
             return true;
         }
+        //Additional methods
+
+        public async Task<bool> TeacherIsClassmaster(int teacherId)
+        {
+            var hasAnyClassesAsClassmaster = await context.Classes
+                .Where(c => c.TeacherId == teacherId)
+                .AnyAsync();
+            return hasAnyClassesAsClassmaster;
+        }
+
         //VALIDATIONS
         public static bool HasRequiredFields(Teacher teacher)
         {

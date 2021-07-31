@@ -1,7 +1,7 @@
 {
-  "name": "WebApp",
+  "name": "Studento",
   "version": "1.0.0",
-  "description": "Vítej na repozitáři moderního klasifikačního systému Studento, aplikace je poskytována zdarma :blush:",
+  "description": "Vítej na repozitáři moderního klasifikačního systému Studento",
   "main": "index.js",
   "scripts": {
     "build": "webpack --config=webpack.config.js"

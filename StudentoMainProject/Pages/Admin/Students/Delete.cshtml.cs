@@ -7,21 +7,23 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using SchoolGradebook.Models;
 using SchoolGradebook.Data;
+using SchoolGradebook.Services;
 
 namespace SchoolGradebook.Pages.Admin.Students
 {
     public class DeleteModel : PageModel
     {
-        private readonly SchoolGradebook.Data.SchoolContext _context;
+        private readonly StudentService studentService;
 
-        public DeleteModel(SchoolGradebook.Data.SchoolContext context)
+        public DeleteModel(StudentService studentService)
         {
-            _context = context;
+            this.studentService = studentService;
         }
 
         [BindProperty]
         public Models.Student Student { get; set; }
 
+        public string ErrorMessage { get; set; }
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
@@ -29,7 +31,7 @@ namespace SchoolGradebook.Pages.Admin.Students
                 return NotFound();
             }
 
-            Student = await _context.Students.FirstOrDefaultAsync(m => m.Id == id);
+            Student = await studentService.GetStudentFullProfileAsync((int)id);
 
             if (Student == null)
             {
@@ -45,12 +47,17 @@ namespace SchoolGradebook.Pages.Admin.Students
                 return NotFound();
             }
 
-            Student = await _context.Students.FindAsync(id);
-
-            if (Student != null)
+            List<int> studentIdsToDelete = new();
+            studentIdsToDelete.Add((int)id);
+            try
             {
-                _context.Students.Remove(Student);
-                await _context.SaveChangesAsync();
+
+            await studentService.RemoveStudentsAsync(studentIdsToDelete);
+            }
+            catch (Exception)
+            {
+                ErrorMessage = "Bohožel se nepodařilo odstranit daného studenta, pro odstranění kontaktujte prosím podporu";
+                return Page();
             }
 
             return RedirectToPage("./Index");

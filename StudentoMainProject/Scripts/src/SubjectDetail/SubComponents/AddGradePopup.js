@@ -64,7 +64,7 @@ const addGradePopup = ({ addGrade, hidePopup }) => {
             <div className="add-grade-popup-inner-container">               
                     <div className="popup-title-container">
                         <h4 className="popup-title">Přidat známku</h4>
-                        <img className="pointer" src="/images/icons/Delete icon.svg" alt="zavřít" height="30px" onClick={() => { hidePopup()}}></img>
+                        <img className="pointer" src="/images/icons/delete.svg" alt="zavřít" height="30px" onClick={() => { hidePopup()}}></img>
                     </div>              
                     <div className="popup-input-container">
                         <div className="popup-input-row">
@@ -93,30 +93,6 @@ const addGradePopup = ({ addGrade, hidePopup }) => {
         </div>
         </div>
     )
-
-   /* return (
-        <div className="add-grade-popup-container">
-            <div className="add-grade-popup-inner-container">
-                <div className="popup-inner-padding">
-                    <div className="popup-title-container">
-                        <h4 className="popup-title">Nová známka</h4>
-                        <img className="pointer" src="/images/close.svg" alt="zavřít" height="25px" onClick={() => { hidePopup()}}></img>
-                    </div>              
-                    <div className="popup-input-container">               
-                        <input className="name-input form-control" placeholder="Název známky" value={gradeName} onChange={(event) => {updateGradeName(event.target.value)}}></input>
-                        <input className="number-input form-control" value={gradeValue} maxlength="2" onChange={(event) => { updateGradeValue(event.target.value)} }></input>
-                    </div>
-                    { showWarning? 
-                        <p className="add-warning-text">{warningMessage}</p>
-                   : null}
-                        <button className="btn btn-primary next-material-button" onClick={onAddClick}>Přidat</button>
-                </div>
-            </div>
-            <div className="grade-info-box">
-                Tuhle známku učitel neuvidí, je jen pro tebe, nemá vliv na průměr, který vidí učitel.
-            </div>
-        </div>
-    )*/
 }
 
 export default addGradePopup

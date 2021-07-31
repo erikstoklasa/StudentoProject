@@ -10,7 +10,7 @@ const MaterialInputList = ({ materials, removeFile, changeName }) => {
     })
 
     return (
-        <div className="mt10">
+        <div>
             {materialList}
         </div>
     )

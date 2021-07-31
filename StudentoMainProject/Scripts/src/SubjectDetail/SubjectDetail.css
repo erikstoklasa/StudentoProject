@@ -191,7 +191,8 @@
     max-height: 95vh;
     width: 100%;
     max-width: 400px;
-    margin: 20px;   
+    margin: 20px;
+    padding: 15px;   
     background-color: white;
     border: none;
     border-radius: 10px;
@@ -463,17 +464,29 @@
 	z-index: -1;
 }
 
+.file-input-label{
+    background: #FFFFFF;
+    box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.1);
+    border: transparent;
+    outline: none;
+    border-radius: 10px;
+    min-height: 150px;
+    cursor: pointer;
+    padding: 10px 10px 40px 10px;
+}
+
 .single-material-input-container{
     display: flex;
     justify-content: space-around;
     align-items: center;
-    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .material-name-input{
-    margin-left: 20px;
-    margin-right: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
 }
+
 
 
 @media(max-width: 1320px){

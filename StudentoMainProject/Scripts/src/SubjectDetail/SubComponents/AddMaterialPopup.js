@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import MaterialInputList from './MaterialInputList'
 
-const AddMaterialPopup = ({ upload, hidePopup }) => {
-    const [headingText, updateHeadingText] = useState('Přidat materiály')
+const AddMaterialPopup = ({ upload, hidePopup }) => {    
     const [inputGroupName, updateInputName] = useState('')
     const [showGroupNameInput, updateShowGroupNameInput] = useState(false)
     const [showWarning, updateShowWarning] = useState(false)
@@ -105,30 +104,31 @@ const AddMaterialPopup = ({ upload, hidePopup }) => {
 
     return (
         <div className="add-material-container">              
-            <div className="popup-inner-container">
-                <div className="popup-inner-padding">
+            <div className="popup-inner-container">                
                 <div className="material-popup-title-container">
-                    <h4 className="popup-title">{headingText}</h4>
-                        <img className="pointer" src="/images/close.svg" alt="zavřít" height="25px" onClick={() => { hidePopup()}}></img>
-                </div>
-                {showGroupNameInput ?
+                    <h4 className="popup-title">Přidat soubory</h4>
+                        <img className="pointer" src="/images/icons/delete.svg" alt="zavřít" height="30px" onClick={() => { hidePopup()}}></img>
+                </div>               
+                            
+                <div className="add-group-container">
+                        
+                        <input className="multiple-file-input" type="file" name="materialy" id="materialy" multiple onChange={(event) => { handleFileInput(event.target.files)}}/>
+                    
+                    <label className="file-input-label w100" for="materialy">
+                    {showGroupNameInput ?
                             <div>
                             <input className="form-control mb10 mt10" placeholder="Jméno skupiny materiálu, např. příprava na test" onChange={(event)=>{updateInputName(event.target.value)}}/>
                                 <div className="hline"></div>
                             </div>
                             : null}
                     {inputData.length > 0 ? <MaterialInputList materials={inputData} removeFile={removeFile} changeName={changeMaterialName}/> : null}
+                    </label>
+                </div>                       
                 {showWarning? 
                         <p className="add-warning-text">{warningMessage}</p>
-                   : null}              
-                <div className="add-group-container">
-                        
-                        <input className="multiple-file-input" type="file" name="materialy" id="materialy" multiple onChange={(event) => { handleFileInput(event.target.files)}}/>
-                        <label className="btn btn-outline-primary w100" for="materialy">Vybrat soubory</label>    
-                </div>                       
-                
+                   : null}  
                 <button className="btn btn-primary next-material-button" onClick={handleUploadClick}>Přidat</button>                    
-                </div>               
+                             
             </div>           
         </div>
     )

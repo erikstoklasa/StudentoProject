@@ -12,7 +12,7 @@ const MaterialInput = ({ material, changeName, index, removeFile }) => {
                 
                 changeName(event.target.value, index)
             }}></input>
-            <img className="pointer" src="/images/close.svg" alt="zavřít" height="15px" onClick={() => {              
+            <img className="pointer" src="/images/icons/delete.svg" alt="zavřít" height="15px" onClick={() => {              
 
                 removeFile()
             }}></img>

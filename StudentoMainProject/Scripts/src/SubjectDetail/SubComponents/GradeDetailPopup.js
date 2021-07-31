@@ -15,7 +15,7 @@ const GradeDetailPopup = ({ grade, info, deleteGrade, hidePopup }) => {
                 <div className="popup-inner-padding">
                     <div className="popup-title-container">
                         <h4 className="detail-popup-title">{grade.name}</h4>
-                        <img className="pointer" src="/images/close.svg" alt="zavřít" height="25px" onClick={() => { hidePopup()}}></img>
+                        <img className="pointer" src="/images/icons/delete.svg" alt="zavřít" height="30px" onClick={() => { hidePopup()}}></img>
                     </div>
                         <p className="detail-relative-time">{grade.addedRelative}</p>
                         <p class="detail-grade-circle">{grade.displayValue}</p>

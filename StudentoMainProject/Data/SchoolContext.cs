@@ -75,6 +75,23 @@ namespace SchoolGradebook.Data
                 .HasMany(e => e.Grades)
                 .WithOne(e => e.Student)
                 .OnDelete(DeleteBehavior.ClientCascade);
+            modelBuilder.Entity<SubjectInstance>()
+                .HasOne(e => e.Teacher)
+                .WithMany(e => e.SubjectInstances)
+                .OnDelete(DeleteBehavior.ClientCascade);
+            modelBuilder.Entity<SubjectInstance>()
+                .HasMany(e => e.Enrollments)
+                .WithOne(e => e.SubjectInstance)
+                .OnDelete(DeleteBehavior.ClientCascade);
+            modelBuilder.Entity<SubjectInstance>()
+                .HasMany(e => e.Grades)
+                .WithOne(e => e.SubjectInstance)
+                .OnDelete(DeleteBehavior.ClientCascade);
+            modelBuilder.Entity<SubjectInstance>()
+                .HasMany(e => e.TimetableRecords)
+                .WithOne(e => e.SubjectInstance)
+                .OnDelete(DeleteBehavior.ClientCascade);
+
         }
     }
 }

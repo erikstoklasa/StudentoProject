@@ -8,13 +8,11 @@
 <div>
     <h1>Odstranit vyučujícího</h1>
     <hr />
+    @if (!String.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="alert alert-danger">@(Model.ErrorMessage)</div>
+    }
     <dl class="row">
-        <dt class="col-sm-2">
-            UserAuthId
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Teacher.UserAuthId
-        </dd>
         <dt class="col-sm-2">
             Jméno
         </dt>
@@ -88,7 +86,37 @@
             @Model.Teacher.PhoneNumber
         </dd>
     </dl>
-    
+    @if (Model.Teacher.SubjectMaterials?.Count > 0)
+    {
+        <div class="alert alert-danger">S vyučujícím bude odstraněno také @Model.Teacher.SubjectMaterials?.Count materialů</div>
+    }
+    else
+    {
+        <div class="alert alert-info">Vyučující nemá přiřazené žádné studijní materiály</div>
+    }
+
+    @if (Model.Teacher.SubjectInstances?.Count > 0)
+    {
+        <div class="alert alert-danger">
+            S vyučujícím budou smazány i jeho předměty:
+        </div>
+        <dl>
+            @foreach (var si in Model.Teacher.SubjectInstances)
+            {
+                <dt class="col-sm-2">
+                    Název předmětu:
+                </dt>
+                <dd class="col-sm-10">
+                    @si.SubjectType.Name
+                </dd>
+            }
+        </dl>
+    }
+    else
+    {
+        <div class="alert alert-info">Vyučující nevyučuje žadné předměty</div>
+    }
+
     <form method="post">
         <input type="hidden" asp-for="Teacher.Id" />
         <input type="submit" value="Odstranit" class="btn btn-danger" /> |

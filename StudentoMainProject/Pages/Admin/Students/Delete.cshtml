@@ -8,6 +8,10 @@
 <h1>Odstranit studenta</h1>
 <div>
     <hr />
+    @if (!String.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="alert alert-danger">@(Model.ErrorMessage)</div>
+    }
     <dl class="row">
         <dt class="col-sm-2">
             Jméno

@@ -23,6 +23,7 @@ namespace SchoolGradebook.Pages.Admin.Students
         [BindProperty]
         public Models.Student Student { get; set; }
 
+        public string ErrorMessage { get; set; }
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
@@ -48,7 +49,16 @@ namespace SchoolGradebook.Pages.Admin.Students
 
             List<int> studentIdsToDelete = new();
             studentIdsToDelete.Add((int)id);
+            try
+            {
+
             await studentService.RemoveStudentsAsync(studentIdsToDelete);
+            }
+            catch (Exception)
+            {
+                ErrorMessage = "Bohožel se nepodařilo odstranit daného studenta, pro odstranění kontaktujte prosím podporu";
+                return Page();
+            }
 
             return RedirectToPage("./Index");
         }

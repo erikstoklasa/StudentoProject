@@ -36,7 +36,7 @@ const GradeDisplay = ({ gradeId, studentId, value, modifyGrade, gradeName, grade
         else if (gradeValueRef.current === '' && gradeValueRef.current !== initialValue) {
             if (gradeId) {
                 updateInitialValue(gradeValueRef.current)
-                modifyGrade(gradeId, 0)
+                modifyGrade(gradeId, 0, studentId, gradeName, grade)
             }
         } 
     }

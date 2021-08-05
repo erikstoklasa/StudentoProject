@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 
 
 const GradeDetailPopup = ({ grade, info, deleteGrade, hidePopup }) => {
-
+    
     useEffect(() => {
         document.body.style.overflow = 'hidden';
         return ()=> document.body.style.overflow = 'unset';
@@ -14,7 +14,7 @@ const GradeDetailPopup = ({ grade, info, deleteGrade, hidePopup }) => {
             <div className="popup-inner-container">
                 <div className="popup-inner-padding">
                     <div className="popup-title-container">
-                        <h4 className="detail-popup-title">{grade.name}</h4>
+                        <h4 className="detail-popup-title">{grade.gradeGroupName}</h4>
                         <img className="pointer" src="/images/icons/delete.svg" alt="zavřít" height="30px" onClick={() => { hidePopup()}}></img>
                     </div>
                         <p className="detail-relative-time">{grade.addedRelative}</p>

@@ -150,6 +150,7 @@ namespace SchoolGradebook.Services
         }
         public static string getShorterString(string input, int maxLength)
         {
+            input = "ahoj";
             if(input.Length > maxLength)
             {
                 return input.Substring(0, maxLength) + "..";

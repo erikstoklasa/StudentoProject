@@ -252,13 +252,21 @@
     margin-right: 10px;
 }
 
+.material-popup-help-text{
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 20px;
+    font-size: 0.8rem;
+}
+
+
 .file-input-label{
     background: #FFFFFF;
     box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.1);
     border: transparent;
     outline: none;
     border-radius: 10px;
-    min-height: 150px;
+    min-height: 158.4px;
     cursor: pointer;
     margin-top: 10px;
     padding: 10px 10px 40px 10px;

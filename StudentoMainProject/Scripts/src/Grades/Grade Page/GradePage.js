@@ -422,7 +422,7 @@ const GradePage = () => {
                     newArr.forEach(grade => {
                         Object.assign(grade, {
                             gradeGroupId: data.id,
-                            added: moment().toISOString()                        
+                            added: moment().toISOString()                       
                         })
                     })
                     fetch(`${apiAdress}/Grades/Teacher/Batch`, {

@@ -59,10 +59,7 @@
 }
 
 .detail-grade-circle{
-    margin: 20px auto 25px auto !important;
-    background: #FEC368;
     font-size: 2rem;
-    color: white;
     height: 4rem;
     width: 4rem;
     line-height: 4rem;
@@ -480,6 +477,22 @@
     justify-content: space-around;
     align-items: center;
     margin-bottom: 10px;
+}
+
+.weight-circle{
+    color: black;
+    border-radius: 50%;
+    border: solid black 1px;
+    font-size: 2rem;
+    height: 4rem;
+    width: 4rem;
+    line-height: 4rem;
+    text-align: center;
+}
+
+.detail-circles-container{
+    display: flex;
+    justify-content: center;
 }
 
 .material-name-input{

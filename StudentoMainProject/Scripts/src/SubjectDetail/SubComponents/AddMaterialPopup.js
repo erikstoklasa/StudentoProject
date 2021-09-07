@@ -17,10 +17,9 @@ const AddMaterialPopup = ({ upload, hidePopup }) => {
     useEffect(() => {
         if (inputData.length > 0) {
             updateShowHelp(false)
-        } else {
-            if (!showHelpText) {
+        } else if (!showHelpText) {
                 updateShowHelp(true)
-            }
+      }
         }
 
     },[inputData]);

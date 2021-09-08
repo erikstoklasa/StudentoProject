@@ -19,8 +19,8 @@ steps:
   inputs:
     command: 'ci'
 
-- script: 
-    npm run build
+- script: npm run build
+  workingDirectory: ./StudentoMainProject/
   displayName: 'npm build'
 - task: NuGetToolInstaller@1
 

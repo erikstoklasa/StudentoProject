@@ -3,17 +3,27 @@ import MaterialInputList from './MaterialInputList'
 
 
 const AddMaterialPopup = ({ upload, hidePopup }) => {    
-    const [headingText, updateHeadingText] = useState('Přidat materiály')
     const [showGroupNameInput, updateShowGroupNameInput] = useState(false)
     const [inputGroupName, updateInputName] = useState('')
     const [showWarning, updateShowWarning] = useState(false)
     const [warningMessage, updateWarning] = useState('')
     const [inputData, updateInputData] = useState([])
+    const [showHelpText, updateShowHelp] = useState(true)
     
     useEffect(() => {
         document.body.style.overflow = 'hidden';
         return ()=> document.body.style.overflow = 'unset';
     }, []);
+
+    useEffect(() => {
+        if (inputData.length > 0) {
+            updateShowHelp(false)
+        } else if (!showHelpText) {
+            updateShowHelp(true)
+ }
+        
+
+    },[inputData]);
     
     useEffect(() => {
         
@@ -115,6 +125,7 @@ const AddMaterialPopup = ({ upload, hidePopup }) => {
                
                
                 <label className="file-input-label w100" for="materialy">
+                    {showHelpText ? <p className="material-popup-help-text">Přetáhni sem soubory, které chceš sdílet se svými spolužáky</p> : null}
                     {showGroupNameInput ?
                         <div>
                         <input className="form-control mb10 mt10" placeholder="Jméno skupiny materiálu, např. příprava na test" onChange={(event)=>{updateInputName(event.target.value)}}/>

@@ -59,10 +59,7 @@
 }
 
 .detail-grade-circle{
-    margin: 20px auto 25px auto !important;
-    background: #FEC368;
     font-size: 2rem;
-    color: white;
     height: 4rem;
     width: 4rem;
     line-height: 4rem;
@@ -469,10 +466,10 @@
     box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.1);
     border: transparent;
     outline: none;
-    border-radius: 10px;
-    min-height: 150px;
+    border-radius: 10px;    
     cursor: pointer;
     padding: 10px 10px 40px 10px;
+    min-height: 158.4px;
 }
 
 .single-material-input-container{
@@ -482,9 +479,32 @@
     margin-bottom: 10px;
 }
 
+.weight-circle{
+    color: black;
+    border-radius: 50%;
+    border: solid black 1px;
+    font-size: 2rem;
+    height: 4rem;
+    width: 4rem;
+    line-height: 4rem;
+    text-align: center;
+}
+
+.detail-circles-container{
+    display: flex;
+    justify-content: center;
+}
+
 .material-name-input{
     margin-left: 10px;
     margin-right: 10px;
+}
+
+.material-popup-help-text{
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 20px;
+    font-size: 0.8rem;
 }
 
 

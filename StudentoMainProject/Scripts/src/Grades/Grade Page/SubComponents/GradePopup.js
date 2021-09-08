@@ -6,8 +6,9 @@ const GradePopup = ({ grade, onNameChange, onWeightChange, newGrade, closePopup,
     const [displayWarning, updateDisplayWarning] = useState(false)
 
     useEffect(() => {
-        if (!newGrade) {          
-            updateGradeName(grade.gradeGroupName)            
+        if (!newGrade) {           
+            updateGradeName(grade.gradeGroupName)
+            updateGradeWeight(grade.gradeGroupWeight)
         }
         document.body.style.overflow = 'hidden';
         return ()=> document.body.style.overflow = 'unset';
@@ -34,7 +35,7 @@ const GradePopup = ({ grade, onNameChange, onWeightChange, newGrade, closePopup,
             }
         } else {
             if (gradeName && gradeWeight) {
-                modifyGradeGroup(grade.gradeGroupId, gradeName, gradeWeight)
+                modifyGradeGroup(grade.gradeGroupId, gradeName, gradeWeight, grade)
                 updateDisplayWarning(false)
                 closePopup()
             } else {

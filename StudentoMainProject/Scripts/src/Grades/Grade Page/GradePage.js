@@ -4,10 +4,11 @@ import AverageColumn from './SubComponents/AverageColumn.js';
 import NewGradeColumn from './SubComponents/NewGradeColumn.js';
 import GradeDisplaySection from './SubComponents/GradeDisplaySection.js';
 import FillerColumn from './SubComponents/FillerColumn.js'
-import GradePopup from './SubComponents/GradePopup'
 import NotificationBar from './SubComponents/NotificationBar.js'
 import apiAdress from './SubComponents/Variables'
+import moment from 'moment';
 import './GradePage.css';
+
 const GradePage = () => {
     const [sortByAverage, updateSortByAverage] = useState(false);
     const [bulkGradeData, updateBulkGradeData] = useState([]);
@@ -100,7 +101,7 @@ const GradePage = () => {
             })
 
             sortedGrades.forEach((grade) => {
-                if (!studentGrades.some(g => g.name === grade.name)) {
+                if (!studentGrades.some(g => g.gradeGroupId === grade.gradeGroupId)) {
                     studentGrades.push(grade)
                 }
                 gradeSum = gradeSum + parseInt(grade.value)
@@ -238,11 +239,22 @@ const GradePage = () => {
                         'Content-Type': 'application/json'
                         // 'Content-Type': 'application/x-www-form-urlencoded',
                     },
-                    body: JSON.stringify(gradeArr)
+                    body: JSON.stringify(gradeArr) 
                 }).then(res => {
-                    if (res.ok) {
+                    if (res.ok) {                        
                         updateBulkGradeData(bulkGradeData.filter(grade => gradeId !== grade.id))
                         renderNotificationBar()
+                        if (!bulkGradeData.some(bulkGrade => { bulkGrade.gradeGroupId === grade.gradeGroupId })) {                      
+                            
+                            fetch(`${apiAdress}/Grades/Teacher/GradeGroup/Batch`, {
+                                method: 'DELETE',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                                },
+                                body: JSON.stringify([grade.gradeGroupId]) 
+                            })
+                        }
                     }
                 })
             }
@@ -253,6 +265,7 @@ const GradePage = () => {
                     subjectInstanceId: InstanceId,
                     studentId: studentId,
                     name: gradeName,
+                    added: moment().toISOString(),
                     gradeGroupId: grade.gradeGroupId,                
                 }
                
@@ -271,10 +284,10 @@ const GradePage = () => {
                     const newResponseGrades = [];                 
                     if (data.id) {
                         bulkGradeData.forEach(grade => {                            
-                            if (grade.id === data.id) {
+                            if (grade.id === data.id) {                                
                                 const displayValue = getGradeDisplayValue(parseInt(data.value))
-                                Object.assign(data, {displayValue : displayValue})
-                                newResponseGrades.push(data)
+                                Object.assign(grade, { displayValue: displayValue })                               
+                                newResponseGrades.push(grade)
                             }
                             else {
                                 newResponseGrades.push(grade)
@@ -318,7 +331,7 @@ const GradePage = () => {
         }
     }
 
-    const modifyGradeGroup = (id, name, weight) => {
+    const modifyGradeGroup = (id, name, weight, grade) => {
         fetch(`${apiAdress}/Grades/Teacher/GradeGroup`, {
             method: 'PUT',
             headers: {
@@ -328,7 +341,8 @@ const GradePage = () => {
             body: JSON.stringify({
                 id: id,
                 weight: weight,
-                name: name,              
+                name: name,
+                added: grade.added,
                 addedBy: 1
             })
         })
@@ -380,8 +394,7 @@ const GradePage = () => {
         updateNewGrades(newArr)
     }
 
-    const handleSubmitNewGrades = (newGradeName, newGradeWeight) => {
-        if (!orderedGrades.some(grade => grade.name === newGradeName)) {
+    const handleSubmitNewGrades = (newGradeName, newGradeWeight) => {           
             const newArr = [...newGrades]
             newArr.forEach(grade => {
                 Object.assign(grade, { name: newGradeName})
@@ -404,9 +417,13 @@ const GradePage = () => {
                             return res.json()
                         }
                     }
-                ).then(data => {                    
+                ).then(data => {
+                    
                     newArr.forEach(grade => {
-                        Object.assign(grade, { gradeGroupId: data.id})
+                        Object.assign(grade, {
+                            gradeGroupId: data.id,
+                            added: moment().toISOString()                       
+                        })
                     })
                     fetch(`${apiAdress}/Grades/Teacher/Batch`, {
                         method: 'POST',
@@ -422,7 +439,7 @@ const GradePage = () => {
                     }).then(data => {
                         data.forEach(grade => {
                             const displayValue = getGradeDisplayValue(parseInt(grade.value))                            
-                            Object.assign(grade, { displayValue: displayValue, gradeGroupName : newGradeName })
+                            Object.assign(grade, { displayValue: displayValue, gradeGroupName : newGradeName, gradeGroupWeight: newGradeWeight })
                         })
                         let array;
                         array = [...bulkGradeData, ...data]
@@ -435,10 +452,7 @@ const GradePage = () => {
                 })
                 } else {
                     return 'failed'
-                }
-        } else {
-            alert('Prosím neopakujte jména známek')
-        }
+                }       
     }
 
     const onClickHeader = () => {

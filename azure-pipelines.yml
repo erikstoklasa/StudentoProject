@@ -15,9 +15,9 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- task: Npm@1
-  inputs:
-    command: 'ci'
+- script: npm ci
+  workingDirectory: ./StudentoMainProject/
+  displayName: 'npm ci'
 
 - script: npm run build
   workingDirectory: ./StudentoMainProject/

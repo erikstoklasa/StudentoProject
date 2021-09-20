@@ -487,7 +487,7 @@ namespace SchoolGradebook.API.Grades
             {
                 return StatusCode(403);
             }
-            GradeGroup g = new GradeGroup()
+            GradeGroup g = new()
             {
                 Name = gradeGroup.Name,
                 AddedById = teacherId,
@@ -528,7 +528,7 @@ namespace SchoolGradebook.API.Grades
             {
                 return StatusCode(403);
             }
-            GradeGroup gg = new GradeGroup()
+            GradeGroup gg = new()
             {
                 Id = gradeGroup.Id,
                 AddedBy = GradeGroup.USERTYPE.Teacher,
@@ -604,7 +604,7 @@ namespace SchoolGradebook.API.Grades
         [Authorize(policy: "OnlyStudent")]
         public async Task<ActionResult<IEnumerable<GradeObject>>> StudentGetGrades(int? subjectInstanceId, int gradeValueFormat = 0)
         {
-            List<GradeObject> gradeObjects = new List<GradeObject>();
+            List<GradeObject> gradeObjects = new();
             int loggedInStudentId = await studentService.GetStudentId(UserId);
             if (loggedInStudentId == -1)
             {
@@ -631,6 +631,7 @@ namespace SchoolGradebook.API.Grades
                         SubjectInstanceId = g.SubjectInstanceId,
                         GradeGroupId = g.GradeGroupId,
                         GradeGroupName = g.GradeGroup?.Name,
+                        GradeGroupWeight = g.GradeGroup?.Weight,
                     };
                     newGrade.Value = gradeValueFormat switch
                     {
@@ -663,6 +664,7 @@ namespace SchoolGradebook.API.Grades
                         Value = g.GetGradeValueInDecimal().ToString(),
                         GradeGroupId = g.GradeGroupId,
                         GradeGroupName = g.GradeGroup?.Name,
+                        GradeGroupWeight = g.GradeGroup?.Weight,
                     };
                     gradeObjects.Add(newGrade);
                 }
@@ -690,7 +692,7 @@ namespace SchoolGradebook.API.Grades
             {
                 return StatusCode(403);
             }
-            Grade g = new Grade()
+            Grade g = new()
             {
                 Added = DateTime.UtcNow,
                 Name = grade.Name,
@@ -746,7 +748,7 @@ namespace SchoolGradebook.API.Grades
         public async Task<IActionResult> StudentDeleteGrades(ICollection<int> gradeIds)
         {
             int studentId = await studentService.GetStudentId(UserId);
-            List<int> idsToDelete = new List<int>();
+            List<int> idsToDelete = new();
             if (studentId == -1)
             {
                 return StatusCode(403);

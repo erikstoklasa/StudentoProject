@@ -87,17 +87,25 @@ function SubjectDetail() {
           
             });
 
-
             const average = sum / gradeNum
-            
             const formattedAverage = 5 - (average / 25)
             updateAverage(formattedAverage)
         }
         else if (grades) {
+            
+            const getGradeWeight = (grade) => {
+              
+                if (!grade.gradeGroupWeight) {
+                    return 1
+                } else {
+                    return grade.gradeGroupWeight
+                }
+            }
+
             let sum = 0;
-            let gradeNum = grades.length;
+            let gradeNum = grades.reduce((sum, current)=>{return sum + getGradeWeight(current)}, 0);
             grades.forEach(grade => {
-                sum = sum + parseInt(grade.value)
+                sum = sum + parseInt(grade.value)*getGradeWeight(grade)
           
             });
             const average = sum / gradeNum

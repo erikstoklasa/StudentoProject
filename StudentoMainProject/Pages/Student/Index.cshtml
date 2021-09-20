@@ -69,7 +69,7 @@
                                 </td>
                                 <td>
                                     <a asp-page="/Student/Grades/Details" asp-route-gradeId="@grade.Id">
-                                        @($"{LanguageHelper.getShorterString(grade.Name, 10)} | {LanguageHelper.getShorterString(grade.SubjectInstance.SubjectType.Name, 15)}")
+                                        @($"{LanguageHelper.getShorterString(grade.GradeGroup.Name, 10)} | {LanguageHelper.getShorterString(grade.SubjectInstance.SubjectType.Name, 15)}")
                                     </a>
                                 </td>
                                 <td>

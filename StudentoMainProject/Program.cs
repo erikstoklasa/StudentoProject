@@ -23,7 +23,7 @@ namespace SchoolGradebook
             host.Run();
         }
 
-        private static void CreateDbIfNotExists(IHost host)
+        private static async Task CreateDbIfNotExists(IHost host)
         {
             using (var scope = host.Services.CreateScope())
             {
@@ -40,7 +40,7 @@ namespace SchoolGradebook
                     //context.Database.EnsureDeleted();
                     //context.Database.EnsureCreated();
                     //context.Database.Migrate();
-                    DbInitializer.Initialize(context);
+                    await DbInitializer.Initialize(context);
                 }
                 catch (Exception ex)
                 {

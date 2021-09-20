@@ -68,15 +68,28 @@ function SubjectDetail() {
     }
 
     //calculate student average from internal value, then store it in state
-    const calculateStudentAverage = (gradeData) => {       
+    const calculateStudentAverage = (gradeData) => {
         if (gradeData) {
+
+            const getGradeWeight = (grade) => {
+              
+                if (!grade.gradeGroupWeight) {
+                    return 1
+                } else {
+                    return grade.gradeGroupWeight
+                }
+            }
+
             let sum = 0;
-            let gradeNum = gradeData.length;
+            let gradeNum = gradeData.reduce((sum, current)=>{return sum + getGradeWeight(current)}, 0);
             gradeData.forEach(grade => {
-                sum = sum + parseInt(grade.value)
+                sum = sum + parseInt(grade.value)*getGradeWeight(grade)
           
             });
+
+
             const average = sum / gradeNum
+            
             const formattedAverage = 5 - (average / 25)
             updateAverage(formattedAverage)
         }

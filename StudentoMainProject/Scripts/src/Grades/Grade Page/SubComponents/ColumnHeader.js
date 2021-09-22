@@ -15,7 +15,7 @@ const ColumnHeader = ({ title, type, handleClick, displayInput, onClickHeader, g
             <div className="column-header">
             
                 {(!displayInput ? <div className=" column-header-container"><div className=" btn btn-primary btn-display" onClick={handleClick}><img src="/images/add.svg" alt="Přidat" height="18px" className="plus"></img><p className="column-header-text">{title}</p></div></div>
-                    : <div className="column-header-container">{displayName? gradeName : null}</div>)}
+                    : <div className="column-header-container nowrap">{displayName? gradeName : null}</div>)}
             
             </div>
         )

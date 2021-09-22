@@ -91,11 +91,13 @@ const GradePage = () => {
             const gradeNum = bulkGradeData.length;
             
             sortedGrades.sort((a, b) => {
-                if (a.gradeGroupName > b.gradeGroupName) { 
-                    return 1
-                }
-                else {
+
+                const result = a.gradeGroupName.localeCompare(b.gradeGroupName)
+                if (result >= 0) { 
                     return -1
+                }
+                else{
+                    return 1
                 }
 
             })

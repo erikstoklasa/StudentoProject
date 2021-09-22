@@ -5,12 +5,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Globalization;
 using Microsoft.EntityFrameworkCore;
+using SchoolGradebook.Services;
 
 namespace SchoolGradebook.Data
 {
     public class DbInitializer
     {
-        public static async Task Initialize(SchoolContext context)
+        public static async Task Initialize(SchoolContext context, StudentService studentService, GradeService gradeService)
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("cs-CZ");
             //if none is filled in then return
@@ -19,7 +20,7 @@ namespace SchoolGradebook.Data
             string[] firstNames = { "Jan", "Jakub", "Tomáš", "Matyáš", "Adam", "Filip", "Vojtěch", "Lukáš", "Martin", "Matěj", "Eliška", "Anna", "Adéla", "Tereza", "Sofie", "Viktorie", "Ema", "Karolína", "Natálie", "Amálie" };
 
             string[] lastNames = { "Nováková", "Novák", "Svobodová", "Svoboda", "Novotný", "Novotná", "Dvořáková", "Dvořák", "Černá", "Černý", "Procházková", "Procházka", "Kučerová", "Kučera", "Veselá", "Veselý" };
-            DateTime[] dates = { DateTime.Parse("07/09/2019"), DateTime.Parse("10/12/2019"), DateTime.Parse("11/01/2020"), DateTime.Parse("18/02/2020"), DateTime.Parse("05/03/2020"), DateTime.Parse("28/03/2020"), DateTime.Parse("11/04/2020") };
+            DateTime[] dates = { DateTime.Parse("10/09/2021"), DateTime.Parse("13/09/2021"), DateTime.Parse("15/09/2021"), DateTime.Parse("20/09/2021"), DateTime.Parse("21/09/2021"), DateTime.Parse("01/09/2021"), DateTime.Parse("09/09/2021") };
             DateTime[] birthdays = { DateTime.Parse("07/09/2002"), DateTime.Parse("10/12/2002"), DateTime.Parse("21/01/2002"), DateTime.Parse("18/02/2002"), DateTime.Parse("05/03/2002"), DateTime.Parse("28/03/2002"), DateTime.Parse("11/04/2002") };
             const int NUMBER_OF_TEACHERS = 6;
             const int NUMBER_OF_STUDENTS = 15;
@@ -37,7 +38,15 @@ namespace SchoolGradebook.Data
             {
                 List<School> schools = new()
                 {
-                    new School() { Name = "Gymnázium Jana Keplera", CityAddress = "Praha 6", StreetAddress = "Parléřova 117", Email = "gjk@jk.cz", OrganizationIdentifNumber = "123456789", PhoneNumber = "123456789", Website = "https://gjk.cz", ZipCode = "16000" }
+                    new School() { Name = "Gymnázium Jana Keplera",
+                        CityAddress = "Praha 6",
+                        StreetAddress = "Parléřova 117",
+                        Email = "gjk@jk.cz",
+                        OrganizationIdentifNumber = "123456789",
+                        PhoneNumber = "123456789",
+                        Website = "https://gjk.cz",
+                        ZipCode = "16000"
+                    }
                 };
 
                 await context.Schools.AddRangeAsync(schools);
@@ -51,7 +60,13 @@ namespace SchoolGradebook.Data
 
                 for (int i = 0; i < NUMBER_OF_TEACHERS; i++)
                 {
-                    teachers.Add(new Teacher { FirstName = firstNames[r.Next(firstNames.Length)], LastName = lastNames[r.Next(lastNames.Length)], SchoolId = 1, Birthdate = birthdays[r.Next(birthdays.Length)], PersonalIdentifNumber = "11" });
+                    teachers.Add(new Teacher { 
+                        FirstName = firstNames[r.Next(firstNames.Length)],
+                        LastName = lastNames[r.Next(lastNames.Length)],
+                        SchoolId = 1,
+                        Birthdate = birthdays[r.Next(birthdays.Length)],
+                        PersonalIdentifNumber = "11"
+                    });
                 }
 
                 await context.Teachers.AddRangeAsync(teachers);
@@ -116,7 +131,13 @@ namespace SchoolGradebook.Data
                 {
                     for (int classInYear = 0; classInYear < classesPerYear; classInYear++)
                     {
-                        classes.Add(new Class() { Grade = (short)year, Name = classesNames[classInYear], BaseRoomId = r.Next(1, 6), TeacherId = 1, SchoolId = 1 });
+                        classes.Add(new Class() {
+                            Grade = (short)year,
+                            Name = classesNames[classInYear],
+                            BaseRoomId = r.Next(1, 6),
+                            TeacherId = 1,
+                            SchoolId = 1
+                        });
                     }
 
                 }
@@ -163,7 +184,8 @@ namespace SchoolGradebook.Data
                             Name = gradeGroupName,
                             Weight = r.Next(1, 11),
                             AddedBy = GradeGroup.USERTYPE.Teacher,
-                            AddedById = si.TeacherId
+                            AddedById = si.TeacherId,
+                            Added = dates[r.Next(dates.Length)]
                         };
                         gradeGroups.Add(g);
                     }
@@ -199,7 +221,12 @@ namespace SchoolGradebook.Data
                 List<TimetableRecord> timetableRecords = new();
                 for (int i = 0; i < 50; i++)
                 {
-                    timetableRecords.Add(new TimetableRecord() { SubjectInstanceId = r.Next(1, 8), RoomId = r.Next(1, 4), Recurrence = 1, TimeFrameId = r.Next(1, 56) });
+                    timetableRecords.Add(new TimetableRecord() {
+                        SubjectInstanceId = r.Next(1, 8),
+                        RoomId = r.Next(1, 4),
+                        Recurrence = 1,
+                        TimeFrameId = r.Next(1, 56)
+                    });
                 }
                 await context.TimetableRecords.AddRangeAsync(timetableRecords);
                 await context.SaveChangesAsync();
@@ -222,7 +249,13 @@ namespace SchoolGradebook.Data
                 List<TimetableChange> timetableChanges = new();
                 for (int i = 0; i < 60; i++)
                 {
-                    timetableChanges.Add(new TimetableChange() { SubjectInstanceId = r.Next(1, 8), StudentGroupId = r.Next(1, 3), Week = r.Next(1, 50), TimeFrameId = r.Next(1, 36), Canceled = r.Next(1, 3) == 1 });
+                    timetableChanges.Add(new TimetableChange() {
+                        SubjectInstanceId = r.Next(1, 8),
+                        StudentGroupId = r.Next(1, 3),
+                        Week = r.Next(1, 50),
+                        TimeFrameId = r.Next(1, 36),
+                        Canceled = r.Next(1, 3) == 1
+                    });
                 }
                 await context.TimetableChanges.AddRangeAsync(timetableChanges);
                 await context.SaveChangesAsync();
@@ -275,21 +308,20 @@ namespace SchoolGradebook.Data
                 List<Grade> grades = new();
                 List<SubjectInstance> subjectInstances =
                     await context.SubjectInstances.AsNoTracking().ToListAsync();
-                List<Student> students =
-                    await context.Students.AsNoTracking().ToListAsync();
                 foreach (var si in subjectInstances)
                 {
-                    foreach (var student in students)
+                    foreach (var student in await studentService.GetAllStudentsBySubjectInstanceAsync(si.Id, onlyIds: true))
                     {
-                        for (int gradeGroupId = 1; gradeGroupId <= 5; gradeGroupId++)
+                        foreach (var gg in await gradeService.GetAllGradeGroupsAsync())
                         {
                             var g = new Grade
                             {
                                 Name = "",
                                 StudentId = student.Id,
                                 SubjectInstanceId = si.Id,
-                                GradeGroupId = gradeGroupId,
-                                Added = dates[r.Next(dates.Length)]
+                                GradeGroupId = gg.Id,
+                                Added = dates[r.Next(dates.Length)],
+                                AddedBy = Grade.USERTYPE.Teacher
                             };
                             g.SetGradeValue(
                                 allowedValues[

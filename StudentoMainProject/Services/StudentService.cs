@@ -122,7 +122,7 @@ namespace SchoolGradebook.Services
                 .ThenInclude(g => g.StudentGroupEnrollments)
                 .AsNoTracking()
                 .ToArrayAsync();
-                List<Student> students = new List<Student>();
+                List<Student> students = new();
 
                 foreach (SubjectInstanceEnrollment enrollment in enrollments)
                     foreach (StudentGroupEnrollment groupEnrollment in enrollment.StudentGroup.StudentGroupEnrollments)
@@ -140,7 +140,7 @@ namespace SchoolGradebook.Services
                 .ThenInclude(ge => ge.Student)
                 .AsNoTracking()
                 .ToArrayAsync();
-                List<Student> students = new List<Student>();
+                List<Student> students = new();
 
                 foreach (SubjectInstanceEnrollment enrollment in enrollments)
                     foreach (StudentGroupEnrollment groupEnrollment in enrollment.StudentGroup.StudentGroupEnrollments)

@@ -90,8 +90,8 @@ const GradePage = () => {
             let gradeSum = 0;
             const gradeNum = bulkGradeData.length;
             
-            sortedGrades.sort((a, b) => { 
-                if (a.added > b.added) { 
+            sortedGrades.sort((a, b) => {
+                if (a.gradeGroupName > b.gradeGroupName) { 
                     return 1
                 }
                 else {

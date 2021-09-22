@@ -114,62 +114,65 @@ namespace SchoolGradebook.Services
             .ToArrayAsync();
             return grades;
         }
-        public async Task AddGradeAsync(Grade grade, USERTYPE usertype, bool saveChanges = true)
+        public async Task AddGradeAsync(Grade grade, USERTYPE usertype)
         {
-            grade.Name ??= "";
-            //Grading scale is relative to the country of school
-            if (grade.GetInternalGradeValue() < -10 || grade.GetInternalGradeValue() > 110)
-            {
-                throw new ArgumentOutOfRangeException("Grade value");
-            }
             grade.AddedBy = usertype;
-            await context.Grades.AddAsync(grade);
-
-            if (saveChanges)
-                await context.SaveChangesAsync();
+            if (GradeIsValid(grade))
+            {
+                await context.Grades.AddAsync(grade);
+            }
+            else
+            {
+                throw new ArgumentException("Grade is not valid.");
+            }
+            await context.SaveChangesAsync();
         }
         public async Task UpdateGradeAsync(Grade grade)
         {
-
-            //Grading scale is relative to the country of school
-            if (grade.GetInternalGradeValue() < -10 || grade.GetInternalGradeValue() > 110)
+            if (GradeIsValid(grade))
             {
-                throw new ArgumentOutOfRangeException("Grade value");
+                context.Attach(grade).State = EntityState.Modified;
             }
-
-            context.Attach(grade).State = EntityState.Modified;
+            else
+            {
+                throw new ArgumentException("Grade is not valid.");
+            }
             await context.SaveChangesAsync();
         }
 
-        public async Task UpdateGradesAsync(ICollection<Grade> grades)
+        public async Task UpdateGradesAsync(IEnumerable<Grade> grades)
         {
             foreach (var grade in grades)
             {
-                grade.Name ??= ""; 
-                //Grading scale is relative to the country of school
-                if (grade.GetInternalGradeValue() < -10 || grade.GetInternalGradeValue() > 110)
+                if (GradeIsValid(grade))
                 {
-                    throw new ArgumentOutOfRangeException("Grade value");
+                    context.Attach(grade).State = EntityState.Modified;
                 }
-                context.Attach(grade).State = EntityState.Modified;
+                else
+                {
+                    throw new ArgumentException("One or more grades are not valid.");
+                }
             }
             await context.SaveChangesAsync();
         }
         public async Task AddGradesAsync(IEnumerable<Grade> grades)
         {
+            List<Grade> gradesToAdd = new();
             foreach (var grade in grades)
             {
-                grade.Name ??= "";
-                //Grading scale is relative to the country of school
-                if (grade.GetInternalGradeValue() < -10 || grade.GetInternalGradeValue() > 110)
+                if (GradeIsValid(grade))
                 {
-                    throw new ArgumentOutOfRangeException("Grade value");
+                    gradesToAdd.Add(grade);
+                }
+                else
+                {
+                    throw new ArgumentException("One or more grades are not valid.");
                 }
             }
             await context.Grades.AddRangeAsync(grades);
             await context.SaveChangesAsync();
         }
-        public async Task DeleteGradesAsync(ICollection<int> gradeIds)
+        public async Task DeleteGradesAsync(IEnumerable<int> gradeIds)
         {
             List<Grade> grades = new();
             foreach (int gId in gradeIds)
@@ -179,15 +182,57 @@ namespace SchoolGradebook.Services
             context.Grades.RemoveRange(grades);
             await context.SaveChangesAsync();
         }
+        public static bool GradeIsValid(Grade grade)
+        {
+            if (grade.AddedBy == USERTYPE.Teacher)
+            {
+                if (grade.GradeGroupId == null || grade.GradeGroupId < 0)
+                    return false;
+            }
+            else //grade is added by a student
+            {
+                if (string.IsNullOrWhiteSpace(grade.Name))
+                    return false;
+                if (grade.Weight == null || grade.Weight <= 0)
+                    return false;
+            }
+
+            if (grade.SubjectInstanceId <= 0)
+                return false;
+
+            if (grade.StudentId <= 0)
+                return false;
+
+            if (DateTime.Compare(grade.Added, DateTime.Parse("20/10/2000")) <= 0)
+                return false;
+
+            if (grade.GetInternalGradeValue() < -10 || grade.GetInternalGradeValue() > 110)
+                throw new ArgumentOutOfRangeException("Grade value");
+
+            return true;
+        }
         //-------------------
         //GradeGroup SECTION
         //-------------------
-
+        public async Task<GradeGroup> GetGradeGroupAsync(int gradeGroupId)
+        {
+            GradeGroup gradeGroup = await context.GradeGroups
+                .Where(s => s.Id == gradeGroupId)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+            return gradeGroup;
+        }
+        public async Task<IEnumerable<GradeGroup>> GetAllGradeGroupsAsync()
+        {
+            IList<GradeGroup> gradeGroups = await context.GradeGroups
+                .AsNoTracking().ToListAsync();
+            return gradeGroups;
+        }
         public async Task AddGradeGroupAsync(GradeGroup gradeGroup, bool saveChanges = true)
         {
             if (!HasRequiredFields(gradeGroup))
             {
-                throw new ArgumentNullException("Grade Group","Not all required properties were set");
+                throw new ArgumentNullException("Grade Group", "Not all required properties were set");
             }
             await context.GradeGroups.AddAsync(gradeGroup);
 
@@ -204,9 +249,9 @@ namespace SchoolGradebook.Services
             context.Attach(gradeGroup).State = EntityState.Modified;
             await context.SaveChangesAsync();
         }
-        public async Task DeleteGradeGroupsAsync(ICollection<int> gradeGroupIds)
+        public async Task DeleteGradeGroupsAsync(IEnumerable<int> gradeGroupIds)
         {
-            List<GradeGroup> gradeGroups = new List<GradeGroup>();
+            List<GradeGroup> gradeGroups = new();
             foreach (int ggId in gradeGroupIds)
             {
                 gradeGroups.Add(new GradeGroup() { Id = ggId });
@@ -230,6 +275,9 @@ namespace SchoolGradebook.Services
             {
                 return false;
             }
+            if (DateTime.Compare(gradeGroup.Added, DateTime.Parse("20/10/2000")) <= 0)
+                return false;
+
             return true;
         }
     }

@@ -21,7 +21,6 @@ namespace SchoolGradebook.API.GradeAverages
 
         private readonly TeacherService teacherService;
         private readonly GradeAverageService gradeAverageService;
-        private readonly GradeGroupService gradeGroupService;
         private readonly StudentService studentService;
         private readonly TeacherAccessValidation teacherAccessValidation;
         private readonly GradeService gradeService;
@@ -30,12 +29,11 @@ namespace SchoolGradebook.API.GradeAverages
         private string UserId { get; set; }
         
 
-        public GradeAverageController(GradeService gradeService, TeacherService teacherService, GradeAverageService gradeAverageService, GradeGroupService gradeGroupService, StudentService studentService, IHttpContextAccessor httpContextAccessor, TeacherAccessValidation teacherAccessValidation) {
+        public GradeAverageController(GradeService gradeService, TeacherService teacherService, GradeAverageService gradeAverageService, StudentService studentService, IHttpContextAccessor httpContextAccessor, TeacherAccessValidation teacherAccessValidation) {
 
             this.gradeService = gradeService;
             this.teacherService = teacherService;
             this.gradeAverageService = gradeAverageService;
-            this.gradeGroupService = gradeGroupService;
             this.studentService = studentService;
             this.teacherAccessValidation = teacherAccessValidation;
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -127,7 +125,7 @@ namespace SchoolGradebook.API.GradeAverages
 
                 }
                 else { 
-                    var gradeGroup = await gradeGroupService.GetGradeGroupAsync(g.GradeGroupId.Value);
+                    var gradeGroup = await gradeService.GetGradeGroupAsync(g.GradeGroupId.Value);
                     weight = gradeGroup.Weight;
                     rememberMap[g.GradeGroupId.Value] = weight;
 
@@ -176,7 +174,7 @@ namespace SchoolGradebook.API.GradeAverages
             double average = 0;
             int totalWeight = 0;
             foreach(var g in grades) {
-                var gradeGroup = await gradeGroupService.GetGradeGroupAsync(g.GradeGroupId.Value);
+                var gradeGroup = await gradeService.GetGradeGroupAsync(g.GradeGroupId.Value);
                 int weight = gradeGroup.Weight;
                 average =+ g.Value * weight;    
                 totalWeight =+ weight;

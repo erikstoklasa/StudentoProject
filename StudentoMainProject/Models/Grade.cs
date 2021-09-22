@@ -13,15 +13,13 @@ namespace SchoolGradebook.Models
 
         public int Id { get; set; }
         public string Name { get; set; }
-        [Display(Name = "Známka")]
-        [Range(1, 5, ErrorMessage = "Zadejte známku mezi 1 a 5")]
         public int Value { get; private set; } //For table in the db
+        public int? Weight{ get; set; } //Only for student grades
         public int StudentId { get; set; }
         public int SubjectInstanceId { get; set; }
         public USERTYPE AddedBy { get; set; }
-        public int? GradeGroupId { get; set; }
-        [Display(Name = "Datum přidání")]
         public DateTime Added { get; set; }
+        public int? GradeGroupId { get; set; } //Only for teacher grades
 
         /// <summary>
         /// Sets the grade value from normal input

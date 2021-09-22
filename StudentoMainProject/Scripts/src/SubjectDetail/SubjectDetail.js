@@ -284,8 +284,9 @@ function SubjectDetail() {
                 value: actualValue,
                 name: name,
                 gradeGroupName: name,
-                gradeGroupWeight: parseInt(weight),
-                subjectInstanceId: subjectId
+                weight: parseInt(weight),
+                subjectInstanceId: subjectId,
+                added: moment().utc()
             })
         }).then(res => {
             if (res.ok) {

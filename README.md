@@ -13,11 +13,11 @@ Takhle zatím vypadá naše aplikace ->
 
 :white_check_mark: Správa klasifikace žáků a jednoduchá analýza
 
+:white_check_mark: Jednoduchá mobilní aplikace
+
 :red_circle: Verze pro veřejnost
 
 :red_circle: Podrobnější analýza, předpovědi vývoje známek
-
-:red_circle: Mobilní aplikace
 
 ## Úkolníček před dalším milníkem:
 

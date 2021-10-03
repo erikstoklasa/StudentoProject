@@ -203,7 +203,7 @@ namespace SchoolGradebook.Services
             if (grade.StudentId <= 0)
                 return false;
 
-            if (DateTime.Compare(grade.Added, DateTime.Parse("20/10/2000")) <= 0)
+            if (DateTime.Compare(grade.Added, DateTime.Parse("10/20/2000")) <= 0)
                 return false;
 
             if (grade.GetInternalGradeValue() < -10 || grade.GetInternalGradeValue() > 110)
@@ -230,7 +230,7 @@ namespace SchoolGradebook.Services
         }
         public async Task AddGradeGroupAsync(GradeGroup gradeGroup, bool saveChanges = true)
         {
-            if (!HasRequiredFields(gradeGroup))
+            if (!GradeGroupIsValid(gradeGroup))
             {
                 throw new ArgumentNullException("Grade Group", "Not all required properties were set");
             }
@@ -241,7 +241,7 @@ namespace SchoolGradebook.Services
         }
         public async Task UpdateGradeGroupAsync(GradeGroup gradeGroup)
         {
-            if (!HasRequiredFields(gradeGroup))
+            if (!GradeGroupIsValid(gradeGroup))
             {
                 throw new ArgumentNullException("Grade Group", "Not all required properties were set");
             }
@@ -261,7 +261,7 @@ namespace SchoolGradebook.Services
         }
 
         //VALIDATIONS
-        public static bool HasRequiredFields(GradeGroup gradeGroup)
+        public static bool GradeGroupIsValid(GradeGroup gradeGroup)
         {
             if (string.IsNullOrWhiteSpace(gradeGroup.Name))
             {
@@ -275,7 +275,7 @@ namespace SchoolGradebook.Services
             {
                 return false;
             }
-            if (DateTime.Compare(gradeGroup.Added, DateTime.Parse("20/10/2000")) <= 0)
+            if (DateTime.Compare(gradeGroup.Added, DateTime.Parse("10/20/2000")) <= 0)
                 return false;
 
             return true;

@@ -150,7 +150,7 @@ namespace SchoolGradebook.Services
         }
         public static string getShorterString(string input, int maxLength)
         {
-            if (!String.IsNullOrWhiteSpace(input))
+            if (String.IsNullOrWhiteSpace(input))
             {
                 return "";
             }

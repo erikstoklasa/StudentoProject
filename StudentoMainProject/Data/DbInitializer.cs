@@ -22,6 +22,7 @@ namespace SchoolGradebook.Data
             string[] lastNames = { "Nováková", "Novák", "Svobodová", "Svoboda", "Novotný", "Novotná", "Dvořáková", "Dvořák", "Černá", "Černý", "Procházková", "Procházka", "Kučerová", "Kučera", "Veselá", "Veselý" };
             DateTime[] dates = { DateTime.Parse("10/09/2021"), DateTime.Parse("13/09/2021"), DateTime.Parse("15/09/2021"), DateTime.Parse("20/09/2021"), DateTime.Parse("21/09/2021"), DateTime.Parse("01/09/2021"), DateTime.Parse("09/09/2021") };
             DateTime[] birthdays = { DateTime.Parse("07/09/2002"), DateTime.Parse("10/12/2002"), DateTime.Parse("21/01/2002"), DateTime.Parse("18/02/2002"), DateTime.Parse("05/03/2002"), DateTime.Parse("28/03/2002"), DateTime.Parse("11/04/2002") };
+            string[] gradeGroupNames = { "Domácí úkol", "Test", "Čtvrtletní práce", "Prezentace", "Aktivita při hodině" };
             const int NUMBER_OF_TEACHERS = 6;
             const int NUMBER_OF_STUDENTS = 15;
             const int NUMBER_OF_CLASSES = 20;
@@ -38,7 +39,9 @@ namespace SchoolGradebook.Data
             {
                 List<School> schools = new()
                 {
-                    new School() { Name = "Gymnázium Jana Keplera",
+                    new School()
+                    {
+                        Name = "Gymnázium Jana Keplera",
                         CityAddress = "Praha 6",
                         StreetAddress = "Parléřova 117",
                         Email = "gjk@jk.cz",
@@ -60,7 +63,8 @@ namespace SchoolGradebook.Data
 
                 for (int i = 0; i < NUMBER_OF_TEACHERS; i++)
                 {
-                    teachers.Add(new Teacher { 
+                    teachers.Add(new Teacher
+                    {
                         FirstName = firstNames[r.Next(firstNames.Length)],
                         LastName = lastNames[r.Next(lastNames.Length)],
                         SchoolId = 1,
@@ -131,7 +135,8 @@ namespace SchoolGradebook.Data
                 {
                     for (int classInYear = 0; classInYear < classesPerYear; classInYear++)
                     {
-                        classes.Add(new Class() {
+                        classes.Add(new Class()
+                        {
                             Grade = (short)year,
                             Name = classesNames[classInYear],
                             BaseRoomId = r.Next(1, 6),
@@ -168,27 +173,22 @@ namespace SchoolGradebook.Data
             //GradeGroups
             if (!context.GradeGroups.Any())
             {
-
                 List<GradeGroup> gradeGroups = new();
-                string[] gradeGroupNames = { "Domácí úkol", "Test", "Čtvrtletní práce", "Prezentace", "Aktivita při hodině" };
-
                 List<SubjectInstance> subjectInstances = await context.SubjectInstances
                     .AsNoTracking()
                     .ToListAsync();
-                foreach (var si in subjectInstances)
+
+                foreach (var gradeGroupName in gradeGroupNames)
                 {
-                    foreach (var gradeGroupName in gradeGroupNames)
+                    var g = new GradeGroup
                     {
-                        var g = new GradeGroup
-                        {
-                            Name = gradeGroupName,
-                            Weight = r.Next(1, 11),
-                            AddedBy = GradeGroup.USERTYPE.Teacher,
-                            AddedById = si.TeacherId,
-                            Added = dates[r.Next(dates.Length)]
-                        };
-                        gradeGroups.Add(g);
-                    }
+                        Name = gradeGroupName,
+                        Weight = r.Next(1, 11),
+                        AddedBy = GradeGroup.USERTYPE.Teacher,
+                        AddedById = r.Next(1, NUMBER_OF_TEACHERS + 1),
+                        Added = dates[r.Next(dates.Length)]
+                    };
+                    gradeGroups.Add(g);
                 }
 
                 await context.GradeGroups.AddRangeAsync(gradeGroups);
@@ -221,7 +221,8 @@ namespace SchoolGradebook.Data
                 List<TimetableRecord> timetableRecords = new();
                 for (int i = 0; i < 50; i++)
                 {
-                    timetableRecords.Add(new TimetableRecord() {
+                    timetableRecords.Add(new TimetableRecord()
+                    {
                         SubjectInstanceId = r.Next(1, 8),
                         RoomId = r.Next(1, 4),
                         Recurrence = 1,
@@ -249,7 +250,8 @@ namespace SchoolGradebook.Data
                 List<TimetableChange> timetableChanges = new();
                 for (int i = 0; i < 60; i++)
                 {
-                    timetableChanges.Add(new TimetableChange() {
+                    timetableChanges.Add(new TimetableChange()
+                    {
                         SubjectInstanceId = r.Next(1, 8),
                         StudentGroupId = r.Next(1, 3),
                         Week = r.Next(1, 50),

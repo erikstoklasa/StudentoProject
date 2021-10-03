@@ -661,7 +661,7 @@ namespace SchoolGradebook.API.Grades
                         GradeGroupId = g.GradeGroupId,
                         GradeGroupName = g.GradeGroup?.Name,
                         GradeGroupWeight = g.GradeGroup?.Weight,
-                        GradeGroupAdded = (DateTime)(g.GradeGroup?.Added),
+                        GradeGroupAdded = g.GradeGroup?.Added,
                     };
                     newGrade.Value = gradeValueFormat switch
                     {
@@ -696,7 +696,7 @@ namespace SchoolGradebook.API.Grades
                         GradeGroupId = g.GradeGroupId,
                         GradeGroupName = g.GradeGroup?.Name,
                         GradeGroupWeight = g.GradeGroup?.Weight,
-                        GradeGroupAdded = (DateTime)(g.GradeGroup?.Added),
+                        GradeGroupAdded = g.GradeGroup?.Added,
                     };
                     gradeObjects.Add(newGrade);
                 }
@@ -818,7 +818,7 @@ namespace SchoolGradebook.API.Grades
         public int StudentId { get; set; }
         public int? GradeGroupId { get; set; }
         public string GradeGroupName { get; set; }
-        public DateTime GradeGroupAdded { get; set; }
+        public DateTime? GradeGroupAdded { get; set; }
         public int? GradeGroupWeight { get; set; }
         public DateTime Added { get; set; }
         public USERTYPE? AddedBy { get; set; }

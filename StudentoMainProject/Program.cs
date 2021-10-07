@@ -37,7 +37,7 @@ namespace SchoolGradebook
                 /* 
                  * Note: 
                  * Uncomment these in case you need to forcefully recreate the tables.
-                 * Don't forget to query db_init.sql afterwards and encomment these back. 
+                 * Don't forget to query db_init.sql afterwards and comment these back. 
                  */
                 //context.Database.EnsureDeleted();
                 //context.Database.EnsureCreated();

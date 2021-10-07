@@ -89,7 +89,7 @@ namespace SchoolGradebook.Services
             return vysledneSlovo;
         }
         //End of credited code
-        public static string getRelativeTime(DateTime dateTime)
+        public static string GetRelativeTime(DateTime dateTime)
         {
             const int SECOND = 1;
             const int MINUTE = 60 * SECOND;
@@ -133,7 +133,7 @@ namespace SchoolGradebook.Services
             }
         }
 
-        public static string getAverageComparisonString(double currentAverage, double lastAverage)
+        public static string GetAverageComparisonString(double currentAverage, double lastAverage)
         {
             if (lastAverage > currentAverage)
             {
@@ -148,7 +148,7 @@ namespace SchoolGradebook.Services
                 return "";
             }
         }
-        public static string getShorterString(string input, int maxLength)
+        public static string GetShorterString(string input, int maxLength)
         {
             if (String.IsNullOrWhiteSpace(input))
             {

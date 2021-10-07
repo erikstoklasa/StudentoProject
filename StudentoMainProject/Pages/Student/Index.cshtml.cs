@@ -71,7 +71,7 @@ namespace SchoolGradebook.Pages.Student
             GPAToDisplay = currentAvg.CompareTo(double.NaN) == 0 ? "žádné známky" : currentAvg.ToString("f2");
             GPA = currentAvg;
             double comparisonAvg = await _analytics.GetTotalAverageForStudentAsync(studentId, 365, 30);
-            GPAComparisonHTML = LanguageHelper.getAverageComparisonString(currentAvg, comparisonAvg);
+            GPAComparisonHTML = LanguageHelper.GetAverageComparisonString(currentAvg, comparisonAvg);
 
 
             //UserCredential credential;

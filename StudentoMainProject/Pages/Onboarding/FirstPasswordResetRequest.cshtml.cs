@@ -46,26 +46,26 @@ namespace SchoolGradebook.Pages
             Email = Email.Trim();
             if (ModelState.IsValid)
             {
-                IdentityUser user = new IdentityUser();
+                IdentityUser user = new();
                 Models.Student s;
-                Models.Teacher t = null;
+                Models.Teacher teacher = null;
                 s = await studentService.GetStudentByEmailAsync(Email);
-                if (s != null)
+                if (s != null && String.IsNullOrEmpty(s.UserAuthId))
                 {
                     user.Email = s.Email;
                     user.UserName = s.Email;
                 }
                 else
                 {
-                    t = await teacherService.GetTeacherByEmailAsync(Email);
-                    if (t != null)
+                    teacher = await teacherService.GetTeacherByEmailAsync(Email);
+                    if (teacher != null && String.IsNullOrEmpty(teacher.UserAuthId))
                     {
-                        user.Email = t.Email;
-                        user.UserName = t.Email;
+                        user.Email = teacher.Email;
+                        user.UserName = teacher.Email;
                     }
                     else
                     {
-                        ModelState.AddModelError("UserNotFound", "Zkontroluj si email, protože tenhle bohužel není pozvaný.");
+                        ModelState.AddModelError("UserNotFound", "Zkontroluj zadaný email, protože tenhle bohužel není pozvaný.");
                         return Page();
                     }
                 }
@@ -85,11 +85,11 @@ namespace SchoolGradebook.Pages
                     s.UserAuthId = user.Id;
                     await studentService.UpdateStudentAsync(s);
                 }
-                else if (t != null)
+                else if (teacher != null)
                 {
                     _userManager.AddToRoleAsync(user, "teacher").Wait();
-                    t.UserAuthId = user.Id;
-                    await teacherService.UpdateTeacherAsync(t, null);
+                    teacher.UserAuthId = user.Id;
+                    await teacherService.UpdateTeacherAsync(teacher, null);
                 }
 
                 var code = await _userManager.GeneratePasswordResetTokenAsync(user);
@@ -110,7 +110,7 @@ namespace SchoolGradebook.Pages
             }
             return Page();
         }
-        private static Random random = new Random();
+        private static readonly Random random = new();
         public static string RandomString(int length)
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";

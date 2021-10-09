@@ -275,7 +275,7 @@ namespace SchoolGradebook.Services
             {
                 return false;
             }
-            if (DateTime.Compare(gradeGroup.Added, DateTime.Parse("10/20/2000")) <= 0)
+            if (DateTime.Compare(gradeGroup.Added, DateTime.Parse("2000-01-01 0:00:00Z")) <= 0)
                 return false;
 
             return true;

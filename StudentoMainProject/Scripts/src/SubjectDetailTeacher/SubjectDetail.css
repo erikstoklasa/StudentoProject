@@ -63,7 +63,8 @@
 
 .student-grades-container{
     flex-grow: 1;
-    flex-basis: 470px;        
+    flex-basis: 470px; 
+    max-width: 100%;       
 }
 
 .student-material-container{
@@ -293,6 +294,11 @@
     .student-material-container {
         padding-left: 50px !important;
     }
+
+    .student-grades-container{
+        max-width: 50%;
+    }
+
     .average-container {
         padding-left: 50px !important;
     }

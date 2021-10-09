@@ -90,15 +90,10 @@ const GradePage = () => {
             let gradeSum = 0;
             const gradeNum = bulkGradeData.length;
             
-            sortedGrades.sort((a, b) => {
+            sortedGrades.sort((a, b) => {               
 
-                const result = a.gradeGroupName.localeCompare(b.gradeGroupName)
-                if (result >= 0) { 
-                    return -1
-                }
-                else{
-                    return 1
-                }
+                return b.gradeGroupAdded.localeCompare(a.gradeGroupAdded)
+  
 
             })
 
@@ -118,20 +113,25 @@ const GradePage = () => {
         }
     }
 
-    const calculateAverages = () => {   
+    const calculateAverages = () => {
+        console.log(bulkGradeData)
+       
         if (bulkStudentData.students && bulkGradeData.length > 0) {
-            const newStudentData = [...bulkStudentData.students.map((student, index) => {
+            const newStudentData = [...bulkStudentData.students.map((student) => {
                 let total = 0;
                 let gradeNum = 0;
                     
                 bulkGradeData.forEach(grade => {
+                    
                     if (grade.studentId === student.id) {
-                        total = total + parseInt(grade.value)
-                        gradeNum = gradeNum + 1
+                        console.log(grade)
+                        total = total + parseInt(grade.value)*grade.gradeGroupWeight
+                        
+                        gradeNum = gradeNum + 1*grade.gradeGroupWeight
                     }
                 })
     
-                const average = 5 - (total / gradeNum) / 25
+                const average = 5 - (total / gradeNum) / 25               
                 const formatedAvearage = average.toFixed(2)
             
                 if (!isNaN(formatedAvearage)) {
@@ -231,7 +231,7 @@ const GradePage = () => {
     }
   
     const modifyGrade = (gradeId, gradeValue, studentId, gradeName, grade, gradeGroupId) => {
-       
+     
         if (gradeId) {
             if (gradeValue === 0) {
                 const gradeArr = [gradeId]
@@ -260,7 +260,7 @@ const GradePage = () => {
                     }
                 })
             }
-            else {                
+            else {               
                 const reqBody = {
                     id: gradeId,
                     value: getInternalGradeValue(gradeValue),
@@ -288,7 +288,9 @@ const GradePage = () => {
                         bulkGradeData.forEach(grade => {                            
                             if (grade.id === data.id) {                                
                                 const displayValue = getGradeDisplayValue(parseInt(data.value))
-                                Object.assign(grade, { displayValue: displayValue })                               
+                                Object.assign(grade, { displayValue: displayValue })
+                                Object.assign(grade, reqBody)
+                             
                                 newResponseGrades.push(grade)
                             }
                             else {
@@ -300,7 +302,7 @@ const GradePage = () => {
                     }              
                 }).catch(err => {})
             }
-        } else if (!gradeId) {          
+        } else if (!gradeId) {           
             
             const reqBody = {
                 value: getInternalGradeValue(gradeValue),
@@ -308,6 +310,10 @@ const GradePage = () => {
                 studentId: studentId,
                 name: gradeName,
                 gradeGroupId: gradeGroupId,
+                gradeGroupAdded: grade.gradeGroupAdded,
+                weight: grade.gradeGroupWeight,
+                added: grade.gradeGroupAdded,
+                gradeGroupWeight: grade.gradeGroupWeight
             }           
 
             fetch(`${apiAdress}/Grades/Teacher`, {
@@ -320,10 +326,10 @@ const GradePage = () => {
                 if (res.ok) {
                     return res.json()
                 }
-            }).then(data => {                
+            }).then(data => {
                 let array;
                 const displayValue = getGradeDisplayValue(parseInt(data.value))
-                Object.assign(data, {displayValue : displayValue})
+                Object.assign(data, { displayValue: displayValue, gradeGroupName: grade.gradeGroupName, gradeGroupAdded: grade.gradeGroupAdded })           
                 array = [...bulkGradeData, data]    
                 return array
             }).then(array => {
@@ -410,8 +416,8 @@ const GradePage = () => {
                     },
                     body: JSON.stringify({
                         weight: newGradeWeight,
-                        name: newGradeName,
-                        addedBy: 1
+                        name: newGradeName,                        
+                        added: moment().toISOString(),
                     })
                 })
                 .then((res) => {
@@ -419,12 +425,11 @@ const GradePage = () => {
                             return res.json()
                         }
                     }
-                ).then(data => {
-                    
+                ).then(data => {                    
                     newArr.forEach(grade => {
                         Object.assign(grade, {
                             gradeGroupId: data.id,
-                            added: moment().toISOString()                       
+                            added: moment().toISOString()                            
                         })
                     })
                     fetch(`${apiAdress}/Grades/Teacher/Batch`, {
@@ -441,7 +446,7 @@ const GradePage = () => {
                     }).then(data => {
                         data.forEach(grade => {
                             const displayValue = getGradeDisplayValue(parseInt(grade.value))                            
-                            Object.assign(grade, { displayValue: displayValue, gradeGroupName : newGradeName, gradeGroupWeight: newGradeWeight })
+                            Object.assign(grade, { displayValue: displayValue, gradeGroupName : newGradeName, gradeGroupWeight: newGradeWeight, gradeGroupAdded: moment().toISOString(), })
                         })
                         let array;
                         array = [...bulkGradeData, ...data]

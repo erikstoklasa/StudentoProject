@@ -74,7 +74,7 @@ namespace SchoolGradebook.API.Grades
                         GradeGroupId = g.GradeGroupId,
                         GradeGroupName = g.GradeGroup?.Name,
                         GradeGroupWeight = g.GradeGroup?.Weight,
-                        GradeGroupAdded = (DateTime)(g.GradeGroup?.Added)
+                        GradeGroupAdded = g.GradeGroup?.Added
                     };
                     newGrade.Value = gradeValueFormat switch
                     {
@@ -99,7 +99,18 @@ namespace SchoolGradebook.API.Grades
                 var grades = await gradeService.GetAllGradesAddedByTeacherAsync((int)subjectInstanceId);
                 foreach (var g in grades)
                 {
-                    GradeObject newGrade = new() { Added = g.Added, Id = g.Id, Name = g.Name, StudentId = g.StudentId, SubjectInstanceId = g.SubjectInstanceId, GradeGroupId = g.GradeGroupId, GradeGroupName = g.GradeGroup?.Name, GradeGroupWeight = g.GradeGroup?.Weight };
+                    GradeObject newGrade = new()
+                    {
+                        Added = g.Added,
+                        Id = g.Id,
+                        Name = g.Name,
+                        StudentId = g.StudentId,
+                        SubjectInstanceId = g.SubjectInstanceId,
+                        GradeGroupId = g.GradeGroupId,
+                        GradeGroupName = g.GradeGroup?.Name,
+                        GradeGroupWeight = g.GradeGroup?.Weight,
+                        GradeGroupAdded = g.GradeGroup?.Added
+                    };
                     newGrade.Value = gradeValueFormat switch
                     {
                         //Internal

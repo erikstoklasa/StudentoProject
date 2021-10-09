@@ -3,6 +3,7 @@ using SchoolGradebook.Data;
 using SchoolGradebook.Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using static SchoolGradebook.Models.Grade;
@@ -203,7 +204,12 @@ namespace SchoolGradebook.Services
             if (grade.StudentId <= 0)
                 return false;
 
-            if (DateTime.Compare(grade.Added, DateTime.Parse("2000-01-01 0:00:00Z")) <= 0)               
+            if (
+                    DateTime.Compare(
+                        grade.Added,
+                        DateTime.ParseExact("01/01/2010", "MM/dd/yyyy", CultureInfo.InvariantCulture)
+                    ) <= 0
+                )
                 return false;
 
             if (grade.GetInternalGradeValue() < -10 || grade.GetInternalGradeValue() > 110)
@@ -275,7 +281,12 @@ namespace SchoolGradebook.Services
             {
                 return false;
             }
-            if (DateTime.Compare(gradeGroup.Added, DateTime.Parse("2000-01-01 0:00:00Z")) <= 0)
+            if (
+                    DateTime.Compare(
+                        gradeGroup.Added, 
+                        DateTime.ParseExact("01/01/2010", "MM/dd/yyyy", CultureInfo.InvariantCulture)
+                    ) <= 0
+                )
                 return false;
 
             return true;

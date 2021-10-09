@@ -113,8 +113,7 @@ const GradePage = () => {
         }
     }
 
-    const calculateAverages = () => {
-        console.log(bulkGradeData)
+    const calculateAverages = () => {        
        
         if (bulkStudentData.students && bulkGradeData.length > 0) {
             const newStudentData = [...bulkStudentData.students.map((student) => {
@@ -124,7 +123,7 @@ const GradePage = () => {
                 bulkGradeData.forEach(grade => {
                     
                     if (grade.studentId === student.id) {
-                        console.log(grade)
+                       
                         total = total + parseInt(grade.value)*grade.gradeGroupWeight
                         
                         gradeNum = gradeNum + 1*grade.gradeGroupWeight

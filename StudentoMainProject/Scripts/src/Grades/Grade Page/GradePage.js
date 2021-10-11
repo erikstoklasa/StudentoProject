@@ -120,7 +120,7 @@ const GradePage = () => {
                 let total = 0;
                 let gradeNum = 0;
                     
-                bulkGradeData.forEach(grade => {
+                bulkGradeData.forEach(grade => {                   
                     
                     if (grade.studentId === student.id) {
                        
@@ -230,6 +230,18 @@ const GradePage = () => {
     }
   
     const modifyGrade = (gradeId, gradeValue, studentId, gradeName, grade, gradeGroupId) => {
+
+        const checkIfBulkContains = (grade) => {
+            let result = false
+            bulkGradeData.forEach(bulkGrade => {
+                if (grade.gradeGroupId === bulkGrade.gradeGroupId) {
+                    if (grade.id !== bulkGrade.id) {
+                        result = true
+                    }
+                }
+            })
+            return result
+        }
      
         if (gradeId) {
             if (gradeValue === 0) {
@@ -245,7 +257,9 @@ const GradePage = () => {
                     if (res.ok) {                        
                         updateBulkGradeData(bulkGradeData.filter(grade => gradeId !== grade.id))
                         renderNotificationBar()
-                        if (!bulkGradeData.some(bulkGrade => { bulkGrade.gradeGroupId === grade.gradeGroupId })) {                      
+                        
+                        
+                        if (!checkIfBulkContains(grade)) {                      
                             
                             fetch(`${apiAdress}/Grades/Teacher/GradeGroup/Batch`, {
                                 method: 'DELETE',
@@ -301,7 +315,8 @@ const GradePage = () => {
                     }              
                 }).catch(err => {})
             }
-        } else if (!gradeId) {           
+        } else if (!gradeId) {
+            
             
             const reqBody = {
                 value: getInternalGradeValue(gradeValue),
@@ -328,7 +343,7 @@ const GradePage = () => {
             }).then(data => {
                 let array;
                 const displayValue = getGradeDisplayValue(parseInt(data.value))
-                Object.assign(data, { displayValue: displayValue, gradeGroupName: grade.gradeGroupName, gradeGroupAdded: grade.gradeGroupAdded })           
+                Object.assign(data, { displayValue: displayValue, gradeGroupName: grade.gradeGroupName, gradeGroupAdded: grade.gradeGroupAdded, gradeGroupWeight: grade.gradeGroupWeight })           
                 array = [...bulkGradeData, data]    
                 return array
             }).then(array => {
@@ -493,8 +508,6 @@ const GradePage = () => {
             </div>
         )
     }
-
-
 
     else {
         return (

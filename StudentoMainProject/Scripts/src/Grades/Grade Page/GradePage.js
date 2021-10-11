@@ -120,7 +120,7 @@ const GradePage = () => {
                 let total = 0;
                 let gradeNum = 0;
                     
-                bulkGradeData.forEach(grade => {
+                bulkGradeData.forEach(grade => {                   
                     
                     if (grade.studentId === student.id) {
                        
@@ -301,7 +301,8 @@ const GradePage = () => {
                     }              
                 }).catch(err => {})
             }
-        } else if (!gradeId) {           
+        } else if (!gradeId) {
+            console.log(grade)
             
             const reqBody = {
                 value: getInternalGradeValue(gradeValue),
@@ -328,7 +329,7 @@ const GradePage = () => {
             }).then(data => {
                 let array;
                 const displayValue = getGradeDisplayValue(parseInt(data.value))
-                Object.assign(data, { displayValue: displayValue, gradeGroupName: grade.gradeGroupName, gradeGroupAdded: grade.gradeGroupAdded })           
+                Object.assign(data, { displayValue: displayValue, gradeGroupName: grade.gradeGroupName, gradeGroupAdded: grade.gradeGroupAdded, gradeGroupWeight: grade.gradeGroupWeight })           
                 array = [...bulkGradeData, data]    
                 return array
             }).then(array => {
@@ -493,8 +494,6 @@ const GradePage = () => {
             </div>
         )
     }
-
-
 
     else {
         return (

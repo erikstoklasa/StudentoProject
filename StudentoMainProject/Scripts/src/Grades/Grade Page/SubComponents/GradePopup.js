@@ -48,7 +48,7 @@ const GradePopup = ({ grade, onNameChange, onWeightChange, newGrade, closePopup,
         <div className="popup-outer">
             <div className="popup-inner">
                 <div className="popup-title-container">
-                    {newGrade ? <h4 className="popup-title">Přidat známku</h4> : <h4 className="popup-title">Změnit známku</h4>}
+                    {newGrade ? <h4 className="popup-title">Přidat známku</h4> : <h4 className="popup-title">Upravit známku</h4>}
                     <img className="pointer" src="/images/close.svg" alt="zavřít" height="25px" onClick={closePopup}></img>
                 </div>
                 <div className="popup-input-container">
@@ -56,7 +56,7 @@ const GradePopup = ({ grade, onNameChange, onWeightChange, newGrade, closePopup,
                     <input className="form-control mb10 weight-input" placeholder="Váha" value={gradeWeight} onChange={(event) => { handleWeightChange(event.target.value) }} />
                 </div>
                 {displayWarning? <p class="add-warning-text">Prosím zadej název a váhu</p> : null}
-                <button className="btn btn-primary next-material-button" onClick={handleAddClick}>Přidat</button>
+                <button className="btn btn-primary next-material-button" onClick={handleAddClick}>{newGrade? "Přidat" : "Uložit"}</button>
             </div>
         </div>
     )

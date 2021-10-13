@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import apiAddress from './variables.js'
 import SubjectTitle from './SubComponents/SubjectTitle'
 import StudentGrades from './SubComponents/StudentGrades'
-import StudentMaterial from './SubComponents/StudentMaterial'
+import StudentMaterial from '../../Components/StudentMaterial/StudentMaterial'
 import AddGradePopup from './SubComponents/AddGradePopup'
-import AddMaterialPopup from './SubComponents/addMaterialPopup'
 import './SubjectDetail.css'
 import moment from 'moment';
 
@@ -15,8 +14,8 @@ function SubjectDetail() {
     const [subjectInfo, updateSubjectInfo] = useState();
     const [studentAverage, updateAverage] = useState();
     const [grades, updateGrades] = useState();
-    const [showMaterialPopup, updateShowMaterialPopup] = useState(false);
-    const [material, updateMaterials] = useState();
+    //const [showMaterialPopup, updateShowMaterialPopup] = useState(false);
+    //const [material, updateMaterials] = useState();
     const [showAddPopup, updateShowAddPopup] = useState(false)
 
     //format grades from internal to display value
@@ -134,7 +133,7 @@ function SubjectDetail() {
         
     }
  
-
+    /*
     const fetchMaterials = () => {
        
         fetch(`${apiAddress}/SubjectMaterials/Student/Material?subjectInstanceId=${subjectId}`)
@@ -155,6 +154,7 @@ function SubjectDetail() {
                 }                
             })
     }
+    */
 
     // fetch grades, subject info and student material(in the future)
     const fetchData = () => {
@@ -187,7 +187,8 @@ function SubjectDetail() {
                     })
                     gradesWithDisplayValue.forEach(grade => {
                         Object.assign(grade, { addedRelative: moment.utc(grade.added).locale('cs').fromNow() })
-                        Object.assign(grade, { addedDisplay: moment.utc(grade.added).format("D.M.Y") })
+                        Object.assign(grade, { addedDisplay: moment.utc(grade.added).local().format("D.M.Y") })
+                        
                     })
                     updateGrades(gradesWithDisplayValue)
                 })
@@ -196,7 +197,7 @@ function SubjectDetail() {
     
     //initialize effect hook chain   
     useEffect(fetchData, subjectId)   
-    useEffect(fetchMaterials, subjectId)
+    //useEffect(fetchMaterials, subjectId)
     useEffect(calculateStudentAverage, [grades])
 
     //update state to display add grade popup
@@ -209,6 +210,7 @@ function SubjectDetail() {
         updateShowAddPopup(false)
     }
 
+    /*
     const uploadMaterials = (groupName, materials) => {
         const materialList = [...materials]
         if (groupName) {
@@ -264,6 +266,7 @@ function SubjectDetail() {
         
     }
 
+    
     const displayMaterialPopup = () => {
         updateShowMaterialPopup(true)
     }
@@ -271,23 +274,28 @@ function SubjectDetail() {
     const hideMaterialPopup = () => {
         updateShowMaterialPopup(false)
     }
+    */
 
     //send a request to post student grade
-    const addStudentGrade = (name, value, weight) => {
+    const addStudentGrade = (name, value, weight, date) => {
+        const addedDate = moment(date, 'YYYY-MM-DD')
+        console.log(addedDate)
         const actualValue = getInternalGradeValue(value)
+        const reqBody = {
+            value: actualValue,
+            name: name,
+            gradeGroupName: name,
+            weight: parseInt(weight),
+            subjectInstanceId: subjectId,
+            added: addedDate.toISOString()
+        }        
+
         fetch(`${apiAddress}/Grades/Student`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                value: actualValue,
-                name: name,
-                gradeGroupName: name,
-                weight: parseInt(weight),
-                subjectInstanceId: subjectId,
-                added: moment().utc()
-            })
+            body: JSON.stringify(reqBody)
         }).then(res => {
             if (res.ok) {
                 return res.json()
@@ -299,11 +307,10 @@ function SubjectDetail() {
                     Object.assign(data, {
                         displayValue: getGradeDisplayValue(parseInt(data.value)),
                         addedRelative: moment.utc(data.added).locale('cs').fromNow(),
-                        addedDisplay: moment.utc(data.added).format("D.M.Y")
+                        addedDisplay: addedDate.format("D.M.Y")
                     })
                     const newArr = [data, ...grades]                   
-                    updateGrades(newArr)
-                  
+                    updateGrades(newArr)                  
                 }
             }
         )
@@ -329,7 +336,7 @@ function SubjectDetail() {
     }
     
 
-
+    const MaterialAddress = `${apiAddress}/SubjectMaterials/Student`
 
        //display everything
     return (
@@ -339,11 +346,11 @@ function SubjectDetail() {
             {grades && subjectInfo ?
                 <div className="grades-material-container">
                     <StudentGrades grades={grades} info={subjectInfo} showPopup={showPopup} deleteGrade={deleteStudentGrade} />
-                    <StudentMaterial material={material} showPopup={displayMaterialPopup} deleteMaterial={deleteMaterial} />
+                    <StudentMaterial apiAddress={MaterialAddress}/>
                     {showAddPopup ? <AddGradePopup addGrade={addStudentGrade} hidePopup={hidePopup} /> : null}
                 </div>
                 : null}
-            { showMaterialPopup ? <AddMaterialPopup upload={uploadMaterials} hidePopup={hideMaterialPopup} /> : null}
+            { /*showMaterialPopup ? <AddMaterialPopup upload={uploadMaterials} hidePopup={hideMaterialPopup} /> : null*/}
            
         </div>
 

@@ -40,7 +40,7 @@ const GradeRow = ({ grade, info, deleteGrade }) => {
                     </div>
                     <div className="grade-sub-container" onClick={() => { updateShowDetail(true) }}>                        
                             <p className="grade-child grade-name">{getGradeName()}</p>                            
-                        <p className="grade-child grade-time">{grade.addedRelative}</p>
+                        <p className="grade-child grade-time">{grade.addedDisplay}</p>
                     </div>
                 </div>
                 {showDetail? <GradeDetailPopup grade={grade} info={info} deleteGrade={deleteGrade} hidePopup={() => { updateShowDetail(false) }}/> : null}

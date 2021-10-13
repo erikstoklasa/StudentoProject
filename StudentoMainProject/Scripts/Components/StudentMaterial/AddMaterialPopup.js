@@ -114,7 +114,7 @@ const AddMaterialPopup = ({ upload, hidePopup }) => {
 
     return (
         <div className="add-material-container">              
-            <div className="popup-inner-container">                
+            <div className="material-popup-inner-container">                
                 <div className="material-popup-title-container">
                     <h4 className="popup-title">Přidat soubory</h4>
                         <img className="pointer" src="/images/icons/delete.svg" alt="zavřít" height="30px" onClick={() => { hidePopup()}}></img>

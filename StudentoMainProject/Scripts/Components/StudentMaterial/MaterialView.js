@@ -1,7 +1,7 @@
 import React from 'react'
 
 
-const MaterialView = ({ material, deleteMaterial, student}) => {  
+const MaterialView = ({ material, deleteMaterial, student }) => {   
     
     return (
         <div>

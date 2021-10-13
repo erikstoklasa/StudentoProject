@@ -1,21 +1,30 @@
 import React, { useState, useEffect } from 'react'
 import '../SubjectDetail.css'
+import moment from 'moment'
 
 const addGradePopup = ({ addGrade, hidePopup }) => {    
     const [gradeName, updateGradeName] = useState()
     const [gradeValue, updateGradeStateValue] = useState('')
     const [gradeWeight, updateGradeWeight] = useState('')
+    const [gradeDate, updateGradeDate] = useState()
     const [showWarning, updateShowWarning] = useState(false)
-    const [warningMessage, updateWarning] = useState('')
+    const [warningMessage, updateWarning] = useState('')    
 
     useEffect(() => {
         document.body.style.overflow = 'hidden';
-        return ()=> document.body.style.overflow = 'unset';
+        return () => document.body.style.overflow = 'unset';
     }, []);
+
+    const setInitialDate = () => {       
+        const today = moment(new Date()).format("YYYY-MM-DD")        
+        updateGradeDate(today)
+    }
+
+    useEffect(setInitialDate, [])
 
     const onAddClick = () => {        
         if (gradeName && gradeValue && gradeWeight) {
-            addGrade(gradeName, gradeValue, gradeWeight)
+            addGrade(gradeName, gradeValue, gradeWeight, gradeDate)
             hidePopup()
             if (showWarning) { updateShowWarning(false) }
         }
@@ -80,7 +89,11 @@ const addGradePopup = ({ addGrade, hidePopup }) => {
                                 <input className="popup-input-field popup-input-small" value={gradeWeight} onChange={(event) => { checkWeightValue(event.target.value) }}></input>
                                 </div>
                             </div>
-                        </div>                       
+                        </div>
+                        <div className="popup-input-row relative">
+                            <p className="input-label">Datum</p>
+                            <input type="date" className="popup-input-field" value={gradeDate} onChange={(event) => {updateGradeDate(event.target.value)}}></input>
+                        </div>
                     </div>
                     { showWarning? 
                         <p className="add-warning-text">{warningMessage}</p>

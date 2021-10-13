@@ -1,9 +1,11 @@
 import React, {useState, useEffect} from 'react'
 import MaterialView from './MaterialView'
-import apiAddress from '../variables.js'
 
 const MaterialContainer = ({ materials, deleteMaterial, info }) => {
     const [studentInfo, updateStudentInfo] = useState()
+    
+
+    const apiAddress = `${window.location.origin}/api`
 
     const fetchInfo = () => {
         fetch(`${apiAddress}/Auth/GetUserInfo`)

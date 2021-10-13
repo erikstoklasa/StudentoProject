@@ -1,6 +1,7 @@
 .subject-title-container{    
     display: flex;
     flex-wrap: wrap;
+    padding: 0px 10px 0px 10px;
 }
 
 .heading-container{
@@ -91,16 +92,6 @@
     cursor: pointer;
 }
 
-
-.material-name{
-    margin: 0 !important;
-    font-weight: 500;
-    min-width: 30px;
-    margin-right: 10px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
 .grade-name-container{
     display: flex;
     justify-content: flex-start;
@@ -149,12 +140,6 @@
     max-width: 650px;        
 }
 
-.student-material-container{
-    width: 100%;
-    max-width: 650px;        
- 
-}
-
 .close-button-container{  
     display: flex;
     justify-content: flex-end;
@@ -180,7 +165,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: 15px;
     z-index: 5;
 }
 
@@ -211,7 +196,7 @@
 .popup-input-row{
     justify-content: space-between;
     display: flex;
-    margin-top: 10px
+    margin-bottom: 15px
 }
 
 .popup-weight-input{
@@ -287,57 +272,6 @@
     margin-right: 10px;
 }
 
-.material-view-container{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 5% 8px 5%;
-}
-
-.material-heading-container{
-    display: flex;
-    align-items: center;
-    width: 65%; 
-    overflow: hidden;
-    text-overflow: ellipsis;
-
-}
-
-.material-name-container{
-    margin-left: 10px;
- 
-}
-
-
-.material-added{
-    margin: 0;
-    font-size: 0.8rem;    
-    color: var(--grey);
-}
-
-.add-material-container{   
-    min-width: 250px;
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    right: 0;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    margin: auto;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 5;
-}
-
-.add-selection-container{
-    display: flex;
-    justify-content: space-around;
-    margin: 20px 0px 0px 0px;
-}
-
 .add-group-container{
     margin: 10px 0px 0px 0px;
 }
@@ -346,7 +280,7 @@
     width: 100%;
     max-width: 400px;    
     margin: 20px 20px 0px 20px;
-    padding:15px 15px 15px 15px;  
+    padding:15px 20px 15px 20px;  
    
     background-color: white;
     border: none;
@@ -366,26 +300,12 @@
     flex-grow: 1;
 }
 
-.material-group-name-input{
-    width: 100%;
-}
-
-.single-material-input{
-    margin: 10px 0px 0px 0px;
-}
-
 .border-container{
     width: calc(100% - 10px);
     margin: 10px auto 10px auto;
     border-width: 1px 0 0 0; /* top right bottom left */
     border-style: solid;
     border-color: lightgray;
-}
-
-.add-material-div{   
-    background: var(--primaryYellowStrong);
-    width: 100%;
-    margin: 10px;
 }
 
 .add-grade-text{
@@ -406,59 +326,8 @@
     border-color: #bee5eb;
 }
 
-
-
-.material-button-container{
-    white-space: nowrap;
-   
-}
-
-.next-material-button{
-    padding: 0.2rem 0.5rem !important;  
-    margin-left: auto;
-}
-
-.mr5{
-    margin-right: 5px;
-}
-
-.ml5{
-    margin-left: 5px;
-}
-
-.mt10{margin-top: 10px;}
-
-.mb10{
-    margin-bottom: 10px;
-}
-
-.pointer{
-    cursor: pointer;
-}
-
-.student-heading-container{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-    margin: 10px 0px 10px 0px;
-}
-
 .main-pd{
     padding: 0px 10px 0px 10px;
-}
-
-.w100{
-    width: 100% !important;
-}
-
-.multiple-file-input{
-    width: 0.1px;
-	height: 0.1px;
-	opacity: 0;
-	overflow: hidden;
-	position: absolute;
-	z-index: -1;
 }
 
 .file-input-label{
@@ -470,14 +339,10 @@
     cursor: pointer;
     padding: 10px 10px 40px 10px;
     min-height: 158.4px;
+    margin-bottom: 15px;
 }
 
-.single-material-input-container{
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    margin-bottom: 10px;
-}
+
 
 .weight-circle{
     color: black;
@@ -509,10 +374,7 @@
 
 
 
-@media(max-width: 1320px){
-    .student-material-container{
-        max-width: 1300px;
-    }
+@media(max-width: 1320px){    
     .student-grades-container{
         max-width: 1300px;
     }  

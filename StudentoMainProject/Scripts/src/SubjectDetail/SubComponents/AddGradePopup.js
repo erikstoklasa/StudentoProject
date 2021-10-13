@@ -69,8 +69,8 @@ const addGradePopup = ({ addGrade, hidePopup }) => {
 
     return (
         <div>
-            <div className="add-grade-popup-container">
-            <div className="add-grade-popup-inner-container">               
+            <div className="add-grade-popup-container" onClick={hidePopup}>
+            <div className="add-grade-popup-inner-container" onClick={(e=> {e.stopPropagation()})}>               
                     <div className="popup-title-container">
                         <h4 className="popup-title">Přidat známku</h4>
                         <img className="pointer" src="/images/icons/delete.svg" alt="zavřít" height="30px" onClick={() => { hidePopup()}}></img>

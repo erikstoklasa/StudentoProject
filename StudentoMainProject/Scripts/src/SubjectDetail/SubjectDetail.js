@@ -14,8 +14,6 @@ function SubjectDetail() {
     const [subjectInfo, updateSubjectInfo] = useState();
     const [studentAverage, updateAverage] = useState();
     const [grades, updateGrades] = useState();
-    //const [showMaterialPopup, updateShowMaterialPopup] = useState(false);
-    //const [material, updateMaterials] = useState();
     const [showAddPopup, updateShowAddPopup] = useState(false)
 
     //format grades from internal to display value
@@ -132,29 +130,6 @@ function SubjectDetail() {
         if (displayValue === '5-') return -10
         
     }
- 
-    /*
-    const fetchMaterials = () => {
-       
-        fetch(`${apiAddress}/SubjectMaterials/Student/Material?subjectInstanceId=${subjectId}`)
-            .then(res => res.json())
-            .then(data => {
-                data.forEach(material => {
-                    const linkText = material.fileExt.substring(1);
-                    Object.assign(material, {
-                        addedRelative: moment.utc(material.added).locale('cs').fromNow(),
-                        addedDisplay: moment.utc(material.added).format("D.M.Y"),
-                        link: linkText
-                    })
-                })
-                if (data.length > 0) {
-                    updateMaterials(data)
-                } else {
-                    updateMaterials(null)
-                }                
-            })
-    }
-    */
 
     // fetch grades, subject info and student material(in the future)
     const fetchData = () => {
@@ -210,76 +185,9 @@ function SubjectDetail() {
         updateShowAddPopup(false)
     }
 
-    /*
-    const uploadMaterials = (groupName, materials) => {
-        const materialList = [...materials]
-        if (groupName) {
-            fetch(`${apiAddress}/SubjectMaterials/Student/MaterialGroup?name=${groupName}`, {
-                method: 'POST',
-            })
-                .then(res => res.json())
-                .then(
-                    data => {
-                        materialList.forEach(material => {
-                            Object.assign(material, { materialGroupId: data.id })
-                        })
-                        materialList.forEach(material => {
-                            const formData = new FormData();
-                            formData.append('FormFile', material.materialFile, material.materialFile.name)
-                            formData.append('Material.Name', material.materialName)
-                            formData.append('Material.Description', material.materialDescription)
-                            formData.append('Material.SubjectInstanceId', subjectId)
-                            formData.append('Material.SubjectMaterialGroupId', material.materialGroupId)
-                            fetch(`${apiAddress}/SubjectMaterials/Student/Material`, {
-                                method: 'POST',
-                                body: formData
-                            }).then(res => res.json())
-                                .then(data => { fetchMaterials() })
-                        })
-                    })
-        } else {
-            materialList.forEach(material => {
-                
-                const formData = new FormData();
-                formData.append('FormFile', material.materialFile, material.materialFile.name)
-                formData.append('Material.Name', material.materialName)
-                formData.append('Material.Description', material.materialDescription)
-                formData.append('Material.SubjectInstanceId', subjectId)
-                
-                fetch(`${apiAddress}/SubjectMaterials/Student/Material`, {
-                    method: 'POST',
-                    body: formData
-                }).then(res => res.json())
-                    .then(data => { fetchMaterials() })
-            })
-        }
-    }
-
-    const deleteMaterial = (id) => {
-        fetch(`${apiAddress}/SubjectMaterials/Student/Material?subjectMaterialId=${id}`, {
-            method: 'DELETE'
-        }).then(res => {
-            if (res.ok) {
-                fetchMaterials()
-            }
-        }) 
-        
-    }
-
-    
-    const displayMaterialPopup = () => {
-        updateShowMaterialPopup(true)
-    }
-
-    const hideMaterialPopup = () => {
-        updateShowMaterialPopup(false)
-    }
-    */
-
     //send a request to post student grade
     const addStudentGrade = (name, value, weight, date) => {
-        const addedDate = moment(date, 'YYYY-MM-DD')
-        console.log(addedDate)
+        const addedDate = moment(date, 'YYYY-MM-DD')      
         const actualValue = getInternalGradeValue(value)
         const reqBody = {
             value: actualValue,
@@ -349,11 +257,8 @@ function SubjectDetail() {
                     <StudentMaterial apiAddress={MaterialAddress}/>
                     {showAddPopup ? <AddGradePopup addGrade={addStudentGrade} hidePopup={hidePopup} /> : null}
                 </div>
-                : null}
-            { /*showMaterialPopup ? <AddMaterialPopup upload={uploadMaterials} hidePopup={hideMaterialPopup} /> : null*/}
-           
+                : null}          
         </div>
-
     );
 }
 

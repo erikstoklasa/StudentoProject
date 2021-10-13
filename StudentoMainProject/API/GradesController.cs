@@ -737,7 +737,7 @@ namespace SchoolGradebook.API.Grades
             }
             Grade g = new()
             {
-                Added = DateTime.UtcNow,
+                Added = grade.Added,
                 Name = grade.Name,
                 Weight = grade.Weight,
                 StudentId = studentId,

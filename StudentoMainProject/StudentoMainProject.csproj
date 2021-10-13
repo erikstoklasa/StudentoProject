@@ -63,6 +63,7 @@
 
 
   <ItemGroup>
+    <Folder Include="Scripts\NewFolder\" />
     <Folder Include="wwwroot\dist\" />
   </ItemGroup>
 

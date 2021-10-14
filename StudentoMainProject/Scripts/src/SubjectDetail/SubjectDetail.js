@@ -193,11 +193,7 @@ function SubjectDetail() {
                 }
             })
         
-    }
-    
-
-    const MaterialAddress = `${apiAddress}/SubjectMaterials/Student`
-       //display everything
+    }  
     
     return (
         <div>
@@ -206,7 +202,7 @@ function SubjectDetail() {
             {grades && subjectInfo ?
                 <div className="grades-material-container">
                     <StudentGrades grades={grades} info={subjectInfo} showPopup={showPopup} deleteGrade={deleteStudentGrade} />
-                    <StudentMaterial apiAddress={MaterialAddress}/>
+                    <StudentMaterial/>
                     {showAddPopup ? <AddGradePopup addGrade={addStudentGrade} hidePopup={hidePopup} /> : null}
                 </div>
                 : null}          

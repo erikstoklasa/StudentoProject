@@ -1,28 +1,14 @@
 import React, {useState, useEffect} from 'react'
 import MaterialView from './MaterialView'
 
-const MaterialContainer = ({ materials, deleteMaterial, info }) => {
-    const [studentInfo, updateStudentInfo] = useState()
-    
-
-    const apiAddress = `${window.location.origin}/api`
-
-    const fetchInfo = () => {
-        fetch(`${apiAddress}/Auth/GetUserInfo`)
-            .then(res => res.json())
-            .then(data => updateStudentInfo(data))
-
-    }
-
-    useEffect(fetchInfo, [])
-
+const MaterialContainer = ({ materials, deleteMaterial, info }) => {        
     const materialsList = materials.map(material => {
-        return <MaterialView material={material} deleteMaterial={deleteMaterial} info={info} student={ studentInfo}/>
+        return <MaterialView material={material} deleteMaterial={deleteMaterial} student={info}/>
     })
 
     return (
         <div className="table table-responsive table-white">
-            {studentInfo ? materialsList : null}
+            {info ? materialsList : null}
         </div>
     )
 }

@@ -11,11 +11,10 @@ import moment from 'moment';
 function SubjectDetail() {
     //initialize state
     const [subjectId, updateSubjectId] = useState(window.location.href.split("Details?id=").pop());
-    const [subjectInfo, updateSubjectInfo] = useState();
-    const [studentAverage, updateAverage] = useState();
-    const [grades, updateGrades] = useState();
+    const [subjectInfo, updateSubjectInfo] = useState();    
+    const [grades, updateGrades] = useState([]);
     const [showAddPopup, updateShowAddPopup] = useState(false)
-
+    
     //format grades from internal to display value
     const getGradeDisplayValue = (grade) => {
         if (grade == 110) {
@@ -65,51 +64,7 @@ function SubjectDetail() {
     }
 
     //calculate student average from internal value, then store it in state
-    const calculateStudentAverage = (gradeData) => {
-        if (gradeData) {
-
-            const getGradeWeight = (grade) => {
-              
-                if (!grade.gradeGroupWeight) {
-                    return 1
-                } else {
-                    return grade.gradeGroupWeight
-                }
-            }
-
-            let sum = 0;
-            let gradeNum = gradeData.reduce((sum, current)=>{return sum + getGradeWeight(current)}, 0);
-            gradeData.forEach(grade => {
-                sum = sum + parseInt(grade.value)*getGradeWeight(grade)
-          
-            });
-
-            const average = sum / gradeNum
-            const formattedAverage = 5 - (average / 25)
-            updateAverage(formattedAverage)
-        }
-        else if (grades) {
-            
-            const getGradeWeight = (grade) => {
-              
-                if (!grade.gradeGroupWeight) {
-                    return 1
-                } else {
-                    return grade.gradeGroupWeight
-                }
-            }
-
-            let sum = 0;
-            let gradeNum = grades.reduce((sum, current)=>{return sum + getGradeWeight(current)}, 0);
-            grades.forEach(grade => {
-                sum = sum + parseInt(grade.value)*getGradeWeight(grade)
-          
-            });
-            const average = sum / gradeNum
-            const formattedAverage = 5 - (average / 25)
-            updateAverage(formattedAverage)
-        }
-    }
+    
 
     const getInternalGradeValue = (displayValue) => {
         if (displayValue === '1*') return 110
@@ -153,8 +108,7 @@ function SubjectDetail() {
             })
                 .then(res => res.json())
                 .then(data => {
-                    //format fetched grades data(add display value, add relative time using moment.js library)
-                    calculateStudentAverage(data)
+                    //format fetched grades data(add display value, add relative time using moment.js library)                   
                     const gradesWithDisplayValue = data.map(grade => {
                         const displayValue = getGradeDisplayValue(parseInt(grade.value))
                         Object.assign(grade, { displayValue: displayValue })
@@ -171,9 +125,7 @@ function SubjectDetail() {
     }
     
     //initialize effect hook chain   
-    useEffect(fetchData, subjectId)   
-    //useEffect(fetchMaterials, subjectId)
-    useEffect(calculateStudentAverage, [grades])
+    useEffect(fetchData, subjectId)    
 
     //update state to display add grade popup
     const showPopup = () => {
@@ -245,11 +197,11 @@ function SubjectDetail() {
     
 
     const MaterialAddress = `${apiAddress}/SubjectMaterials/Student`
-
        //display everything
+    
     return (
         <div>
-            {subjectInfo ? <SubjectTitle info={subjectInfo} average={studentAverage} /> : null}
+            {subjectInfo ? <SubjectTitle info={subjectInfo} grades={grades} /> : null}
         
             {grades && subjectInfo ?
                 <div className="grades-material-container">

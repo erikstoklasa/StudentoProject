@@ -4,6 +4,10 @@
     padding: 0px 10px 0px 10px;
 }
 
+.subject-detail-title{
+    margin-bottom: 0;
+}
+
 .heading-container{
     flex-grow: 1;
     flex-basis: 470px;    
@@ -14,7 +18,7 @@
     flex-basis: 470px;
     display: flex;
     justify-content: start;
-    align-items: center;
+    align-items: center;  
 }
 
 .grades-heading-container{
@@ -382,6 +386,9 @@
     font-size: 0.8rem;
 }
 
+.mb0{
+    margin-bottom: 0;
+}
 
 
 @media(max-width: 1320px){    

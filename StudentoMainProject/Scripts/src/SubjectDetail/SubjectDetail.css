@@ -9,12 +9,12 @@
 
 .heading-container{
     flex-grow: 1;
-    flex-basis: 470px;    
+    flex-basis: 656px;    
 }
 
 .average-container{
     flex-grow: 1;
-    flex-basis: 470px;
+    flex-basis: 656px;
     display: flex;
     justify-content: start;
     align-items: center;  

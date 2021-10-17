@@ -103,8 +103,10 @@ const addGradePopup = ({ addGrade, hidePopup }) => {
                     </div>
                     { showWarning? 
                         <p className="add-warning-text">{warningMessage}</p>
-                   : null}
-                        <button className="btn btn-primary next-material-button" onClick={onAddClick}>Přidat</button>                
+                        : null}
+                    <div className="flex-right">
+                        <button className="btn btn-primary next-material-button" onClick={onAddClick}>Přidat</button>
+                    </div>
             </div>
             <div className="grade-info-box">
                 Tuhle známku učitel neuvidí, je jen pro tebe, nemá vliv na průměr, který vidí učitel.

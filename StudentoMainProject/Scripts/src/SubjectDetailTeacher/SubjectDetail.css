@@ -5,12 +5,12 @@
 
 .heading-container{
     flex-grow: 1;
-    flex-basis: 470px;    
+    flex-basis: 656px;    
 }
 
 .average-container{
     flex-grow: 1;
-    flex-basis: 470px;
+    flex-basis: 656px;
     display: flex;
     justify-content: start;
     align-items: center;
@@ -265,15 +265,7 @@
 @media(max-width: 1332px){    
     .student-grades-container{
         max-width: 1300px;
-    }  
+    }
+      
 }
 
-@media (min-width: 960px){      
-
-    .average-container {
-        padding-left: 50px !important;
-    }
-    .grade-info-name{
-        max-width: 500px;
-    }
-}

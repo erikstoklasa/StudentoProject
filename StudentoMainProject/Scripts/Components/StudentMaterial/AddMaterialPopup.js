@@ -137,9 +137,10 @@ const AddMaterialPopup = ({ upload, hidePopup }) => {
                 </div>                       
                 {showWarning? 
                         <p className="add-warning-text">{warningMessage}</p>
-                   : null}  
+                    : null}
+                <div className="flex-right">
                 <button className="btn btn-primary next-material-button" onClick={handleUploadClick}>Přidat</button>                    
-                             
+                </div>            
             </div>           
         </div>
     )

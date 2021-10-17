@@ -8,7 +8,7 @@ const StudentMaterial = () => {
     const subjectId = window.location.href.split("Details?id=").pop();
     const [adress, updateAdress] = useState()
     const [showMaterialPopup, updateShowMaterialPopup] = useState(false);
-    const [studentInfo, updateStudentInfo] = useState()
+    const [userInfo, updateUserInfo] = useState()
     const [material, updateMaterials] = useState();
     
 
@@ -20,9 +20,10 @@ const StudentMaterial = () => {
         fetch(`${window.location.origin}/api/Auth/GetUserInfo`)
         .then(res => res.json())
             .then(data => {
-                updateStudentInfo(data)
-
-                const apiString = `${window.location.origin}/api/SubjectMaterials/${getUserType(data)}`                
+                const type = getUserType(data)
+                Object.assign(data, {typeName: type})
+                updateUserInfo(data)
+                const apiString = `${window.location.origin}/api/SubjectMaterials/${type}`                
                 updateAdress(apiString)
         })
     }
@@ -122,7 +123,7 @@ const StudentMaterial = () => {
                 <p class="table-heading">Studijní materiály</p>
                 <a class="btn btn-primary" onClick={displayMaterialPopup}><img src="/images/add.svg" alt="Přidat" height="18px" class="btn-icon" />Přidat studijní materiál</a>
             </div>
-            {material ? <MaterialContainer materials={material} info={studentInfo} deleteMaterial={deleteMaterial} /> : <p class="alert alert-dark my-1 w-100">Zatím jsi nepřidal/a žádné studijní materiály 🙁</p>}
+            {material ? <MaterialContainer materials={material} info={userInfo} deleteMaterial={deleteMaterial} /> : <p class="alert alert-dark my-1 w-100">Zatím jsi nepřidal/a žádné studijní materiály 🙁</p>}
             {showMaterialPopup ? <AddMaterialPopup upload={uploadMaterials} hidePopup={hideMaterialPopup} /> : null}
         </div>
         

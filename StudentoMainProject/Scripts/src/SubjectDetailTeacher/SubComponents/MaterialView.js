@@ -1,7 +1,6 @@
 import React from 'react'
-import apiAddress from '../variables'
 
-const MaterialView = ({ material, deleteMaterial, info }) => {  
+const MaterialView = ({ material, deleteMaterial}) => {  
 
     return (
         <div className="material-view-container">

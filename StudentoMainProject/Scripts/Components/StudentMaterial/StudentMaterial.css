@@ -1,7 +1,6 @@
 .material-container{
     width: 100%;
-    max-width: 650px;
-    padding: 0px 10px 0px 10px;   
+    max-width: 650px;     
 }
 
 .material-popup-inner-container{
@@ -14,6 +13,13 @@
     border: none;
     border-radius: 10px;
     overflow-y: auto !important;   
+}
+
+.material-popup-title-container{    
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .popup-title{
@@ -153,7 +159,7 @@
     cursor: pointer;
 }
 
-@media(max-width: 1320px){
+@media(max-width: 1332px){
     .material-container{
         max-width: 1300px;
     }   

@@ -1,9 +1,9 @@
-import React, {useState, useEffect} from 'react'
+import React from 'react'
 import MaterialView from './MaterialView'
 
 const MaterialContainer = ({ materials, deleteMaterial, info }) => {        
     const materialsList = materials.map(material => {
-        return <MaterialView material={material} deleteMaterial={deleteMaterial} student={info}/>
+        return <MaterialView material={material} deleteMaterial={deleteMaterial} user={info}/>
     })
 
     return (

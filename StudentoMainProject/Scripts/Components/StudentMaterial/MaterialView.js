@@ -1,8 +1,22 @@
 import React from 'react'
 
 
-const MaterialView = ({ material, deleteMaterial, student}) => {  
+const MaterialView = ({ material, deleteMaterial, user }) => {
     
+    const getCanDelete = () => {
+        if (user.typeName === "Teacher") {
+            return true
+        } else {
+            if (material.addedById === user.userId && material.addedBy !== 0) {
+                return true
+            } else {
+                return false
+            }
+        }
+    }
+    
+   
+
     return (
         <div>
         <div className="material-view-container">
@@ -14,7 +28,7 @@ const MaterialView = ({ material, deleteMaterial, student}) => {
                 </div>                
             </div>
             <div className="material-button-container">
-                    {material.addedBy === 1 && student.userId === material.addedById ? <div class="btn btn-danger rm" onClick={() => { deleteMaterial(material.id) }}>Smazat</div> : null}
+                    { getCanDelete() ? <div class="btn btn-danger rm" onClick={() => { deleteMaterial(material.id) }}>Smazat</div> : null}
                 <a className="btn btn-primary" href={`/Student/Subjects/Materials/Details?id=${material.id}`}>Stáhnout</a>
             </div>
             </div>

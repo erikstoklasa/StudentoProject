@@ -2,21 +2,15 @@ import React, { useState, useEffect } from 'react';
 import apiAddress from './variables.js'
 import SubjectTitle from './SubComponents/SubjectTitle'
 import StudentGrades from './SubComponents/StudentGrades'
-import StudentMaterial from './SubComponents/StudentMaterial'
-import AddMaterialPopup from './SubComponents/addMaterialPopup'
+import StudentMaterial from '../../Components/StudentMaterial/StudentMaterial'
 import './SubjectDetail.css'
-import moment from 'moment';
   
 function SubjectDetail() {
     //initialize state
     const [subjectId, updateSubjectId] = useState(window.location.href.split("Details?id=").pop());
     const [subjectInfo, updateSubjectInfo] = useState();
     const [studentAverage, updateAverage] = useState();   
-    const [students, updateStudents] = useState();
-    const [showMaterialPopup, updateShowMaterialPopup] = useState(false);
-    const [material, updateMaterials] = useState();    
-
-   
+    const [students, updateStudents] = useState();     
 
     //format grades from internal to display value
     const getGradeDisplayValue = (grade) => {       
@@ -96,27 +90,7 @@ function SubjectDetail() {
                 }
             )
         }              
-    }
-
-    const fetchMaterials = () => {
-        fetch(`${apiAddress}/SubjectMaterials/Teacher/Material?subjectInstanceId=${subjectId}`)
-            .then(res => res.json())
-            .then(data => {
-                data.forEach(material => {
-                    const linkText = material.fileExt.substring(1);
-                    Object.assign(material, {
-                        addedRelative: moment.utc(material.added).locale('cs').fromNow(),
-                        addedDisplay: moment.utc(material.added).format("L"),
-                        link: linkText
-                    })
-                })
-                if (data.length > 0) {                    
-                    updateMaterials(data)
-                }else {
-                    updateMaterials(null)
-                }   
-            })
-    }
+    }  
 
     const fetchGrades = () => {
         if (subjectId) {
@@ -169,78 +143,11 @@ function SubjectDetail() {
             })
             updateStudents(newStudents)
         }
-    }
-
-    const uploadMaterials = (groupName, materials) => {   
-        const materialList = [...materials]
-        if (groupName) {
-            fetch(`${apiAddress}/SubjectMaterials/Teacher/MaterialGroup?name=${groupName}`, {
-                method: 'POST',
-            })
-                .then(res => res.json())
-                .then(
-                    data => {
-                        materialList.forEach(material => {
-                            Object.assign(material, { materialGroupId: data.id })
-                        })
-                        materialList.forEach(material => {
-                            const formData = new FormData();
-                            formData.append('FormFile', material.materialFile, material.materialFile.name)
-                            formData.append('Material.Name', material.materialName)
-                            formData.append('Material.Description', material.materialDescription)
-                            formData.append('Material.SubjectInstanceId', subjectId)
-                            formData.append('Material.SubjectMaterialGroupId', material.materialGroupId)                            
-                            fetch(`${apiAddress}/SubjectMaterials/Teacher/Material`, {
-                                method: 'POST',
-                                body: formData
-                            }).then(res => {
-                                if (res.ok) {
-                                    fetchMaterials()
-                            } })
-                        })
-                    })
-        } else {            
-            materialList.forEach(material => {                             
-                const formData = new FormData();
-                formData.append('FormFile', material.materialFile, material.materialFile.name)
-                formData.append('Material.Name', material.materialName)
-                formData.append('Material.Description', material.materialDescription)
-                formData.append('Material.SubjectInstanceId', subjectId)                                          
-                fetch(`${apiAddress}/SubjectMaterials/Teacher/Material`, {
-                    method: 'POST',
-                    body: formData
-                }).then(res => {
-                    if (res.ok) {
-                        fetchMaterials()
-                } })                
-            })
-        }
-    }
-
-    const deleteMaterial = (id) => {
-        fetch(`${apiAddress}/SubjectMaterials/Teacher/Material?subjectMaterialId=${id}`, {
-            method: 'DELETE'           
-        }).then(res => {
-            if (res.ok) {
-                fetchMaterials()
-            }
-        })
-            
-    }
-
-    const displayMaterialPopup = () => {
-        updateShowMaterialPopup(true)
-    }
-
-    const hideMaterialPopup = () => {
-        updateShowMaterialPopup(false)
-    }
+    }   
     
     //initialize effect hook chain    
-    useEffect(fetchData, subjectId)
-    useEffect(fetchMaterials, subjectId)
-    useEffect(fetchGrades, students)
-    
+    useEffect(fetchData, subjectId)    
+    useEffect(fetchGrades, students)   
 
     //display everything
     return (
@@ -249,11 +156,10 @@ function SubjectDetail() {
             {students && subjectInfo?
                 <div className="grades-material-container">
                     <StudentGrades students={students} info={subjectInfo} />
-                    <StudentMaterial material={material} info={subjectInfo} deleteMaterial={deleteMaterial }showPopup={displayMaterialPopup}/>
+                    <StudentMaterial />
                 </div>                
             : null}
-            <a href="/Teacher">Všechny předměty</a>
-            { showMaterialPopup ? <AddMaterialPopup upload={uploadMaterials} hidePopup={ hideMaterialPopup}/> : null}
+            <a href="/Teacher">Všechny předměty</a>            
         </div>        
     );
 }

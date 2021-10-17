@@ -118,7 +118,7 @@
                         <a class="no-bcg-onhover" asp-page="Subjects/Materials/Details" asp-route-Id="@subjectMaterial.Id">
                             <div class="card-body mt-3 py-0">
                                 <div class="row-custom">
-                                    <img class="cell" alt="Extension icon" src="~/images/icons/@(MimeTypeMap.GetExtension(MimeTypeMap.GetMimeType(subjectMaterial.FileExt)).Substring(1)).png" />
+                                    <img class="cell" alt="Extension icon" src="~/images/icons/@(MimeTypeMap.GetExtension(MimeTypeMap.GetMimeType(subjectMaterial.FileExt)).Substring(1)).png" onerror="this.onerror=null;this.src='/images/icons/fallback.png'"/>
                                     <div class="cell"><span>@(subjectMaterial.Name)</span></div>
                                 </div>
                             </div>

@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
+import moment from 'moment';
 
 
-
-const GradeDetailPopup = ({ grade, info, deleteGrade, hidePopup }) => {
-   
+const GradeDetailPopup = ({ grade, info, deleteGrade, hidePopup }) => {   
     useEffect(() => {
         document.body.style.overflow = 'hidden';
         return ()=> document.body.style.overflow = 'unset';
@@ -11,16 +10,16 @@ const GradeDetailPopup = ({ grade, info, deleteGrade, hidePopup }) => {
 
     const getGradeClass = (value) => { 
         if (value >= 90) {
-            return ' background-green text-dark'
+            return ' background-blue text-light'
         }
         if (value >= 65 && value < 90) {
-            return ' background-grey text-dark'
+            return ' background-green text-light'
         }
         if (value >= 40 && value < 65) {
-            return ' background-yellow text-dark'
+            return ' background-yellow text-light'
         }
         if (value >= 15 && value < 40) {
-            return ' background-red text-dark'
+            return ' background-red text-light'
         }
         if (value >= -10 && value < 15) {
             return ' background-black text-light'
@@ -44,13 +43,17 @@ const GradeDetailPopup = ({ grade, info, deleteGrade, hidePopup }) => {
                         <h4 className="detail-popup-title">{getGradeName(grade)}</h4>
                         <img className="pointer" src="/images/icons/delete.svg" alt="zavřít" height="30px" onClick={() => { hidePopup()}}></img>
                     </div>
-                        <p className="detail-relative-time">{grade.addedRelative}</p>
-                        <div className="detail-circles-container">
-                            <p className={`detail-grade-circle ${getGradeClass(grade.value)}`}>{grade.displayValue}</p>                           
+                        <p className="detail-relative-time">{grade.addedDisplay}</p>                       
+                        <div className={`detail-grade-circle ${getGradeClass(grade.value)}`}>{grade.displayValue}</div>                      
+                        <div className="detail-weight-container">
+                            <p className="mb0">Váha: </p>
+                            <div className="detail-grade-weight-circle">{grade.gradeGroupWeight? grade.gradeGroupWeight : grade.weight}</div>
                         </div>
                         {grade.addedBy === 1 ?
-                        <div>
-                            <button onClick={() => { hidePopup(); deleteGrade(grade.id) }} class="btn btn-danger next-material-button">Smazat</button>
+                        <div className="flex-right">
+                                <button onClick={() => { hidePopup(); deleteGrade(grade.id) }} class="btn btn-danger next-material-button vert-center">
+                                    <img className="mr5" src="/images/icons/trash_white.svg" height="20px"/>
+                                    Smazat známku</button>
                         </div> : null}
                 </div>
             </div>

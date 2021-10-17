@@ -1,19 +1,29 @@
 .subject-title-container{    
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: wrap;    
+}
+
+.subject-detail-title{
+    margin-bottom: 0;
+    font-weight: bold;
+}
+
+.subject-heading-text{
+    margin-bottom: 0;
+    font-weight: bold;
 }
 
 .heading-container{
     flex-grow: 1;
-    flex-basis: 470px;    
+    flex-basis: 656px;    
 }
 
 .average-container{
     flex-grow: 1;
-    flex-basis: 470px;
+    flex-basis: 656px;
     display: flex;
     justify-content: start;
-    align-items: center;
+    align-items: center;  
 }
 
 .grades-heading-container{
@@ -34,9 +44,9 @@
 
 .grade-container{   
     padding: 15px 5% 15px 5%;
-    display: flex;
-    justify-content: space-between; 
-    align-items: center; 
+    display: flex;   
+    align-items: center;
+    cursor: pointer;
 }
 
 .grade-info-container{
@@ -59,19 +69,44 @@
 }
 
 .detail-grade-circle{
-    font-size: 2rem;
-    height: 4rem;
-    width: 4rem;
-    line-height: 4rem;
-    border-radius: 50%;
-    text-align: center;
+    font-size: 1.5rem;
+    height: 3rem;
+    width: 3rem;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+    border-radius: 50%;    
 }
 
-.grade-sub-container{
+.detail-grade-weight-circle{  
+    height: 1.5rem;
+    width: 1.5rem;
+    margin-left: 5px;
+    border-radius: 50%;
+    background-color: white;
+    border: solid black 1.25px;
     display: flex;
+    justify-content: center;
+    align-items: center;    
+    color: black;
+    font-size: 0.75rem;
+}
+
+.vert-center{
+    display: flex;
+    align-items: center;
+}
+
+.detail-weight-container{
+    display: flex;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.grade-sub-container{    
     min-width: 100px;
-    width: 80%;
-    justify-content: space-between;
+    margin-left: 20px;    
 }
 
 .grade-info-sub-container{   
@@ -79,27 +114,7 @@
     width: 70%;    
 }
 
-.grade-name{   
-    display: inline-block;
-    color: #0366d6 !important;
-    min-width: 30px;  
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    margin-top: auto;
-    margin-bottom: auto;
-    cursor: pointer;
-}
 
-
-.material-name{
-    margin: 0 !important;
-    font-weight: 500;
-    min-width: 30px;
-    margin-right: 10px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
 
 .grade-name-container{
     display: flex;
@@ -118,19 +133,42 @@
     font-weight: bold;
 }
 
-.grade-time{    
-    white-space: nowrap;
-    display:flex;
-    justify-content: start;
+.subject-detail-grade-circle {
+    height: 3rem;
+    width: 3rem;
+    font-size: 1.5rem;    
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
     align-items: center;
-    margin: 0 !important;
+    position: relative;
 }
 
-.grade-child{
-    margin: 0px 10px 0px 10px;
-    white-space: nowrap;
-   
+.grade-weight-circle{
+    position: absolute;
+    height: 1.5rem;
+    width: 1.5rem;
+    border-radius: 50%;
+    background-color: white;
+    border: solid black 1.25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    bottom: -5px;
+    right: -5px;
+    color: black;
+    font-size: 0.85rem;
+}
 
+.grade-name{     
+    white-space: nowrap;  
+    margin-bottom: 0px;
+}
+
+.grade-time{    
+    white-space: nowrap;
+    margin-bottom: 0px;
+    color: var(--grey);    
 }
 
 .grade-value{
@@ -147,12 +185,6 @@
 .student-grades-container{
     width: 100%;
     max-width: 650px;        
-}
-
-.student-material-container{
-    width: 100%;
-    max-width: 650px;        
- 
 }
 
 .close-button-container{  
@@ -180,7 +212,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: 15px;
     z-index: 5;
 }
 
@@ -211,7 +243,7 @@
 .popup-input-row{
     justify-content: space-between;
     display: flex;
-    margin-top: 10px
+    margin-bottom: 15px
 }
 
 .popup-weight-input{
@@ -287,57 +319,6 @@
     margin-right: 10px;
 }
 
-.material-view-container{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 5% 8px 5%;
-}
-
-.material-heading-container{
-    display: flex;
-    align-items: center;
-    width: 65%; 
-    overflow: hidden;
-    text-overflow: ellipsis;
-
-}
-
-.material-name-container{
-    margin-left: 10px;
- 
-}
-
-
-.material-added{
-    margin: 0;
-    font-size: 0.8rem;    
-    color: var(--grey);
-}
-
-.add-material-container{   
-    min-width: 250px;
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    right: 0;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    margin: auto;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 5;
-}
-
-.add-selection-container{
-    display: flex;
-    justify-content: space-around;
-    margin: 20px 0px 0px 0px;
-}
-
 .add-group-container{
     margin: 10px 0px 0px 0px;
 }
@@ -346,7 +327,7 @@
     width: 100%;
     max-width: 400px;    
     margin: 20px 20px 0px 20px;
-    padding:15px 15px 15px 15px;  
+    padding:15px 20px 15px 20px;  
    
     background-color: white;
     border: none;
@@ -354,24 +335,8 @@
     overflow: hidden;   
 }
 
-.material-popup-title-container{
-    
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
 .add-selection-button{
     flex-grow: 1;
-}
-
-.material-group-name-input{
-    width: 100%;
-}
-
-.single-material-input{
-    margin: 10px 0px 0px 0px;
 }
 
 .border-container{
@@ -380,12 +345,6 @@
     border-width: 1px 0 0 0; /* top right bottom left */
     border-style: solid;
     border-color: lightgray;
-}
-
-.add-material-div{   
-    background: var(--primaryYellowStrong);
-    width: 100%;
-    margin: 10px;
 }
 
 .add-grade-text{
@@ -406,59 +365,8 @@
     border-color: #bee5eb;
 }
 
-
-
-.material-button-container{
-    white-space: nowrap;
-   
-}
-
-.next-material-button{
-    padding: 0.2rem 0.5rem !important;  
-    margin-left: auto;
-}
-
-.mr5{
-    margin-right: 5px;
-}
-
-.ml5{
-    margin-left: 5px;
-}
-
-.mt10{margin-top: 10px;}
-
-.mb10{
-    margin-bottom: 10px;
-}
-
-.pointer{
-    cursor: pointer;
-}
-
-.student-heading-container{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-    margin: 10px 0px 10px 0px;
-}
-
 .main-pd{
     padding: 0px 10px 0px 10px;
-}
-
-.w100{
-    width: 100% !important;
-}
-
-.multiple-file-input{
-    width: 0.1px;
-	height: 0.1px;
-	opacity: 0;
-	overflow: hidden;
-	position: absolute;
-	z-index: -1;
 }
 
 .file-input-label{
@@ -470,13 +378,16 @@
     cursor: pointer;
     padding: 10px 10px 40px 10px;
     min-height: 158.4px;
+    margin-bottom: 15px;
 }
 
-.single-material-input-container{
+.mr5{
+    margin-right: 5px;
+}
+
+.flex-right{
     display: flex;
-    justify-content: space-around;
-    align-items: center;
-    margin-bottom: 10px;
+    justify-content: flex-end;
 }
 
 .weight-circle{
@@ -488,11 +399,6 @@
     width: 4rem;
     line-height: 4rem;
     text-align: center;
-}
-
-.detail-circles-container{
-    display: flex;
-    justify-content: center;
 }
 
 .material-name-input{
@@ -507,12 +413,12 @@
     font-size: 0.8rem;
 }
 
+.mb0{
+    margin-bottom: 0;
+}
 
 
-@media(max-width: 1320px){
-    .student-material-container{
-        max-width: 1300px;
-    }
+@media(max-width: 1332px){    
     .student-grades-container{
         max-width: 1300px;
     }  

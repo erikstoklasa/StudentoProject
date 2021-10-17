@@ -15,13 +15,13 @@ const StudentGrades = ({ grades, info, showPopup, deleteGrade }) => {
 
     // display grades
     return (
-        <div className="student-grades-container main-pd">
+        <div className="student-grades-container">
             <p className="grades-heading">Známky od vyučující/ho</p>
             <div>
                 <GradeView grades={teacherGrades} info={info} type={'teacherGrades'}/>
             </div>
             <div className="grades-heading-container">
-                <p className="grades-heading">Známky přidány mnou</p>
+                <p className="grades-heading">Známky přidáné mnou</p>
                 <a class="btn btn-primary" onClick={() => { showPopup() }}><img src="/images/add.svg" alt="Přidat" height="20px" class="btn-icon" ></img>Přidat známku</a>
             </div>            
             <div>

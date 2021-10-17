@@ -8,16 +8,16 @@ const GradeRow = ({ grade, info, deleteGrade }) => {
     //returns grades css class based on value
         const getGradeClass = (value) => { 
             if (value >= 90) {
-                return ' background-green text-dark'
+                return ' background-blue text-light'
             }
             if (value >= 65 && value < 90) {
-                return ' background-grey text-dark'
+                return ' background-green text-light'
             }
             if (value >= 40 && value < 65) {
-                return ' background-yellow text-dark'
+                return ' background-yellow text-light'
             }
             if (value >= 15 && value < 40) {
-                return ' background-red text-dark'
+                return ' background-red text-light'
             }
             if (value >= -10 && value < 15) {
                 return ' background-black text-light'
@@ -34,13 +34,14 @@ const GradeRow = ({ grade, info, deleteGrade }) => {
 
         return (
             <div>
-                <div className='grade-container'>
-                    <div className="grade-name-container">
-                        <p className={`grade-child grade-value grade-circle ${getGradeClass(grade.value)}`}>{grade.displayValue}</p>
+                <div className='grade-container' onClick={() => { updateShowDetail(true) }}>                   
+                    <div className={`grade-value subject-detail-grade-circle ${getGradeClass(grade.value)}`}>
+                        {grade.displayValue}
+                        <div className="grade-weight-circle">{grade.gradeGroupWeight? grade.gradeGroupWeight : grade.weight}</div>
                     </div>
-                    <div className="grade-sub-container" onClick={() => { updateShowDetail(true) }}>                        
-                            <p className="grade-child grade-name">{getGradeName()}</p>                            
-                        <p className="grade-child grade-time">{grade.addedRelative}</p>
+                    <div className="grade-sub-container">                        
+                            <h5 className="grade-name">{getGradeName()}</h5>                            
+                            <p className="grade-time">{grade.addedRelative}</p>
                     </div>
                 </div>
                 {showDetail? <GradeDetailPopup grade={grade} info={info} deleteGrade={deleteGrade} hidePopup={() => { updateShowDetail(false) }}/> : null}

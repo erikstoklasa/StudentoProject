@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import apiAddress from './variables.js'
 import SubjectTitle from './SubComponents/SubjectTitle'
 import StudentGrades from './SubComponents/StudentGrades'
-import StudentMaterial from './SubComponents/StudentMaterial'
+import StudentMaterial from '../../Components/StudentMaterial/StudentMaterial'
 import AddGradePopup from './SubComponents/AddGradePopup'
-import AddMaterialPopup from './SubComponents/addMaterialPopup'
 import './SubjectDetail.css'
 import moment from 'moment';
 
@@ -12,13 +11,10 @@ import moment from 'moment';
 function SubjectDetail() {
     //initialize state
     const [subjectId, updateSubjectId] = useState(window.location.href.split("Details?id=").pop());
-    const [subjectInfo, updateSubjectInfo] = useState();
-    const [studentAverage, updateAverage] = useState();
-    const [grades, updateGrades] = useState();
-    const [showMaterialPopup, updateShowMaterialPopup] = useState(false);
-    const [material, updateMaterials] = useState();
+    const [subjectInfo, updateSubjectInfo] = useState();    
+    const [grades, updateGrades] = useState([]);
     const [showAddPopup, updateShowAddPopup] = useState(false)
-
+    
     //format grades from internal to display value
     const getGradeDisplayValue = (grade) => {
         if (grade == 110) {
@@ -68,51 +64,7 @@ function SubjectDetail() {
     }
 
     //calculate student average from internal value, then store it in state
-    const calculateStudentAverage = (gradeData) => {
-        if (gradeData) {
-
-            const getGradeWeight = (grade) => {
-              
-                if (!grade.gradeGroupWeight) {
-                    return 1
-                } else {
-                    return grade.gradeGroupWeight
-                }
-            }
-
-            let sum = 0;
-            let gradeNum = gradeData.reduce((sum, current)=>{return sum + getGradeWeight(current)}, 0);
-            gradeData.forEach(grade => {
-                sum = sum + parseInt(grade.value)*getGradeWeight(grade)
-          
-            });
-
-            const average = sum / gradeNum
-            const formattedAverage = 5 - (average / 25)
-            updateAverage(formattedAverage)
-        }
-        else if (grades) {
-            
-            const getGradeWeight = (grade) => {
-              
-                if (!grade.gradeGroupWeight) {
-                    return 1
-                } else {
-                    return grade.gradeGroupWeight
-                }
-            }
-
-            let sum = 0;
-            let gradeNum = grades.reduce((sum, current)=>{return sum + getGradeWeight(current)}, 0);
-            grades.forEach(grade => {
-                sum = sum + parseInt(grade.value)*getGradeWeight(grade)
-          
-            });
-            const average = sum / gradeNum
-            const formattedAverage = 5 - (average / 25)
-            updateAverage(formattedAverage)
-        }
-    }
+    
 
     const getInternalGradeValue = (displayValue) => {
         if (displayValue === '1*') return 110
@@ -132,28 +84,6 @@ function SubjectDetail() {
         if (displayValue === '5') return 0
         if (displayValue === '5-') return -10
         
-    }
- 
-
-    const fetchMaterials = () => {
-       
-        fetch(`${apiAddress}/SubjectMaterials/Student/Material?subjectInstanceId=${subjectId}`)
-            .then(res => res.json())
-            .then(data => {
-                data.forEach(material => {
-                    const linkText = material.fileExt.substring(1);
-                    Object.assign(material, {
-                        addedRelative: moment.utc(material.added).locale('cs').fromNow(),
-                        addedDisplay: moment.utc(material.added).format("D.M.Y"),
-                        link: linkText
-                    })
-                })
-                if (data.length > 0) {
-                    updateMaterials(data)
-                } else {
-                    updateMaterials(null)
-                }                
-            })
     }
 
     // fetch grades, subject info and student material(in the future)
@@ -178,8 +108,7 @@ function SubjectDetail() {
             })
                 .then(res => res.json())
                 .then(data => {
-                    //format fetched grades data(add display value, add relative time using moment.js library)
-                    calculateStudentAverage(data)
+                    //format fetched grades data(add display value, add relative time using moment.js library)                   
                     const gradesWithDisplayValue = data.map(grade => {
                         const displayValue = getGradeDisplayValue(parseInt(grade.value))
                         Object.assign(grade, { displayValue: displayValue })
@@ -187,7 +116,8 @@ function SubjectDetail() {
                     })
                     gradesWithDisplayValue.forEach(grade => {
                         Object.assign(grade, { addedRelative: moment.utc(grade.added).locale('cs').fromNow() })
-                        Object.assign(grade, { addedDisplay: moment.utc(grade.added).format("D.M.Y") })
+                        Object.assign(grade, { addedDisplay: moment.utc(grade.added).local().locale('cs').format("D. MMMM Y") })
+                        
                     })
                     updateGrades(gradesWithDisplayValue)
                 })
@@ -195,9 +125,7 @@ function SubjectDetail() {
     }
     
     //initialize effect hook chain   
-    useEffect(fetchData, subjectId)   
-    useEffect(fetchMaterials, subjectId)
-    useEffect(calculateStudentAverage, [grades])
+    useEffect(fetchData, subjectId)    
 
     //update state to display add grade popup
     const showPopup = () => {
@@ -209,85 +137,25 @@ function SubjectDetail() {
         updateShowAddPopup(false)
     }
 
-    const uploadMaterials = (groupName, materials) => {
-        const materialList = [...materials]
-        if (groupName) {
-            fetch(`${apiAddress}/SubjectMaterials/Student/MaterialGroup?name=${groupName}`, {
-                method: 'POST',
-            })
-                .then(res => res.json())
-                .then(
-                    data => {
-                        materialList.forEach(material => {
-                            Object.assign(material, { materialGroupId: data.id })
-                        })
-                        materialList.forEach(material => {
-                            const formData = new FormData();
-                            formData.append('FormFile', material.materialFile, material.materialFile.name)
-                            formData.append('Material.Name', material.materialName)
-                            formData.append('Material.Description', material.materialDescription)
-                            formData.append('Material.SubjectInstanceId', subjectId)
-                            formData.append('Material.SubjectMaterialGroupId', material.materialGroupId)
-                            fetch(`${apiAddress}/SubjectMaterials/Student/Material`, {
-                                method: 'POST',
-                                body: formData
-                            }).then(res => res.json())
-                                .then(data => { fetchMaterials() })
-                        })
-                    })
-        } else {
-            materialList.forEach(material => {
-                
-                const formData = new FormData();
-                formData.append('FormFile', material.materialFile, material.materialFile.name)
-                formData.append('Material.Name', material.materialName)
-                formData.append('Material.Description', material.materialDescription)
-                formData.append('Material.SubjectInstanceId', subjectId)
-                
-                fetch(`${apiAddress}/SubjectMaterials/Student/Material`, {
-                    method: 'POST',
-                    body: formData
-                }).then(res => res.json())
-                    .then(data => { fetchMaterials() })
-            })
-        }
-    }
-
-    const deleteMaterial = (id) => {
-        fetch(`${apiAddress}/SubjectMaterials/Student/Material?subjectMaterialId=${id}`, {
-            method: 'DELETE'
-        }).then(res => {
-            if (res.ok) {
-                fetchMaterials()
-            }
-        }) 
-        
-    }
-
-    const displayMaterialPopup = () => {
-        updateShowMaterialPopup(true)
-    }
-
-    const hideMaterialPopup = () => {
-        updateShowMaterialPopup(false)
-    }
-
     //send a request to post student grade
-    const addStudentGrade = (name, value, weight) => {
+    const addStudentGrade = (name, value, weight, date) => {
+        const addedDate = moment(date, 'YYYY-MM-DD')      
         const actualValue = getInternalGradeValue(value)
+        const reqBody = {
+            value: actualValue,
+            name: name,
+            gradeGroupName: name,
+            weight: parseInt(weight),
+            subjectInstanceId: subjectId,
+            added: addedDate.toISOString()
+        }        
+
         fetch(`${apiAddress}/Grades/Student`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                value: actualValue,
-                name: name,
-                gradeGroupName: name,
-                weight: parseInt(weight),
-                subjectInstanceId: subjectId,
-                added: moment().utc()
-            })
+            body: JSON.stringify(reqBody)
         }).then(res => {
             if (res.ok) {
                 return res.json()
@@ -299,11 +167,10 @@ function SubjectDetail() {
                     Object.assign(data, {
                         displayValue: getGradeDisplayValue(parseInt(data.value)),
                         addedRelative: moment.utc(data.added).locale('cs').fromNow(),
-                        addedDisplay: moment.utc(data.added).format("D.M.Y")
+                        addedDisplay: moment.utc(addedDate).local().locale('cs').format("D. MMMM Y") 
                     })
-                    const newArr = [data, ...grades]                   
-                    updateGrades(newArr)
-                  
+                    const newArr = [...grades, data]                   
+                    updateGrades(newArr)                  
                 }
             }
         )
@@ -326,27 +193,20 @@ function SubjectDetail() {
                 }
             })
         
-    }
+    }  
     
-
-
-
-       //display everything
     return (
         <div>
-            {subjectInfo ? <SubjectTitle info={subjectInfo} average={studentAverage} /> : null}
+            {subjectInfo ? <SubjectTitle info={subjectInfo} grades={grades} /> : null}
         
             {grades && subjectInfo ?
                 <div className="grades-material-container">
                     <StudentGrades grades={grades} info={subjectInfo} showPopup={showPopup} deleteGrade={deleteStudentGrade} />
-                    <StudentMaterial material={material} showPopup={displayMaterialPopup} deleteMaterial={deleteMaterial} />
+                    <StudentMaterial/>
                     {showAddPopup ? <AddGradePopup addGrade={addStudentGrade} hidePopup={hidePopup} /> : null}
                 </div>
-                : null}
-            { showMaterialPopup ? <AddMaterialPopup upload={uploadMaterials} hidePopup={hideMaterialPopup} /> : null}
-           
+                : null}          
         </div>
-
     );
 }
 

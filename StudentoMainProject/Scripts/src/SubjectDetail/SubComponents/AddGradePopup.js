@@ -1,21 +1,30 @@
 import React, { useState, useEffect } from 'react'
 import '../SubjectDetail.css'
+import moment from 'moment'
 
 const addGradePopup = ({ addGrade, hidePopup }) => {    
     const [gradeName, updateGradeName] = useState()
     const [gradeValue, updateGradeStateValue] = useState('')
     const [gradeWeight, updateGradeWeight] = useState('')
+    const [gradeDate, updateGradeDate] = useState()
     const [showWarning, updateShowWarning] = useState(false)
-    const [warningMessage, updateWarning] = useState('')
+    const [warningMessage, updateWarning] = useState('')    
 
     useEffect(() => {
         document.body.style.overflow = 'hidden';
-        return ()=> document.body.style.overflow = 'unset';
+        return () => document.body.style.overflow = 'unset';
     }, []);
+
+    const setInitialDate = () => {       
+        const today = moment(new Date()).format("YYYY-MM-DD")        
+        updateGradeDate(today)
+    }
+
+    useEffect(setInitialDate, [])
 
     const onAddClick = () => {        
         if (gradeName && gradeValue && gradeWeight) {
-            addGrade(gradeName, gradeValue, gradeWeight)
+            addGrade(gradeName, gradeValue, gradeWeight, gradeDate)
             hidePopup()
             if (showWarning) { updateShowWarning(false) }
         }
@@ -48,9 +57,15 @@ const addGradePopup = ({ addGrade, hidePopup }) => {
         }   
     }
 
+    const setGradeName = (val) => {
+        if (val.length <= 27) {
+            updateGradeName(val)
+        }
+    }
+
     const checkWeightValue = (value) => {
-        const val = parseInt(value)
-        if (val >= 0 && val <= 10) {
+        const val = parseInt(value)      
+        if (val > 0 && val <= 10) {          
             updateGradeWeight(val)
         } else if (value === '') {
             updateGradeWeight(value)
@@ -60,8 +75,8 @@ const addGradePopup = ({ addGrade, hidePopup }) => {
 
     return (
         <div>
-            <div className="add-grade-popup-container">
-            <div className="add-grade-popup-inner-container">               
+            <div className="add-grade-popup-container" onClick={hidePopup}>
+            <div className="add-grade-popup-inner-container" onClick={(e=> {e.stopPropagation()})}>               
                     <div className="popup-title-container">
                         <h4 className="popup-title">Přidat známku</h4>
                         <img className="pointer" src="/images/icons/delete.svg" alt="zavřít" height="30px" onClick={() => { hidePopup()}}></img>
@@ -69,7 +84,7 @@ const addGradePopup = ({ addGrade, hidePopup }) => {
                     <div className="popup-input-container">
                         <div className="popup-input-row">
                             <p className="input-label">Název známky</p>
-                            <input className="popup-input-field" value={gradeName} onChange={(event) => {updateGradeName(event.target.value)}}></input>
+                            <input className="popup-input-field" value={gradeName} onChange={(event) => {setGradeName(event.target.value)}}></input>
                         </div>
                         <div className="popup-input-row">
                             <p className="input-label">Známka</p>
@@ -80,12 +95,18 @@ const addGradePopup = ({ addGrade, hidePopup }) => {
                                 <input className="popup-input-field popup-input-small" value={gradeWeight} onChange={(event) => { checkWeightValue(event.target.value) }}></input>
                                 </div>
                             </div>
-                        </div>                       
+                        </div>
+                        <div className="popup-input-row relative">
+                            <p className="input-label">Datum</p>
+                            <input type="date" className="popup-input-field" value={gradeDate} onChange={(event) => {updateGradeDate(event.target.value)}}></input>
+                        </div>
                     </div>
                     { showWarning? 
                         <p className="add-warning-text">{warningMessage}</p>
-                   : null}
-                        <button className="btn btn-primary next-material-button" onClick={onAddClick}>Přidat</button>                
+                        : null}
+                    <div className="flex-right">
+                        <button className="btn btn-primary next-material-button" onClick={onAddClick}>Přidat</button>
+                    </div>
             </div>
             <div className="grade-info-box">
                 Tuhle známku učitel neuvidí, je jen pro tebe, nemá vliv na průměr, který vidí učitel.

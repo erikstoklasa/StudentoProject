@@ -5,12 +5,12 @@
 
 .heading-container{
     flex-grow: 1;
-    flex-basis: 470px;    
+    flex-basis: 656px;    
 }
 
 .average-container{
     flex-grow: 1;
-    flex-basis: 470px;
+    flex-basis: 656px;
     display: flex;
     justify-content: start;
     align-items: center;
@@ -61,10 +61,9 @@
     justify-content: space-between;
 }
 
-.student-grades-container{
-    flex-grow: 1;
-    flex-basis: 470px; 
-    max-width: 100%;       
+.student-grades-container{     
+    width: 100%;
+    max-width: 650px;      
 }
 
 .student-material-container{
@@ -101,33 +100,6 @@
 
 .rm{
     margin-right: 10px;
-}
-
-.material-view-container{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 5% 8px 5%;
-}
-
-.material-heading-container{
-    display: flex;
-    align-items: center;
-}
-
-.material-name-container{
-    margin-left: 10px;  
-}
-
-.material-name{
-    margin: 0;
-    font-weight: 500;
-}
-
-.material-added{
-    margin: 0;
-    font-size: 0.8rem;    
-    color: var(--grey);
 }
 
 .add-warning-text{
@@ -290,19 +262,10 @@
     margin-bottom: 10px;
 }
 
-@media (min-width: 960px){
-    .student-material-container {
-        padding-left: 50px !important;
-    }
-
+@media(max-width: 1332px){    
     .student-grades-container{
-        max-width: 50%;
+        max-width: 1300px;
     }
-
-    .average-container {
-        padding-left: 50px !important;
-    }
-    .grade-info-name{
-        max-width: 500px;
-    }
+      
 }
+

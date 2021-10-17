@@ -113,11 +113,11 @@ const AddMaterialPopup = ({ upload, hidePopup }) => {
     }
 
     return (
-        <div className="add-material-container">              
-            <div className="popup-inner-container">                
+        <div className="add-material-container" onClick={hidePopup}>              
+            <div className="material-popup-inner-container" onClick={e=> {e.stopPropagation()}}>                
                 <div className="material-popup-title-container">
                     <h4 className="popup-title">Přidat soubory</h4>
-                        <img className="pointer" src="/images/icons/delete.svg" alt="zavřít" height="30px" onClick={() => { hidePopup()}}></img>
+                        <img className="pointer" src="/images/icons/delete.svg" alt="zavřít" height="30px" onClick={hidePopup}></img>
                 </div>               
                             
                 <div className="add-group-container">
@@ -137,9 +137,10 @@ const AddMaterialPopup = ({ upload, hidePopup }) => {
                 </div>                       
                 {showWarning? 
                         <p className="add-warning-text">{warningMessage}</p>
-                   : null}  
+                    : null}
+                <div className="flex-right">
                 <button className="btn btn-primary next-material-button" onClick={handleUploadClick}>Přidat</button>                    
-                             
+                </div>            
             </div>           
         </div>
     )

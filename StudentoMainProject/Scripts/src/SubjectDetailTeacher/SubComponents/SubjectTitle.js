@@ -8,10 +8,10 @@ const SubjectTitle = ({ info, average }) => {
         return (
             <div className="subject-title-container">
                 <div className="heading-container">
-                    <h1>{info.name}</h1>                    
+                    <h2><b>{info.name}</b></h2>                    
                 </div>
                 <div className="average-container ">
-                    <h3>{`Ø `}{average.toFixed(2)}</h3>
+                    <h2><b>{`Ø `}{average.toFixed(2)}</b></h2>
                 </div>
             </div>
         )

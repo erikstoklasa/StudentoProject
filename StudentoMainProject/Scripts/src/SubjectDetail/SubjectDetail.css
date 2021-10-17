@@ -41,6 +41,7 @@
     padding: 15px 5% 15px 5%;
     display: flex;   
     align-items: center;
+    cursor: pointer;
 }
 
 .grade-info-container{
@@ -63,12 +64,39 @@
 }
 
 .detail-grade-circle{
-    font-size: 2rem;
-    height: 4rem;
-    width: 4rem;
-    line-height: 4rem;
+    font-size: 1.5rem;
+    height: 3rem;
+    width: 3rem;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+    border-radius: 50%;    
+}
+
+.detail-grade-weight-circle{  
+    height: 1.5rem;
+    width: 1.5rem;
+    margin-left: 5px;
     border-radius: 50%;
-    text-align: center;
+    background-color: white;
+    border: solid black 1.25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+    color: black;
+    font-size: 0.75rem;
+}
+
+.vert-center{
+    display: flex;
+    align-items: center;
+}
+
+.detail-weight-container{
+    display: flex;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .grade-sub-container{    
@@ -356,7 +384,14 @@
     margin-bottom: 15px;
 }
 
+.mr5{
+    margin-right: 5px;
+}
 
+.flex-right{
+    display: flex;
+    justify-content: flex-end;
+}
 
 .weight-circle{
     color: black;
@@ -367,11 +402,6 @@
     width: 4rem;
     line-height: 4rem;
     text-align: center;
-}
-
-.detail-circles-container{
-    display: flex;
-    justify-content: center;
 }
 
 .material-name-input{

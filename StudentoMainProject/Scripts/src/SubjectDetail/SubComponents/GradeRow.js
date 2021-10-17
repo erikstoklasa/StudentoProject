@@ -34,12 +34,12 @@ const GradeRow = ({ grade, info, deleteGrade }) => {
 
         return (
             <div>
-                <div className='grade-container'>                   
+                <div className='grade-container' onClick={() => { updateShowDetail(true) }}>                   
                     <div className={`grade-value subject-detail-grade-circle ${getGradeClass(grade.value)}`}>
                         {grade.displayValue}
                         <div className="grade-weight-circle">{grade.gradeGroupWeight? grade.gradeGroupWeight : grade.weight}</div>
                     </div>
-                    <div className="grade-sub-container" onClick={() => { updateShowDetail(true) }}>                        
+                    <div className="grade-sub-container">                        
                             <h5 className="grade-name">{getGradeName()}</h5>                            
                             <p className="grade-time">{grade.addedRelative}</p>
                     </div>

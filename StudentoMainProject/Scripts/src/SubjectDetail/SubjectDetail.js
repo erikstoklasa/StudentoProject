@@ -116,7 +116,7 @@ function SubjectDetail() {
                     })
                     gradesWithDisplayValue.forEach(grade => {
                         Object.assign(grade, { addedRelative: moment.utc(grade.added).locale('cs').fromNow() })
-                        Object.assign(grade, { addedDisplay: moment.utc(grade.added).local().format("D.M.Y") })
+                        Object.assign(grade, { addedDisplay: moment.utc(grade.added).local().locale('cs').format("D. MMMM Y") })
                         
                     })
                     updateGrades(gradesWithDisplayValue)
@@ -167,9 +167,9 @@ function SubjectDetail() {
                     Object.assign(data, {
                         displayValue: getGradeDisplayValue(parseInt(data.value)),
                         addedRelative: moment.utc(data.added).locale('cs').fromNow(),
-                        addedDisplay: addedDate.format("D.M.Y")
+                        addedDisplay: moment.utc(addedDate).local().locale('cs').format("D. MMMM Y") 
                     })
-                    const newArr = [data, ...grades]                   
+                    const newArr = [...grades, data]                   
                     updateGrades(newArr)                  
                 }
             }

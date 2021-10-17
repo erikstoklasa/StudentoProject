@@ -277,6 +277,7 @@ h2 {
 .row-custom {
     display: flex;
     flex-direction: row;
+    align-items: center;
     width: 100%;
     border-radius: 5px;
 }
@@ -295,7 +296,13 @@ h2 {
 }
 
 .cell {
-    height: 50px;
+    height: 50px;   
+}
+
+.cell:last-child {
+    height: min-content;
+    padding-left: 10px;
+    overflow: hidden;    
 }
 
 .cell-group {
@@ -665,9 +672,7 @@ html {
         text-align: start;
     }
 
-    .cell:last-child {
-        padding-left: 25px;
-    }
+   
 
     .table td:first-child {
         padding-left: 2rem;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, {useEffect} from 'react'
 
 
 
@@ -44,7 +44,7 @@ const GradeDetailPopup = ({ grade, info, deleteGrade, hidePopup }) => {
                         <h4 className="detail-popup-title">{getGradeName(grade)}</h4>
                         <img className="pointer" src="/images/icons/delete.svg" alt="zavřít" height="30px" onClick={() => { hidePopup()}}></img>
                     </div>
-                        <p className="detail-relative-time">{grade.addedRelative}</p>
+                        <p className="detail-relative-time">{grade.addedDisplay}</p>
                         <div className="detail-circles-container">
                             <p className={`detail-grade-circle ${getGradeClass(grade.value)}`}>{grade.displayValue}</p>                           
                         </div>

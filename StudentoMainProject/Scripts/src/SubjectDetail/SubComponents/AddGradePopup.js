@@ -57,9 +57,15 @@ const addGradePopup = ({ addGrade, hidePopup }) => {
         }   
     }
 
+    const setGradeName = (val) => {
+        if (val.length <= 27) {
+            updateGradeName(val)
+        }
+    }
+
     const checkWeightValue = (value) => {
-        const val = parseInt(value)
-        if (val >= 0 && val <= 10) {
+        const val = parseInt(value)      
+        if (val > 0 && val <= 10) {          
             updateGradeWeight(val)
         } else if (value === '') {
             updateGradeWeight(value)
@@ -78,7 +84,7 @@ const addGradePopup = ({ addGrade, hidePopup }) => {
                     <div className="popup-input-container">
                         <div className="popup-input-row">
                             <p className="input-label">Název známky</p>
-                            <input className="popup-input-field" value={gradeName} onChange={(event) => {updateGradeName(event.target.value)}}></input>
+                            <input className="popup-input-field" value={gradeName} onChange={(event) => {setGradeName(event.target.value)}}></input>
                         </div>
                         <div className="popup-input-row">
                             <p className="input-label">Známka</p>

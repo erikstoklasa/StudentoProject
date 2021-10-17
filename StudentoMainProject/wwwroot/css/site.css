@@ -8,6 +8,7 @@ for details on configuring this project to bundle and minify static web assets. 
     --grey: #505050;
     --pastelRed: #ff000085;
     --pastelGreen: #33c72180;
+    --pastelBlue: #579AD9;
 }
 
 /* Grading */
@@ -44,6 +45,10 @@ for details on configuring this project to bundle and minify static web assets. 
 
 .background-green {
     background: var(--pastelGreen);
+}
+
+.background-blue {
+    background: var(--pastelBlue);
 }
 
 

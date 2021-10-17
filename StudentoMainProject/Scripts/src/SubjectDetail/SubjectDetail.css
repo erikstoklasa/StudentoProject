@@ -5,6 +5,12 @@
 
 .subject-detail-title{
     margin-bottom: 0;
+    font-weight: bold;
+}
+
+.subject-heading-text{
+    margin-bottom: 0;
+    font-weight: bold;
 }
 
 .heading-container{

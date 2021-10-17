@@ -21,7 +21,7 @@ const SubjectTitle = ({ info, grades }) => {
             });
             const average = sum / gradeNum
             const formattedAverage = 5 - (average / 25)            
-            return <h2 className="mb0"><b>{`Ø `}{formattedAverage.toFixed(2)}</b></h2>
+            return <h2 className="subject-heading-text">{`Ø `}{formattedAverage.toFixed(2)}</h2>
         } else {
             return null
         }
@@ -32,7 +32,7 @@ const SubjectTitle = ({ info, grades }) => {
         return (
             <div className="subject-title-container">
                 <div className="heading-container">
-                    <h2 className="subject-detail-title"><b>{info.name}</b></h2>
+                    <h2 className="subject-detail-title">{info.name}</h2>
                     <h5 className="mb0">{`${info.teacher.firstName} ${info.teacher.lastName}`}</h5>
                 </div>
                 <div className="average-container ">

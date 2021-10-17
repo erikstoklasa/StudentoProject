@@ -6,16 +6,16 @@ import moment from 'moment';
 
 const StudentMaterial = () => {
     const subjectId = window.location.href.split("Details?id=").pop();
-    const [adress, updateAdress] = useState()
+    const [address, updateAddress] = useState()
     const [showMaterialPopup, updateShowMaterialPopup] = useState(false);
     const [userInfo, updateUserInfo] = useState()
     const [material, updateMaterials] = useState();
     
 
-    const getApiAdress = () => {       
+    const getApiAddress = () => {       
         const getUserType = (data) => {           
             if (data.userType === 'student')    return 'Student'           
-            else return 'Teacher'
+            else if(data.userType === 'teacher') return 'Teacher'
         }
         fetch(`${window.location.origin}/api/Auth/GetUserInfo`)
         .then(res => res.json())
@@ -24,13 +24,13 @@ const StudentMaterial = () => {
                 Object.assign(data, {typeName: type})
                 updateUserInfo(data)
                 const apiString = `${window.location.origin}/api/SubjectMaterials/${type}`                
-                updateAdress(apiString)
+                updateAddress(apiString)
         })
     }
 
     const fetchMaterials = () => {      
-        if (adress) {
-            fetch(`${adress}/Material?subjectInstanceId=${subjectId}`)
+        if (address) {
+            fetch(`${address}/Material?subjectInstanceId=${subjectId}`)
                 .then(res => res.json())
                 .then(data => {
                     data.forEach(material => {
@@ -50,13 +50,13 @@ const StudentMaterial = () => {
         }
     }   
 
-    useEffect(getApiAdress, [])
-    useEffect(fetchMaterials, [adress])
+    useEffect(getApiAddress, [])
+    useEffect(fetchMaterials, [address])
     
     const uploadMaterials = (groupName, materials) => {
         const materialList = [...materials]
         if (groupName) {
-            fetch(`${adress}/MaterialGroup?name=${groupName}`, {
+            fetch(`${address}/MaterialGroup?name=${groupName}`, {
                 method: 'POST',
             })
                 .then(res => res.json())
@@ -72,7 +72,7 @@ const StudentMaterial = () => {
                             formData.append('Material.Description', material.materialDescription)
                             formData.append('Material.SubjectInstanceId', subjectId)
                             formData.append('Material.SubjectMaterialGroupId', material.materialGroupId)
-                            fetch(`${adress}/Material`, {
+                            fetch(`${address}/Material`, {
                                 method: 'POST',
                                 body: formData
                             }).then(res => res.json())
@@ -88,7 +88,7 @@ const StudentMaterial = () => {
                 formData.append('Material.Description', material.materialDescription)
                 formData.append('Material.SubjectInstanceId', subjectId)
                 
-                fetch(`${adress}/Material`, {
+                fetch(`${address}/Material`, {
                     method: 'POST',
                     body: formData
                 }).then(res => res.json())
@@ -98,7 +98,7 @@ const StudentMaterial = () => {
     }
 
     const deleteMaterial = (id) => {
-        fetch(`${adress}/Material?subjectMaterialId=${id}`, {
+        fetch(`${address}/Material?subjectMaterialId=${id}`, {
             method: 'DELETE'
         }).then(res => {
             if (res.ok) {

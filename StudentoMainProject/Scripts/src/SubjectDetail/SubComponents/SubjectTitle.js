@@ -3,7 +3,7 @@ import '../SubjectDetail.css'
 
 const SubjectTitle = ({ info, grades }) => {
     
-    const calculateStudentAverage = (data) => {
+    const calculateStudentAverage = (data) => {       
         const getGradeWeight = (grade) => {              
             if (!grade.gradeGroupWeight) {
                 if (grade.weight) return grade.weight
@@ -32,12 +32,12 @@ const SubjectTitle = ({ info, grades }) => {
         return (
             <div className="subject-title-container">
                 <div className="heading-container">
-                    <h2 className="subject-detail-title">{info.name}</h2>
+                    <div className="average-container">
+                        <h2 className="subject-detail-title">{info.name}</h2>                        
+                        { grades.success? calculateStudentAverage(grades.data) : null}                        
+                    </div>                    
                     <h5 className="mb0">{`${info.teacher.firstName} ${info.teacher.lastName}`}</h5>
-                </div>
-                <div className="average-container ">
-                    {calculateStudentAverage(grades)}
-                </div>
+                </div>                                
             </div>
         )
     } else { 

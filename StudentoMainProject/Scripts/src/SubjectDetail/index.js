@@ -1,11 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import SubjectDetail from './SubjectDetail';
+
 
 ReactDOM.render(
-  
-    <App />,
-  
+    <React.StrictMode>
+    <SubjectDetail />
+    </React.StrictMode>,  
   document.getElementById('root')
 );
 

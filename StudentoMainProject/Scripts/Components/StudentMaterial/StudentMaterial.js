@@ -120,7 +120,7 @@ const StudentMaterial = () => {
        
         <div class="material-container">
             <div className="material-container-heading-container">
-                <p class="table-heading">Studijní materiály</p>
+                <p class="material-table-heading">Studijní materiály</p>
                 <a class="btn btn-primary" onClick={displayMaterialPopup}><img src="/images/add.svg" alt="Přidat" height="18px" class="btn-icon" />Přidat studijní materiál</a>
             </div>
             {material ? <MaterialContainer materials={material} info={userInfo} deleteMaterial={deleteMaterial} /> : <p class="alert alert-dark my-1 w-100">Zatím jsi nepřidal/a žádné studijní materiály 🙁</p>}

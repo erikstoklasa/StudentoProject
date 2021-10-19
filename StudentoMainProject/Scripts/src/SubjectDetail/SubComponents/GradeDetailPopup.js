@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react'
-import moment from 'moment';
 
 
-const GradeDetailPopup = ({ grade, info, deleteGrade, hidePopup }) => {   
+const GradeDetailPopup = ({ grade, deleteGrade, hidePopup }) => {   
     useEffect(() => {
         document.body.style.overflow = 'hidden';
         return ()=> document.body.style.overflow = 'unset';

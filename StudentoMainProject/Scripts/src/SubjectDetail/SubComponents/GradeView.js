@@ -1,11 +1,12 @@
 import React from 'react'
 import GradeRow from './GradeRow'
+import InfoAlert from '../../../Components/Alerts/InfoAlert'
 
-const GradeView = ({ grades, info, type, deleteGrade }) => {  
+const GradeView = ({ grades, type, deleteGrade }) => {  
  
     //create an html element for each grade recieved in props, put them into an array
     const gradeList = grades.map(grade => { 
-        return <GradeRow grade={grade} info={info} type={type} deleteGrade={ deleteGrade}/>
+        return <GradeRow grade={grade} type={type} deleteGrade={ deleteGrade}/>
     })
 
     if (grades.length > 0) {
@@ -20,16 +21,12 @@ const GradeView = ({ grades, info, type, deleteGrade }) => {
     } else {
         if (type === 'teacherGrades') {
             return (
-                <div>
-                    <p class="alert alert-info my-1">Zatím ti vyučující nepřidal žádné známky 🙁</p>
-                </div>
+                <InfoAlert text={'Zatím ti vyučující nepřidal žádné známky🙁'}/>                
             )
         }
         if (type === 'studentGrades') {
             return (
-                <div>
-                <p class="alert alert-info mb-4">Tady si můžeš přidat svoje známky. Budou se ti počítat jen do tvého průměru (učitel tyhle známky neuvidí).</p>
-                </div>
+                <InfoAlert text={'Tady si můžeš přidat svoje známky. Budou se ti počítat jen do tvého průměru (učitel tyhle známky neuvidí).'}/>                
             )
         }
     }

@@ -4,128 +4,34 @@ import SubjectTitle from './SubComponents/SubjectTitle'
 import StudentGrades from './SubComponents/StudentGrades'
 import StudentMaterial from '../../Components/StudentMaterial/StudentMaterial'
 import AddGradePopup from './SubComponents/AddGradePopup'
+import { fetchGrades, postGrade, deleteGrades } from '../../Services/GradeService.js';
+import { fetchSubjectInstance } from '../../Services/SubjectService.js';
 import './SubjectDetail.css'
-import moment from 'moment';
+
 
   
-function SubjectDetail() {
+const SubjectDetail = () => {
     //initialize state
-    const [subjectId, updateSubjectId] = useState(window.location.href.split("Details?id=").pop());
+    const subjectId = window.location.href.split("Details?id=").pop()
     const [subjectInfo, updateSubjectInfo] = useState();    
     const [grades, updateGrades] = useState([]);
-    const [showAddPopup, updateShowAddPopup] = useState(false)
-    
-    //format grades from internal to display value
-    const getGradeDisplayValue = (grade) => {
-        if (grade == 110) {
-            return '1+'
-        }
-        if (grade === 100) {
-            return 1
-        }
-        if (grade === 90) {
-            return '1-'
-        }
-        if (grade === 85) {
-            return '2+'
-        }
-        if (grade === 75) {
-            return 2
-        }
-        if (grade === 65) {
-            return '2-'
-        }
-        if (grade === 60) {
-            return '3+'
-        }
-        if (grade === 50) {
-            return 3
-        }
-        if (grade === 40) {
-            return '3-'
-        }
-        if (grade === 35) {
-            return '4+'
-        }
-        if (grade === 25) {
-            return 4
-        }
-        if (grade === 15) {
-            return '4-'
-        }
-        if (grade === 10) {
-            return '5+'
-        }
-        if (grade === 0) {
-            return 5
-        } if (grade === -10) {
-            return '5-'
-        }
-    }
-
-    //calculate student average from internal value, then store it in state
-    
-
-    const getInternalGradeValue = (displayValue) => {
-        if (displayValue === '1*') return 110
-        if (displayValue === '1+') return 110
-        if (displayValue === '1') return 100
-        if (displayValue === '1-') return 90
-        if (displayValue === '2+') return 85
-        if (displayValue === '2') return 75
-        if (displayValue === '2-') return 65
-        if (displayValue === '3+') return 60
-        if (displayValue === '3') return 50
-        if (displayValue === '3-') return 40
-        if (displayValue === '4+') return 35
-        if (displayValue === '4') return 25
-        if (displayValue === '4-') return 15
-        if (displayValue === '5+') return 10
-        if (displayValue === '5') return 0
-        if (displayValue === '5-') return -10
-        
-    }
+    const [showAddPopup, updateShowAddPopup] = useState(false)    
 
     // fetch grades, subject info and student material(in the future)
-    const fetchData = () => {
-        
-        if (subjectId) {
-            fetch(`${apiAddress}/SubjectInstances/Student/${subjectId}`, {
-                method: 'GET',
-                headers: {
-                    'Cache-Control': 'no-cache'
-                }
-            })
-                .then(res => res.json())
-                .then(data => updateSubjectInfo(data))
+    const fetchData = () => {     
+           
+        const getData = async () => {
+            const resGrades = await fetchGrades('Student', subjectId)
+            const resSubject = await fetchSubjectInstance('Student', subjectId)
+            
+            updateSubjectInfo(resSubject)
+            updateGrades(resGrades)            
         }
-        if (subjectId) {
-            fetch(`${apiAddress}/Grades/Student?subjectInstanceId=${subjectId}`, {
-                method: 'GET',
-                headers: {
-                    'Cache-Control': 'no-cache'
-                }
-            })
-                .then(res => res.json())
-                .then(data => {
-                    //format fetched grades data(add display value, add relative time using moment.js library)                   
-                    const gradesWithDisplayValue = data.map(grade => {
-                        const displayValue = getGradeDisplayValue(parseInt(grade.value))
-                        Object.assign(grade, { displayValue: displayValue })
-                        return grade
-                    })
-                    gradesWithDisplayValue.forEach(grade => {
-                        Object.assign(grade, { addedRelative: moment.utc(grade.added).locale('cs').fromNow() })
-                        Object.assign(grade, { addedDisplay: moment.utc(grade.added).local().locale('cs').format("D. MMMM Y") })
-                        
-                    })
-                    updateGrades(gradesWithDisplayValue)
-                })
-        }
+        getData()        
     }
     
     //initialize effect hook chain   
-    useEffect(fetchData, subjectId)    
+    useEffect(fetchData, [])    
 
     //update state to display add grade popup
     const showPopup = () => {
@@ -138,70 +44,36 @@ function SubjectDetail() {
     }
 
     //send a request to post student grade
-    const addStudentGrade = (name, value, weight, date) => {
-        const addedDate = moment(date, 'YYYY-MM-DD')      
-        const actualValue = getInternalGradeValue(value)
-        const reqBody = {
-            value: actualValue,
-            name: name,
-            gradeGroupName: name,
-            weight: parseInt(weight),
-            subjectInstanceId: subjectId,
-            added: addedDate.toISOString()
+    const addStudentGrade = async (name, value, weight, date) => {        
+        const res = await postGrade('Student', grades.data, subjectId, name, value, weight, date)        
+        if (res.success) {
+            updateGrades({
+                success: true,
+                status: grades.status,
+                data: res.data
+            })
         }        
-
-        fetch(`${apiAddress}/Grades/Student`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(reqBody)
-        }).then(res => {
-            if (res.ok) {
-                return res.json()
-            }
-        }
-        ).then(
-            data => {
-                if (data) {
-                    Object.assign(data, {
-                        displayValue: getGradeDisplayValue(parseInt(data.value)),
-                        addedRelative: moment.utc(data.added).locale('cs').fromNow(),
-                        addedDisplay: moment.utc(addedDate).local().locale('cs').format("D. MMMM Y") 
-                    })
-                    const newArr = [...grades, data]                   
-                    updateGrades(newArr)                  
-                }
-            }
-        )
     }
 
-    const deleteStudentGrade = (id) => {
-        const reqBody = [id];
-        fetch(`${apiAddress}/Grades/Student/Batch`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-                // 'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: JSON.stringify(reqBody)
-        })
-            .then(res => {
-                if (res.ok) {
-                    const newArr = grades.filter(grade => grade.id != id)
-                    updateGrades(newArr)                   
-                }
+    const deleteStudentGrade = async (id) => {
+        const idArray = [id];
+        const res = await deleteGrades('Student', grades.data, idArray)
+        if (res.success) {
+            updateGrades({
+                success: true,
+                status: grades.status,
+                data: res.data
             })
-        
+        }        
     }  
     
     return (
-        <div>
-            {subjectInfo ? <SubjectTitle info={subjectInfo} grades={grades} /> : null}
+        <div className="subject-detail-container">
+            {subjectInfo ? <SubjectTitle info={subjectInfo.data} grades={grades} /> : null}
         
             {grades && subjectInfo ?
                 <div className="grades-material-container">
-                    <StudentGrades grades={grades} info={subjectInfo} showPopup={showPopup} deleteGrade={deleteStudentGrade} />
+                    <StudentGrades grades={grades} showPopup={showPopup} deleteGrade={deleteStudentGrade} />
                     <StudentMaterial/>
                     {showAddPopup ? <AddGradePopup addGrade={addStudentGrade} hidePopup={hidePopup} /> : null}
                 </div>

@@ -1,5 +1,5 @@
 .subject-detail-table{
-    padding: 0px 15px 20px 15px;
+    padding: 20px 20px 10px;
 }
 
 .material-container{
@@ -85,7 +85,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 20px;
+    margin-bottom: 10px;
 }
 
 .material-heading-container{

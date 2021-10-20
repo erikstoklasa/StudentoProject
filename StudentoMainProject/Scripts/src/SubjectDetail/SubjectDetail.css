@@ -2,8 +2,8 @@
     padding: 0px 4px 0px 4px;
 }
 
-.subject-detail-table{
-    padding: 0px 15px 20px 15px;
+.subject-detail-table {
+    padding: 20px 20px 10px;
 }
 
 .subject-title-container{    
@@ -49,11 +49,16 @@
     text-align: start;
 }
 
-.grade-container{   
-    margin-top: 20px;
-    display: flex;   
+.grade-container {
+    margin-bottom: 10px;
+    display: flex;
+    padding: 5px;
+    border-radius: 10px;
     align-items: center;
     cursor: pointer;
+}
+.grade-container:hover{
+    background: rgba(0,0,0,0.15);
 }
 
 .grade-info-container{

@@ -13,7 +13,7 @@ const GradeView = ({ grades, type, deleteGrade }) => {
         //display array of grade html elements
        
             return (
-                <div className="table table-responsive table-white">
+                <div className="table table-responsive table-white subject-detail-table">
                     {gradeList}                   
                 </div>
             )

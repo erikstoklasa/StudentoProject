@@ -38,7 +38,7 @@ export const fetchGrades = async (userType, subjectId, valueFormat = null) => {
     }         
 }
 
-export const postGrade = async (userType, gradeData, subjectId, name, value, weight, date) => {
+export const postGrade = async (userType, subjectId, name, value, weight, date) => {
     if (userType === 'Student') {
         const gradeDate = moment(date, 'YYYY-MM-DD').toISOString()
         const reqBody = {
@@ -62,16 +62,14 @@ export const postGrade = async (userType, gradeData, subjectId, name, value, wei
                 displayValue: value,
                 addedRelative: moment.utc(gradeDate).locale('cs').fromNow(),
                 addedDisplay: moment.utc(gradeDate).local().locale('cs').format("D. MMMM Y")
-            })
-
-            const newArray = [data, ...gradeData]
+            })            
 
             const reqResponse = {
                 success: res.ok,
                 status: res.status,
-                data: newArray
+                data: data
             }
-
+            
             return reqResponse
         } else {
             const reqResponse = {

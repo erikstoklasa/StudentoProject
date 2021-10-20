@@ -3,6 +3,10 @@
     flex-wrap: wrap;
 }
 
+.subject-detail-table{
+    padding: 0px 15px 20px 15px;
+}
+
 .heading-container{
     flex-grow: 1;
     flex-basis: 656px;    
@@ -21,11 +25,11 @@
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;     
-    margin: 16px 0px 16px 0px; 
+    margin: 10px 0px 10px 0px; 
 }
 
 .grade-container{   
-    padding: 8px 5% 8px 5%;
+    margin-top: 20px;
     display: flex;
     justify-content: space-between; 
     align-items: center; 
@@ -80,8 +84,8 @@
 }
 
 .grades-heading{
-    margin-top: 1rem;
-    margin-bottom: 1rem;
+    margin-top: 10px;
+    margin-bottom: 10px;
     white-space: nowrap;
     margin-right: 25px;
     color: var(--grey); 

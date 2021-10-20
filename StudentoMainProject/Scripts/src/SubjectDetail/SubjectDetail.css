@@ -2,6 +2,10 @@
     padding: 0px 4px 0px 4px;
 }
 
+.subject-detail-table{
+    padding: 0px 15px 20px 15px;
+}
+
 .subject-title-container{    
     display: flex;
     flex-wrap: wrap;
@@ -37,7 +41,7 @@
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;     
-    margin: 16px 0px 16px 0px; 
+    margin: 10px 0px 10px 0px; 
 }
 
 .grades-heading{
@@ -49,7 +53,7 @@
 }
 
 .grade-container{   
-    padding: 15px 5% 15px 5%;
+    margin-top: 20px;
     display: flex;   
     align-items: center;
     cursor: pointer;

@@ -2,12 +2,13 @@ import React from 'react'
 
 
 const MaterialView = ({ material, deleteMaterial, user }) => {
+  
     
     const getCanDelete = () => {
-        if (user.typeName === "Teacher") {
+        if (user.data.typeName === "Teacher") {
             return true
         } else {
-            if (material.addedById === user.userId && material.addedBy !== 0) {
+            if (material.addedById === user.data.userId && material.addedBy !== 0) {
                 return true
             } else {
                 return false

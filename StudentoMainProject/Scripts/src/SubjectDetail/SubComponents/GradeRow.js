@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import GradeDetailPopup from './GradeDetailPopup'
 import '../SubjectDetail.css'
 
-const GradeRow = ({ grade, info, deleteGrade }) => {    
+const GradeRow = ({ grade, deleteGrade }) => {    
     const [showDetail, updateShowDetail] = useState(false); 
     
     //returns grades css class based on value
@@ -20,7 +20,7 @@ const GradeRow = ({ grade, info, deleteGrade }) => {
                 return ' background-red text-light'
             }
             if (value >= -10 && value < 15) {
-                return ' background-black text-light'
+                return ' background-darkred text-light'
             }
     }
     
@@ -44,7 +44,7 @@ const GradeRow = ({ grade, info, deleteGrade }) => {
                             <p className="grade-time">{grade.addedRelative}</p>
                     </div>
                 </div>
-                {showDetail? <GradeDetailPopup grade={grade} info={info} deleteGrade={deleteGrade} hidePopup={() => { updateShowDetail(false) }}/> : null}
+                {showDetail? <GradeDetailPopup grade={grade} deleteGrade={deleteGrade} hidePopup={() => { updateShowDetail(false) }}/> : null}
             </div>
         )        
      

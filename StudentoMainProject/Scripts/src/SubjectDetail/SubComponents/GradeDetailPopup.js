@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react'
-import moment from 'moment';
 
 
-const GradeDetailPopup = ({ grade, info, deleteGrade, hidePopup }) => {   
+const GradeDetailPopup = ({ grade, deleteGrade, hidePopup }) => {   
     useEffect(() => {
         document.body.style.overflow = 'hidden';
         return ()=> document.body.style.overflow = 'unset';
@@ -22,7 +21,7 @@ const GradeDetailPopup = ({ grade, info, deleteGrade, hidePopup }) => {
             return ' background-red text-light'
         }
         if (value >= -10 && value < 15) {
-            return ' background-black text-light'
+            return ' background-darkred text-light'
         }
     }
 

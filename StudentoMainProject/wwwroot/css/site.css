@@ -6,8 +6,9 @@ for details on configuring this project to bundle and minify static web assets. 
     --primaryYellowStrong: #feb23c;
     --transparentGrey: #0000001a;
     --grey: #505050;
-    --pastelRed: #ff000085;
-    --pastelGreen: #33c72180;
+    --pastelRed: #EC5C5C;
+    --pastelDarkRed: #B41C1C;
+    --pastelGreen: #2AA044;
     --pastelBlue: #579AD9;
 }
 
@@ -37,6 +38,10 @@ for details on configuring this project to bundle and minify static web assets. 
 
 .background-red {
     background: var(--pastelRed);
+}
+
+.background-darkred {
+    background: var(--pastelDarkRed);
 }
 
 .background-grey {
@@ -91,9 +96,14 @@ for details on configuring this project to bundle and minify static web assets. 
 
 .btn {
     padding: 0.4rem 0.7rem;
+    border-radius: 10px;
     width: 100%;
     cursor: pointer;
 }
+
+    .btn:hover {
+        border-radius: 10px;
+    }
 
 .btn-condensed {
     padding: .25rem .5rem !important;
@@ -260,7 +270,7 @@ h2 {
 
 .table-white {
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
-    border-radius: 0.25rem;
+    border-radius: 10px;
     background: #fff;
     padding: 0.5rem;
 }

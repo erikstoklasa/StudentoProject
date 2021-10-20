@@ -1,7 +1,22 @@
+.subject-detail-table{
+    padding: 20px 20px 10px;
+}
+
 .material-container{
     width: 100%;
-    max-width: 650px;     
+    max-width: 640px;     
 }
+
+.material-table-heading{
+    margin: 0;   
+    white-space: nowrap;    
+    color: var(--grey);
+    text-align: start; 
+    margin-top: 10px;
+    margin-bottom: 10px;   
+}
+
+
 
 .material-popup-inner-container{
     max-height: 95vh;
@@ -27,11 +42,11 @@
 }
 
 .material-container-heading-container{
+    margin: 10px 0px 10px 0px;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    align-items: center;
-    margin: 10px 0px 10px 0px;
+    align-items: center;    
 }
 
 .material-name{
@@ -70,7 +85,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 8px 5% 8px 5%;
+    margin-bottom: 10px;
 }
 
 .material-heading-container{

@@ -11,7 +11,7 @@ const GradeView = ({ students, info}) => {
     if (students) {
         //display array of student html elements       
             return (
-                <div className="table table-responsive table-white">
+                <div className="table table-responsive table-white subject-detail-table">
                     {studentList}                   
                 </div>
             )

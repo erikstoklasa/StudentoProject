@@ -15,13 +15,10 @@
 .subject-detail-title{
     margin-bottom: 0;
     margin-right: 10px;
-    font-weight: bold;
 }
 
 .subject-heading-text{
     margin-bottom: 0;
-    
-    font-weight: bold;
     white-space: nowrap;
 }
 
@@ -89,7 +86,7 @@
     border-radius: 50%;    
 }
 
-.detail-grade-weight-circle{  
+.detail-grade-weight-circle {
     height: 1.5rem;
     width: 1.5rem;
     margin-left: 5px;
@@ -98,8 +95,9 @@
     border: solid black 1.25px;
     display: flex;
     justify-content: center;
-    align-items: center;    
+    align-items: center;
     color: black;
+    line-height: initial;
     font-size: 0.75rem;
 }
 
@@ -144,9 +142,9 @@
 }
 
 .subject-detail-grade-circle {
-    height: 3rem;
-    width: 3rem;
-    font-size: 1.5rem;    
+    height: 2.5rem;
+    width: 2.5rem;
+    font-size: 1.3rem;
     border-radius: 50%;
     display: flex;
     justify-content: center;
@@ -154,10 +152,10 @@
     position: relative;
 }
 
-.grade-weight-circle{
+.grade-weight-circle {
     position: absolute;
-    height: 1.5rem;
-    width: 1.5rem;
+    height: 1.3rem;
+    width: 1.3rem;
     border-radius: 50%;
     background-color: white;
     border: solid black 1.25px;
@@ -167,7 +165,7 @@
     bottom: -5px;
     right: -5px;
     color: black;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
 }
 
 .grade-name{     
@@ -262,7 +260,7 @@
 }
 
 .popup-input-small{
-    max-width: 40px !important;
+    max-width: 42px !important;
 }
 
 .popup-input-field{

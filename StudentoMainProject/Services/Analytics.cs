@@ -59,13 +59,11 @@ namespace SchoolGradebook.Services
         /// <summary>
         /// Gets the subject average for specified student and subject instance
         /// </summary>
-        /// <param name="studentId"></param>
-        /// <param name="SubjectInstanceId"></param>
+        /// <param name="grades"></param>
         /// <returns>Subject average in 2 precision points (eg. 1.48)</returns>
-        public async Task<double> GetSubjectAverageForStudentAsync(int studentId, int SubjectInstanceId)
+        public static double GetSubjectAverageForStudentAsync(Grade[] grades)
         {
             int sum = 0;
-            Grade[] grades = await gradeService.GetAllGradesByStudentSubjectInstance(studentId, SubjectInstanceId);
 
             int count = grades.Length;
             if (count == 0) //Student doesn't have any grades in the given subject
@@ -83,12 +81,11 @@ namespace SchoolGradebook.Services
         /// <summary>
         /// Gets the subject average in decimal (eg. 1.481)
         /// </summary>
-        /// <param name="subjectInstanceId"></param>
+        /// <param name="grades"></param>
         /// <returns>Subject average decimal number for 3 precision points</returns>
-        public async Task<double> GetSubjectAverageAsync(int subjectInstanceId)
+        public async Task<double> GetSubjectAverageAsync(Grade[] grades)
         {
             double sum = 0.0;
-            Grade[] grades = await Context.Grades.Where(g => g.SubjectInstanceId == subjectInstanceId).AsNoTracking().ToArrayAsync();
 
             int count = grades.Length;
             if (count == 0) //Students has no grades for specified subject

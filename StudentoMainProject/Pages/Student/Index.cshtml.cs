@@ -62,7 +62,9 @@ namespace SchoolGradebook.Pages.Student
             Subjects = await subjectService.GetAllSubjectInstancesByStudentAsync(studentId);
             foreach (SubjectInstance si in Subjects)
             {
-                double sAvg = await _analytics.GetSubjectAverageForStudentAsync(studentId, si.Id);
+                double sAvg = Analytics.GetSubjectAverageForStudentAsync(
+                        await gradeService.GetAllGradesByStudentSubjectInstance(studentId, si.Id)
+                    );
                 string output = sAvg.CompareTo(double.NaN) == 0 ? "" : sAvg.ToString("f2");
                 SubjectAverages.Add(output);
             }

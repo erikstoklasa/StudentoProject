@@ -87,6 +87,16 @@ namespace SchoolGradebook.Services
             .ToArrayAsync();
             return grades;
         }
+        public async Task<Grade[]> GetAllGradesBySubjectInstanceAsync(int subjectInstanceId)
+        {
+            Grade[] grades;
+            grades = await context.Grades
+            .Where(g => g.SubjectInstanceId == subjectInstanceId)
+            .OrderByDescending(g => g.Added)
+            .AsNoTracking()
+            .ToArrayAsync();
+            return grades;
+        }
         public async Task<Grade[]> GetGradesAddedByTeacherAsync(int studentId, int subjectInstanceId)
         {
             Grade[] grades;

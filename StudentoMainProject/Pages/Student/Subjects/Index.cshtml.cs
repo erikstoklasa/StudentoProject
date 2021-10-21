@@ -15,14 +15,16 @@ namespace SchoolGradebook.Pages.Student.Subjects
         private readonly SubjectService subjectService;
         private readonly StudentService studentService;
         private readonly Analytics analytics;
+        private readonly GradeService gradeService;
 
-        public IndexModel(IHttpContextAccessor httpContextAccessor, SubjectService subjectService, StudentService studentService, Analytics analytics)
+        public IndexModel(IHttpContextAccessor httpContextAccessor, SubjectService subjectService, StudentService studentService, Analytics analytics, GradeService gradeService)
         {
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             UserId ??= "";
             this.subjectService = subjectService;
             this.studentService = studentService;
             this.analytics = analytics;
+            this.gradeService = gradeService;
             SubjectAverages = new List<string>();
         }
 
@@ -37,7 +39,9 @@ namespace SchoolGradebook.Pages.Student.Subjects
             foreach(SubjectInstance si in Subjects)
             {
                 //Update analytics method to use only studentId instead of UserID
-                double sAvg = await analytics.GetSubjectAverageForStudentAsync((int)studentId, si.Id);
+                double sAvg = Analytics.GetSubjectAverageForStudentAsync(
+                        await gradeService.GetAllGradesByStudentSubjectInstance(studentId, si.Id)
+                    );
                 string output = sAvg.CompareTo(double.NaN) == 0 ? "Žádné známky" : sAvg.ToString("f2");
                 SubjectAverages.Add(output);
             }

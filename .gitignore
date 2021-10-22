@@ -5,6 +5,7 @@ StudentoMainProject/obj
 StudentoMainProject/bin
 StudentoMainProject/Properties/PublishProfiles
 StudentoMainProject/node_modules
+StudentoMainProject/wwwroot/css/site.min.css
 StudentoMainProject/wwwroot/dist
 
 TimetableServiceProject/obj

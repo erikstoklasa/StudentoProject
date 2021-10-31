@@ -86,7 +86,7 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
             }
             SubjectMaterials = await subjectMaterialService.GetAllMaterialsBySubjectInstance(Subject.Id);
             Students = await studentService.GetAllStudentsBySubjectInstanceAsync(Subject.Id);
-            SubjectAvg = await _analytics.GetSubjectAverageAsync(await gradeService.GetAllGradesBySubjectInstanceAsync((int)id));
+            SubjectAvg = await Analytics.GetSubjectAverageAsync(await gradeService.GetAllGradesBySubjectInstanceAsync((int)id));
             foreach (Models.Student s in Students)
             {
                 StudentAverages.Add(Analytics.GetSubjectAverageForStudentAsync(

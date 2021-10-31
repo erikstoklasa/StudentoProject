@@ -340,7 +340,7 @@
             <param name="value"></param>
             <returns></returns>
         </member>
-        <member name="M:SchoolGradebook.Models.Grade.MapInnerValueToDecimalValue(System.Int32)">
+        <member name="M:SchoolGradebook.Models.Grade.MapInnerValueToDecimalValue(System.Single)">
             <summary>
             Maps the inner value (110) to the decimal value (0.6), lowest returned is 5.0
             </summary>

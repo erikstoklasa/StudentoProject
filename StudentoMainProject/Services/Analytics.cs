@@ -65,16 +65,17 @@ namespace SchoolGradebook.Services
         {
             int sum = 0;
 
-            int count = grades.Length;
-            if (count == 0) //Student doesn't have any grades in the given subject
+            int weightSum = 0;
+            foreach (Grade g in grades)
+            {
+                weightSum += g.GetWeight(); 
+                sum += g.GetInternalGradeValue() * g.GetWeight();
+            }
+            if (weightSum == 0) //Student doesn't have any grades in the given subject
             {
                 return Double.NaN;
             }
-            foreach (Grade g in grades)
-            {
-                sum += g.GetInternalGradeValue();
-            }
-            int internalAverage = (int)Math.Ceiling((float)sum / count);
+            float internalAverage = (float)sum / weightSum;
             return Grade.MapInnerValueToDecimalValue(internalAverage);
         }
 
@@ -83,20 +84,21 @@ namespace SchoolGradebook.Services
         /// </summary>
         /// <param name="grades"></param>
         /// <returns>Subject average decimal number for 3 precision points</returns>
-        public async Task<double> GetSubjectAverageAsync(Grade[] grades)
+        public static async Task<double> GetSubjectAverageAsync(Grade[] grades)
         {
             double sum = 0.0;
 
-            int count = grades.Length;
-            if (count == 0) //Students has no grades for specified subject
+            int weightSum = 0;
+            foreach (Grade g in grades)
+            {
+                weightSum += g.GetWeight();
+                sum += g.GetGradeValueInDecimal() * g.GetWeight();
+            }
+            if (weightSum == 0) //Students has no grades for specified subject
             {
                 return Double.NaN;
             }
-            foreach (Grade g in grades)
-            {
-                sum += g.GetGradeValueInDecimal();
-            }
-            return Math.Round(sum / count, 3);
+            return Math.Round(sum / weightSum, 3);
         }
         //Student
         public async Task<double> GetTotalAverageForStudentAsync(

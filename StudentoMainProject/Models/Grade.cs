@@ -100,11 +100,11 @@ namespace SchoolGradebook.Models
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static float MapInnerValueToDecimalValue(int value)
+        public static float MapInnerValueToDecimalValue(float value)
         {
             if (value <= 110 && value >= 0)
             {
-                return (float)Math.Round(5 - (value / 25f), 2);
+                return (float)(5 - (value / 25f));
             }
             if (value > 110)
             {
@@ -141,6 +141,19 @@ namespace SchoolGradebook.Models
                 "5-" => -10,
                 _ => throw new ArgumentException("Value provided was not found in the mapping table", "Grade value"),
             };
+        }
+
+        public int GetWeight() 
+        {
+            if (Weight != null)
+            {
+                return (int)Weight;
+            }
+            else
+            {
+                return GradeGroup.Weight;
+            }
+
         }
 
 

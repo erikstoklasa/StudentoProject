@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudentoMainProject", "Stud
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimetableServiceProject", "TimetableServiceProject\TimetableServiceProject.csproj", "{69E781BA-73C3-4B57-8B95-DC7423271141}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XUnitTests", "XUnitTests\XUnitTests.csproj", "{1FAE31B0-87BD-4EAC-8010-52E359F7F20D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{69E781BA-73C3-4B57-8B95-DC7423271141}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{69E781BA-73C3-4B57-8B95-DC7423271141}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{69E781BA-73C3-4B57-8B95-DC7423271141}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FAE31B0-87BD-4EAC-8010-52E359F7F20D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FAE31B0-87BD-4EAC-8010-52E359F7F20D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FAE31B0-87BD-4EAC-8010-52E359F7F20D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FAE31B0-87BD-4EAC-8010-52E359F7F20D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

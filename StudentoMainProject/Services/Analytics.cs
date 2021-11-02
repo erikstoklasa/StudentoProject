@@ -59,47 +59,46 @@ namespace SchoolGradebook.Services
         /// <summary>
         /// Gets the subject average for specified student and subject instance
         /// </summary>
-        /// <param name="studentId"></param>
-        /// <param name="SubjectInstanceId"></param>
+        /// <param name="grades"></param>
         /// <returns>Subject average in 2 precision points (eg. 1.48)</returns>
-        public async Task<double> GetSubjectAverageForStudentAsync(int studentId, int SubjectInstanceId)
+        public static double GetSubjectAverageForStudentAsync(Grade[] grades)
         {
             int sum = 0;
-            Grade[] grades = await gradeService.GetAllGradesByStudentSubjectInstance(studentId, SubjectInstanceId);
 
-            int count = grades.Length;
-            if (count == 0) //Student doesn't have any grades in the given subject
+            int weightSum = 0;
+            foreach (Grade g in grades)
+            {
+                weightSum += g.GetWeight(); 
+                sum += g.GetInternalGradeValue() * g.GetWeight();
+            }
+            if (weightSum == 0) //Student doesn't have any grades in the given subject
             {
                 return Double.NaN;
             }
-            foreach (Grade g in grades)
-            {
-                sum += g.GetInternalGradeValue();
-            }
-            int internalAverage = (int)Math.Ceiling((float)sum / count);
+            float internalAverage = (float)sum / weightSum;
             return Grade.MapInnerValueToDecimalValue(internalAverage);
         }
 
         /// <summary>
         /// Gets the subject average in decimal (eg. 1.481)
         /// </summary>
-        /// <param name="subjectInstanceId"></param>
+        /// <param name="grades"></param>
         /// <returns>Subject average decimal number for 3 precision points</returns>
-        public async Task<double> GetSubjectAverageAsync(int subjectInstanceId)
+        public static async Task<double> GetSubjectAverageAsync(Grade[] grades)
         {
             double sum = 0.0;
-            Grade[] grades = await Context.Grades.Where(g => g.SubjectInstanceId == subjectInstanceId).AsNoTracking().ToArrayAsync();
 
-            int count = grades.Length;
-            if (count == 0) //Students has no grades for specified subject
+            int weightSum = 0;
+            foreach (Grade g in grades)
+            {
+                weightSum += g.GetWeight();
+                sum += g.GetGradeValueInDecimal() * g.GetWeight();
+            }
+            if (weightSum == 0) //Students has no grades for specified subject
             {
                 return Double.NaN;
             }
-            foreach (Grade g in grades)
-            {
-                sum += g.GetGradeValueInDecimal();
-            }
-            return Math.Round(sum / count, 3);
+            return Math.Round(sum / weightSum, 3);
         }
         //Student
         public async Task<double> GetTotalAverageForStudentAsync(

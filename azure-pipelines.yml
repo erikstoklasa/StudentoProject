@@ -11,6 +11,7 @@ pool:
 
 variables:
   solution: './StudentoMainProject/StudentoMainProject.csproj'
+  tests: './XUnitTests/XUnitTests.csproj'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
@@ -38,7 +39,7 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'test'
-    projects: './XUnitTests/'
+    projects: '$(tests)'
     
 - task: PublishBuildArtifacts@1
   inputs:

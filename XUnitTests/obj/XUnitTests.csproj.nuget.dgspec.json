@@ -1,24 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\jirka-pc\\Studento\\WebApp\\XUnitTests\\XUnitTests.csproj": {}
+    "C:\\Users\\stokl\\source\\repos\\WebApp\\XUnitTests\\XUnitTests.csproj": {}
   },
   "projects": {
-    "C:\\Users\\jirka-pc\\Studento\\WebApp\\StudentoMainProject\\StudentoMainProject.csproj": {
+    "C:\\Users\\stokl\\source\\repos\\WebApp\\StudentoMainProject\\StudentoMainProject.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\jirka-pc\\Studento\\WebApp\\StudentoMainProject\\StudentoMainProject.csproj",
+        "projectUniqueName": "C:\\Users\\stokl\\source\\repos\\WebApp\\StudentoMainProject\\StudentoMainProject.csproj",
         "projectName": "StudentoMainProject",
-        "projectPath": "C:\\Users\\jirka-pc\\Studento\\WebApp\\StudentoMainProject\\StudentoMainProject.csproj",
-        "packagesPath": "C:\\Users\\jirka-pc\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\jirka-pc\\Studento\\WebApp\\StudentoMainProject\\obj\\",
+        "projectPath": "C:\\Users\\stokl\\source\\repos\\WebApp\\StudentoMainProject\\StudentoMainProject.csproj",
+        "packagesPath": "C:\\Users\\stokl\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\stokl\\source\\repos\\WebApp\\StudentoMainProject\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\jirka-pc\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\stokl\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -147,21 +146,20 @@
         }
       }
     },
-    "C:\\Users\\jirka-pc\\Studento\\WebApp\\XUnitTests\\XUnitTests.csproj": {
+    "C:\\Users\\stokl\\source\\repos\\WebApp\\XUnitTests\\XUnitTests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\jirka-pc\\Studento\\WebApp\\XUnitTests\\XUnitTests.csproj",
+        "projectUniqueName": "C:\\Users\\stokl\\source\\repos\\WebApp\\XUnitTests\\XUnitTests.csproj",
         "projectName": "XUnitTests",
-        "projectPath": "C:\\Users\\jirka-pc\\Studento\\WebApp\\XUnitTests\\XUnitTests.csproj",
-        "packagesPath": "C:\\Users\\jirka-pc\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\jirka-pc\\Studento\\WebApp\\XUnitTests\\obj\\",
+        "projectPath": "C:\\Users\\stokl\\source\\repos\\WebApp\\XUnitTests\\XUnitTests.csproj",
+        "packagesPath": "C:\\Users\\stokl\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\stokl\\source\\repos\\WebApp\\XUnitTests\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\jirka-pc\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\stokl\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -175,8 +173,8 @@
           "net5.0": {
             "targetAlias": "net5.0",
             "projectReferences": {
-              "C:\\Users\\jirka-pc\\Studento\\WebApp\\StudentoMainProject\\StudentoMainProject.csproj": {
-                "projectPath": "C:\\Users\\jirka-pc\\Studento\\WebApp\\StudentoMainProject\\StudentoMainProject.csproj"
+              "C:\\Users\\stokl\\source\\repos\\WebApp\\StudentoMainProject\\StudentoMainProject.csproj": {
+                "projectPath": "C:\\Users\\stokl\\source\\repos\\WebApp\\StudentoMainProject\\StudentoMainProject.csproj"
               }
             }
           }

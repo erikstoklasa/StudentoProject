@@ -11,3 +11,6 @@ TimetableServiceProject/obj
 TimetableServiceProject/bin
 TimetableServiceProject/Migrations
 TimetableServiceProject/Properties/PublishProfiles
+
+XUnitTests/obj
+XUnitTests/bin

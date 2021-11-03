@@ -82,6 +82,7 @@ namespace SchoolGradebook.Services
             .Include(g => g.SubjectInstance)
             .Include(g => g.SubjectInstance.Teacher)
             .Include(g => g.SubjectInstance.SubjectType)
+            .Include(g => g.GradeGroup)
             .OrderByDescending(g => g.Added)
             .AsNoTracking()
             .ToArrayAsync();
@@ -92,6 +93,7 @@ namespace SchoolGradebook.Services
             Grade[] grades;
             grades = await context.Grades
             .Where(g => g.SubjectInstanceId == subjectInstanceId)
+            .Include(g => g.GradeGroup)
             .OrderByDescending(g => g.Added)
             .AsNoTracking()
             .ToArrayAsync();

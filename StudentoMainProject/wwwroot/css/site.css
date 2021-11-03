@@ -238,6 +238,17 @@ h2 {
         width: 100%;
     }
 
+.affiliated-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+    .affiliated-section img {
+        max-width: 350px;
+        height: fit-content;
+    }
+
 .contact-section {
     margin: 10rem 0;
 }
@@ -249,7 +260,10 @@ h2 {
 .contact-email {
     font-size: 2.5rem;
 }
-
+.customer-points{
+    display:flex;
+    flex-wrap: wrap;
+}
 .table-heading {
     color: var(--grey);
     margin: 1rem 0;
@@ -306,14 +320,14 @@ h2 {
 }
 
 .cell {
-    height: 50px;   
+    height: 50px;
 }
 
-.cell:last-child {
-    height: min-content;
-    padding-left: 10px;
-    overflow: hidden;    
-}
+    .cell:last-child {
+        height: min-content;
+        padding-left: 10px;
+        overflow: hidden;
+    }
 
 .cell-group {
     display: flex;
@@ -682,7 +696,7 @@ html {
         text-align: start;
     }
 
-   
+
 
     .table td:first-child {
         padding-left: 2rem;

@@ -13,21 +13,17 @@ namespace SchoolGradebook.Pages.Teacher
 {
     public class IndexModel : PageModel
     {
-        private readonly Analytics _analytics;
         private readonly TeacherService teacherService;
         private readonly StudentService studentService;
         private readonly SubjectService subjectService;
 
-        public int UniqueStudentCount { get; set; }
-        public int SubjectCount { get; set; }
         private string UserId { get; set; }
         public List<int> StudentsCount { get; set; }
         public IEnumerable<(SubjectInstance subjectInstance, int studentCount)> SubjectsAndStudentCounts;
         public List<SubjectInstance> Subjects { get; set; }
 
-        public IndexModel(Analytics analytics, IHttpContextAccessor httpContextAccessor, TeacherService teacherService, StudentService studentService, SubjectService subjectService)
+        public IndexModel(IHttpContextAccessor httpContextAccessor, TeacherService teacherService, StudentService studentService, SubjectService subjectService)
         {
-            _analytics = analytics;
             this.teacherService = teacherService;
             this.studentService = studentService;
             this.subjectService = subjectService;
@@ -36,7 +32,6 @@ namespace SchoolGradebook.Pages.Teacher
         }
         public async Task<IActionResult> OnGetAsync()
         {
-            SubjectCount = await _analytics.GetSubjectsCountByTeacherIdAsync(UserId);
 
             int teacherId = await teacherService.GetTeacherId(UserId);
 
@@ -51,7 +46,6 @@ namespace SchoolGradebook.Pages.Teacher
             {
                 return LocalRedirect("/ActivateAccount");
             }
-            UniqueStudentCount = (await studentService.GetAllStudentsByTeacherAsync(teacherId)).Count;
             return Page();
         }
     }

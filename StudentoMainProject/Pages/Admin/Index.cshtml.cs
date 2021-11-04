@@ -16,15 +16,17 @@ namespace SchoolGradebook.Pages.Admin
         public string UserId { get; set; }
         public int StudentCount { get; set; }
         public int TeacherCount { get; set; }
-        private readonly Analytics _analytics;
         private readonly AdminService adminService;
+        private readonly StudentService studentService;
+        private readonly TeacherService teacherService;
 
-        public IndexModel(IHttpContextAccessor httpContextAccessor, Analytics analytics, AdminService adminService)
+        public IndexModel(IHttpContextAccessor httpContextAccessor, AdminService adminService, StudentService studentService, TeacherService teacherService)
         {
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             UserId ??= "";
-            _analytics = analytics;
             this.adminService = adminService;
+            this.studentService = studentService;
+            this.teacherService = teacherService;
         }
         public async Task<IActionResult> OnGetAsync()
         {
@@ -43,8 +45,8 @@ namespace SchoolGradebook.Pages.Admin
             {
                 return Forbid();
             }
-            TeacherCount = await _analytics.GetTeachersCountAsync();
-            StudentCount = await _analytics.GetStudentsCountAsync();
+            TeacherCount = await teacherService.GetTeacherCountAsync();
+            StudentCount = await studentService.GetStudentCountAsync();            
             StudentToTeacherRatio = (double)StudentCount / TeacherCount;
             return Page();
         }

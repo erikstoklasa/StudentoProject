@@ -15,47 +15,13 @@ namespace SchoolGradebook.Services
         private readonly SubjectService subjectService;
         private readonly StudentService studentService;
         private readonly GradeService gradeService;
-
-        private SchoolContext Context { get; set; }
-        public Analytics(SchoolContext context, SubjectService subjectService, StudentService studentService, GradeService gradeService)
+        public Analytics(SubjectService subjectService, StudentService studentService, GradeService gradeService)
         {
-            Context = context;
             this.subjectService = subjectService;
             this.studentService = studentService;
             this.gradeService = gradeService;
         }
-        //Admin
-        public async Task<int> GetTeachersCountAsync()
-        {
-            return await Context.Teachers.CountAsync();
-        }
-        public async Task<int> GetStudentsCountAsync()
-        {
-            return await Context.Students.CountAsync();
-        }
-        public async Task<double> GetStudentsToTeachersRatioAsync(int decimalPlaces = 2)
-        {
-            double output = Math.Round(await GetStudentsCountAsync() / (double)await GetTeachersCountAsync(), decimalPlaces);
-            output = output == Double.NaN ? 0 : output;
-            return output;
-        }
-
-        //Teacher
-
-        public async Task<int> GetStudentsCountByTeacherUserAuthIdAsync(string teacherUserAuthId)
-        {
-            int countOfStudents = await Context.Enrollments
-                .Where(s => s.SubjectInstance.Teacher.UserAuthId == teacherUserAuthId)
-                .CountAsync();
-            return countOfStudents;
-        }
-        public async Task<int> GetSubjectsCountByTeacherIdAsync(string userId)
-        {
-            int countOfSubjects = await Context.SubjectInstances
-                .Where(s => s.Teacher.UserAuthId == userId)
-                .CountAsync();
-            return countOfSubjects;
-        }
+        
         /// <summary>
         /// Gets the subject average for specified student and subject instance
         /// </summary>
@@ -84,7 +50,7 @@ namespace SchoolGradebook.Services
         /// </summary>
         /// <param name="grades"></param>
         /// <returns>Subject average decimal number for 3 precision points</returns>
-        public static async Task<double> GetSubjectAverageAsync(Grade[] grades)
+        public static double GetSubjectAverageAsync(Grade[] grades)
         {
             double sum = 0.0;
 
@@ -120,7 +86,7 @@ namespace SchoolGradebook.Services
             {
                 //Getting averages of every subject that the student has
                 double currentSubjectAvg = await GetSubjectAverageForStudentAsync(studentId, subjectInstance.Id, maxGradeDayAge, minGradeDayAge, 5);
-                if (currentSubjectAvg.CompareTo(Double.NaN) != 0) // getSubjectAverageForStudent returns 0 if student has no grades or is not enrolled in the subject
+                if (!double.IsNaN(currentSubjectAvg)) // getSubjectAverageForStudent returns 0 if student has no grades or is not enrolled in the subject
                 {
                     countOfSubjectsWithGrades++;
                     totalASumOfAverages += currentSubjectAvg;
@@ -138,7 +104,7 @@ namespace SchoolGradebook.Services
             int decimalPlaces = 2)
         {
             Grade[] grades = await gradeService.GetAllGradesByStudentSubjectInstance(studentId, subjectInstanceId);
-            List<Grade> filtredGrades = new List<Grade>();
+            List<Grade> filtredGrades = new();
             foreach (Grade g in grades)
             {
                 if (g.StudentId == studentId &&

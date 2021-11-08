@@ -210,6 +210,7 @@ const GradePage = () => {
     }
     
     const getInternalGradeValue = (displayValue) => {
+        
         if (displayValue === '1+') return 110
         if (displayValue === '1*') return 110
         if (displayValue === '1') return 100
@@ -388,12 +389,15 @@ const GradePage = () => {
     }
 
     const trackNewGradeValues = (grade, id) => {
-        
+      
+
         const newGrade = {
             value: getInternalGradeValue(grade),
             subjectInstanceId: InstanceId,
             studentId: id,
-        } 
+        }
+        
+        
 
         if (!newGrades.some(e => e.studentId === newGrade.studentId)) {
             const newArr = [...newGrades, newGrade]            
@@ -401,11 +405,14 @@ const GradePage = () => {
            
         } else {
             const newArr = [...newGrades]
-            newArr.forEach(grade => {
-                if (grade.studentId === newGrade.studentId) {
-                    grade.value = getInternalGradeValue(value);
+            newArr.forEach(gradeObj => {
+                if (gradeObj.studentId === newGrade.studentId) {
+                   
+                    Object.assign(gradeObj, {value: getInternalGradeValue(grade)})
+                    
                 }
             })
+            
             updateNewGrades(newArr)
         }
     }

@@ -21,12 +21,31 @@ const NewGrade = ({ studentId, showInput, onGradeChange, onGradeRemove }) => {
         }
     }
 
+    const handleGradeChange = (value) => {
+
+        if (value.length === 1) {
+            if (parseInt(value) > 0 && parseInt(value) < 6) {
+                updateNewGradeValue(value)
+                onGradeChange(value, studentId)
+            }
+        } else if (value.length === 2) {
+            if (value.charAt(1) === '+' || value.charAt(1) === '-' || value.charAt(0) === '1' && value.charAt(1) === '*') {
+                updateNewGradeValue(value)
+                onGradeChange(value, studentId)
+            }
+        } else if (value === '') {
+            updateNewGradeValue(value)
+            onGradeRemove(studentId);
+        }    
+        
+    }
+
     useEffect(clearGrades, [showInput]);
 
     if (showInput) {
         return (
             <div className="grade-cell new-grade-cell">
-                <input maxLength="1" className="form-control grade-input" value={newGradeValue} onChange={event => {handleInputChange(event.target.value)}}></input>
+                <input maxLength="2" className="form-control grade-input" value={newGradeValue} onChange={event => {handleGradeChange(event.target.value)}}></input>
             </div>
         )
     }

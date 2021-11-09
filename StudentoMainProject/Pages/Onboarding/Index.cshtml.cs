@@ -1,36 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.EntityFrameworkCore;
-using SchoolGradebook.Data;
-using SchoolGradebook.Models;
 using SchoolGradebook.Services;
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Text.Encodings.Web;
+using System.Threading.Tasks;
 
 namespace SchoolGradebook.Pages
 {
     public class FirstPasswordResetRequest : PageModel
     {
         private readonly UserManager<IdentityUser> _userManager;
-        private readonly IEmailSender emailSender;
+        private readonly EmailSender emailSender;
         private readonly StudentService studentService;
         private readonly TeacherService teacherService;
 
+
+        public RequestResponse EmailRequestResponse;
         [BindProperty(SupportsGet = true)]
         [EmailAddress]
         public string Email { get; set; }
 
-        public FirstPasswordResetRequest(UserManager<IdentityUser> userManager, IEmailSender emailSender, StudentService studentService, TeacherService teacherService)
+        public FirstPasswordResetRequest(UserManager<IdentityUser> userManager, EmailSender emailSender, StudentService studentService, TeacherService teacherService)
         {
             _userManager = userManager;
             this.emailSender = emailSender;
@@ -100,12 +95,20 @@ namespace SchoolGradebook.Pages
                     values: new { code, userId = user.Id },
                     protocol: Request.Scheme);
 
-                await emailSender.SendEmailAsync(
+                var requestResult = await emailSender.SendEmailWithResponseAsync(
                     Email,
                     "Vítej ve Studentu! 🎉",
-                    $"Přihlaš se do aplikace Studento <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>kliknutím zde</a>.");
-
-                ViewData["status"] = "Úspěch, zkontroluj si svůj email, na který jsme ti poslali odkaz.";
+                    $"Ahoj, dokonči vytváření svého účtu do aplikace Studento <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>kliknutím zde</a>.");
+                if (requestResult.IsSuccessStatusCode)
+                {
+                    EmailRequestResponse.Message = "Úspěch, zkontroluj si svůj email, na který jsme ti poslali odkaz.";
+                    EmailRequestResponse.Success = true;
+                }
+                else
+                {
+                    EmailRequestResponse.Message = "Nepodařilo se odeslat email na tvojí emailovou schránku, zkus to prosím později.";
+                    EmailRequestResponse.Success = false;
+                }
                 return Page();
             }
             return Page();
@@ -118,4 +121,9 @@ namespace SchoolGradebook.Pages
               .Select(s => s[random.Next(s.Length)]).ToArray());
         }
     }
+    public struct RequestResponse
+        {
+            public bool Success { get; set; }
+            public string Message { get; set; }
+        }
 }

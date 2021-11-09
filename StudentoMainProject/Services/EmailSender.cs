@@ -23,7 +23,12 @@ namespace SchoolGradebook.Services
             return Execute(Configuration.GetConnectionString("SEND_GRID_KEY"), subject, message, email);
         }
 
-        public Task Execute(string apiKey, string subject, string message, string email)
+        public Task<Response> SendEmailWithResponseAsync(string email, string subject, string message)
+        {
+            return Execute(Configuration.GetConnectionString("SEND_GRID_KEY"), subject, message, email);
+        }
+
+        public Task<Response> Execute(string apiKey, string subject, string message, string email)
         {
             var client = new SendGridClient(apiKey);
             var msg = new SendGridMessage()
@@ -31,7 +36,8 @@ namespace SchoolGradebook.Services
                 From = new EmailAddress("mailer@studento.cz"),
                 Subject = subject,
                 PlainTextContent = message,
-                HtmlContent = message
+                HtmlContent = message,
+                ReplyTo = new EmailAddress("erik@studento.cz")
             };
             msg.AddTo(new EmailAddress(email));
             msg.SetClickTracking(false, false);

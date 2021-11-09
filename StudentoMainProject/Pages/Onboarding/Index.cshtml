@@ -5,10 +5,14 @@
 }
 <h1>Jsi pozván/a do Studenta 🎉</h1>
 <p>Jsi jedním z prvních uživatelů naší aplikace, na webu můžeš <strong>zapisovat svoje známky a sdílet své výpisky nebo stránky z učebnic se spolužáky</strong>. Každý měsíc ale přidáváme na web nové funkce. Můžeš se těšit například na spojení Studento.cz s Google Classroom, podporu rozvrhu a další super funkce.</p>
-@if (ViewData["status"] != null)
+@if (Model.EmailRequestResponse.Success == true)
 {
-    <div class="alert alert-success mt-4">@ViewData["status"]</div>
+    <div class="alert alert-success mt-4">@Model.EmailRequestResponse.Message</div> }
+else if (!String.IsNullOrWhiteSpace(Model.EmailRequestResponse.Message))
+{
+    <div class="alert alert-warning mt-4">@Model.EmailRequestResponse.Message</div>
 }
+
 <form method="post" class="col-lg-3 pt-2 pl-0">
     <div class="form-group">
         <label asp-for="Email" class="control-label">Zadej svůj školní email</label>

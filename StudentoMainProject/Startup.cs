@@ -59,6 +59,7 @@ namespace SchoolGradebook
             });
 
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<EmailSender>();
             services.AddTransient<Analytics>();
             services.AddTransient<TeacherAccessValidation>();
             services.AddTransient<StudentService>();

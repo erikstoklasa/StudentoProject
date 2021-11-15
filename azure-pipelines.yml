@@ -10,10 +10,11 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  solution: './StudentoMainProject/StudentoMainProject.csproj'
   tests: './XUnitTests/XUnitTests.csproj'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  dotNetFramework: 'net6.0'
+  dotNetVersion: '6.0.x'
 
 steps:
 - script: npm ci
@@ -23,18 +24,13 @@ steps:
 - script: npm run build
   workingDirectory: ./StudentoMainProject/
   displayName: 'npm build'
-- task: NuGetToolInstaller@1
 
-- task: NuGetCommand@2
+- task: UseDotNet@2
   inputs:
-    restoreSolution: '$(solution)'
-
-- task: VSBuild@1
-  inputs:
-    solution: '$(solution)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    version: $(dotNetVersion)
+    includePreviewVersions: false
+- script: dotnet build --configuration $(buildConfiguration)
+  displayName: 'Build Studento Web App'
 
 - task: DotNetCoreCLI@2
   inputs:

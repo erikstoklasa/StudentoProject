@@ -32,10 +32,12 @@ steps:
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'Build Studento Web App'
 
-- task: DotNetCoreCLI@2
+- task: UseDotNet@2
   inputs:
-    command: 'test'
-    projects: '$(tests)'
+    version: $(dotNetVersion)
+    includePreviewVersions: false
+- script: dotnet test --configuration $(buildConfiguration) $(tests)
+  displayName: 'Run unit tests'
     
 - task: PublishBuildArtifacts@1
   inputs:

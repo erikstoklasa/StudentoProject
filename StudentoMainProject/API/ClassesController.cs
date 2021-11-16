@@ -28,6 +28,10 @@ namespace StudentoMainProject.API
             this.studentService = studentService;
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
         }
+        /// <summary>
+        /// Gets all classes at admin's school
+        /// </summary>
+        /// <returns>Returns all classes at admin's school</returns>
         [HttpGet]
         [Authorize(policy: "AdminAndTeacher")]
         public async Task<ICollection<ClassObject>> TeacherGetAllClasses()
@@ -48,23 +52,43 @@ namespace StudentoMainProject.API
             }
             return outputs;
         }
+        /// <summary>
+        /// Deletes class
+        /// </summary>
+        /// <param name="id"></param>
         [HttpDelete("Admin")]
         [Authorize(policy: "OnlyAdmin")]
         public async Task<IActionResult> AdminDeleteClass(int id)
         {
+            Class classObject = await classService.GetPlainClassAsync(id);
+            
+            if (classObject == null)
+            {
+                return BadRequest("Class not found");
+            }
+            
+            Admin admin = await adminService.GetAdminByUserAuthId(UserId);
+
+            if (classObject.SchoolId != admin.SchoolId)
+            {
+                return Forbid();
+            }
+
             bool classHasStudents = await studentService.HasAnyStudentsInClassAsync(id);
+
             if (classHasStudents)
             {
                 return BadRequest("You need to remove students from the class first.");
             }
-            bool classFound = await classService.DeleteClassAsync(id);
-            if (!classFound)
-            {
-                return BadRequest();
-            }
+
+            await classService.DeleteClassAsync(id);
             return Ok();
 
         }
+        /// <summary>
+        /// Adds class to admin's school
+        /// </summary>
+        /// <param name="classObject"></param>
         [HttpPost("Admin")]
         [Authorize(policy: "OnlyAdmin")]
         public async Task<IActionResult> AdminPostClass(ClassObject classObject)

@@ -29,7 +29,7 @@ namespace XUnitTests
 
             // ASSERT
 
-            Assert.Equal(3, Analytics.GetSubjectAverageForStudentAsync(grades.ToArray()),2);
+            Assert.Equal(3, AnalyticsService.GetSubjectAverageForStudentAsync(grades.ToArray()),2);
         }
 
         [Fact]
@@ -53,7 +53,7 @@ namespace XUnitTests
 
             // ASSERT
 
-            Assert.Equal(2.26923076923077, Analytics.GetSubjectAverageForStudentAsync(grades.ToArray()), 2);
+            Assert.Equal(2.26923076923077, AnalyticsService.GetSubjectAverageForStudentAsync(grades.ToArray()), 2);
         }
 
         [Fact]
@@ -76,7 +76,7 @@ namespace XUnitTests
 
             // ASSERT
 
-            Assert.Equal(3, Analytics.GetSubjectAverageAsync(grades.ToArray()).Result, 3);
+            Assert.Equal(3, AnalyticsService.GetSubjectAverageAsync(grades.ToArray()), 3);
         }
 
         [Fact]
@@ -100,7 +100,7 @@ namespace XUnitTests
 
             // ASSERT
 
-            Assert.Equal(2.26923076923077, Analytics.GetSubjectAverageAsync(grades.ToArray()).Result, 3);
+            Assert.Equal(2.26923076923077, AnalyticsService.GetSubjectAverageAsync(grades.ToArray()), 3);
         }
     }
 }

@@ -10,12 +10,12 @@ using System.Threading.Tasks;
 
 namespace SchoolGradebook.Services
 {
-    public class Analytics
+    public class AnalyticsService
     {
         private readonly SubjectService subjectService;
         private readonly StudentService studentService;
         private readonly GradeService gradeService;
-        public Analytics(SubjectService subjectService, StudentService studentService, GradeService gradeService)
+        public AnalyticsService(SubjectService subjectService, StudentService studentService, GradeService gradeService)
         {
             this.subjectService = subjectService;
             this.studentService = studentService;

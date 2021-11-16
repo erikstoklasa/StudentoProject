@@ -25,7 +25,7 @@ namespace SchoolGradebook.Pages.Student.Subjects
         public double SubjectAverage { get; set; }
 
         public DetailsModel(IHttpContextAccessor httpContextAccessor,
-                            Analytics analytics,
+                            AnalyticsService analytics,
                             SubjectService subjectService,
                             StudentAccessValidation studentAccessValidation,
                             StudentService studentService,

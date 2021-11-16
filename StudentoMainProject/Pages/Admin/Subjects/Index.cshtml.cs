@@ -12,13 +12,13 @@ namespace SchoolGradebook.Pages.Admin.Subjects
     {
         public string UserId { get; set; }
         public List<SubjectInstance> SubjectInstances { get; set; }
-        private readonly Analytics _analytics;
+        private readonly AnalyticsService _analytics;
         private readonly SubjectService subjectService;
         private readonly StudentService studentService;
 
         public List<int> StudentsCount { get; set; }
 
-        public IndexModel(IHttpContextAccessor httpContextAccessor, Analytics analytics, SubjectService subjectService, StudentService studentService)
+        public IndexModel(IHttpContextAccessor httpContextAccessor, AnalyticsService analytics, SubjectService subjectService, StudentService studentService)
         {
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             UserId ??= "";

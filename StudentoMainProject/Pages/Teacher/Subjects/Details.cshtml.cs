@@ -25,7 +25,7 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
 {
     public class DetailsModel : PageModel
     {
-        private readonly Analytics _analytics;
+        private readonly AnalyticsService _analytics;
         private readonly TeacherAccessValidation teacherAccessValidation;
         private readonly TeacherService teacherService;
         private readonly StudentService studentService;
@@ -35,7 +35,7 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
         private readonly StudentGroupService studentGroupService;
         private readonly ILogger<DetailsModel> logger;
 
-        public DetailsModel(IHttpContextAccessor httpContextAccessor, Analytics analytics, TeacherAccessValidation teacherAccessValidation, TeacherService teacherService, StudentService studentService, SubjectService subjectService, SubjectMaterialService subjectMaterialService, GradeService gradeService, StudentGroupService studentGroupService, ILogger<DetailsModel> logger)
+        public DetailsModel(IHttpContextAccessor httpContextAccessor, AnalyticsService analytics, TeacherAccessValidation teacherAccessValidation, TeacherService teacherService, StudentService studentService, SubjectService subjectService, SubjectMaterialService subjectMaterialService, GradeService gradeService, StudentGroupService studentGroupService, ILogger<DetailsModel> logger)
         {
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             _analytics = analytics;
@@ -86,10 +86,10 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
             }
             SubjectMaterials = await subjectMaterialService.GetAllMaterialsBySubjectInstance(Subject.Id);
             Students = await studentService.GetAllStudentsBySubjectInstanceAsync(Subject.Id);
-            SubjectAvg = Analytics.GetSubjectAverageAsync(await gradeService.GetAllGradesBySubjectInstanceAsync((int)id));
+            SubjectAvg = AnalyticsService.GetSubjectAverageAsync(await gradeService.GetAllGradesBySubjectInstanceAsync((int)id));
             foreach (Models.Student s in Students)
             {
-                StudentAverages.Add(Analytics.GetSubjectAverageForStudentAsync(
+                StudentAverages.Add(AnalyticsService.GetSubjectAverageForStudentAsync(
                         await gradeService.GetAllGradesByStudentSubjectInstance(s.Id, Subject.Id)
                     ));
                 StudentGrades.Add((await gradeService.GetGradesAddedByTeacherAsync(s.Id, Subject.Id)).ToList());
@@ -127,7 +127,7 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
             foreach (Models.Student s in Students)
             {
                 StudentAverages.Add(
-                    Analytics.GetSubjectAverageForStudentAsync(
+                    AnalyticsService.GetSubjectAverageForStudentAsync(
                         await gradeService.GetAllGradesByStudentSubjectInstance(s.Id, Subject.Id)
                     ));
                 StudentGrades.Add((await gradeService.GetGradesAddedByTeacherAsync(s.Id, Subject.Id)).ToList());

@@ -22,7 +22,7 @@ namespace SchoolGradebook.Pages.Student
     {
         private readonly SubjectService subjectService;
         private readonly StudentService studentService;
-        private readonly Analytics _analytics;
+        private readonly AnalyticsService _analytics;
         private readonly GradeService gradeService;
 
         public string StudentFirstName { get; set; }
@@ -38,7 +38,7 @@ namespace SchoolGradebook.Pages.Student
         public IList<Course> Courses { get; set; }
         public string ClassroomStatus { get; set; }
 
-        public IndexModel(IHttpContextAccessor httpContextAccessor, SubjectService subjectService, StudentService studentService, Analytics analytics, GradeService gradeService)
+        public IndexModel(IHttpContextAccessor httpContextAccessor, SubjectService subjectService, StudentService studentService, AnalyticsService analytics, GradeService gradeService)
         {
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             this.subjectService = subjectService;
@@ -62,7 +62,7 @@ namespace SchoolGradebook.Pages.Student
             Subjects = await subjectService.GetAllSubjectInstancesByStudentAsync(studentId);
             foreach (SubjectInstance si in Subjects)
             {
-                double sAvg = Analytics.GetSubjectAverageForStudentAsync(
+                double sAvg = AnalyticsService.GetSubjectAverageForStudentAsync(
                         await gradeService.GetAllGradesByStudentSubjectInstance(studentId, si.Id)
                     );
                 string output = sAvg.CompareTo(double.NaN) == 0 ? "" : sAvg.ToString("f2");

@@ -55,7 +55,7 @@ namespace SchoolGradebook.Services
                         tf.LessonRecord = lessonRecord;
                     }
                 }
-                if (timetableChanges.Count() > 0)
+                if (timetableChanges.Count > 0)
                 {
                     tf.TimetableChange = timetableChanges.Where(tch => tch.TimeFrameId == tf.Id).FirstOrDefault();
                 }
@@ -83,7 +83,7 @@ namespace SchoolGradebook.Services
                         tf.LessonRecord = lessonRecord;
                     }
                 }
-                if (timetableChanges.Count() > 0)
+                if (timetableChanges.Count > 0)
                 {
                     tf.TimetableChange = timetableChanges.Where(tch => tch.TimeFrameId == tf.Id).FirstOrDefault();
                 }
@@ -98,7 +98,7 @@ namespace SchoolGradebook.Services
             List<TimetableChange> timetableChanges =
                 await timetableChangeService.GetAllTimetableChangesByTeacherUntilThisWeek(teacherId, thisWeek);
             List<LessonRecord> completedLessonRecords = await lessonRecordService.GetAllLessonRecordsByTeacher(teacherId);
-            List<LessonRecord> lessonRecordsToBeCompleted = new List<LessonRecord>();
+            List<LessonRecord> lessonRecordsToBeCompleted = new();
             //Go through each timetable record and timetable change and check if there is a lesson record for that
             for (int currWeek = 1; currWeek < thisWeek; currWeek++)
             {

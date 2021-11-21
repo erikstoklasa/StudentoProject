@@ -25,7 +25,6 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
 {
     public class DetailsModel : PageModel
     {
-        private readonly AnalyticsService _analytics;
         private readonly TeacherAccessValidation teacherAccessValidation;
         private readonly TeacherService teacherService;
         private readonly StudentService studentService;
@@ -35,10 +34,9 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
         private readonly StudentGroupService studentGroupService;
         private readonly ILogger<DetailsModel> logger;
 
-        public DetailsModel(IHttpContextAccessor httpContextAccessor, AnalyticsService analytics, TeacherAccessValidation teacherAccessValidation, TeacherService teacherService, StudentService studentService, SubjectService subjectService, SubjectMaterialService subjectMaterialService, GradeService gradeService, StudentGroupService studentGroupService, ILogger<DetailsModel> logger)
+        public DetailsModel(IHttpContextAccessor httpContextAccessor, TeacherAccessValidation teacherAccessValidation, TeacherService teacherService, StudentService studentService, SubjectService subjectService, SubjectMaterialService subjectMaterialService, GradeService gradeService, StudentGroupService studentGroupService, ILogger<DetailsModel> logger)
         {
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            _analytics = analytics;
             this.teacherAccessValidation = teacherAccessValidation;
             this.teacherService = teacherService;
             this.studentService = studentService;
@@ -141,17 +139,17 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
             {
                 StudentGroupNames.Add(studentGroup.Name);
             }
-            using MemoryStream stream = new MemoryStream();
-            PdfDocument pdfDoc = new PdfDocument(new PdfWriter(stream));
-            Document doc = new Document(pdfDoc);
-            PdfFont defaultFont = PdfFontFactory.CreateFont("wwwroot/fonts/OpenSans-Regular.ttf", PdfEncodings.IDENTITY_H, true);
+            using MemoryStream stream = new();
+            PdfDocument pdfDoc = new(new PdfWriter(stream));
+            Document doc = new(pdfDoc);
+            PdfFont defaultFont = PdfFontFactory.CreateFont("wwwroot/fonts/OpenSans-Regular.ttf", PdfEncodings.IDENTITY_H, PdfFontFactory.EmbeddingStrategy.FORCE_EMBEDDED);
             //Image picture = new Image(ImageDataFactory.Create("wwwroot/images/girl.png"));
             //picture.ScaleToFit(100,150);
             //doc.Add(new Paragraph().Add(picture).SetHorizontalAlignment(HorizontalAlignment.RIGHT));
             doc.Add(new Paragraph(Subject.GetFullName())).SetFont(defaultFont);
             doc.Add(new Paragraph(String.Join(" + ", StudentGroupNames))).SetFont(defaultFont);
             doc.Add(new Paragraph($"Počet studentů: {Students.Length}")).SetFont(defaultFont);
-            Text t = new Text($"Aktuální k: {DateTime.UtcNow.ToLocalTime()}");
+            Text t = new($"Aktuální k: {DateTime.UtcNow.ToLocalTime()}");
             t.SetFontSize(10);
             doc.Add(new Paragraph(t)).SetFont(defaultFont);
 
@@ -160,17 +158,17 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
             table.AddHeaderCell("Jméno a přijímení");
             table.AddHeaderCell("Průměr");
             table.AddHeaderCell("Známky");
-            foreach (var i in StudentsAndAverageAndGrades)
+            foreach (var (student, studentAverage, studentGrades) in StudentsAndAverageAndGrades)
             {
-                table.AddCell(i.student.GetFullName());
-                table.AddCell(i.studentAverage.ToString("f2"));
-                List<string> onlyGradeValues = new List<string>();
-                foreach (var y in i.studentGrades)
+                table.AddCell(student.GetFullName());
+                table.AddCell(studentAverage.ToString("f2"));
+                List<string> onlyGradeValues = new();
+                foreach (var y in studentGrades)
                 {
                     onlyGradeValues.Add(y.GetGradeValue());
                 }
                 string gradesString = String.Join(",", onlyGradeValues);
-                Cell cell = new Cell();
+                Cell cell = new();
                 cell.SetMinHeight(20);
                 cell.SetVerticalAlignment(VerticalAlignment.MIDDLE);
                 table.AddCell(gradesString);

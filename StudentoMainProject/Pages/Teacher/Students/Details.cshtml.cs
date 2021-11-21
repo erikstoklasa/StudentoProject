@@ -70,10 +70,10 @@ namespace SchoolGradebook.Pages.Teacher.Students
                 return NotFound();
             }
 
-            using MemoryStream stream = new MemoryStream();
-            PdfDocument pdfDoc = new PdfDocument(new PdfWriter(stream));
-            Document doc = new Document(pdfDoc);
-            PdfFont defaultFont = PdfFontFactory.CreateFont("wwwroot/fonts/OpenSans-Regular.ttf", PdfEncodings.IDENTITY_H, false);
+            using MemoryStream stream = new();
+            PdfDocument pdfDoc = new(new PdfWriter(stream));
+            Document doc = new(pdfDoc);
+            PdfFont defaultFont = PdfFontFactory.CreateFont("wwwroot/fonts/OpenSans-Regular.ttf", PdfEncodings.IDENTITY_H, PdfFontFactory.EmbeddingStrategy.FORCE_EMBEDDED);
             //Image picture = new Image(ImageDataFactory.Create("wwwroot/images/girl.png"));
             //picture.ScaleToFit(100,150);
             //doc.Add(new Paragraph().Add(picture).SetHorizontalAlignment(HorizontalAlignment.RIGHT));

@@ -59,10 +59,10 @@ namespace SchoolGradebook.API.SubjectMaterials
                 return Forbid();
             }
             IEnumerable<SubjectMaterial> subjectMaterials = await subjectMaterialService.GetAllMaterialsBySubjectInstanceForTeacher(subjectInstanceId);
-            List<SubjectMaterialObject> output = new List<SubjectMaterialObject>();
+            List<SubjectMaterialObject> output = new();
             foreach (var sm in subjectMaterials)
             {
-                SubjectMaterialObject smo = new SubjectMaterialObject
+                SubjectMaterialObject smo = new()
                 {
                     Id = sm.Id.ToString(),
                     Name = sm.Name,
@@ -117,7 +117,7 @@ namespace SchoolGradebook.API.SubjectMaterials
                     //Uploading to blob storage
 
                     string connectionString = configuration.GetConnectionString("AZURE_STORAGE_CONNECTION_STRING");
-                    BlobServiceClient blobServiceClient = new BlobServiceClient(connectionString);
+                    BlobServiceClient blobServiceClient = new(connectionString);
                     BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient("subjectmaterials");
                     //using FileStream uploadFileStream = System.IO.File.OpenRead(filePath);
                     using Stream uploadStream = formFileObject.FormFile.OpenReadStream();
@@ -134,7 +134,7 @@ namespace SchoolGradebook.API.SubjectMaterials
                 }
                 //Adding to our db
                 SubjectMaterial toAdd =
-                        new SubjectMaterial()
+                        new()
                         {
                             Id = materialId,
                             Added = DateTime.UtcNow,
@@ -153,7 +153,7 @@ namespace SchoolGradebook.API.SubjectMaterials
                 {
                     return BadRequest();
                 }
-                return CreatedAtAction("PostSubjectMaterial", new { Id = toAdd.Id });
+                return CreatedAtAction("PostSubjectMaterial", new { toAdd.Id });
             }
             return BadRequest();
         }
@@ -219,7 +219,7 @@ namespace SchoolGradebook.API.SubjectMaterials
         public async Task<ActionResult> AddSubjectMaterialGroup(string name)
         {
             int teacherId = await teacherService.GetTeacherId(UserId);
-            SubjectMaterialGroup smg = new SubjectMaterialGroup()
+            SubjectMaterialGroup smg = new()
             {
                 Name = name,
                 AddedById = teacherId,
@@ -228,7 +228,7 @@ namespace SchoolGradebook.API.SubjectMaterials
             if (await subjectMaterialService.AddMaterialGroupAsync(smg))
             {
 
-                return CreatedAtAction("PostSubjectMaterialGroup", new { Id = smg.Id });
+                return CreatedAtAction("PostSubjectMaterialGroup", new { smg.Id });
             }
             else
             {
@@ -248,7 +248,7 @@ namespace SchoolGradebook.API.SubjectMaterials
         [Authorize(policy: "OnlyTeacher")]
         public async Task<ActionResult<IEnumerable<SubjectMaterialObject>>> UpdateSubjectMaterialGroup(int subjectMaterialGroupId, string name)
         {
-            SubjectMaterialGroup smg = new SubjectMaterialGroup()
+            SubjectMaterialGroup smg = new()
             {
                 Id = subjectMaterialGroupId,
                 Name = name
@@ -293,10 +293,10 @@ namespace SchoolGradebook.API.SubjectMaterials
                 return Forbid();
             }
             IEnumerable<SubjectMaterial> subjectMaterials = await subjectMaterialService.GetAllMaterialsBySubjectInstance(subjectInstanceId);
-            List<SubjectMaterialObject> output = new List<SubjectMaterialObject>();
+            List<SubjectMaterialObject> output = new();
             foreach (var sm in subjectMaterials)
             {
-                SubjectMaterialObject smo = new SubjectMaterialObject
+                SubjectMaterialObject smo = new()
                 {
                     Id = sm.Id.ToString(),
                     Name = sm.Name,
@@ -351,7 +351,7 @@ namespace SchoolGradebook.API.SubjectMaterials
                     //Uploading to blob storage
 
                     string connectionString = configuration.GetConnectionString("AZURE_STORAGE_CONNECTION_STRING");
-                    BlobServiceClient blobServiceClient = new BlobServiceClient(connectionString);
+                    BlobServiceClient blobServiceClient = new(connectionString);
                     BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient("subjectmaterials");
                     //using FileStream uploadFileStream = System.IO.File.OpenRead(filePath);
                     using Stream uploadStream = formFileObject.FormFile.OpenReadStream();
@@ -368,7 +368,7 @@ namespace SchoolGradebook.API.SubjectMaterials
                 }
                 //Adding to our db
                 SubjectMaterial toAdd =
-                        new SubjectMaterial()
+                        new()
                         {
                             Id = materialId,
                             Added = DateTime.UtcNow,
@@ -387,7 +387,7 @@ namespace SchoolGradebook.API.SubjectMaterials
                 {
                     return BadRequest();
                 }
-                return CreatedAtAction("PostSubjectMaterial", new { Id = toAdd.Id });
+                return CreatedAtAction("PostSubjectMaterial", new { toAdd.Id });
             }
             return BadRequest();
         }
@@ -424,7 +424,7 @@ namespace SchoolGradebook.API.SubjectMaterials
         public async Task<ActionResult> StudentAddSubjectMaterialGroup(string name)
         {
             int studentId = await studentService.GetStudentId(UserId);
-            SubjectMaterialGroup smg = new SubjectMaterialGroup()
+            SubjectMaterialGroup smg = new()
             {
                 Name = name,
                 AddedById = studentId,
@@ -433,7 +433,7 @@ namespace SchoolGradebook.API.SubjectMaterials
             if (await subjectMaterialService.AddMaterialGroupAsync(smg))
             {
 
-                return CreatedAtAction("PostSubjectMaterialGroup", new { Id = smg.Id });
+                return CreatedAtAction("PostSubjectMaterialGroup", new { smg.Id });
             }
             else
             {
@@ -458,7 +458,7 @@ namespace SchoolGradebook.API.SubjectMaterials
             {
                 return Forbid();
             }
-            SubjectMaterialGroup smg = new SubjectMaterialGroup()
+            SubjectMaterialGroup smg = new()
             {
                 Id = subjectMaterialGroupId,
                 Name = name,
@@ -496,22 +496,24 @@ namespace SchoolGradebook.API.SubjectMaterials
     }
     public class SubjectMaterialUploadObject
     {
-#nullable enable
         public string Name { get; set; }
+#nullable enable
         public string? Description { get; set; }
 
         public int? SubjectTypeId { get; set; }
         public int SubjectInstanceId { get; set; }
         public int? SubjectMaterialGroupId { set; get; }
+#nullable disable
     }
     public class SubjectMaterialObject
     {
-#nullable enable
         public enum USERTYPE { Teacher, Student }
-
+#nullable enable
         public string? Id { get; set; }
+#nullable disable
 
         public string Name { get; set; }
+#nullable enable
         public string? Description { get; set; }
         public string? FileExt { get; set; }
         public string? FileType { get; set; } //MIME Media type https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types

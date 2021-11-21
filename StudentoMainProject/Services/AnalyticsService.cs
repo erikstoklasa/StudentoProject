@@ -1,11 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using SchoolGradebook.Data;
-using SchoolGradebook.Models;
+﻿using SchoolGradebook.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace SchoolGradebook.Services
@@ -13,12 +8,10 @@ namespace SchoolGradebook.Services
     public class AnalyticsService
     {
         private readonly SubjectService subjectService;
-        private readonly StudentService studentService;
         private readonly GradeService gradeService;
-        public AnalyticsService(SubjectService subjectService, StudentService studentService, GradeService gradeService)
+        public AnalyticsService(SubjectService subjectService,GradeService gradeService)
         {
             this.subjectService = subjectService;
-            this.studentService = studentService;
             this.gradeService = gradeService;
         }
         

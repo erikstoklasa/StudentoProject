@@ -128,7 +128,7 @@ namespace SchoolGradebook
 
             app.UseHttpsRedirection();
             const string cacheMaxAge = "604800";
-            FileExtensionContentTypeProvider provider = new FileExtensionContentTypeProvider();
+            FileExtensionContentTypeProvider provider = new();
             provider.Mappings[".webmanifest"] = "application/manifest+json";
             app.UseStaticFiles(new StaticFileOptions()
             {

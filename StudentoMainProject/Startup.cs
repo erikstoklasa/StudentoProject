@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.StaticFiles;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SchoolGradebook.Data;
 using SchoolGradebook.Services;
+using StudentoMainProject.Services;
 using System;
 using System.IO;
 using System.Reflection;
@@ -80,6 +82,7 @@ namespace SchoolGradebook
             services.AddTransient<AdminService>();
             services.AddTransient<TimetableChangeService>();
             services.AddTransient<AttendanceService>();
+            services.AddTransient<LogItemService>();
             services.AddTransient<GradeAverageService>();
 
             services.AddRazorPages().AddRazorPagesOptions(options =>
@@ -102,6 +105,7 @@ namespace SchoolGradebook
                 options.IncludeXmlComments(xmlPath);
                 options.CustomSchemaIds(type => type.ToString());
             });
+            services.AddDatabaseDeveloperPageExceptionFilter();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -113,7 +117,7 @@ namespace SchoolGradebook
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
+                app.UseMigrationsEndPoint();
             }
             else
             {
@@ -136,7 +140,10 @@ namespace SchoolGradebook
                          "Cache-Control", $"public, max-age={cacheMaxAge}");
                 }
             });
-
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseSwaggerUI(c =>

@@ -1,25 +1,21 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SchoolGradebook.Data;
 using SchoolGradebook.Services;
+using System;
+using System.Threading.Tasks;
 
 namespace SchoolGradebook
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var host = CreateHostBuilder(args).Build();
 
-            CreateDbIfNotExists(host);
+            await CreateDbIfNotExists(host);
 
             host.Run();
         }

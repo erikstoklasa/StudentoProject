@@ -1,17 +1,16 @@
-using Google.Apis.Auth.OAuth2;
-using Google.Apis.Classroom.v1;
 using Google.Apis.Classroom.v1.Data;
-using Google.Apis.Services;
-using Google.Apis.Util.Store;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SchoolGradebook.Models;
 using SchoolGradebook.Services;
+using StudentoMainProject.Models;
+using StudentoMainProject.Services;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,6 +23,7 @@ namespace SchoolGradebook.Pages.Student
         private readonly StudentService studentService;
         private readonly AnalyticsService _analytics;
         private readonly GradeService gradeService;
+        private readonly LogItemService logItemService;
 
         public string StudentFirstName { get; set; }
         public string UserId { get; private set; }
@@ -37,16 +37,24 @@ namespace SchoolGradebook.Pages.Student
         public string GPAComparisonHTML { get; set; }
         public IList<Course> Courses { get; set; }
         public string ClassroomStatus { get; set; }
+        public IPAddress IPAddress { get; set; }
 
-        public IndexModel(IHttpContextAccessor httpContextAccessor, SubjectService subjectService, StudentService studentService, AnalyticsService analytics, GradeService gradeService)
+        public IndexModel(IHttpContextAccessor httpContextAccessor,
+                          SubjectService subjectService,
+                          StudentService studentService,
+                          AnalyticsService analytics,
+                          GradeService gradeService,
+                          LogItemService logItemService)
         {
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            IPAddress = httpContextAccessor.HttpContext.Connection.RemoteIpAddress;
             this.subjectService = subjectService;
             this.studentService = studentService;
             _analytics = analytics;
             this.gradeService = gradeService;
+            this.logItemService = logItemService;
             SubjectAverages = new List<string>();
-            System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("cs-CZ");
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("cs-CZ");
         }
         public async Task<IActionResult> OnGetAsync()
         {
@@ -57,6 +65,16 @@ namespace SchoolGradebook.Pages.Student
             {
                 return LocalRedirect("/ActivateAccount");
             }
+            await logItemService.Log(
+                new LogItem
+                {
+                    EventType = "StudentIndex",
+                    Timestamp = DateTime.UtcNow,
+                    UserAuthId = UserId,
+                    UserId = studentId,
+                    UserRole = "student",
+                    IPAddress = IPAddress.ToString()
+                });
             StudentFirstName = (await studentService.GetStudentBasicInfoAsync(studentId)).FirstName;
             RecentGrades = await gradeService.GetRecentGradesAsync(studentId, 0, 3);
             Subjects = await subjectService.GetAllSubjectInstancesByStudentAsync(studentId);

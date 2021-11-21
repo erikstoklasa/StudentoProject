@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SchoolGradebook.Models;
+using StudentoMainProject.Models;
 
 namespace SchoolGradebook.Data
 {
@@ -38,6 +39,7 @@ namespace SchoolGradebook.Data
         public DbSet<School> Schools { get; set; }
         public DbSet<TimetableChange> TimetableChanges { get; set; }
         public DbSet<GradeAverage> GradeAverages { get; set; }
+        public DbSet<LogItem> LogItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -61,6 +63,7 @@ namespace SchoolGradebook.Data
             modelBuilder.Entity<TimeFrame>().ToTable("TimeFrames");
             modelBuilder.Entity<Room>().ToTable("Rooms");
             modelBuilder.Entity<GradeAverage>().ToTable("GradeAverages");
+            modelBuilder.Entity<LogItem>().ToTable("LogItems");
             modelBuilder.Entity<LessonRecord>().ToTable("LessonRecords").HasIndex(tr => tr.TimeFrameId).IsUnique(false);
             modelBuilder.Entity<AttendanceRecord>().ToTable("AttendanceRecords");
             modelBuilder.Entity<TimetableRecord>().ToTable("TimetableRecords").HasIndex(tr => tr.TimeFrameId).IsUnique(false);

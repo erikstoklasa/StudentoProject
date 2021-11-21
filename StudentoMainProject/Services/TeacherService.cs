@@ -94,7 +94,7 @@ namespace SchoolGradebook.Services
         }
         public async Task<int> GetTeacherCountAsync()
         {
-            return (await GetAllTeachersAsync()).Length;
+            return await context.Teachers.CountAsync();
         }
         public async Task<bool> DeleteTeacherAsync(int teacherId)
         {

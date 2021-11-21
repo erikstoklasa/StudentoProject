@@ -196,7 +196,7 @@ namespace SchoolGradebook.Services
         }
         public async Task<int> GetStudentCountAsync()
         {
-            return (await GetAllStudentsAsync()).Length;
+            return await context.Students.CountAsync();
         }
         public async Task<int> GetStudentCountBySubjectAsync(int subjectId)
         {
@@ -207,7 +207,7 @@ namespace SchoolGradebook.Services
             .AsNoTracking()
             .ToArrayAsync();
 
-            List<int> studentIds = new List<int>(40);
+            List<int> studentIds = new();
 
             foreach (SubjectInstanceEnrollment enrollment in enrollments)
                 foreach (StudentGroupEnrollment groupEnrollment in enrollment.StudentGroup.StudentGroupEnrollments)

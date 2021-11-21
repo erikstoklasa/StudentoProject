@@ -14,14 +14,17 @@ namespace SchoolGradebook.Pages.Admin.Classes
     public class DeleteModel : PageModel
     {
         private readonly ClassService classService;
+        private readonly StudentService studentService;
 
-        public DeleteModel(ClassService classService)
+        public DeleteModel(ClassService classService, StudentService studentService)
         {
             this.classService = classService;
+            this.studentService = studentService;
         }
 
         [BindProperty]
         public Class Class { get; set; }
+        public List<Models.Student> Students { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -36,6 +39,7 @@ namespace SchoolGradebook.Pages.Admin.Classes
             {
                 return NotFound();
             }
+            Students = await studentService.GetAllStudentsByClassAsync((int)id);
             return Page();
         }
 
@@ -45,7 +49,8 @@ namespace SchoolGradebook.Pages.Admin.Classes
             {
                 return NotFound();
             }
-
+            List<int> studentIdsToDelete = await studentService.GetAllStudentIdsByClassAsync((int)id);
+            await studentService.RemoveStudentsAsync(studentIdsToDelete);
             await classService.DeleteClassAsync((int)id);
 
             return RedirectToPage("./Index");

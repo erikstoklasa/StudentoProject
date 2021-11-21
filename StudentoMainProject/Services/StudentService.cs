@@ -22,17 +22,17 @@ namespace SchoolGradebook.Services
         }
         public async Task<int> GetStudentId(string userAuthId)
         {
-            Student student = await context.Students
+            int? studentId = await context.Students
                 .Where(t => t.UserAuthId == userAuthId)
                 .AsNoTracking()
-                .Select(s => new Student { Id = s.Id })
+                .Select(s => s.Id)
                 .FirstOrDefaultAsync();
 
-            if (student == null) //Has role student but no assigned userAuthId - can happen after db resets
+            if (studentId == null) //Has role student but no assigned userAuthId - can happen after db resets
             {
                 return -1;
             }
-            return student.Id;
+            return (int)studentId;
         }
         public async Task<bool> AddStudentAsync(Student student)
         {
@@ -162,6 +162,19 @@ namespace SchoolGradebook.Services
                 .ToListAsync();
             return students;
         }
+        public async Task<List<int>> GetAllStudentIdsByClassAsync(int classId)
+        {
+            List<int> studentIds = await context.Students
+                .Where(s => s.ClassId == classId)
+                .Select(s => s.Id)
+                .ToListAsync();
+            return studentIds;
+        }
+        public async Task<bool> HasAnyStudentsInClassAsync(int classId)
+            => await context.Students
+                .Where(s => s.ClassId == classId)
+                .AnyAsync();
+
         public async Task<List<Student>> GetAllStudentsByTeacherAsync(int teacherId)
         {
             List<SubjectInstanceEnrollment> enrollments = await context.Enrollments
@@ -245,7 +258,7 @@ namespace SchoolGradebook.Services
         }
         public async Task RemoveStudentsAsync(ICollection<int> studentIds)
         {
-            List<Student> students = new();
+            List<Student> students = new(studentIds.Count);
             foreach (int studentId in studentIds)
             {
                 Student s = await context.Students

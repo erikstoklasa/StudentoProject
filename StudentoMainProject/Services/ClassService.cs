@@ -27,6 +27,14 @@ namespace SchoolGradebook.Services
                 .FirstOrDefaultAsync();
             return classOut;
         }
+        public async Task<Class> GetPlainClassAsync(int classId)
+        {
+            Class classOut = await context.Classes
+                .Where(s => s.Id == classId)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+            return classOut;
+        }
         public async Task<bool> AddClassAsync(Class classItem)
         {
             try

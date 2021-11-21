@@ -33,6 +33,8 @@ namespace SchoolGradebook.Services
 
         public async Task<Admin> GetAdminById(int id)
             => await context.Admins.Where(a => a.Id == id).AsNoTracking().FirstOrDefaultAsync();
+        public async Task<Admin> GetAdminByUserAuthId(string id)
+            => await context.Admins.Where(a => a.UserAuthId == id).AsNoTracking().FirstOrDefaultAsync();
 
         public async Task<bool> IsAdminSufficientLevel(int adminId, int level)
             => (await GetAdminById(adminId)).AdminLevel >= level;

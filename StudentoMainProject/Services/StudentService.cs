@@ -28,7 +28,7 @@ namespace SchoolGradebook.Services
                 .Select(s => s.Id)
                 .FirstOrDefaultAsync();
 
-            if (studentId == null) //Has role student but no assigned userAuthId - can happen after db resets
+            if (studentId == null || studentId == 0) //Has role student but no assigned userAuthId - can happen after db resets
             {
                 return -1;
             }

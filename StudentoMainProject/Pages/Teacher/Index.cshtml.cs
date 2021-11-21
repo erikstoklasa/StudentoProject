@@ -46,11 +46,15 @@ namespace SchoolGradebook.Pages.Teacher
         public async Task<IActionResult> OnGetAsync()
         {
             int teacherId = await teacherService.GetTeacherId(UserId);
+            if (teacherId == -1)
+            {
+                return LocalRedirect("/ActivateAccount");
+            }
             await logItemService.Log(
                 new LogItem
                 {
                     EventType = "TeacherIndex",
-                    Timestamp = new DateTime(),
+                    Timestamp = DateTime.UtcNow,
                     UserAuthId = UserId,
                     UserId = teacherId,
                     UserRole = "teacher",
@@ -64,10 +68,6 @@ namespace SchoolGradebook.Pages.Teacher
                 StudentsCount.Add(await studentService.GetStudentCountBySubjectAsync(si.Id));
             }
             SubjectsAndStudentCounts = Subjects.Zip(StudentsCount, (si, sc) => (si, sc));
-            if (teacherId == -1)
-            {
-                return LocalRedirect("/ActivateAccount");
-            }
             return Page();
         }
     }

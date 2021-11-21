@@ -29,6 +29,7 @@ steps:
   inputs:
     version: $(dotNetVersion)
     includePreviewVersions: false
+    installationPath: $(Agent.ToolsDirectory)/dotnet
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'Build Studento Web App'
 
@@ -36,6 +37,7 @@ steps:
   inputs:
     version: $(dotNetVersion)
     includePreviewVersions: false
+    installationPath: $(Agent.ToolsDirectory)/dotnet
 - script: dotnet test --configuration $(buildConfiguration) $(tests)
   displayName: 'Run unit tests'
     

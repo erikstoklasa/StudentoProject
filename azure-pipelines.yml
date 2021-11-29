@@ -28,18 +28,16 @@ steps:
 - task: UseDotNet@2
   inputs:
     version: $(dotNetVersion)
-    includePreviewVersions: false
-    installationPath: $(Agent.ToolsDirectory)/dotnet
-- script: dotnet build --configuration $(buildConfiguration)
-  displayName: 'Build Studento Web App'
-
-- task: UseDotNet@2
-  inputs:
-    version: $(dotNetVersion)
-    includePreviewVersions: false
     installationPath: $(Agent.ToolsDirectory)/dotnet
 - script: dotnet test --configuration $(buildConfiguration) $(tests)
   displayName: 'Run unit tests'
+  
+- task: UseDotNet@2
+  inputs:
+    version: $(dotNetVersion)
+    installationPath: $(Agent.ToolsDirectory)/dotnet
+- script: dotnet publish --configuration $(buildConfiguration) -o $(build.artifactstagingdirectory)\WebApp.zip
+  displayName: 'Build Studento Web App'
     
 - task: PublishBuildArtifacts@1
   inputs:

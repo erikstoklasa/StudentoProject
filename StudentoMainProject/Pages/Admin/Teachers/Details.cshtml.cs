@@ -62,10 +62,10 @@ namespace SchoolGradebook.Pages.Admin.Teachers
                 return NotFound();
             }
             Teacher.Approbations = await approbationService.GetAllApprobations((int)id);
-            using MemoryStream stream = new MemoryStream();
-            PdfDocument pdfDoc = new PdfDocument(new PdfWriter(stream));
-            Document doc = new Document(pdfDoc);
-            PdfFont defaultFont = PdfFontFactory.CreateFont("wwwroot/fonts/OpenSans-Regular.ttf", PdfEncodings.IDENTITY_H, false);
+            using MemoryStream stream = new();
+            PdfDocument pdfDoc = new(new PdfWriter(stream));
+            Document doc = new(pdfDoc);
+            PdfFont defaultFont = PdfFontFactory.CreateFont("wwwroot/fonts/OpenSans-Regular.ttf", PdfEncodings.IDENTITY_H, PdfFontFactory.EmbeddingStrategy.FORCE_EMBEDDED);
             //Image picture = new Image(ImageDataFactory.Create("wwwroot/images/girl.png"));
             //picture.ScaleToFit(100,150);
             //doc.Add(new Paragraph().Add(picture).SetHorizontalAlignment(HorizontalAlignment.RIGHT));
@@ -113,8 +113,8 @@ namespace SchoolGradebook.Pages.Admin.Teachers
             table.AddCell("Datum nástupu").SetFont(defaultFont);
             table.AddCell(Teacher.StartDate.GetValueOrDefault().ToString("d. M. yyyy")).SetFont(defaultFont);
 
-            List<string> approbationNames = new List<string>();
-            if(Teacher.Approbations != null)
+            List<string> approbationNames = new();
+            if (Teacher.Approbations != null)
             {
                 foreach (var a in Teacher.Approbations)
                 {

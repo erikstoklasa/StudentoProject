@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SchoolGradebook.Models;
 using SchoolGradebook.Services;
+using StudentoMainProject.Services;
+using StudentoMainProject.Models;
+using System.Net;
 
 namespace SchoolGradebook.API.SubjectInstances
 {
@@ -20,16 +23,27 @@ namespace SchoolGradebook.API.SubjectInstances
         private readonly TeacherService teacherService;
         private readonly TeacherAccessValidation teacherAccessValidation;
         private readonly StudentAccessValidation studentAccessValidation;
-        private string UserId { get; set; }
+        private readonly LogItemService logItemService;
 
-        public SubjectInstancesController(SubjectService subjectService, StudentService studentService, TeacherService teacherService, TeacherAccessValidation teacherAccessValidation, StudentAccessValidation studentAccessValidation, IHttpContextAccessor httpContextAccessor)
+        private string UserId { get; set; }
+        public IPAddress IPAddress { get; set; }
+
+        public SubjectInstancesController(SubjectService subjectService,
+                                          StudentService studentService,
+                                          TeacherService teacherService,
+                                          TeacherAccessValidation teacherAccessValidation,
+                                          StudentAccessValidation studentAccessValidation,
+                                          IHttpContextAccessor httpContextAccessor,
+                                          LogItemService logItemService)
         {
             this.subjectService = subjectService;
             this.studentService = studentService;
             this.teacherService = teacherService;
             this.teacherAccessValidation = teacherAccessValidation;
             this.studentAccessValidation = studentAccessValidation;
+            this.logItemService = logItemService;
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            IPAddress = httpContextAccessor.HttpContext.Connection.RemoteIpAddress;
         }
 
         /// <summary>
@@ -52,7 +66,7 @@ namespace SchoolGradebook.API.SubjectInstances
             }
             SubjectInstance si = await subjectService.GetSubjectInstanceAsync(id);
             ICollection<Student> students = await studentService.GetAllStudentsBySubjectInstanceAsync(id);
-            List<UserObject> userObjects = new List<UserObject>();
+            List<UserObject> userObjects = new();
             foreach (var s in students)
             {
                 userObjects.Add(new UserObject() { Id = s.Id, FirstName = s.FirstName, LastName = s.LastName });
@@ -84,13 +98,28 @@ namespace SchoolGradebook.API.SubjectInstances
             {
                 return StatusCode(403);
             }
-            SubjectInstance si = await subjectService.GetSubjectInstanceAsync(id);
-            ICollection<Student> students = await studentService.GetAllStudentsBySubjectInstanceAsync(id);
-            List<UserObject> userObjects = new List<UserObject>();
+            Task logTask = logItemService.Log(
+                new LogItem
+                {
+                    EventType = "SubjectDetail",
+                    Timestamp = DateTime.UtcNow,
+                    UserAuthId = UserId,
+                    UserId = studentId,
+                    UserRole = "student",
+                    IPAddress = IPAddress.ToString(),
+                    EventParam = id
+                });
+            Task<SubjectInstance> subjectTask = subjectService.GetSubjectInstanceAsync(id);
+            Task<Student[]> studentTask = studentService.GetAllStudentsBySubjectInstanceAsync(id);
+            await Task.WhenAll(subjectTask, studentTask);
+            SubjectInstance si = await subjectTask;
+            ICollection<Student> students = await studentTask;
+            List<UserObject> userObjects = new();
             foreach (var s in students)
             {
                 userObjects.Add(new UserObject() { Id = s.Id, FirstName = s.FirstName, LastName = s.LastName });
             }
+            await logTask;
             return new SubjectInstanceObject()
             {
                 Id = si.Id,
@@ -113,7 +142,7 @@ namespace SchoolGradebook.API.SubjectInstances
                 return StatusCode(403);
             }
             List<SubjectInstance> subjectInstances = await subjectService.GetAllSubjectInstancesByStudentAsync(studentId);
-            List<SubjectInstanceObject> output = new List<SubjectInstanceObject>();
+            List<SubjectInstanceObject> output = new();
             foreach (var si in subjectInstances)
             {
                 output.Add(new SubjectInstanceObject()

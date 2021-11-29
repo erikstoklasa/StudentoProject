@@ -1,73 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using SchoolGradebook.Data;
-using SchoolGradebook.Models;
-using System.Security.Claims;
-using SchoolGradebook.Services;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace SchoolGradebook.Pages.Student.Subjects
 {
     public class DetailsModel : PageModel
     {
-        private readonly SubjectService subjectService;
-        private readonly StudentAccessValidation studentAccessValidation;
-        private readonly StudentService studentService;
-
-        public Grade[] Grades { get; set; }
-
-        public List<SubjectMaterial> SubjectMaterials { get; set; }
-        public double SubjectAverage { get; set; }
-
-        public DetailsModel(IHttpContextAccessor httpContextAccessor,
-                            AnalyticsService analytics,
-                            SubjectService subjectService,
-                            StudentAccessValidation studentAccessValidation,
-                            StudentService studentService,
-                            SubjectMaterialService subjectMaterialService,
-                            GradeService gradeService)
+        public DetailsModel()
         {
-            UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            this.subjectService = subjectService;
-            this.studentAccessValidation = studentAccessValidation;
-            this.studentService = studentService;
+
         }
 
-        public string UserId { get; private set; }
-        public SubjectInstance Subject { get; set; }
-
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public void OnGetAsync()
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
-            Subject = await subjectService.GetSubjectInstanceAsync((int)id);
-
-            if (Subject == null)
-            {
-                return NotFound();
-            }
-
-            int? studentId = await studentService.GetStudentId(UserId);
-
-            if (studentId == null)
-            {
-                return Forbid();
-            }
-            bool studentHasAccessToSubject = await studentAccessValidation.HasAccessToSubject((int)studentId, (int)id);//HERE IS A PROBLEM!
-            if (!studentHasAccessToSubject)
-            {
-                return BadRequest();
-            }
-
-            return Page();
         }
     }
 }

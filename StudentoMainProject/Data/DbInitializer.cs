@@ -174,9 +174,6 @@ namespace SchoolGradebook.Data
             if (!context.GradeGroups.Any())
             {
                 List<GradeGroup> gradeGroups = new();
-                List<SubjectInstance> subjectInstances = await context.SubjectInstances
-                    .AsNoTracking()
-                    .ToListAsync();
 
                 foreach (var gradeGroupName in gradeGroupNames)
                 {

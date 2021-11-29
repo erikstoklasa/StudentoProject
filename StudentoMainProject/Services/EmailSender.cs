@@ -33,7 +33,7 @@ namespace SchoolGradebook.Services
             var client = new SendGridClient(apiKey);
             var msg = new SendGridMessage()
             {
-                From = new EmailAddress("mailer@studento.cz", "Studneto.cz"),
+                From = new EmailAddress("mailer@studento.cz", "Studento.cz"),
                 Subject = subject,
                 PlainTextContent = message,
                 HtmlContent = message,

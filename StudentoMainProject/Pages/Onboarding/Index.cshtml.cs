@@ -113,7 +113,7 @@ namespace SchoolGradebook.Pages
             var client = new SendGridClient(Configuration.GetConnectionString("SEND_GRID_KEY"));
             var msg = new SendGridMessage()
             {
-                From = new EmailAddress("mailer@studento.cz", "Studneto.cz"),
+                From = new EmailAddress("mailer@studento.cz", "Studento.cz"),
                 ReplyTo = new EmailAddress("moje@studento.cz")
             };
             msg.SetTemplateId("d-dc8c591fcd6b4cf8b88d3904a7c44b61");

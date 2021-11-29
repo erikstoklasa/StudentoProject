@@ -11,6 +11,7 @@ pool:
 
 variables:
   tests: './XUnitTests/XUnitTests.csproj'
+  mainProject: './StudentoMainProject/StudentoMainProject.csproj'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   dotNetFramework: 'net6.0'
@@ -36,8 +37,16 @@ steps:
   inputs:
     version: $(dotNetVersion)
     installationPath: $(Agent.ToolsDirectory)/dotnet
-- script: dotnet publish --configuration $(buildConfiguration) -o $(build.artifactstagingdirectory)\WebApp.zip
+- script: dotnet publish $(mainProject) -c $(buildConfiguration)
   displayName: 'Build Studento Web App'
+
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(Build.BinariesDirectory)'
+    includeRootFolder: true
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    replaceExistingArchive: true
     
 - task: PublishBuildArtifacts@1
   inputs:

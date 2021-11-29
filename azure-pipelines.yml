@@ -37,16 +37,9 @@ steps:
   inputs:
     version: $(dotNetVersion)
     installationPath: $(Agent.ToolsDirectory)/dotnet
-- script: dotnet publish $(mainProject) -c $(buildConfiguration)
+- script: dotnet publish $(mainProject) -c $(buildConfiguration)  /p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Studento"
   displayName: 'Build Studento Web App'
 
-- task: ArchiveFiles@2
-  inputs:
-    rootFolderOrFile: '$(Build.BinariesDirectory)'
-    includeRootFolder: true
-    archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-    replaceExistingArchive: true
     
 - task: PublishBuildArtifacts@1
   inputs:

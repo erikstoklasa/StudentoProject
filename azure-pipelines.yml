@@ -4,43 +4,43 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 trigger:
-- master
+  - master
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: "windows-latest"
 
 variables:
-  tests: './XUnitTests/XUnitTests.csproj'
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  dotNetFramework: 'net6.0'
-  dotNetVersion: '6.0.x'
+  tests: "./XUnitTests/XUnitTests.csproj"
+  mainProject: "./StudentoMainProject/StudentoMainProject.csproj"
+  buildPlatform: "Any CPU"
+  buildConfiguration: "Release"
+  dotNetVersion: "6.0.x"
 
 steps:
-- script: npm ci
-  workingDirectory: ./StudentoMainProject/
-  displayName: 'npm ci'
+  - script: npm ci
+    workingDirectory: ./StudentoMainProject/
+    displayName: "npm ci"
 
-- script: npm run build
-  workingDirectory: ./StudentoMainProject/
-  displayName: 'npm build'
+  - script: npm run build
+    workingDirectory: ./StudentoMainProject/
+    displayName: "npm build"
 
-- task: UseDotNet@2
-  inputs:
-    version: $(dotNetVersion)
-    installationPath: $(Agent.ToolsDirectory)/dotnet
-- script: dotnet test --configuration $(buildConfiguration) $(tests)
-  displayName: 'Run unit tests'
-  
-- task: UseDotNet@2
-  inputs:
-    version: $(dotNetVersion)
-    installationPath: $(Agent.ToolsDirectory)/dotnet
-- script: dotnet publish --configuration $(buildConfiguration) -o $(build.artifactstagingdirectory)\WebApp.zip
-  displayName: 'Build Studento Web App'
-    
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
+  - task: UseDotNet@2
+    inputs:
+      version: $(dotNetVersion)
+      installationPath: $(Agent.ToolsDirectory)/dotnet
+  - script: dotnet test -c $(buildConfiguration) $(tests)
+    displayName: "Run unit tests"
+
+  - task: UseDotNet@2
+    inputs:
+      version: $(dotNetVersion)
+      installationPath: $(Agent.ToolsDirectory)/dotnet
+  - script: dotnet publish $(mainProject) -c $(buildConfiguration) /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Studento"
+    displayName: "Build Studento Web App"
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: "$(Build.ArtifactStagingDirectory)"
+      ArtifactName: "drop"
+      publishLocation: "Container"

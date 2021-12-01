@@ -16,7 +16,7 @@
     <div class="d-flex flex-column flex-grow-1 mt-3 mt-lg-0">
         <div class="d-flex flex-column">
             <h1>@Model.Student.GetFullName()</h1>
-            <h4>@($"{Model.Student.Class.GetName()} - {Model.Student.Class.Teacher.GetFullName()}")</h4>
+            <h4>@($"{Model.Student.Class?.GetName()} - {Model.Student.Class?.Teacher.GetFullName()}")</h4>
         </div>
         <div class="d-flex flex-row">
             <div class="mr-3 d-flex flex-row flex-grow-1">

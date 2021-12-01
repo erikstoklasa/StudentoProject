@@ -5,20 +5,20 @@
 }
 @if ((string) ViewData["status"] == "OK")
 {
-    <p class="alert alert-success">Uspěšně přidáno</p>
+    <p class="alert alert-success">Studenti byli úspěšně přidáni</p>
 }
 else if(ViewData["status"] != null)
 {
-    <p class="alert alert-danger">Vyskytla se chyba</p>
+    <p class="alert alert-danger">Vyskytla se chyba: @ViewData["status"]</p>
 }
-<p>Import studentů bude zpracován Studentem, až bude import dokončený, budeme Vás informovat emailem.</p>
+<p>Import studentů musí být ve formátu csv, řádky mají přesně 6 záznamů oddělených čárkou: jméno, příjmení, datum narození, rodné číslo, email, id třídy (optional).</p>
 <form enctype="multipart/form-data" method="post">
     <dl>
         <dt>
             <label asp-for="FileUpload">Soubor se záznamy o studentech</label>
         </dt>
         <dd>
-            <input asp-for="FileUpload" type="file" accept=".csv,.tsv">
+            <input asp-for="FileUpload" type="file" accept=".csv">
             <span asp-validation-for="FileUpload"></span>
         </dd>
     </dl>

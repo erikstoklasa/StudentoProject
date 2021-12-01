@@ -98,7 +98,7 @@ namespace SchoolGradebook.API.SubjectInstances
             {
                 return StatusCode(403);
             }
-            Task logTask = logItemService.Log(
+            await logItemService.Log(
                 new LogItem
                 {
                     EventType = "SubjectDetail",
@@ -109,17 +109,14 @@ namespace SchoolGradebook.API.SubjectInstances
                     IPAddress = IPAddress.ToString(),
                     EventParam = id
                 });
-            Task<SubjectInstance> subjectTask = subjectService.GetSubjectInstanceAsync(id);
-            Task<Student[]> studentTask = studentService.GetAllStudentsBySubjectInstanceAsync(id);
-            await Task.WhenAll(subjectTask, studentTask);
-            SubjectInstance si = await subjectTask;
-            ICollection<Student> students = await studentTask;
+            SubjectInstance si = await subjectService.GetSubjectInstanceAsync(id);
+            ICollection<Student> students = await studentService.GetAllStudentsBySubjectInstanceAsync(id);
             List<UserObject> userObjects = new();
             foreach (var s in students)
             {
                 userObjects.Add(new UserObject() { Id = s.Id, FirstName = s.FirstName, LastName = s.LastName });
             }
-            await logTask;
+            ;
             return new SubjectInstanceObject()
             {
                 Id = si.Id,

@@ -56,6 +56,31 @@ namespace SchoolGradebook.Services
 
             return true;
         }
+        public async Task<bool> AddStudentRangeAsync(List<Student> students)
+        {
+            foreach (Student student in students)
+            {
+                if (!HasRequiredFields(student))
+                {
+                    return false;
+                }
+                if (!ValidationUtils.PersonalIdentifNumberIsValid(student.PersonalIdentifNumber))
+                {
+                    return false;
+                }
+            }
+            try
+            {
+                await context.Students.AddRangeAsync(students);
+                await context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
+        }
         public async Task<Student> GetStudentAsync(int studentId)
         {
             Student student = await context.Students

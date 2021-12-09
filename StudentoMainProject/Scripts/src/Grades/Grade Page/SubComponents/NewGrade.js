@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useRef} from 'react'
 import '../GradePage.css'
 
-const NewGrade = ({ studentId, showInput, onGradeChange, onGradeRemove, currentStudentEdited  , onClickOutside }) => {
+const NewGrade = ({ studentId, showInput, onGradeChange, onGradeRemove, currentStudentEdited  , onClickOutside, updateCurrentStudentEdited }) => {
     const [newGradeValue, updateNewGradeValue] = useState("");
     const inputRef = useRef(null)
 
@@ -33,7 +33,7 @@ const NewGrade = ({ studentId, showInput, onGradeChange, onGradeRemove, currentS
     const handleFocus = () => {        
         if (studentId === currentStudentEdited && showInput) {
             inputRef.current.focus()
-        }
+        } 
     }
     
     useEffect(handleFocus, [currentStudentEdited])
@@ -47,7 +47,9 @@ const NewGrade = ({ studentId, showInput, onGradeChange, onGradeRemove, currentS
                     ref={inputRef}
                     maxLength="2"
                     className="form-control grade-input"
-                    value={newGradeValue}                    
+                    value={newGradeValue}
+                    onBlur={() => onClickOutside(studentId)}
+                    onClick={() => updateCurrentStudentEdited(studentId)}
                     onChange={event => { handleGradeChange(event.target.value) }}></input>
             </div>
         )

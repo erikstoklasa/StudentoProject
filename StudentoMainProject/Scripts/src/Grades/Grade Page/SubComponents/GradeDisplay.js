@@ -1,12 +1,18 @@
 import React, {useState, useEffect, useRef} from 'react'
 import '../GradePage.css'
 
-const GradeDisplay = ({ gradeId, studentId, value, modifyGrade, gradeName, grade, gradeGroupId }) => {
+const GradeDisplay = ({ gradeId, studentId, value, modifyGrade, gradeName, grade, gradeGroupId, currentStudentEdited, updateCurrentStudentEdited, onClickOutside }) => {
     const [initialValue, updateInitialValue] = useState();
     const [gradeValue, updateGradeValue] = useState();
     const [displayInput, updateDisplayInput] = useState(false);
     const gradeValueRef = useRef(gradeValue)
     
+    useEffect(() => {        
+        if (studentId === currentStudentEdited) {
+            updateDisplayInput(true)
+        }
+    })
+
     useEffect(() => {
         updateInitialValue(value)
         updateGradeValue(value)
@@ -19,11 +25,13 @@ const GradeDisplay = ({ gradeId, studentId, value, modifyGrade, gradeName, grade
 
     const handleClick = () => {       
         updateDisplayInput(true)
+        updateCurrentStudentEdited(studentId)
         addEventListener("keypress", onEnterPress)
     }
 
-    const onEnterPress = (event) => {
-        if (event.key === "Enter") {                
+    const onEnterPress = (event) => {       
+        if (event.key === "Enter") {
+            removeEventListener('keypress', onEnterPress)
             hideInput()
         }
     }
@@ -42,7 +50,8 @@ const GradeDisplay = ({ gradeId, studentId, value, modifyGrade, gradeName, grade
     }
 
     const hideInput = () => {
-        updateDisplayInput(false)       
+        updateDisplayInput(false)
+        onClickOutside(studentId)
         commitGrade()
         removeEventListener('keypress', onEnterPress);
     }
@@ -61,13 +70,12 @@ const GradeDisplay = ({ gradeId, studentId, value, modifyGrade, gradeName, grade
             setGradeValue('')
         }    
         
-    }
+    } 
 
     if (!displayInput) {
         return (
             <div className="grade-cell">
-                <div className="grade-text" onClick={handleClick}>{gradeValue}</div>
-       
+                <div className="grade-text" onClick={handleClick}>{gradeValue}</div>       
             </div>
             
         )
@@ -76,7 +84,7 @@ const GradeDisplay = ({ gradeId, studentId, value, modifyGrade, gradeName, grade
         
         return (
             <div className="grade-cell">
-                <input className="form-control grade-input" maxLength="2" tabIndex="0" autoFocus onBlur={hideInput} value={gradeValue} onChange={(event) => { handleGradeChange(event.target.value) }}></input>            
+                <input className="form-control grade-input" maxLength="2" tabIndex="0" autoFocus onBlur={hideInput} value={gradeValue} onChange={(event) => { handleGradeChange(event.target.value) }}></input>
             </div>
         )
     }

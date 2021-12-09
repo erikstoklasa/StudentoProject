@@ -9,6 +9,10 @@
     box-shadow: 0 3px 6px rgba(0,0,0,0.16);
 }
 
+.new-grade-header{
+    min-width: 160px;
+}
+
 .empty-grade-table{
     display: flex;
     justify-content: center;
@@ -256,4 +260,9 @@
 
 .nowrap{
     white-space: nowrap;
+}
+
+.grade-input-inactive{
+    display: flex;
+    align-items: center;
 }

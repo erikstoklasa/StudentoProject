@@ -1,19 +1,9 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import '../GradePage.css'
 
-const NewGrade = ({ studentId, showInput, onGradeChange, onGradeRemove }) => {
+const NewGrade = ({ studentId, showInput, onGradeChange, onGradeRemove, currentStudentEdited  , onClickOutside, updateCurrentStudentEdited }) => {
     const [newGradeValue, updateNewGradeValue] = useState("");
-
-    const handleInputChange = (value) => { 
-        if (value > 0 && value < 6) {
-            updateNewGradeValue(value)
-            onGradeChange(value, studentId)
-        }
-        else if (value === '') {
-            updateNewGradeValue(value)
-            onGradeRemove(studentId);
-        }
-    }
+    const inputRef = useRef(null)
 
     const clearGrades = () => {
         if (showInput) {
@@ -40,18 +30,33 @@ const NewGrade = ({ studentId, showInput, onGradeChange, onGradeRemove }) => {
         
     }
 
-    useEffect(clearGrades, [showInput]);
+    const handleFocus = () => {        
+        if (studentId === currentStudentEdited && showInput) {
+            inputRef.current.focus()
+        } 
+    }
+    
+    useEffect(handleFocus, [currentStudentEdited])
+
+    useEffect(clearGrades, [showInput]);     
 
     if (showInput) {
         return (
-            <div className="grade-cell new-grade-cell">
-                <input maxLength="2" className="form-control grade-input" value={newGradeValue} onChange={event => {handleGradeChange(event.target.value)}}></input>
+            <div className="grade-cell new-grade-cell" >
+                <input
+                    ref={inputRef}
+                    maxLength="2"
+                    className="form-control grade-input"
+                    value={newGradeValue}
+                    onBlur={() => onClickOutside(studentId)}
+                    onClick={() => updateCurrentStudentEdited(studentId)}
+                    onChange={event => { handleGradeChange(event.target.value) }}></input>
             </div>
         )
-    }
+    }     
     else { 
         return (
-            <div className = "grade-cell new-grade-cell">
+            <div className = "grade-cell new-grade-cell" ref={inputRef}>
             </div>
         )
     }

@@ -156,7 +156,7 @@ function SubjectDetail() {
             {students && subjectInfo?
                 <div className="grades-material-container">
                     <StudentGrades students={students} info={subjectInfo} />
-                    <StudentMaterial />
+                    <StudentMaterial authors={subjectInfo.teacher}/>
                 </div>                
             : null}
             <a href="/Teacher">Všechny předměty</a>            

@@ -94,7 +94,7 @@ const SubjectDetail = () => {
                 <SubjectTitle info={subjectInfo} grades={grades} />
                     <div className="grades-material-container">
                         <StudentGrades grades={grades} showPopup={showPopup} deleteGrade={deleteStudentGrade} />
-                        <StudentMaterial/>
+                        <StudentMaterial authors={subjectInfo.data.students}/>
                         {showAddPopup ? <AddGradePopup addGrade={addStudentGrade} hidePopup={hidePopup} /> : null}
                     </div>
                 </div>

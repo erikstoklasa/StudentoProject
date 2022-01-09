@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, createContext} from 'react'
 import MaterialContainer from './MaterialContainer'
 import AddMaterialPopup from './AddMaterialPopup'
 import { fetchMaterials, postMaterialGroup, postMaterial, deleteMaterial } from '../../Services/MaterialService'
@@ -7,12 +7,14 @@ import LoadingScreen from '../Loading/LoadingScreen'
 import './StudentMaterial.css'
 import moment from 'moment';
 
-const StudentMaterial = () => {
+export const MaterialContext = createContext()
+
+const StudentMaterial = ({authors}) => {
     const subjectId = window.location.href.split("Details?id=").pop();    
     const [showMaterialPopup, updateShowMaterialPopup] = useState(false);
     const [userInfo, updateUserInfo] = useState()
     const [materialData, updateMaterials] = useState();
-    
+        
 
     const getApiAddress = () => {       
         const getUserType = (data) => {           
@@ -142,25 +144,22 @@ const StudentMaterial = () => {
     }
 
     return (
-       
-        <div class="material-container">
-            {materialData && userInfo ?
-            <div>
-            <div className="material-container-heading-container">
-            <p class="material-table-heading">Studijní materiály</p>
+        <MaterialContext.Provider value={authors}>
+            <div class="material-container">
+                {materialData && userInfo ?
+                <div>
+                <div className="material-container-heading-container">
+                <p class="material-table-heading">Studijní materiály</p>
                 {materialData.loaded? <a class="btn btn-primary" onClick={displayMaterialPopup}><img src="/images/add.svg" alt="Přidat" height="18px" class="btn-icon" />Přidat studijní materiál</a> : null}
+                </div>
+                        
+                <MaterialContainer materials={materialData} info={userInfo} deleteMaterial={deleteMaterials} /> 
+                {showMaterialPopup ? <AddMaterialPopup upload={uploadMaterials} hidePopup={hideMaterialPopup} /> : null}
+                </div>
+                    : <LoadingScreen relative={true} />}            
             </div>
-            <MaterialContainer materials={materialData} info={userInfo} deleteMaterial={deleteMaterials} /> 
-            {showMaterialPopup ? <AddMaterialPopup upload={uploadMaterials} hidePopup={hideMaterialPopup} /> : null}
-            </div>
-                : <LoadingScreen relative={true} />}            
-        </div>
-        
+        </MaterialContext.Provider>        
     )
-
 }
-
-
- 
 
 export default StudentMaterial

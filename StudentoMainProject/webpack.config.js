@@ -2,19 +2,19 @@
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 
 module.exports = {
-    entry: { 
-        
-        TimeTable: "./Scripts/src/TimeTable/index.js",       
+    entry: {
+
+        TimeTable: "./Scripts/src/TimeTable/index.js",
         Grades: "./Scripts/src/Grades/index.js",
         SubjectDetail: "./Scripts/src/SubjectDetail/index.js",
         SubjectDetailTeacher: "./Scripts/src/SubjectDetailTeacher/index.js"
 
-        
+
     },
     output: {
         path: path.resolve(__dirname, "./wwwroot/dist"),
         filename: "[name].js"
-    },
+    },    
     module: {
         rules: [
             {

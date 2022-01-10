@@ -140,6 +140,7 @@ namespace SchoolGradebook.API.Grades
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(policy: "OnlyTeacher")]
         [HttpGet("Teacher/{id}")]
         public async Task<ActionResult<GradeObject>> TeacherGetGrade(int id, int gradeValueFormat = 0)
         {

@@ -164,6 +164,7 @@ namespace SchoolGradebook.API.SubjectMaterials
         /// <param name="sm">Needs to have a specified id</param>
         /// <returns></returns>
         [HttpPut("Teacher/Material")]
+        [Authorize(policy: "OnlyTeacher")]
         public async Task<ActionResult> UpdateSubjectMaterial(SubjectMaterialObject sm)
         {
             int teacherId = await teacherService.GetTeacherId(UserId);
@@ -201,6 +202,7 @@ namespace SchoolGradebook.API.SubjectMaterials
         /// <param name="subjectMaterialId"></param>
         /// <returns></returns>
         [HttpDelete("Teacher/Material")]
+        [Authorize(policy: "OnlyTeacher")]
         public async Task<ActionResult> DeleteSubjectMaterial(Guid subjectMaterialId)
         {
             await subjectMaterialService.SoftDeleteMaterialAsync(subjectMaterialId);

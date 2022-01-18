@@ -3,10 +3,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SchoolGradebook.Models;
 using SchoolGradebook.Services;
+using StudentoMainProject.Models;
+using StudentoMainProject.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -20,17 +23,26 @@ namespace SchoolGradebook.API
         private readonly UserManager<IdentityUser> userManager;
         private readonly StudentService studentService;
         private readonly TeacherService teacherService;
+        private readonly LogItemService logItemService;
 
         public string UserAuthId { get; set; }
 
-        public AuthController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, IHttpContextAccessor httpContextAccessor, StudentService studentService, TeacherService teacherService)
+        public AuthController(SignInManager<IdentityUser> signInManager,
+                              UserManager<IdentityUser> userManager,
+                              IHttpContextAccessor httpContextAccessor,
+                              StudentService studentService,
+                              TeacherService teacherService,
+                              LogItemService logItemService)
         {
             this.signInManager = signInManager;
             this.userManager = userManager;
             this.studentService = studentService;
             this.teacherService = teacherService;
+            this.logItemService = logItemService;
             UserAuthId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            IPAddress = httpContextAccessor.HttpContext.Connection.RemoteIpAddress;
         }
+        public IPAddress IPAddress { get; set; }
         /// <summary>
         /// Gets the auth session cookie
         /// </summary>
@@ -48,6 +60,15 @@ namespace SchoolGradebook.API
                 {
                     return BadRequest(new AuthResponseObject() { Error = "User has no role" });
                 }
+                await logItemService.Log(
+                    new LogItem
+                    {
+                        EventType = "AuthSuccess",
+                        Timestamp = DateTime.UtcNow,
+                        UserAuthId = UserAuthId,
+                        UserRole = roles.FirstOrDefault(),
+                        IPAddress = IPAddress.ToString()
+                    });
                 return new AuthResponseObject() { UserType = roles.FirstOrDefault() };
             }
             if (result.RequiresTwoFactor)

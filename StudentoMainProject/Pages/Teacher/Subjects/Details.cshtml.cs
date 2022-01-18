@@ -1,6 +1,4 @@
 ﻿using iText.IO.Font;
-using iText.IO.Font.Constants;
-using iText.IO.Image;
 using iText.Kernel.Font;
 using iText.Kernel.Pdf;
 using iText.Layout;
@@ -9,15 +7,16 @@ using iText.Layout.Properties;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
 using SchoolGradebook.Models;
 using SchoolGradebook.Services;
+using StudentoMainProject.Models;
+using StudentoMainProject.Services;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -32,9 +31,17 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
         private readonly SubjectMaterialService subjectMaterialService;
         private readonly GradeService gradeService;
         private readonly StudentGroupService studentGroupService;
-        private readonly ILogger<DetailsModel> logger;
+        private readonly LogItemService logItemService;
 
-        public DetailsModel(IHttpContextAccessor httpContextAccessor, TeacherAccessValidation teacherAccessValidation, TeacherService teacherService, StudentService studentService, SubjectService subjectService, SubjectMaterialService subjectMaterialService, GradeService gradeService, StudentGroupService studentGroupService, ILogger<DetailsModel> logger)
+        public DetailsModel(IHttpContextAccessor httpContextAccessor,
+                            TeacherAccessValidation teacherAccessValidation,
+                            TeacherService teacherService,
+                            StudentService studentService,
+                            SubjectService subjectService,
+                            SubjectMaterialService subjectMaterialService,
+                            GradeService gradeService,
+                            StudentGroupService studentGroupService,
+                            LogItemService logItemService)
         {
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             this.teacherAccessValidation = teacherAccessValidation;
@@ -44,12 +51,13 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
             this.subjectMaterialService = subjectMaterialService;
             this.gradeService = gradeService;
             this.studentGroupService = studentGroupService;
-            this.logger = logger;
+            this.logItemService = logItemService;
             StudentGrades = new List<List<Grade>>();
             SubjectMaterials = new List<SubjectMaterial>();
             StudentAverages = new List<double>();
             System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("cs-CZ");
             StudentGroupNames = new List<string>();
+            IPAddress = httpContextAccessor.HttpContext.Connection.RemoteIpAddress;
         }
 
         public string UserId { get; private set; }
@@ -62,53 +70,13 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
         public double SubjectAvg { get; set; }
         public List<SubjectMaterial> SubjectMaterials { get; set; }
         public List<(Models.Student student, double studentAverage, List<Grade> studentGrades)> StudentsAndAverageAndGrades;
+        public IPAddress IPAddress { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            int TeacherId = await teacherService.GetTeacherId(UserId);
-            bool teacherHasAccessToSubject = await teacherAccessValidation.HasAccessToSubject(TeacherId, (int)id);
-            if (!teacherHasAccessToSubject)
-            {
-                return BadRequest();
-            }
-
-            Subject = await subjectService.GetSubjectInstanceAsync((int)id);
-            if (Subject == null)
-            {
-                return NotFound();
-            }
-            SubjectMaterials = await subjectMaterialService.GetAllMaterialsBySubjectInstance(Subject.Id);
-            Students = await studentService.GetAllStudentsBySubjectInstanceAsync(Subject.Id);
-            SubjectAvg = AnalyticsService.GetSubjectAverageAsync(await gradeService.GetAllGradesBySubjectInstanceAsync((int)id));
-            foreach (Models.Student s in Students)
-            {
-                StudentAverages.Add(AnalyticsService.GetSubjectAverageForStudentAsync(
-                        await gradeService.GetAllGradesByStudentSubjectInstance(s.Id, Subject.Id)
-                    ));
-                StudentGrades.Add((await gradeService.GetGradesAddedByTeacherAsync(s.Id, Subject.Id)).ToList());
-            }
-            StudentsAndAverageAndGrades = Enumerable
-                .Range(0, Students.Length)
-                .Select(i => Tuple.Create(Students[i], StudentAverages[i], StudentGrades[i]).ToValueTuple())
-                .ToList();
-            StudentGroups = await studentGroupService.GetAllGroupsBySubjectInstanceAsync((int)id);
-            foreach (var studentGroup in StudentGroups)
-            {
-                StudentGroupNames.Add(studentGroup.Name);
-            }
-            return Page();
-        }
+        public void OnGet(){}
         public async Task<IActionResult> OnGetPrintAsync(int? id)
         {
-            var timer = new Stopwatch();
-            timer.Start();
-            int TeacherId = await teacherService.GetTeacherId(UserId);
-            bool teacherHasAccessToSubject = await teacherAccessValidation.HasAccessToSubject(TeacherId, (int)id);
+            int teacherId = await teacherService.GetTeacherId(UserId);
+            bool teacherHasAccessToSubject = await teacherAccessValidation.HasAccessToSubject(teacherId, (int)id);
             if (!teacherHasAccessToSubject)
             {
                 return BadRequest();
@@ -119,6 +87,16 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
             {
                 return NotFound();
             }
+            await logItemService.Log(
+                new LogItem
+                {
+                    EventType = "SubjectDetailPrint",
+                    Timestamp = DateTime.UtcNow,
+                    UserAuthId = UserId,
+                    UserId = teacherId,
+                    UserRole = "teacher",
+                    IPAddress = IPAddress.ToString()
+                });
             SubjectMaterials = await subjectMaterialService.GetAllMaterialsBySubjectInstance(Subject.Id);
             Students = await studentService.GetAllStudentsBySubjectInstanceAsync(Subject.Id);
 
@@ -176,9 +154,6 @@ namespace SchoolGradebook.Pages.Teacher.Subjects
 
             doc.Add(table).SetFont(defaultFont);
             doc.Close();
-
-            timer.Stop();
-            logger.LogInformation($"Time taken generating:{timer.ElapsedMilliseconds}");
             return File(stream.ToArray(), "application/pdf", $"{Subject.GetFullName()} (výpis známek).pdf");
         }
     }

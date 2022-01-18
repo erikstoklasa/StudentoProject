@@ -14,16 +14,14 @@ namespace SchoolGradebook.Pages.Student.Subjects
         public string UserId { get; set; }
         private readonly SubjectService subjectService;
         private readonly StudentService studentService;
-        private readonly AnalyticsService analytics;
         private readonly GradeService gradeService;
 
-        public IndexModel(IHttpContextAccessor httpContextAccessor, SubjectService subjectService, StudentService studentService, AnalyticsService analytics, GradeService gradeService)
+        public IndexModel(IHttpContextAccessor httpContextAccessor, SubjectService subjectService, StudentService studentService, GradeService gradeService)
         {
             UserId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             UserId ??= "";
             this.subjectService = subjectService;
             this.studentService = studentService;
-            this.analytics = analytics;
             this.gradeService = gradeService;
             SubjectAverages = new List<string>();
         }

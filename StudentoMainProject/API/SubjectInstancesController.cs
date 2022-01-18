@@ -64,6 +64,17 @@ namespace SchoolGradebook.API.SubjectInstances
             {
                 return StatusCode(403);
             }
+            await logItemService.Log(
+                new LogItem
+                {
+                    EventType = "SubjectDetail",
+                    Timestamp = DateTime.UtcNow,
+                    UserAuthId = UserId,
+                    UserId = teacherId,
+                    UserRole = "teacher",
+                    IPAddress = IPAddress.ToString(),
+                    EventParam = id
+                });
             SubjectInstance si = await subjectService.GetSubjectInstanceAsync(id);
             ICollection<Student> students = await studentService.GetAllStudentsBySubjectInstanceAsync(id);
             List<UserObject> userObjects = new();

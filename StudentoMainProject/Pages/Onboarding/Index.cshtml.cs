@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
@@ -6,9 +7,12 @@ using Microsoft.Extensions.Configuration;
 using SchoolGradebook.Services;
 using SendGrid;
 using SendGrid.Helpers.Mail;
+using StudentoMainProject.Models;
+using StudentoMainProject.Services;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
@@ -20,19 +24,28 @@ namespace SchoolGradebook.Pages
         private readonly UserManager<IdentityUser> _userManager;
         private readonly StudentService studentService;
         private readonly TeacherService teacherService;
-
+        private readonly LogItemService logItemService;
         public RequestResponse EmailRequestResponse;
         [BindProperty(SupportsGet = true)]
         [EmailAddress]
         public string Email { get; set; }
         public IConfiguration Configuration { get; }
+        public IPAddress IPAddress { get; set; }
 
-        public FirstPasswordResetRequest(IConfiguration configuration, UserManager<IdentityUser> userManager, StudentService studentService, TeacherService teacherService)
+        public FirstPasswordResetRequest(IConfiguration configuration,
+                                         UserManager<IdentityUser> userManager,
+                                         StudentService studentService,
+                                         TeacherService teacherService,
+                                         LogItemService logItemService,
+                                         IHttpContextAccessor httpContextAccessor
+                                         )
         {
             Configuration = configuration;
             _userManager = userManager;
             this.studentService = studentService;
             this.teacherService = teacherService;
+            this.logItemService = logItemService;
+            IPAddress = httpContextAccessor.HttpContext.Connection.RemoteIpAddress;
         }
         public IActionResult OnGet()
         {
@@ -60,7 +73,17 @@ namespace SchoolGradebook.Pages
                 }
                 else
                 {
-                    ModelState.AddModelError("UserAlreadyAssigned", "Tenhle email už má aktivovaný účet. Stačí se přihlásit na hlavní stránce Studento.cz");
+                    ModelState.AddModelError("UserAlreadyAssigned", "Tenhle email už má aktivovaný účet. Stačí se přihlásit přes tlačítko vpravo nahoře.");
+                    await logItemService.Log(
+                        new LogItem
+                        {
+                            EventType = "OnboardingAlreadyActivated",
+                            Timestamp = DateTime.UtcNow,
+                            UserAuthId = student.UserAuthId,
+                            UserId = student.Id,
+                            UserRole = "student",
+                            IPAddress = IPAddress.ToString()
+                        });
                     return Page();
                 }
             }
@@ -78,6 +101,16 @@ namespace SchoolGradebook.Pages
                     else
                     {
                         ModelState.AddModelError("UserAlreadyAssigned", "Tenhle email už má aktivovaný účet. Stačí se přihlásit na hlavní stránce Studento.cz");
+                        await logItemService.Log(
+                        new LogItem
+                        {
+                            EventType = "OnboardingAlreadyActivated",
+                            Timestamp = DateTime.UtcNow,
+                            UserAuthId = teacher.UserAuthId,
+                            UserId = teacher.Id,
+                            UserRole = "teacher",
+                            IPAddress = IPAddress.ToString()
+                        });
                         return Page();
                     }
                 }
@@ -129,11 +162,64 @@ namespace SchoolGradebook.Pages
             {
                 EmailRequestResponse.Message = "Super, teď si zkontroluj svůj email, na který jsme ti poslali odkaz.";
                 EmailRequestResponse.Success = true;
+                if (student != null)
+                {
+                    await logItemService.Log(
+                            new LogItem
+                            {
+                                EventType = "OnboardingEmailSent",
+                                Timestamp = DateTime.UtcNow,
+                                UserAuthId = student.UserAuthId,
+                                UserId = student.Id,
+                                UserRole = "student",
+                                IPAddress = IPAddress.ToString()
+                            });
+                }
+                else if (teacher != null)
+                {
+                    await logItemService.Log(
+                        new LogItem
+                        {
+                            EventType = "OnboardingEmailSent",
+                            Timestamp = DateTime.UtcNow,
+                            UserAuthId = teacher.UserAuthId,
+                            UserId = teacher.Id,
+                            UserRole = "teacher",
+                            IPAddress = IPAddress.ToString()
+                        });
+                }
+
             }
             else
             {
                 EmailRequestResponse.Message = "Nepodařilo se odeslat email na tvojí emailovou schránku, zkus to prosím později.";
                 EmailRequestResponse.Success = false;
+                if (student != null)
+                {
+                    await logItemService.Log(
+                            new LogItem
+                            {
+                                EventType = "OnboardingEmailError",
+                                Timestamp = DateTime.UtcNow,
+                                UserAuthId = student.UserAuthId,
+                                UserId = student.Id,
+                                UserRole = "student",
+                                IPAddress = IPAddress.ToString()
+                            });
+                }
+                else if (teacher != null)
+                {
+                    await logItemService.Log(
+                        new LogItem
+                        {
+                            EventType = "OnboardingEmailError",
+                            Timestamp = DateTime.UtcNow,
+                            UserAuthId = teacher.UserAuthId,
+                            UserId = teacher.Id,
+                            UserRole = "teacher",
+                            IPAddress = IPAddress.ToString()
+                        });
+                }
             }
             return Page();
         }

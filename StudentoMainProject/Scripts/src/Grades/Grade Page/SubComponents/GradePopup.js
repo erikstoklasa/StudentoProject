@@ -1,6 +1,6 @@
 import React,{ useState, useEffect} from 'react'
 
-const GradePopup = ({ grade, onNameChange, onWeightChange, newGrade, closePopup, onAddClick, modifyGradeGroup }) => {
+const GradePopup = ({ grade, onNameChange, onWeightChange, newGrade, closePopup, onAddClick, modifyGradeGroup, deleteGradeGroup }) => {
     const [gradeName, updateGradeName] = useState('')
     const [gradeWeight, updateGradeWeight] = useState('')
     const [displayWarning, updateDisplayWarning] = useState(false)
@@ -44,6 +44,11 @@ const GradePopup = ({ grade, onNameChange, onWeightChange, newGrade, closePopup,
         }
     }
 
+    const handleDeleteClick = () => {
+        deleteGradeGroup(grade.gradeGroupId)
+        closePopup()
+    }
+
     return (
         <div className="popup-outer">
             <div className="popup-inner">
@@ -55,8 +60,15 @@ const GradePopup = ({ grade, onNameChange, onWeightChange, newGrade, closePopup,
                     <input className="form-control mb10" placeholder="Jméno známky" maxLength="50" value={gradeName} onChange={(event) => { updateGradeName(event.target.value); if (newGrade) { onNameChange(event) }}}/>
                     <input className="form-control mb10 weight-input" placeholder="Váha" value={gradeWeight} onChange={(event) => { handleWeightChange(event.target.value) }} />
                 </div>
-                {displayWarning? <p class="add-warning-text">Prosím zadej název a váhu</p> : null}
-                <button className="btn btn-primary next-material-button" onClick={handleAddClick}>{newGrade? "Přidat" : "Uložit"}</button>
+                {displayWarning ? <p class="add-warning-text">Prosím zadej název a váhu</p> : null}
+                
+                {newGrade ? <button className="btn btn-primary next-material-button" onClick={handleAddClick}>Přidat</button> : 
+                    <div className="grade-page-popup-button-container">
+                        <button className="btn btn-primary" onClick={handleAddClick}>Uložit</button>
+                        <button className="btn btn-danger" onClick={handleDeleteClick}>Smazat</button>
+                    </div>
+                }
+                
             </div>
         </div>
     )

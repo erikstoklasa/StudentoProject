@@ -266,3 +266,13 @@
     display: flex;
     align-items: center;
 }
+
+.grade-page-popup-button-container{
+    display: flex;
+    gap: 15px;
+    justify-content: space-between;
+}
+
+.grade-page-popup-button-container > button {
+    flex-grow: 1;
+}

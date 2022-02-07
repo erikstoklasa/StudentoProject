@@ -388,6 +388,38 @@ const GradePage = () => {
         })
     }
 
+    const deleteGradeGroup = async (id) => {
+        console.log(id)
+        const idList = []
+        bulkGradeData.forEach(gradeObj => {
+            if (gradeObj.gradeGroupId === id) {
+                idList.push(gradeObj.id)
+            }
+        })
+       
+       
+        const response = await fetch(`${apiAdress}/Grades/Teacher/Batch`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: JSON.stringify(idList)
+        })
+        if (response.ok) {            
+            const newBulkGrades = bulkGradeData.filter(gradeObj => gradeObj.gradeGroupId !== id)
+            updateBulkGradeData(newBulkGrades)
+            const response = await fetch(`${apiAdress}/Grades/Teacher/GradeGroup/Batch`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: JSON.stringify([id])
+            })
+        }
+    }
+
     const trackNewGradeValues = (grade, id) => {
       
 
@@ -530,7 +562,7 @@ const GradePage = () => {
                     {(orderedStudents ? <StudentColumn students={orderedStudents} /> : null)}
                     {(orderedStudents && bulkGradeData ? <AverageColumn students={orderedStudents} onClickHeader={onClickHeader} /> : null)}
                     {(orderedStudents ? <NewGradeColumn students={orderedStudents} trackNewGradeValues={trackNewGradeValues} removeNewGrade={removeNewGrade} handleSubmitNewGrades={handleSubmitNewGrades} /> : null)}
-                    {(orderedStudents && orderedGrades && bulkGradeData ? <GradeDisplaySection orderedGrades={orderedGrades} orderedStudents={orderedStudents} bulkGradeData={bulkGradeData} modifyGrade={modifyGrade} modifyGradeGroup={modifyGradeGroup}/> : null)}
+                    {(orderedStudents && orderedGrades && bulkGradeData ? <GradeDisplaySection orderedGrades={orderedGrades} orderedStudents={orderedStudents} bulkGradeData={bulkGradeData} modifyGrade={modifyGrade} modifyGradeGroup={modifyGradeGroup} deleteGradeGroup={deleteGradeGroup}/>: null)}
                     {(orderedStudents ? <FillerColumn students={orderedStudents} /> : null)}
                 </div>
            

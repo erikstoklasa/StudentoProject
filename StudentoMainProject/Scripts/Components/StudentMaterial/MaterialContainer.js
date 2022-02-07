@@ -12,7 +12,7 @@ const MaterialContainer = ({ materials, deleteMaterial, info }) => {
                 return <MaterialView material={material} deleteMaterial={deleteMaterial} user={info}/>
             })
             return (
-                <div className="table table-responsive table-white subject-detail-table">
+                <div className="table table-responsive table-white subject-detail-table-material">
                     {info ? materialsList : null}
                 </div>
             )

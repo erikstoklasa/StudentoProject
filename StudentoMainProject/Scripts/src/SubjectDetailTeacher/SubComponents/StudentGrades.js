@@ -5,10 +5,10 @@ const StudentGrades = ({ students, info }) => {
     
     // display grades
     return (
-        <div className="student-grades-container">
-            <div className="student-heading-container">
+        <div className="student-grades-container-teacher">
+            <div className="student-heading-container-teacher">
                 <p className="grades-heading">Studenti</p>
-                <div className="student-heading-sub-container">
+                <div className="student-heading-sub-container-teacher">
                     <a class="btn btn-outline-primary rm" href={`/Teacher/Subjects/Details?id=${info.id}&amp;handler=print`}><img src="/images/print.svg" alt="Vytisknout" height="20px" class="btn-icon" />Tisk výpisu</a>
                     <a class="btn btn-primary display-grades-link" href={`/Teacher/Grades?SubjectInstanceId=${info.id}`}>Zobrazit známky</a>
                 </div>

@@ -19,13 +19,13 @@ const GradeRow = ({ student }) => {
     
     return (
         <div>
-            <div className='grade-container'>
-                <div className="name-container">
+            <div className='grade-container-teacher'>
+                <div className="name-container-teacher">
                         <a className="" href={`${adress}Teacher/Students/Details?id=${student.id}`}>{`${student.firstName} ${student.lastName}`}</a>
                 </div>
-                <div className="grade-sub-container">              
-                    <p className="student-average"><b>{student.average}</b></p>
-                    <p className="student-average">{ gradesString }</p>
+                <div className="grade-sub-container-teacher">              
+                    <p className="student-average-teacher"><b>{student.average}</b></p>
+                    <p className="student-average-teacher">{ gradesString }</p>
                 </div>
             </div>         
         </div>

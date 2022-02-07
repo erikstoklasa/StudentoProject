@@ -1,5 +1,7 @@
-.subject-detail-table{
+.subject-detail-table-material{
     padding: 20px 20px 10px;
+    max-height: 500px;
+    overflow: auto;
 }
 
 .material-container{

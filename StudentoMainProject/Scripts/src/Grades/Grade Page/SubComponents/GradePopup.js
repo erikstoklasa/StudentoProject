@@ -61,7 +61,7 @@ const GradePopup = ({ grade, onNameChange, onWeightChange, newGrade, closePopup,
                     <input className="form-control" placeholder="Jméno známky" maxLength="50" value={gradeName} onChange={(event) => { updateGradeName(event.target.value); if (newGrade) { onNameChange(event) }}}/>
                     <input className="form-control weight-input" placeholder="Váha" value={gradeWeight} onChange={(event) => { handleWeightChange(event.target.value) }} />                    
                 </div>
-                <div className='grade-page-popup-default-container mb10'>
+                {newGrade ? <div className='grade-page-popup-default-container mb10'>
                     <label htmlFor='default-grade'>Předvyplnit známky</label>
                     <select id="default-grade" className="grade-page-default-grade-input" id="cars" name="cars" value={defaultNewValue} onChange={event => updateDefaultNewValue(event.target.value)}>
                         <option value={1}>1</option>
@@ -71,7 +71,7 @@ const GradePopup = ({ grade, onNameChange, onWeightChange, newGrade, closePopup,
                         <option value={5}>5</option>
                         <option value="null">Žádné</option>
                     </select>
-                </div>
+                </div> : null}
                 {displayWarning ? <p class="add-warning-text">Prosím zadej název a váhu</p> : null}
                 
                 {newGrade ? <button className="btn btn-primary next-material-button" onClick={handleAddClick}>Přidat</button> : 

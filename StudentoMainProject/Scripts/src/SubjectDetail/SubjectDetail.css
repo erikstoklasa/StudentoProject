@@ -189,15 +189,15 @@
 }
 
 .grades-material-container{
-    display: flex;
-    flex-wrap: wrap;     
+    display: flex;        
     justify-content: space-between;
     width: 100%;
+    gap: 20px;
 }
 
 .student-grades-container{
-    width: 100%;
-    max-width: 640px;        
+    flex-basis: 500px;
+    flex-grow: 1;             
 }
 
 .close-button-container{  
@@ -431,10 +431,10 @@
 }
 
 
-@media(max-width: 1332px){    
-    .student-grades-container{
-        max-width: 1300px;
-    }  
+@media(max-width: 1120px){       
+    .grades-material-container{
+        flex-wrap: wrap;
+    }   
 }
 
 @media (max-width: 800px){

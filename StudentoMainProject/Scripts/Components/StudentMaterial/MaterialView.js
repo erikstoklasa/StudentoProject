@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { MaterialContext } from './StudentMaterial'
 
-const MaterialView = ({ material, deleteMaterial, user }) => {
+const MaterialView = ({ material, deleteMaterial, user }) => {    
     const authors = useContext(MaterialContext)    
     
     const getCanDelete = () => {
@@ -35,9 +35,9 @@ const MaterialView = ({ material, deleteMaterial, user }) => {
                     <p className="material-added">{`${getAuthorName()} · ${material.addedRelative}`}</p>
                 </div>                
             </div>
-            <div className="material-button-container">
-                    { getCanDelete() ? <div class="btn btn-danger rm" onClick={() => { deleteMaterial(material.id) }}>Smazat</div> : null}
-                <a className="btn btn-primary" href={`/Student/Subjects/Materials/Details?id=${material.id}`}>Stáhnout</a>
+            <div className="material-button-container">                    
+                {getCanDelete() ? <img src="/images/icons/trash.svg" class="material-view-icon" onClick={() => { deleteMaterial(material.id) }} /> : null} 
+                <a href={`/${user.data.typeName}/Subjects/Materials/Details?id=${material.id}`} download><img src="/images/icons/download.svg" className="material-view-icon"/></a>
             </div>
         </div>
         

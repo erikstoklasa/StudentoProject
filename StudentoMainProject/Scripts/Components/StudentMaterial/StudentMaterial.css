@@ -5,8 +5,8 @@
 }
 
 .material-container{
-    width: 100%;
-    max-width: 640px;     
+    flex-basis: 500px;
+    flex-grow: 1;   
 }
 
 .material-table-heading{
@@ -54,8 +54,7 @@
 .material-name{
     margin: 0 !important;
     font-weight: 500;
-    min-width: 30px;
-    margin-right: 10px;
+    min-width: 30px;    
     overflow: hidden;
     text-overflow: ellipsis;
 }
@@ -88,15 +87,15 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
+    gap: 20px;
 }
 
 .material-heading-container{
     display: flex;
-    align-items: center;
-    width: 65%; 
+    align-items: center;     
     overflow: hidden;
     text-overflow: ellipsis;
-
+    flex-grow: 1;
 }
 
 .material-name-container{
@@ -119,7 +118,9 @@
 }
 
 .material-button-container{
-    white-space: nowrap;   
+    white-space: nowrap;
+    display: flex;
+    gap: 15px;
 }
 
 .next-material-button{
@@ -181,10 +182,22 @@
     cursor: pointer;
 }
 
+.material-view-icon{
+    cursor: pointer;
+    width: 1.5rem;
+    
+}
+
 @media(max-width: 1332px){
     .material-container{
         max-width: 1300px;
     }   
+}
+
+@media(max-width: 1120px){    
+   .material-container{
+       width: 100%;
+   }
 }
 
 @media (max-width: 800px){    

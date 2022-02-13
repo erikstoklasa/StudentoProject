@@ -130,8 +130,8 @@ const StudentMaterial = ({ authors }) => {
 
     const deleteMaterials = async (id) => {
         const res = await deleteMaterial(userInfo.data.typeName,id)
-        if (res.success) {
-            const newMatArr = materialData.data.filter(material => { material.id !== id })
+        if (res.success) {            
+            const newMatArr = materialData.data.filter(material =>  material.id !== id )            
             updateMaterials(
                 {
                     loaded: true,

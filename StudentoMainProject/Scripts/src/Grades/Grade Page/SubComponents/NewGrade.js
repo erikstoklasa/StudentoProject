@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useRef} from 'react'
 import '../GradePage.css'
 
-const NewGrade = ({ studentId, showInput, onGradeChange, onGradeRemove, currentStudentEdited  , onClickOutside, updateCurrentStudentEdited }) => {
+const NewGrade = ({ studentId, showInput, onGradeChange, onGradeRemove, currentStudentEdited  , onClickOutside, updateCurrentStudentEdited, defaultValue }) => {
     const [newGradeValue, updateNewGradeValue] = useState("");
     const inputRef = useRef(null)
 
@@ -35,10 +35,18 @@ const NewGrade = ({ studentId, showInput, onGradeChange, onGradeRemove, currentS
             inputRef.current.focus()
         } 
     }
+
+    const fillDefaultValue = () => {       
+        if (defaultValue.default) {
+            updateNewGradeValue(defaultValue.value)           
+        }
+    }
     
     useEffect(handleFocus, [currentStudentEdited])
 
-    useEffect(clearGrades, [showInput]);     
+    useEffect(clearGrades, [showInput]);
+    
+    useEffect(fillDefaultValue, [defaultValue])
 
     if (showInput) {
         return (

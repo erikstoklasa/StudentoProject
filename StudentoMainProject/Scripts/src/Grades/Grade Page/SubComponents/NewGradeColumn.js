@@ -4,8 +4,12 @@ import GradePopup from './GradePopup'
 import NewGrade from './NewGrade';
 import '../GradePage.css'
 
-const NewGradeColumn = ({ students, trackNewGradeValues, removeNewGrade, handleSubmitNewGrades }) => {
+const NewGradeColumn = ({ students, trackNewGradeValues, removeNewGrade, handleSubmitNewGrades, assignDefaults }) => {
     const [displayGradeNameInput, updateDisplayGradeNameInput] = useState(false)
+    const [defaultGradeValues, updateDefaultGradeValues] = useState({
+        default: false,
+        value: null
+    })
     const [displayNameInHeader, updateDisplayName] = useState(false)
     const [newGradeName, updateNewGradeName] = useState('')
     const [newGradeWeight, upadeNewGradeWeight] = useState('')
@@ -46,7 +50,7 @@ const NewGradeColumn = ({ students, trackNewGradeValues, removeNewGrade, handleS
     } 
     
     const inputList = students.map((student, index) => {
-        return <NewGrade key={index} studentId={student.id} showInput={showInput} onGradeChange={trackNewGradeValues} onGradeRemove={removeNewGrade} currentStudentEdited={currentStudentEdited} updateCurrentStudentEdited={updateCurrentStudent} onClickOutside={handleOutsideClick}/>
+        return <NewGrade key={index} studentId={student.id} showInput={showInput} onGradeChange={trackNewGradeValues} onGradeRemove={removeNewGrade} currentStudentEdited={currentStudentEdited} updateCurrentStudentEdited={updateCurrentStudent} onClickOutside={handleOutsideClick} defaultValue={defaultGradeValues}/>
     })
 
     const onGradeNameInputChange = (event) => {
@@ -58,10 +62,17 @@ const NewGradeColumn = ({ students, trackNewGradeValues, removeNewGrade, handleS
     }
 
    
-    const onAddClick = () => {
+    const onAddClick = (defaultGrade) => {
+        if (defaultGrade !== 'null') {
+            assignDefaults(defaultGrade)            
+            updateDefaultGradeValues({
+                default: true,
+                value: defaultGrade
+            })            
+        }
         updateDisplayName(true)
         updateDisplayPopup(false)
-        updateShowInput(true); 
+        updateShowInput(true);        
     }
 
     const closePopup = () => {       

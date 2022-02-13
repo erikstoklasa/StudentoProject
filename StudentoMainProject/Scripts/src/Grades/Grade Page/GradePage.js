@@ -420,16 +420,13 @@ const GradePage = () => {
         }
     }
 
-    const trackNewGradeValues = (grade, id) => {
-      
+    const trackNewGradeValues = (grade, id) => { 
 
         const newGrade = {
             value: getInternalGradeValue(grade),
             subjectInstanceId: InstanceId,
             studentId: id,
-        }
-        
-        
+        }        
 
         if (!newGrades.some(e => e.studentId === newGrade.studentId)) {
             const newArr = [...newGrades, newGrade]            
@@ -447,6 +444,17 @@ const GradePage = () => {
             
             updateNewGrades(newArr)
         }
+    }
+
+    const assignDefaultNewGrades = (defaultGrade) => {
+        const defaultGradeArr = orderedStudents.map(student => {
+            return ({
+                value: getInternalGradeValue(defaultGrade),
+                subjectInstanceId: InstanceId,
+                studentId: student.id,
+            })
+        })
+        updateNewGrades(defaultGradeArr)
     }
 
     const removeNewGrade = (studentId) => {
@@ -561,7 +569,7 @@ const GradePage = () => {
                 <div className="grade-table-container">
                     {(orderedStudents ? <StudentColumn students={orderedStudents} /> : null)}
                     {(orderedStudents && bulkGradeData ? <AverageColumn students={orderedStudents} onClickHeader={onClickHeader} /> : null)}
-                    {(orderedStudents ? <NewGradeColumn students={orderedStudents} trackNewGradeValues={trackNewGradeValues} removeNewGrade={removeNewGrade} handleSubmitNewGrades={handleSubmitNewGrades} /> : null)}
+                    {(orderedStudents ? <NewGradeColumn students={orderedStudents} trackNewGradeValues={trackNewGradeValues} removeNewGrade={removeNewGrade} handleSubmitNewGrades={handleSubmitNewGrades} assignDefaults={assignDefaultNewGrades}/> : null)}
                     {(orderedStudents && orderedGrades && bulkGradeData ? <GradeDisplaySection orderedGrades={orderedGrades} orderedStudents={orderedStudents} bulkGradeData={bulkGradeData} modifyGrade={modifyGrade} modifyGradeGroup={modifyGradeGroup} deleteGradeGroup={deleteGradeGroup}/>: null)}
                     {(orderedStudents ? <FillerColumn students={orderedStudents} /> : null)}
                 </div>

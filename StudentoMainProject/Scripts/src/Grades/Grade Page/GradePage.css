@@ -98,8 +98,10 @@
 .grade-input{
     max-width: 40px;
     max-height: 25px;
+    padding: 0.375rem 0 !important;
     -webkit-appearance: none !important;
     margin: 0;
+    text-align: center;
 }
 
 .column-header-input{

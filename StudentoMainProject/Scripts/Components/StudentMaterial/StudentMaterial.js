@@ -9,12 +9,18 @@ import moment from 'moment';
 
 export const MaterialContext = createContext()
 
-const StudentMaterial = ({authors}) => {
-    const subjectId = window.location.href.split("Details?id=").pop();    
+const StudentMaterial = ({ authors }) => {
+    
+    const getSubjectId = () => {
+        const queryString = window.location.search
+        const urlParams = new URLSearchParams(queryString);
+        return urlParams.get('id').split('/')[0]
+    }    
+
+    const subjectId = getSubjectId()   
     const [showMaterialPopup, updateShowMaterialPopup] = useState(false);
     const [userInfo, updateUserInfo] = useState()
-    const [materialData, updateMaterials] = useState();
-        
+    const [materialData, updateMaterials] = useState();        
 
     const getApiAddress = () => {       
         const getUserType = (data) => {           

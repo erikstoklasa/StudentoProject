@@ -29,7 +29,13 @@ namespace SchoolGradebook.API.GradeAverages
         private string UserId { get; set; }
         
 
-        public GradeAverageController(GradeService gradeService, TeacherService teacherService, GradeAverageService gradeAverageService, StudentService studentService, IHttpContextAccessor httpContextAccessor, TeacherAccessValidation teacherAccessValidation) {
+        public GradeAverageController(GradeService gradeService,
+                                      TeacherService teacherService,
+                                      GradeAverageService gradeAverageService,
+                                      StudentService studentService,
+                                      IHttpContextAccessor httpContextAccessor,
+                                      TeacherAccessValidation teacherAccessValidation)
+        {
 
             this.gradeService = gradeService;
             this.teacherService = teacherService;
@@ -164,7 +170,6 @@ namespace SchoolGradebook.API.GradeAverages
         /// <returns>Action result</returns>
         [HttpPost("CalculateStudentSubjectInstanceAverage")]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        
         [Authorize(policy : "OnlyStudent")]
         public async Task<ActionResult<GradeAverageObject>> CalculateGradeAverageForStudentsOnSubjectInstance(int subjectInstanceId) {
 
@@ -201,9 +206,7 @@ namespace SchoolGradebook.API.GradeAverages
     public class GradeAverageObject
     {
         public enum USERTYPE { Teacher, Student }
-
         public int Id { get; set; }
-
         public int SubjectInstanceId { get; set; }
         public double Value { get; set; } //For table in the db
         public int TeacherId { get; set; }

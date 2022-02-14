@@ -12,43 +12,43 @@ namespace SchoolGradebook.Models
         public int Id { get; set; }
         public string? UserAuthId { get; set; }
         [Display(Name = "Jméno")]
-        public String? FirstName { get; set; }
+        public string? FirstName { get; set; }
         [Display(Name = "Příjmení")]
-        public String? LastName { get; set; }
+        public string? LastName { get; set; }
         [Display(Name = "Datum narození")]
         public DateTime? Birthdate { get; set; }
         [Display(Name = "Rodné číslo")]
-        public String? PersonalIdentifNumber { get; set; }
+        public string? PersonalIdentifNumber { get; set; }
         [Display(Name = "Místo narození")]
-        public String? PlaceOfBirth { get; set; }
+        public string? PlaceOfBirth { get; set; }
         [Display(Name = "Datum nástupu")]
         public DateTime? StartDate { get; set; }
         [Display(Name = "Pojišťovna")]
-        public String? InsuranceCompany { get; set; }
+        public string? InsuranceCompany { get; set; }
         [Display(Name = "Číslo občanského průkazu")]
-        public String? IdentifCardNumber { get; set; }
+        public string? IdentifCardNumber { get; set; }
         [Display(Name = "Dosažené vzdělání")]
-        public String? EducationLevel { get; set; }
+        public string? EducationLevel { get; set; }
         //Address
         [Display(Name = "Ulice a čp.")]
-        public String? StreetAddress { get; set; }
+        public string? StreetAddress { get; set; }
         [Display(Name = "Město")]
-        public String? CityAddress { get; set; }
+        public string? CityAddress { get; set; }
         [Display(Name = "PSČ")]
-        public String? ZipCode { get; set; }
+        public string? ZipCode { get; set; }
         //Contact
-        public String? Email { get; set; }
+        public string? Email { get; set; }
         [Display(Name = "Telefonní číslo")]
-        public String? PhoneNumber { get; set; }
-        public int? SchoolId { get; set; }
-        public String GetFullName()
+        public string? PhoneNumber { get; set; }
+        public int SchoolId { get; set; }
+        public string GetFullName()
         {
             FirstName ??= "";
             LastName ??= "";
             return $"{FirstName} {LastName}";
         }
 
-        public String GetInitials()
+        public string GetInitials()
         {
             FirstName ??= "";
             LastName ??= "";

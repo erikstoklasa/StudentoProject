@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using MimeTypes;
 using SchoolGradebook.Models;
 using SchoolGradebook.Services;
+using StudentoMainProject.API.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -30,7 +31,13 @@ namespace SchoolGradebook.API.SubjectMaterials
 
         private string UserId { get; set; }
 
-        public SubjectMaterialsController(SubjectMaterialService subjectMaterialService, IHttpContextAccessor httpContextAccessor, TeacherService teacherService, TeacherAccessValidation teacherAccessValidation, IConfiguration configuration, StudentService studentService, StudentAccessValidation studentAccessValidation)
+        public SubjectMaterialsController(SubjectMaterialService subjectMaterialService,
+                                          IHttpContextAccessor httpContextAccessor,
+                                          TeacherService teacherService,
+                                          TeacherAccessValidation teacherAccessValidation,
+                                          IConfiguration configuration,
+                                          StudentService studentService,
+                                          StudentAccessValidation studentAccessValidation)
         {
             this.subjectMaterialService = subjectMaterialService;
             this.teacherService = teacherService;
@@ -54,6 +61,10 @@ namespace SchoolGradebook.API.SubjectMaterials
         public async Task<ActionResult<IEnumerable<SubjectMaterialObject>>> GetSubjectMaterials(int subjectInstanceId)
         {
             int teacherId = await teacherService.GetTeacherId(UserId);
+            if (teacherId == -1)
+            {
+                return BadRequest();
+            }
             if (!await teacherAccessValidation.HasAccessToSubject(teacherId, subjectInstanceId))
             {
                 return Forbid();
@@ -62,23 +73,47 @@ namespace SchoolGradebook.API.SubjectMaterials
             List<SubjectMaterialObject> output = new();
             foreach (var sm in subjectMaterials)
             {
-                SubjectMaterialObject smo = new()
+                if (sm.AddedBy == SubjectMaterial.USERTYPE.Student)
                 {
-                    Id = sm.Id.ToString(),
-                    Name = sm.Name,
-                    Description = sm.Description,
-                    FileExt = sm.FileExt,
-                    FileType = sm.FileType,
-                    Added = sm.Added,
-                    AddedBy = (SubjectMaterialObject.USERTYPE)sm.AddedBy,
-                    SubjectMaterialGroupName = sm.SubjectMaterialGroup?.Name,
-                    SubjectTypeId = sm.SubjectTypeId,
-                    AddedById = sm.AddedById,
-                    SubjectMaterialGroupId = sm.SubjectMaterialGroupId,
-                    SubjectMaterialGroupAddedBy = sm.SubjectMaterialGroup != null ? (SubjectMaterialObject.USERTYPE?)sm.SubjectMaterialGroup?.AddedBy : null,
-                    SubjectMaterialGroupAddedById = sm.SubjectMaterialGroup?.AddedById
-                };
-                output.Add(smo);
+                    SubjectMaterialObject smo = new()
+                    {
+                        Id = sm.Id.ToString(),
+                        Name = sm.Name,
+                        Description = sm.Description,
+                        FileExt = sm.FileExt,
+                        FileType = sm.FileType,
+                        Added = sm.Added,
+                        AddedBy = new UserObject()
+                        {
+                            Id = sm.AddedById,
+                            UserType = UserObject.USERTYPE.Student,
+                        },
+                        SubjectMaterialGroupName = sm.SubjectMaterialGroup?.Name,
+                        SubjectTypeId = sm.SubjectTypeId
+                    };
+                    output.Add(smo);
+                } else //is added by teacher
+                {
+                    var teacher = await teacherService.GetTeacherBasicInfoAsync(sm.AddedById);
+                    SubjectMaterialObject smo = new()
+                    {
+                        Id = sm.Id.ToString(),
+                        Name = sm.Name,
+                        Description = sm.Description,
+                        FileExt = sm.FileExt,
+                        FileType = sm.FileType,
+                        Added = sm.Added,
+                        AddedBy = new UserObject()
+                        {
+                            Id = sm.AddedById,
+                            UserType = UserObject.USERTYPE.Teacher,
+                        },
+                        SubjectMaterialGroupName = sm.SubjectMaterialGroup?.Name,
+                        SubjectTypeId = sm.SubjectTypeId
+                    };
+                    output.Add(smo);
+                }
+                
             }
             return output;
         }
@@ -182,9 +217,9 @@ namespace SchoolGradebook.API.SubjectMaterials
                     FileExt = sm.FileExt,
                     FileType = sm.FileType,
                     Added = DateTime.UtcNow,
-                    AddedBy = (SubjectMaterial.USERTYPE)sm.AddedBy,
+                    AddedBy = (SubjectMaterial.USERTYPE)sm.AddedBy.UserType,
                     SubjectTypeId = sm.SubjectTypeId,
-                    AddedById = sm.AddedById,
+                    AddedById = sm.AddedBy.Id,
                     SubjectMaterialGroupId = sm.SubjectMaterialGroupId
                 });
 
@@ -292,29 +327,52 @@ namespace SchoolGradebook.API.SubjectMaterials
             int studentId = await studentService.GetStudentId(UserId);
             if (!await studentAccessValidation.HasAccessToSubject(studentId, subjectInstanceId))
             {
-                return Forbid();
+                return StatusCode(403);
             }
             IEnumerable<SubjectMaterial> subjectMaterials = await subjectMaterialService.GetAllMaterialsBySubjectInstance(subjectInstanceId);
             List<SubjectMaterialObject> output = new();
             foreach (var sm in subjectMaterials)
             {
-                SubjectMaterialObject smo = new()
+                if (sm.AddedBy == SubjectMaterial.USERTYPE.Student)
                 {
-                    Id = sm.Id.ToString(),
-                    Name = sm.Name,
-                    Description = sm.Description,
-                    FileExt = sm.FileExt,
-                    FileType = sm.FileType,
-                    Added = sm.Added,
-                    AddedBy = (SubjectMaterialObject.USERTYPE)sm.AddedBy,
-                    SubjectMaterialGroupName = sm.SubjectMaterialGroup?.Name,
-                    SubjectTypeId = sm.SubjectTypeId,
-                    AddedById = sm.AddedById,
-                    SubjectMaterialGroupId = sm.SubjectMaterialGroupId,
-                    SubjectMaterialGroupAddedBy = sm.SubjectMaterialGroup != null ? (SubjectMaterialObject.USERTYPE?)sm.SubjectMaterialGroup?.AddedBy : null,
-                    SubjectMaterialGroupAddedById = sm.SubjectMaterialGroup?.AddedById
-                };
-                output.Add(smo);
+                    SubjectMaterialObject smo = new()
+                    {
+                        Id = sm.Id.ToString(),
+                        Name = sm.Name,
+                        Description = sm.Description,
+                        FileExt = sm.FileExt,
+                        FileType = sm.FileType,
+                        Added = sm.Added,
+                        AddedBy = new UserObject()
+                        {
+                            Id = sm.AddedById,
+                            UserType = UserObject.USERTYPE.Student,
+                        },
+                        SubjectMaterialGroupName = sm.SubjectMaterialGroup?.Name,
+                        SubjectTypeId = sm.SubjectTypeId
+                    };
+                    output.Add(smo);
+                }
+                else //is added by teacher
+                {
+                    SubjectMaterialObject smo = new()
+                    {
+                        Id = sm.Id.ToString(),
+                        Name = sm.Name,
+                        Description = sm.Description,
+                        FileExt = sm.FileExt,
+                        FileType = sm.FileType,
+                        Added = sm.Added,
+                        AddedBy = new UserObject()
+                        {
+                            Id = sm.AddedById,
+                            UserType = UserObject.USERTYPE.Teacher,
+                        },
+                        SubjectMaterialGroupName = sm.SubjectMaterialGroup?.Name,
+                        SubjectTypeId = sm.SubjectTypeId
+                    };
+                    output.Add(smo);
+                }
             }
             return output;
         }
@@ -395,7 +453,7 @@ namespace SchoolGradebook.API.SubjectMaterials
         }
 
         /// <summary>
-        /// Soft deletes subject material group
+        /// Soft deletes subject material
         /// </summary>
         /// <param name="subjectMaterialId"></param>
         /// <returns></returns>
@@ -509,7 +567,6 @@ namespace SchoolGradebook.API.SubjectMaterials
     }
     public class SubjectMaterialObject
     {
-        public enum USERTYPE { Teacher, Student }
 #nullable enable
         public string? Id { get; set; }
 #nullable disable
@@ -520,12 +577,9 @@ namespace SchoolGradebook.API.SubjectMaterials
         public string? FileExt { get; set; }
         public string? FileType { get; set; } //MIME Media type https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
         public DateTime? Added { get; set; }
-        public USERTYPE? AddedBy { get; set; }
-        public int AddedById { set; get; }
+        public UserObject? AddedBy { get; set; }
         public string? SubjectMaterialGroupName { set; get; }
-        public USERTYPE? SubjectMaterialGroupAddedBy { set; get; }
-        public int? SubjectMaterialGroupAddedById { set; get; }
-
+        public UserObject? SubjectMaterialGroupAddedBy { set; get; }
         public int? SubjectTypeId { get; set; }
         public int SubjectInstanceId { get; set; }
         public int? SubjectMaterialGroupId { set; get; }

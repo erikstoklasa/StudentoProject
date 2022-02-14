@@ -21,7 +21,10 @@ namespace StudentoMainProject.API
 
         private string UserId { get; set; }
 
-        public ClassesController(IHttpContextAccessor httpContextAccessor, ClassService classService, AdminService adminService, StudentService studentService)
+        public ClassesController(IHttpContextAccessor httpContextAccessor,
+                                 ClassService classService,
+                                 AdminService adminService,
+                                 StudentService studentService)
         {
             this.classService = classService;
             this.adminService = adminService;

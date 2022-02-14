@@ -59,7 +59,31 @@ namespace SchoolGradebook.Services
         public async Task<Teacher> GetTeacherAsync(int teacherId)
         {
             Teacher teacher = await context.Teachers
-                .Where(s => s.Id == teacherId)
+                .Where(t => t.Id == teacherId)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+            return teacher;
+        }
+        public async Task<Teacher> GetTeacherAsync(string userAuthId)
+        {
+            Teacher teacher = await context.Teachers
+                .Where(t => t.UserAuthId == userAuthId)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+            return teacher;
+        }
+        public async Task<Teacher> GetTeacherBasicInfoAsync(int teacherId)
+        {
+            //Basic info: First Name, Last Name, Id
+            Teacher teacher = await context.Teachers
+                .Where(t => t.Id == teacherId)
+                .Select(t => new Teacher
+                {
+                    Id = t.Id,
+                    FirstName = t.FirstName,
+                    LastName = t.LastName,
+                    SchoolId = t.SchoolId
+                })
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
             return teacher;

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SchoolGradebook.Models;
 using SchoolGradebook.Services;
+using StudentoMainProject.API.Models;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
@@ -664,7 +665,10 @@ namespace SchoolGradebook.API.Grades
                     var newGrade = new GradeObject
                     {
                         Added = g.Added,
-                        AddedBy = (GradeObject.USERTYPE)utype,
+                        AddedBy = new UserObject()
+                        {
+                            UserType = (UserObject.USERTYPE)utype,
+                        },
                         Id = g.Id,
                         Name = g.Name,
                         Weight = g.Weight,
@@ -698,7 +702,10 @@ namespace SchoolGradebook.API.Grades
                     var newGrade = new GradeObject
                     {
                         Added = g.Added,
-                        AddedBy = (GradeObject.USERTYPE)utype, //Casting the Grade UserType data model enum to the response GradeObject UserType
+                        AddedBy = new UserObject()
+                        {
+                            UserType = (UserObject.USERTYPE)utype,
+                        },
                         Id = g.Id,
                         Name = g.Name,
                         Weight = g.Weight,
@@ -821,7 +828,6 @@ namespace SchoolGradebook.API.Grades
     }
     public class GradeObject
     {
-        public enum USERTYPE { Teacher, Student }
         public int Id { get; set; }
         public string Name { get; set; }
         public string Value { get; set; }
@@ -833,7 +839,9 @@ namespace SchoolGradebook.API.Grades
         public DateTime? GradeGroupAdded { get; set; }
         public int? GradeGroupWeight { get; set; }
         public DateTime Added { get; set; }
-        public USERTYPE? AddedBy { get; set; }
+#nullable enable
+        public UserObject? AddedBy { get; set; }
+#nullable disable
 
     }
     public class GradeGroupObject

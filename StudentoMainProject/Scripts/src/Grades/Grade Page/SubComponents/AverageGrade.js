@@ -1,11 +1,18 @@
 import React from 'react'
-import '../GradePage.css';
+import { Cell } from '../SharedStyles'
+import styled from 'styled-components'
+
+const Average = styled.p`  
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+`
 
 const AverageGrade = ({ grade }) => {
     return (
-    <div className="grade-cell">
-            {(grade ? <p className="average-grade-text">{grade}</p> : <p className="grade-text"></p>)}           
-    </div>   
+    <Cell>
+        {grade ? <Average>{grade}</Average> : null}           
+    </Cell>   
     )
 }
 

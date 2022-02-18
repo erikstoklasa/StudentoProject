@@ -7,7 +7,39 @@ import FillerColumn from './SubComponents/FillerColumn.js'
 import NotificationBar from './SubComponents/NotificationBar.js'
 import apiAdress from './SubComponents/Variables'
 import moment from 'moment';
-import './GradePage.css';
+import styled from 'styled-components';
+
+const Info = styled.div` 
+    display: inline-block;    
+    margin-bottom: 25px;
+    white-space: nowrap;
+`
+const AverageHeading = styled.h2` 
+    white-space: nowrap;
+    font-weight: normal;
+`
+const Container = styled.div`
+    display: flex;
+    border-radius: 0.25rem;
+    background: #fff;
+    padding: 0;
+    padding-top: 20px;
+    padding-bottom: 10px !important;
+    overflow-x: auto;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16);
+`
+const EmptyTable = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    width: 100%;
+    border-radius: 0.25rem;
+    background: #fff;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16);
+    font-size: 2rem;
+`
 
 const GradePage = () => {
     const [sortByAverage, updateSortByAverage] = useState(false);
@@ -27,8 +59,7 @@ const GradePage = () => {
     const getInstanceId = () => {       
         const idContainer = document.querySelector("#subjectInstanceId")
         updateInstanceId(idContainer.value);
-    }       
-
+    }
     const fetchData = () => {
         if (InstanceId) {
             fetch(`${apiAdress}/Grades/Teacher?subjectInstanceId=${InstanceId}`, {
@@ -54,7 +85,6 @@ const GradePage = () => {
         
         }
     }
-
     const sortStudents = () => {      
         if (formattedStudentData && sortByAverage === false) {           
             if (formattedStudentData.length > 0) {
@@ -112,7 +142,6 @@ const GradePage = () => {
             updateBigAverage(average.toFixed(2))
         }
     }
-
     const calculateAverages = () => {        
        
         if (bulkStudentData.students && bulkGradeData.length > 0) {
@@ -542,39 +571,34 @@ const GradePage = () => {
   
     if (!orderedStudents) {     
         return (
-            <div>
-                <div className="subject-info">
-                    {(bulkStudentData ? <h1 className="subject-heading">{bulkStudentData.name}</h1> : null)}
-                    {(bulkGradeData ? <h2 className="subject-average-text">Průměr: <span className="average-header-number">{bigAverage}</span></h2> : null)}
+            <>
+                <Info>
+                    {(bulkStudentData ? <h1>{bulkStudentData.name}</h1> : null)}
+                    {(bulkGradeData ? <AverageHeading>Průměr: {bigAverage}</AverageHeading> : null)}
                     {(bulkStudentData.students ? <div>{`${bulkStudentData.students.length} studentů`}</div> : null)}
-                </div>                      
-           
-                <div className="empty-grade-table">
-                    <div>Zatím žádní studenti</div>                  
-                </div>
-            </div>
+                </Info>                
+                <EmptyTable>Zatím žádní studenti</EmptyTable>                 
+            </>
         )
     }
 
     else {
         return (
-            <div>
-                
-                 <div className="subject-info">
-                    {(bulkStudentData ? <h1 className="subject-heading">{bulkStudentData.name}</h1> : null)}
-                    {(bulkGradeData ? <h2 className="subject-average-text">Průměr: <span className="average-header-number">{bigAverage}</span></h2> : null)}
-                    {(bulkStudentData.students ? <div>{`${bulkStudentData.students.length} studentů`}</div> : null)}
-                </div>
-                <NotificationBar data={notificationData} />
-                <div className="grade-table-container">
-                    {(orderedStudents ? <StudentColumn students={orderedStudents} /> : null)}
-                    {(orderedStudents && bulkGradeData ? <AverageColumn students={orderedStudents} onClickHeader={onClickHeader} /> : null)}
-                    {(orderedStudents ? <NewGradeColumn students={orderedStudents} trackNewGradeValues={trackNewGradeValues} removeNewGrade={removeNewGrade} handleSubmitNewGrades={handleSubmitNewGrades} assignDefaults={assignDefaultNewGrades}/> : null)}
-                    {(orderedStudents && orderedGrades && bulkGradeData ? <GradeDisplaySection orderedGrades={orderedGrades} orderedStudents={orderedStudents} bulkGradeData={bulkGradeData} modifyGrade={modifyGrade} modifyGradeGroup={modifyGradeGroup} deleteGradeGroup={deleteGradeGroup}/>: null)}
-                    {(orderedStudents ? <FillerColumn students={orderedStudents} /> : null)}
-                </div>
-           
-            </div>
+            <>                
+            <Info>
+                {(bulkStudentData ? <h1>{bulkStudentData.name}</h1> : null)}
+                {(bulkGradeData ? <AverageHeading>Průměr: {bigAverage}</AverageHeading> : null)}
+                {(bulkStudentData.students ? <div>{`${bulkStudentData.students.length} studentů`}</div> : null)}
+            </Info>
+            <NotificationBar data={notificationData} />
+            <Container>
+                {(orderedStudents ? <StudentColumn students={orderedStudents} /> : null)}
+                {(orderedStudents && bulkGradeData ? <AverageColumn students={orderedStudents} onClickHeader={onClickHeader} /> : null)}
+                {(orderedStudents ? <NewGradeColumn students={orderedStudents} trackNewGradeValues={trackNewGradeValues} removeNewGrade={removeNewGrade} handleSubmitNewGrades={handleSubmitNewGrades} assignDefaults={assignDefaultNewGrades}/> : null)}
+                {(orderedStudents && orderedGrades && bulkGradeData ? <GradeDisplaySection orderedGrades={orderedGrades} orderedStudents={orderedStudents} bulkGradeData={bulkGradeData} modifyGrade={modifyGrade} modifyGradeGroup={modifyGradeGroup} deleteGradeGroup={deleteGradeGroup}/>: null)}
+                {(orderedStudents ? <FillerColumn students={orderedStudents} /> : null)}
+            </Container>           
+            </>
         )
     }
 }

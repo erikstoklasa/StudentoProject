@@ -2,7 +2,16 @@ import React, {useState} from 'react'
 import ColumnHeader from './ColumnHeader';
 import GradePopup from './GradePopup'
 import NewGrade from './NewGrade';
-import '../GradePage.css'
+import { PrimaryButton } from '../../../../Styles/GlobalStyles';
+import styled from 'styled-components'
+
+const ButtonContainer = styled.div` 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+`
 
 const NewGradeColumn = ({ students, trackNewGradeValues, removeNewGrade, handleSubmitNewGrades, assignDefaults }) => {
     const [displayGradeNameInput, updateDisplayGradeNameInput] = useState(false)
@@ -90,17 +99,18 @@ const NewGradeColumn = ({ students, trackNewGradeValues, removeNewGrade, handleS
     }  
 
     return (
-        <div className='grade-table-column new-grade-column' onKeyDown={handleArrowClick}>            
+        <div onKeyDown={handleArrowClick}>            
             <ColumnHeader title={'Přidat známku'} type={'New Grade'} handleClick={handleHeaderClick} displayInput={displayGradeNameInput} gradeName={newGradeName} displayName={displayNameInHeader} />
             {displayPopup ? <GradePopup newGrade={true} onNameChange={onGradeNameInputChange} onWeightChange={onWeightChange} closePopup={closePopup} onAddClick={onAddClick}/> : null}
             {inputList}
-            {(showInput ? <div className="button-cell"><button className="btn btn-primary" onClick={() => {
+            {(showInput ? <ButtonContainer>
+                <PrimaryButton onClick={() => {
                 if (newGradeName && newGradeWeight) {
                     handleSubmitNewGrades(newGradeName, newGradeWeight)              
                         resetColumn()                
                 }
-            }}>Přidat</button></div> : null)}
-            
+                }}>Přidat</PrimaryButton>
+            </ButtonContainer> : null)}            
         </div>
     )
 

@@ -1,17 +1,21 @@
 import React from 'react'
 import FillerGrade from './FillerGrade'
 import ColumnHeader from './ColumnHeader'
-import '../GradePage.css'
+import styled from 'styled-components'
+
+const Column = styled.div` 
+    width: 100%;
+`
 
 const FillerColumn = ({ students }) => {
     const cellArray = students.map(student => { 
         return <FillerGrade key={student.id} id={student.id}/>
     })
     return (
-        <div className="filler-column">
+        <Column>
             <ColumnHeader title={''}/>
             {cellArray}
-        </div>
+        </Column>
     )
 }
 export default FillerColumn

@@ -1,6 +1,44 @@
 import React, { useState } from 'react'
+import { PrimaryButton } from '../../../../Styles/GlobalStyles'
+import styled from 'styled-components'
 
-import '../GradePage.css';
+const Header = styled.div` 
+    cursor: pointer;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    padding-bottom: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    > p {
+        white-space: nowrap;
+        margin: 0;
+        padding: 0;
+        user-select: none;
+    }
+`
+const NewHeader = styled(Header)` 
+    width:150px;
+`
+
+const Button = styled(PrimaryButton)` 
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    > p {
+        white-space: nowrap;
+        margin: 0;
+        padding: 0;
+        user-select: none;
+    }
+`
+const AverageIcon = styled.img` 
+    height: 18px;
+    margin-right: 0.4rem;
+    transform: scale(0.8);
+`
 
 const ColumnHeader = ({ title, type, handleClick, displayInput, onClickHeader, grade, gradeName, displayName, activatePopup }) => {
     const [displayArrow, updateDisplayArrow] = useState(false)    
@@ -12,42 +50,45 @@ const ColumnHeader = ({ title, type, handleClick, displayInput, onClickHeader, g
 
     if (type === 'New Grade') {
         return (
-            <div className="column-header new-grade-header">
-            
-                {(!displayInput ? <div className=" column-header-container"><div className=" btn btn-primary btn-display" onClick={handleClick}><img src="/images/add.svg" alt="Přidat" height="18px" className="plus"></img><p className="column-header-text">{title}</p></div></div>
-                    : <div className="column-header-container nowrap">{displayName? gradeName : null}</div>)}
-            
-            </div>
+            <NewHeader>            
+                {(!displayInput ?                    
+                    <Button onClick={handleClick}>                        
+                    <p>{title}</p>
+                    </Button>                       
+                    : <p>{displayName? gradeName : null}</p>)}            
+            </NewHeader>
         )
     }
 
-
-
-
     if (type === 'average' && !displayArrow) { 
         return (
-            <div className="column-header" onClick={() => {
+            <Header onClick={() => {
                 onClickHeader()
                 handleAverageHeaderClick()
-            }}><img src="/images/uparrow.svg" height="18px" className="plus"></img><p className="column-header-text">{title}</p></div>
+            }}>
+                <AverageIcon src="/images/uparrow.svg"/>
+                <p>{title}</p>
+            </Header>
         ) 
     }
 
     if (type === 'average' && displayArrow) { 
         return (
-            <div className="column-header" onClick={() => {
+            <Header onClick={() => {
                 onClickHeader()
                 handleAverageHeaderClick()
-            }}><img src="/images/downarrow.svg" height="18px" className="plus"></img><p className="column-header-text">{title}</p></div>
+            }}>
+                <AverageIcon src="/images/downarrow.svg"></AverageIcon>
+                <p>{title}</p>
+            </Header>
         ) 
     }
 
-
     else {
         return (
-            <div className="column-header" onClick={activatePopup}><p className="column-header-text">{title}</p></div>
-               
-            
+            <Header onClick={activatePopup}>
+                <p>{title}</p>
+            </Header>           
         )
     }
 }

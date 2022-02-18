@@ -14,9 +14,9 @@ const AverageColumn = ({ students, onClickHeader }) => {
 
 
     return (
-        <div className="grade-table-column">
+        <div>
             <ColumnHeader title={'Průměr'} type={'average'} onClickHeader={onClickHeader} />
-            <div className = "grade-shadow-bottom">
+            <div>
                 {gradeList}            
             </div>
         </div>

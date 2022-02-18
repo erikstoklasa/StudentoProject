@@ -3,7 +3,6 @@ import apiAddress from './variables.js'
 import SubjectTitle from './SubComponents/SubjectTitle'
 import StudentGrades from './SubComponents/StudentGrades'
 import StudentMaterial from '../../Components/StudentMaterial/StudentMaterial'
-import './SubjectDetail.css'
 import styled from 'styled-components'
 
 const Container = styled.div` 

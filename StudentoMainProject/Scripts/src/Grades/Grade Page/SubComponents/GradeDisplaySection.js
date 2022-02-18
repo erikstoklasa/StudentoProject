@@ -1,6 +1,10 @@
 import React from 'react'
 import GradeDisplayColumn from './GradeDisplayColumn'
-import '../GradePage.css'
+import styled from 'styled-components'
+
+const Section = styled.div` 
+    display: flex;
+`
 
 const GradeDisplaySection = ({ orderedGrades, orderedStudents, bulkGradeData, modifyGrade, modifyGradeGroup, deleteGradeGroup }) => { 
  
@@ -10,9 +14,9 @@ const GradeDisplaySection = ({ orderedGrades, orderedStudents, bulkGradeData, mo
     })        
            
     return (
-        <div className="grade-column-section">
+        <Section>
             {gradeColumnList}
-        </div>
+        </Section>
     )
 }
 

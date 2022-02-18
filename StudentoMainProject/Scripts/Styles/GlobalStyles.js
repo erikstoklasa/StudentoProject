@@ -39,7 +39,16 @@ export const DangerButton = styled(Button)`
     background-color: #dc3545;
     border-color: #dc3545;
 `
-
+export const SecondaryButton = styled(Button)` 
+    color: #000;
+    background-color: #fff;
+    border: 2px solid var(--primaryYellowStrong) !important;
+    :hover {
+        color: #000;
+        background-color: var(--primaryYellowStrong);
+        border-color: var(--primaryYellowStrong);
+    }
+`
 export const Table = styled.div`
     width: 100%;
     margin-bottom: 1rem;

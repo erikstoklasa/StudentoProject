@@ -1,22 +1,38 @@
 import React from 'react'
-import '../SubjectDetail.css'
+import styled from 'styled-components'
+
+const Container = styled.div` 
+    display: flex;
+    flex-wrap: wrap;
+`
+const HeadingContainer = styled.div` 
+    flex-grow: 1;
+    flex-basis: 656px;  
+`
+const AverageContainer = styled.div` 
+    flex-grow: 1;
+    flex-basis: 656px;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+`
 
 const SubjectTitle = ({ info, average }) => {
     
     //display subject title, student average and teacher name
     if (info) {
         return (
-            <div className="subject-title-container">
-                <div className="heading-container">
+            <Container>
+                <HeadingContainer>
                     <h2>{info.name}</h2>                    
-                </div>
-                <div className="average-container ">
+                </HeadingContainer>
+                <AverageContainer>
                     <h2>{`Ø `}{average.toFixed(2)}</h2>
-                </div>
-            </div>
+                </AverageContainer>
+            </Container>
         )
     } else { 
-        return(<div></div>)
+        return(<></>)
     }
 }
 

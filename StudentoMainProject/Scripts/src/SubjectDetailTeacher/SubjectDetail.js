@@ -4,8 +4,18 @@ import SubjectTitle from './SubComponents/SubjectTitle'
 import StudentGrades from './SubComponents/StudentGrades'
 import StudentMaterial from '../../Components/StudentMaterial/StudentMaterial'
 import './SubjectDetail.css'
-  
-function SubjectDetail() {
+import styled from 'styled-components'
+
+const Container = styled.div` 
+    display: flex;         
+    justify-content: space-between;
+    gap: 20px;
+    @media(max-width: 1120px){   
+        flex-wrap: wrap;
+    }
+`
+
+const SubjectDetail = () => {
     //initialize state
     const [subjectId, updateSubjectId] = useState(window.location.href.split("Details?id=").pop());
     const [subjectInfo, updateSubjectInfo] = useState();
@@ -151,16 +161,16 @@ function SubjectDetail() {
 
     //display everything
     return (
-        <div>
+        <>
             {subjectInfo && studentAverage ? <SubjectTitle info={subjectInfo} average={studentAverage} /> : null}            
             {students && subjectInfo?
-                <div className="grades-material-container">
+                <Container>
                     <StudentGrades students={students} info={subjectInfo} />
                     <StudentMaterial authors={subjectInfo.teacher}/>
-                </div>                
+                </Container>                
             : null}
             <a href="/Teacher">Všechny předměty</a>            
-        </div>        
+        </>        
     );
 }
 

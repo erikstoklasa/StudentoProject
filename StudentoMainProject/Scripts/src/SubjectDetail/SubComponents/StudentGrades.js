@@ -1,7 +1,27 @@
 import React from 'react'
 import GradeView from './GradeView.js'
 import ErrorAlert from '../../../Components/Alerts/ErrorAlert.js'
-import InfoAlert from '../../../Components/Alerts/InfoAlert.js'
+import { PrimaryButton } from '../../../Styles/GlobalStyles.js'
+import styled from 'styled-components'
+
+const Grades = styled.div` 
+    flex-basis: 500px;
+    flex-grow: 1; 
+`
+const Heading = styled.p` 
+    margin-top: 10px;
+    margin-bottom: 10px;
+    white-space: nowrap;    
+    color: var(--grey);
+    text-align: start;
+`
+const HeadingContainer = styled.div` 
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;     
+    margin: 10px 0px 10px 0px;
+`
 
 const StudentGrades = ({ grades, showPopup, deleteGrade }) => {
     
@@ -17,23 +37,23 @@ const StudentGrades = ({ grades, showPopup, deleteGrade }) => {
             })
         
             return (
-                <div className="student-grades-container">
-                    <p className="grades-heading">Známky od vyučující/ho</p>
+                <Grades>
+                    <Heading>Známky od vyučující/ho</Heading>
                     <GradeView grades={teacherGrades} type={'teacherGrades'} />
-                    <div className="grades-heading-container">
-                        <p className="grades-heading">Známky přidáné mnou</p>
-                        <a class="btn btn-primary" onClick={() => { showPopup() }}><img src="/images/add.svg" alt="Přidat" height="20px" class="btn-icon" ></img>Přidat známku</a>
-                    </div>
+                    <HeadingContainer>
+                        <Heading>Známky přidáné mnou</Heading>
+                        <PrimaryButton onClick={() => { showPopup() }}>Přidat známku</PrimaryButton>
+                    </HeadingContainer>
                     <GradeView grades={studentGrades} type={'studentGrades'} deleteGrade={deleteGrade} />
-                </div>
+                </Grades>
             )
 
         } else {
             return (
-                <div className="student-grades-container">
-                    <p className="grades-heading">Známky</p>
+                <Grades>
+                    <Heading>Známky</Heading>
                     <ErrorAlert text={'Nepodařilo se načíst známky 🙁'} />
-                </div>
+                </Grades>
             )
         }
     

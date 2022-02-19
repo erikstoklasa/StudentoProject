@@ -101,7 +101,7 @@ export const StyledInfoAlert = styled(StyledAlert)`
     background-color: #d1ecf1;
     border-color: #bee5eb;
 `
-export const StyledErrorAlert = styled(Alert)` 
+export const StyledErrorAlert = styled(StyledAlert)` 
     color: #721c24;
     background-color: #f8d7da;
     border-color: #f5c6cb;

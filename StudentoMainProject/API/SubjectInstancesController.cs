@@ -11,6 +11,7 @@ using SchoolGradebook.Services;
 using StudentoMainProject.Services;
 using StudentoMainProject.Models;
 using System.Net;
+using StudentoMainProject.API.Models;
 
 namespace SchoolGradebook.API.SubjectInstances
 {
@@ -80,13 +81,13 @@ namespace SchoolGradebook.API.SubjectInstances
             List<UserObject> userObjects = new();
             foreach (var s in students)
             {
-                userObjects.Add(new UserObject() { Id = s.Id, FirstName = s.FirstName, LastName = s.LastName });
+                userObjects.Add(new UserObject() { Id = s.Id, FirstName = s.FirstName, LastName = s.LastName, UserType = UserObject.USERTYPE.Student });
             }
             return new SubjectInstanceObject()
             {
                 Id = si.Id,
                 Name = si.SubjectType.Name,
-                Teacher = new UserObject() { Id = si.TeacherId, FirstName = si.Teacher.FirstName, LastName = si.Teacher.LastName },
+                Teacher = new UserObject() { Id = si.TeacherId, FirstName = si.Teacher.FirstName, LastName = si.Teacher.LastName, UserType = UserObject.USERTYPE.Teacher },
                 Students = userObjects
             };
         }
@@ -125,14 +126,14 @@ namespace SchoolGradebook.API.SubjectInstances
             List<UserObject> userObjects = new();
             foreach (var s in students)
             {
-                userObjects.Add(new UserObject() { Id = s.Id, FirstName = s.FirstName, LastName = s.LastName });
+                userObjects.Add(new UserObject() { Id = s.Id, FirstName = s.FirstName, LastName = s.LastName, UserType = UserObject.USERTYPE.Student });
             }
             ;
             return new SubjectInstanceObject()
             {
                 Id = si.Id,
                 Name = si.SubjectType.Name,
-                Teacher = new UserObject() { Id = si.TeacherId, FirstName = si.Teacher.FirstName, LastName = si.Teacher.LastName },
+                Teacher = new UserObject() { Id = si.TeacherId, FirstName = si.Teacher.FirstName, LastName = si.Teacher.LastName, UserType = UserObject.USERTYPE.Teacher },
                 Students = userObjects
             };
         }
@@ -157,7 +158,7 @@ namespace SchoolGradebook.API.SubjectInstances
                 {
                     Id = si.Id,
                     Name = si.SubjectType.Name,
-                    Teacher = new UserObject() { Id = si.TeacherId, FirstName = si.Teacher.FirstName, LastName = si.Teacher.LastName }
+                    Teacher = new UserObject() { Id = si.TeacherId, FirstName = si.Teacher.FirstName, LastName = si.Teacher.LastName, UserType = UserObject.USERTYPE.Teacher }
                 });
             }
             return output;
@@ -192,20 +193,4 @@ namespace SchoolGradebook.API.SubjectInstances
             return subjectInstanceObjects;
         }
     }
-
-
-    public class SubjectInstanceObject
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public UserObject Teacher { get; set; }
-        public ICollection<UserObject> Students { get; set; }
-    }
-    public class UserObject
-    {
-        public int Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-    }
-
 }

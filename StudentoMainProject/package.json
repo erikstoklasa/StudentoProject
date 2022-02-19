@@ -29,6 +29,8 @@
   },
   "dependencies": {
     "date-fns": "^2.21.1",
-    "moment": "^2.29.1"
+    "moment": "^2.29.1",
+    "styled-components": "^5.3.3",
+    "styled-icons": "^10.45.0"
   }
 }

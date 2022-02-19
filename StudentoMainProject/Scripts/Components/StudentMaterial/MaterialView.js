@@ -46,7 +46,7 @@ const StyledIcon = styled.img`
 `
 
 const MaterialView = ({ material, deleteMaterial, user }) => {    
-    const authors = useContext(MaterialContext)    
+    const authors = useContext(MaterialContext)      
     
     const getCanDelete = () => {
         if (user.data.typeName === "Teacher") {
@@ -62,11 +62,20 @@ const MaterialView = ({ material, deleteMaterial, user }) => {
 
     const getAuthorName = () => {        
         if (user.data.typeName === "Student") {
-            const userId = material.addedById
-            const author = authors.find(student => student.id === userId)
-            return `${author.firstName} ${author.lastName}`
+            if (material.addedBy === 0) {
+                return `${authors.teacher.firstName} ${authors.teacher.lastName}`
+            } else {
+                const authorId = material.addedById                
+                const author = authors.students.find(student => student.id === authorId)
+                if (author) {
+                    return `${author.firstName} ${author.lastName}`
+                } else {
+                    return ''
+                }
+            }            
         } else {
-            return `${authors.firstName} ${authors.lastName}`
+            //teacher always returns his name
+            return `${user.data.firstName} ${user.data.lastName}`
         }
     }    
 

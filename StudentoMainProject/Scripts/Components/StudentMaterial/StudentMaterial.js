@@ -49,9 +49,10 @@ const StudentMaterial = ({ authors }) => {
             else if (data.userType === 'teacher') return 'Teacher'
             else if(data.userType === 'teacher classmaster') return 'Teacher'
         }
-        const getTypeNum = (data) => {
-            if (data.userType === 'student')    return 1          
-            else if(data.userType === 'teacher') return 0
+
+        const getTypeNum = (data) => {            
+            if (data.userType === 'student') return 1          
+            else return 0
         }
 
         const getUserData = async () => {
@@ -168,10 +169,23 @@ const StudentMaterial = ({ authors }) => {
         updateShowMaterialPopup(true)
     }
 
+    const isLoaded = () => {
+        if (materialData && userInfo) {
+            if (userInfo.data.typeName === 'Teacher') {
+                return true
+            } else if (userInfo.data.typeName === 'Student' && authors) {
+                return true
+            } else {
+                return false
+            }
+        }
+        else return false
+    }    
+
     return (
         <MaterialContext.Provider value={authors}>
             <StyledContainer>
-                {materialData && userInfo && authors ?
+                {isLoaded() ?
                 <>
                 <StyledHeadingContainer>
                 <StyledHeading>Studijní materiály</StyledHeading>

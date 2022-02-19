@@ -101,7 +101,10 @@ const SubjectDetail = () => {
                 <SubjectTitle info={subjectInfo} grades={grades} />
                 <SubjectDetailContainer>
                     <StudentGrades grades={grades} showPopup={showPopup} deleteGrade={deleteStudentGrade} />
-                    <StudentMaterial authors={subjectInfo.data.students}/>
+                    <StudentMaterial authors={{
+                        students: [...subjectInfo.data.students],
+                        teacher: subjectInfo.data.teacher
+                    }} />
                     {showAddPopup ? <AddGradePopup addGrade={addStudentGrade} hidePopup={hidePopup} /> : null}
                 </SubjectDetailContainer>
             </>

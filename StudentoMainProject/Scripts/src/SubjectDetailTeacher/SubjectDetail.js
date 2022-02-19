@@ -166,7 +166,7 @@ const SubjectDetail = () => {
             {students && subjectInfo?
                 <Container>
                     <StudentGrades students={students} info={subjectInfo} />
-                    <StudentMaterial authors={subjectInfo.teacher}/>
+                    <StudentMaterial/>
                 </Container>                
             : <LoadingScreen/>}
             <a href="/Teacher">Všechny předměty</a>            

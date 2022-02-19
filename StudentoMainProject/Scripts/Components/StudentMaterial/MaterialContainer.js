@@ -11,7 +11,7 @@ const StyledTable = styled(WhiteTable)`
     overflow: auto;
 `
 
-const MaterialContainer = ({ materials, deleteMaterial, info }) => {        
+const MaterialContainer = ({ materials, deleteMaterial, info }) => {  
    
     if (materials.loaded) {
         

@@ -171,7 +171,7 @@ const StudentMaterial = ({ authors }) => {
     return (
         <MaterialContext.Provider value={authors}>
             <StyledContainer>
-                {materialData && userInfo ?
+                {materialData && userInfo && authors ?
                 <>
                 <StyledHeadingContainer>
                 <StyledHeading>Studijní materiály</StyledHeading>

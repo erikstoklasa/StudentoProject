@@ -1,11 +1,11 @@
 import React from 'react'
-import './Alerts.css'
+import { StyledErrorAlert } from '../../Styles/GlobalStyles'
 
 const ErrorTable = ({ text }) => {
     return (
-        <p className="alert alert-danger alert-custom">
+        <StyledErrorAlert>
             {text}
-        </p>
+        </StyledErrorAlert>
     )    
 }
 

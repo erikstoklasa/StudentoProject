@@ -88,10 +88,32 @@ export const StyledWarningText = styled.p`
     font-weight: 600;  
     margin: 10px 0px 10px 0px;
 `
+export const StyledAlert = styled.div` 
+    position: relative;
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+`
 
-export const StyledCloseIcon = styled.img.attrs(props => ({
+export const StyledInfoAlert = styled(StyledAlert)` 
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+`
+export const StyledErrorAlert = styled(Alert)` 
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+`
+
+export const StyledCloseIcon = styled.img.attrs(props => (
+    {
     src: '/images/icons/delete.svg'
-}))` 
+    }
+))` 
     cursor: pointer;
     height: 30px;
 `
+
+ 

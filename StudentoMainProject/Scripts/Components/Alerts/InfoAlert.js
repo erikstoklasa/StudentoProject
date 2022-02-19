@@ -1,11 +1,11 @@
 import React from 'react'
-import './Alerts.css'
+import { StyledInfoAlert } from '../../Styles/GlobalStyles'
 
 const InfoTable = ({ text }) => {
     return (
-        <p className="alert alert-info alert-custom">
+        <StyledInfoAlert>
             {text}
-        </p>
+        </StyledInfoAlert>
     )    
 }
 

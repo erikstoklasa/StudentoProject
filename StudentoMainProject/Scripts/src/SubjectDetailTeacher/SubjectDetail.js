@@ -3,6 +3,7 @@ import apiAddress from './variables.js'
 import SubjectTitle from './SubComponents/SubjectTitle'
 import StudentGrades from './SubComponents/StudentGrades'
 import StudentMaterial from '../../Components/StudentMaterial/StudentMaterial'
+import LoadingScreen from '../../Components/Loading/LoadingScreen.js';
 import styled from 'styled-components'
 
 const Container = styled.div` 
@@ -167,7 +168,7 @@ const SubjectDetail = () => {
                     <StudentGrades students={students} info={subjectInfo} />
                     <StudentMaterial authors={subjectInfo.teacher}/>
                 </Container>                
-            : null}
+            : <LoadingScreen/>}
             <a href="/Teacher">Všechny předměty</a>            
         </>        
     );

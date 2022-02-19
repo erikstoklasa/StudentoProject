@@ -82,3 +82,16 @@ export const Input = styled.input`
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     outline: none !important;    
 `
+export const StyledWarningText = styled.p` 
+    color: var(--pastelRed);
+    font-size: 1rem;
+    font-weight: 600;  
+    margin: 10px 0px 10px 0px;
+`
+
+export const StyledCloseIcon = styled.img.attrs(props => ({
+    src: '/images/icons/delete.svg'
+}))` 
+    cursor: pointer;
+    height: 30px;
+`

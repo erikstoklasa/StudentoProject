@@ -1,5 +1,49 @@
 import React, { useContext } from 'react'
 import { MaterialContext } from './StudentMaterial'
+import styled from 'styled-components'
+
+const StyledContainer = styled.div` 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 20px;
+`
+const HeadingContainer = styled.div` 
+    display: flex;
+    align-items: center;     
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-grow: 1;
+`
+const StyledFileIcon = styled.img` 
+    height: 50px;
+    cursor: default;
+`
+const StyledNameContainer = styled.div` 
+    margin-left: 10px;
+`
+const StyledName = styled.p`
+    margin: 0 !important;
+    font-weight: 500;
+    min-width: 30px;    
+    overflow: hidden;
+    text-overflow: ellipsis;
+`
+const StyledDate = styled.p`
+    margin: 0;
+    font-size: 0.8rem;    
+    color: var(--grey);
+`
+const StyledIconContainer = styled.div`     
+    display: flex;
+    gap: 15px;
+`
+
+const StyledIcon = styled.img` 
+    cursor: pointer;
+    width: 1.5rem;
+`
 
 const MaterialView = ({ material, deleteMaterial, user }) => {    
     const authors = useContext(MaterialContext)    
@@ -27,19 +71,24 @@ const MaterialView = ({ material, deleteMaterial, user }) => {
     }    
 
     return (       
-        <div className="material-view-container">
-            <div className="material-heading-container">               
-                    <img src={`/images/icons/${material.link}.png`} alt="icon" height="50px" onError={(e) => { e.target.onerror = null; e.target.src = "/images/icons/fallback.png" }}></img>
-                 <div className="material-name-container">
-                    <p className="material-name">{material.name}</p>
-                    <p className="material-added">{`${getAuthorName()} · ${material.addedRelative}`}</p>
-                </div>                
-            </div>
-            <div className="material-button-container">                    
-                {getCanDelete() ? <img src="/images/icons/trash.svg" class="material-view-icon" onClick={() => { deleteMaterial(material.id) }} /> : null} 
-                <a href={`/${user.data.typeName}/Subjects/Materials/Details?id=${material.id}`} download><img src="/images/icons/download.svg" className="material-view-icon"/></a>
-            </div>
-        </div>
+        <StyledContainer>
+            <HeadingContainer>               
+                <StyledFileIcon src={`/images/icons/${material.link}.png`} alt="icon" onError={(e) => { e.target.onerror = null; e.target.src = "/images/icons/fallback.png" }}></StyledFileIcon>
+                 <StyledNameContainer>
+                    <StyledName>{material.name}</StyledName>
+                    <StyledDate>{`${getAuthorName()} · ${material.addedRelative}`}</StyledDate>
+                </StyledNameContainer>                
+            </HeadingContainer>
+            <StyledIconContainer>                    
+                {getCanDelete() ?
+                    <a>
+                        <StyledIcon src="/images/icons/trash.svg" onClick={() => { deleteMaterial(material.id) }} />
+                    </a> : null} 
+                <a href={`/${user.data.typeName}/Subjects/Materials/Details?id=${material.id}`} download>
+                    <StyledIcon src="/images/icons/download.svg" />
+                </a>
+            </StyledIconContainer>
+        </StyledContainer>
         
     )
 }

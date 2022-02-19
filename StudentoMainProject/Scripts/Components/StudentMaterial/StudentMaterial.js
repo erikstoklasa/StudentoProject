@@ -4,10 +4,31 @@ import AddMaterialPopup from './AddMaterialPopup'
 import { fetchMaterials, postMaterialGroup, postMaterial, deleteMaterial } from '../../Services/MaterialService'
 import { fetchUserInfo } from '../../Services/AuthService'
 import LoadingScreen from '../Loading/LoadingScreen'
-import './StudentMaterial.css'
+import { PrimaryButton } from '../../Styles/GlobalStyles'
+import styled from 'styled-components'
 import moment from 'moment';
 
 export const MaterialContext = createContext()
+
+const StyledContainer = styled.div` 
+    flex-basis: 500px;
+    flex-grow: 1;  
+`
+const StyledHeadingContainer = styled.div` 
+    margin: 10px 0px 10px 0px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center; 
+`
+const StyledHeading = styled.p` 
+    margin: 0;   
+    white-space: nowrap;    
+    color: var(--grey);
+    text-align: start; 
+    margin-top: 10px;
+    margin-bottom: 10px;   
+`
 
 const StudentMaterial = ({ authors }) => {
     
@@ -47,9 +68,7 @@ const StudentMaterial = ({ authors }) => {
             }
         }
         getUserData()        
-    }
-
-   
+    }   
 
     const fetchData = () => {        
         if (userInfo?.loaded) {           
@@ -74,13 +93,13 @@ const StudentMaterial = ({ authors }) => {
     useEffect(getApiAddress, [])
     useEffect(fetchData, [userInfo])
 
-    const uploadMaterial = async (materialProp) => {
+    const uploadMaterial = async (materialProp) => {        
         const res = await postMaterial(subjectId, userInfo.data.typeName, materialProp)
-        if (res.success) {
-           
+        if (res.success) {            
+            //materialProp.materialFile.name
             const newMaterial = {
                 id: res.data.id,
-                name: materialProp.materialFile.name,                
+                name: materialProp.materialName,                
                 addedBy: userInfo.data.typeNum,
                 addedById: userInfo.data.userId,
                 description: '',
@@ -151,19 +170,18 @@ const StudentMaterial = ({ authors }) => {
 
     return (
         <MaterialContext.Provider value={authors}>
-            <div class="material-container">
+            <StyledContainer>
                 {materialData && userInfo ?
-                <div>
-                <div className="material-container-heading-container">
-                <p class="material-table-heading">Studijní materiály</p>
-                {materialData.loaded? <a class="btn btn-primary" onClick={displayMaterialPopup}><img src="/images/add.svg" alt="Přidat" height="18px" class="btn-icon" />Přidat studijní materiál</a> : null}
-                </div>
-                        
+                <>
+                <StyledHeadingContainer>
+                <StyledHeading>Studijní materiály</StyledHeading>
+                {materialData.loaded? <PrimaryButton onClick={displayMaterialPopup}>Přidat studijní materiál</PrimaryButton> : null}
+                </StyledHeadingContainer>                        
                 <MaterialContainer materials={materialData} info={userInfo} deleteMaterial={deleteMaterials} /> 
                 {showMaterialPopup ? <AddMaterialPopup upload={uploadMaterials} hidePopup={hideMaterialPopup} /> : null}
-                </div>
-                    : <LoadingScreen relative={true} />}            
-            </div>
+                </>
+                : <LoadingScreen relative={true} />}            
+            </StyledContainer>
         </MaterialContext.Provider>        
     )
 }

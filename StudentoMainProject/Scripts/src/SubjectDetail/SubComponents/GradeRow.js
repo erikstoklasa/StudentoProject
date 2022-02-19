@@ -104,7 +104,7 @@ const GradeRow = ({ grade, deleteGrade }) => {
         }
     }
 
-        return (
+    return (
         <>
             <Container onClick={() => { updateShowDetail(true) }}>                   
                 <Grade value={grade.value}>
@@ -113,14 +113,12 @@ const GradeRow = ({ grade, deleteGrade }) => {
                 </Grade>
                 <GradeInfo>                        
                     <GradeName>{getGradeName()}</GradeName>                            
-                    <GradeTime>{grade.addedRelative}</GradeTime>
+                    <GradeTime>{grade.addedRelative}</GradeTime>                        
                 </GradeInfo>
             </Container>
             {showDetail? <GradeDetailPopup grade={grade} deleteGrade={deleteGrade} hidePopup={() => { updateShowDetail(false) }}/> : null}
         </>
-    )        
-     
-    
+    )   
 }
 
 export default GradeRow

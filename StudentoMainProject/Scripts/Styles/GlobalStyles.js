@@ -28,6 +28,7 @@ export const Button = styled.div`
 export const PrimaryButton = styled(Button)` 
     background-color: var(--primaryYellowStrong);
     border: 2px solid var(--primaryYellowStrong);
+    white-space: nowrap;
     color: #1a0504;
     :hover {
         background-color: #fff;

@@ -1,4 +1,20 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
+import styled from 'styled-components'
+
+const Cell = styled.div` 
+    position: relative;
+    margin-right: 12px;
+    flex: 0.7 1 0;
+    min-width: 75px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    > p {
+        position: absolute;
+        bottom: 0px;
+    }
+`
 
 const DayColumnCell = ({ dayName, dateArray, dateModifier }) => {
     const [actualDate, updateActualDate] = useState();
@@ -20,10 +36,10 @@ const DayColumnCell = ({ dayName, dateArray, dateModifier }) => {
 
 
     return (
-        <div className="day-cell day-cell-horizontal">
-        <h5 >{dayName}</h5>
-        <p className="row-date">{actualDate}</p>
-        </div>
+        <Cell>
+            <h5>{dayName}</h5>
+            <p>{actualDate}</p>
+        </Cell>
     )
 }
 

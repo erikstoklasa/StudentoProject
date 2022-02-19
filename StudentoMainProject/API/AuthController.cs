@@ -58,7 +58,7 @@ namespace SchoolGradebook.API
                 var roles = await userManager.GetRolesAsync(user);
                 if (roles == null)
                 {
-                    return BadRequest(new LoginResponseObject() { Error = "User has no role" });
+                    return BadRequest(new LoginResponseObject() { Error = "Uživatel nemá žádnou roli" });
                 }
                 await logItemService.Log(
                     new LogItem
@@ -88,11 +88,11 @@ namespace SchoolGradebook.API
             }
             if (result.RequiresTwoFactor)
             {
-                return BadRequest(new LoginResponseObject() { Error = "Authentication requires 2FA" });
+                return BadRequest(new LoginResponseObject() { Error = "Authentifikace vyžaduje dvoufaktotové ověření" });
             }
             if (result.IsLockedOut)
             {
-                return BadRequest(new LoginResponseObject() { Error = "Account locked out" });
+                return BadRequest(new LoginResponseObject() { Error = "Účet byl zablokován" });
             }
             return BadRequest(new LoginResponseObject() { Error = "Neověřená emailová adresa, nebo špatné údaje" });
         }

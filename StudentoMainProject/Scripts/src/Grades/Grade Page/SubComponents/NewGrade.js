@@ -1,7 +1,21 @@
-import React, {useState, useEffect, useRef} from 'react'
-import '../GradePage.css'
+import React, { useState, useEffect, useRef } from 'react'
+import { Input } from '../../../../Styles/GlobalStyles';
+import { Cell } from '../SharedStyles';
+import styled from 'styled-components'
 
-const NewGrade = ({ studentId, showInput, onGradeChange, onGradeRemove, currentStudentEdited  , onClickOutside, updateCurrentStudentEdited }) => {
+const NewCell = styled(Cell)` 
+    width: 100%;
+`
+const GradeInput = styled(Input)` 
+    max-width: 40px;
+    max-height: 25px;
+    padding: 0.375rem 0 !important;
+    -webkit-appearance: none !important;
+    margin: 0;
+    text-align: center;
+`
+
+const NewGrade = ({ studentId, showInput, onGradeChange, onGradeRemove, currentStudentEdited  , onClickOutside, updateCurrentStudentEdited, defaultValue }) => {
     const [newGradeValue, updateNewGradeValue] = useState("");
     const inputRef = useRef(null)
 
@@ -35,29 +49,34 @@ const NewGrade = ({ studentId, showInput, onGradeChange, onGradeRemove, currentS
             inputRef.current.focus()
         } 
     }
+
+    const fillDefaultValue = () => {       
+        if (defaultValue.default) {
+            updateNewGradeValue(defaultValue.value)           
+        }
+    }
     
     useEffect(handleFocus, [currentStudentEdited])
 
-    useEffect(clearGrades, [showInput]);     
+    useEffect(clearGrades, [showInput]);
+    
+    useEffect(fillDefaultValue, [defaultValue])
 
     if (showInput) {
         return (
-            <div className="grade-cell new-grade-cell" >
-                <input
+            <NewCell>
+                <GradeInput
                     ref={inputRef}
-                    maxLength="2"
-                    className="form-control grade-input"
+                    maxLength="2"                   
                     value={newGradeValue}
                     onBlur={() => onClickOutside(studentId)}
                     onClick={() => updateCurrentStudentEdited(studentId)}
-                    onChange={event => { handleGradeChange(event.target.value) }}></input>
-            </div>
+                    onChange={event => { handleGradeChange(event.target.value) }}></GradeInput>
+            </NewCell>
         )
-    }     
-    else { 
+    }else { 
         return (
-            <div className = "grade-cell new-grade-cell" ref={inputRef}>
-            </div>
+            <NewCell ref={inputRef}></NewCell>
         )
     }
     

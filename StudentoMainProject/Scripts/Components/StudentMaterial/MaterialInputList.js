@@ -1,5 +1,10 @@
 import React from 'react'
 import MaterialInput from './MaterialInput'
+import styled from 'styled-components'
+
+const StyledList = styled.div` 
+    margin-top: 10px;
+`
 
 const MaterialInputList = ({ materials, removeFile, changeName }) => {
     
@@ -10,9 +15,9 @@ const MaterialInputList = ({ materials, removeFile, changeName }) => {
     })
 
     return (
-        <div className="mt10">
+        <StyledList>
             {materialList}
-        </div>
+        </StyledList>
     )
 
 }

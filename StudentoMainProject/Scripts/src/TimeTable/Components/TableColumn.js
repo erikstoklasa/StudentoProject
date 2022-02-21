@@ -1,11 +1,28 @@
 import React,  {useEffect, useState} from 'react'
 import TableCell from './TableCell'
-import '../TimeTable.css'
+import styled from 'styled-components'
+
+const Column = styled.div` 
+    display: flex;
+    flex: 1 1 0px;
+    flex-direction: column;
+`
+const VerticalCell = styled.div` 
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;        
+    min-width: 0px !important;
+    > p {
+        margin-bottom: 0px;
+    }
+`
 
 const TableColumn = ({ frameArray, dayName, type, dateArray, dateModifier }) => { 
     const [actualDate, updateActualDate] = useState();
     const cellArray = frameArray.map(frame => {
-        return <TableCell frame={frame} type={type} extraClasses={'table-cell-vertical'}/>
+        return <TableCell frame={frame} type={type} isVertical={true}/>
     })
 
     const determineDate = () => { 
@@ -22,13 +39,13 @@ const TableColumn = ({ frameArray, dayName, type, dateArray, dateModifier }) => 
     useEffect(determineDate, dateArray)
 
     return (
-        <div className="table-column">
-            <div className="day-cell-vertical">
-                <h5 >{dayName}</h5>
-                <p className="mb0">{actualDate}</p>
-        </div>
+        <Column>
+            <VerticalCell>
+                <h5>{dayName}</h5>
+                <p>{actualDate}</p>
+            </VerticalCell>
             {cellArray}
-        </div>
+        </Column>
     )
 }
 

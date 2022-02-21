@@ -6,10 +6,18 @@ import AddGradePopup from './SubComponents/AddGradePopup'
 import LoadingScreen from '../../Components/Loading/LoadingScreen';
 import { fetchGrades, postGrade, deleteGrades } from '../../Services/GradeService.js';
 import { fetchSubjectInstance } from '../../Services/SubjectService.js';
-import './SubjectDetail.css'
+import styled from 'styled-components';
 
+const SubjectDetailContainer = styled.div` 
+    display: flex;        
+    justify-content: space-between;
+    width: 100%;
+    gap: 20px;
+    @media(max-width: 1120px){   
+        flex-wrap: wrap;       
+    }
+`
 
-  
 const SubjectDetail = () => {
     //initialize state
     const subjectId = window.location.href.split("Details?id=").pop()
@@ -87,21 +95,23 @@ const SubjectDetail = () => {
         }        
     }   
 
-    return (
-        <div className="subject-detail-container">
-            {grades && subjectInfo ?
-                <div>    
+    if (grades && subjectInfo) {
+        return (
+            <>
                 <SubjectTitle info={subjectInfo} grades={grades} />
-                    <div className="grades-material-container">
-                        <StudentGrades grades={grades} showPopup={showPopup} deleteGrade={deleteStudentGrade} />
-                        <StudentMaterial authors={subjectInfo.data.students}/>
-                        {showAddPopup ? <AddGradePopup addGrade={addStudentGrade} hidePopup={hidePopup} /> : null}
-                    </div>
-                </div>
-            : <LoadingScreen />}
-                        
-        </div>
-    );
+                <SubjectDetailContainer>
+                    <StudentGrades grades={grades} showPopup={showPopup} deleteGrade={deleteStudentGrade} />
+                    <StudentMaterial authors={{
+                        students: [...subjectInfo.data.students],
+                        teacher: subjectInfo.data.teacher
+                    }} />
+                    {showAddPopup ? <AddGradePopup addGrade={addStudentGrade} hidePopup={hidePopup} /> : null}
+                </SubjectDetailContainer>
+            </>
+        )
+    }else {
+        return <LoadingScreen/>
+    }    
 }
 
 export default SubjectDetail

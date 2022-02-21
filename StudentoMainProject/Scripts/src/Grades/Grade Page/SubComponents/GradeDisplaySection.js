@@ -1,18 +1,22 @@
 import React from 'react'
 import GradeDisplayColumn from './GradeDisplayColumn'
-import '../GradePage.css'
+import styled from 'styled-components'
 
-const GradeDisplaySection = ({ orderedGrades, orderedStudents, bulkGradeData, modifyGrade, modifyGradeGroup }) => { 
+const Section = styled.div` 
+    display: flex;
+`
+
+const GradeDisplaySection = ({ orderedGrades, orderedStudents, bulkGradeData, modifyGrade, modifyGradeGroup, deleteGradeGroup }) => { 
  
         
     const gradeColumnList = orderedGrades.map((grade, index) => {
-        return <GradeDisplayColumn key={index} grade={grade} students={orderedStudents} studentGrades={bulkGradeData} modifyGrade={modifyGrade} modifyGradeGroup={modifyGradeGroup}/>
+        return <GradeDisplayColumn key={index} grade={grade} students={orderedStudents} studentGrades={bulkGradeData} modifyGrade={modifyGrade} modifyGradeGroup={modifyGradeGroup} deleteGradeGroup={deleteGradeGroup}/>
     })        
            
     return (
-        <div className="grade-column-section">
+        <Section>
             {gradeColumnList}
-        </div>
+        </Section>
     )
 }
 

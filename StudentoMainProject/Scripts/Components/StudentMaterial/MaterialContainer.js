@@ -2,8 +2,16 @@ import React from 'react'
 import MaterialView from './MaterialView'
 import InfoAlert from '../Alerts/InfoAlert'
 import ErrorAlert from '../Alerts/ErrorAlert'
+import { WhiteTable } from '../../Styles/GlobalStyles'
+import styled from 'styled-components'
 
-const MaterialContainer = ({ materials, deleteMaterial, info }) => {        
+const StyledTable = styled(WhiteTable)` 
+    padding: 20px 20px 10px;
+    max-height: 500px;
+    overflow: auto;
+`
+
+const MaterialContainer = ({ materials, deleteMaterial, info }) => {  
    
     if (materials.loaded) {
         
@@ -12,9 +20,9 @@ const MaterialContainer = ({ materials, deleteMaterial, info }) => {
                 return <MaterialView material={material} deleteMaterial={deleteMaterial} user={info}/>
             })
             return (
-                <div className="table table-responsive table-white subject-detail-table">
+                <StyledTable>
                     {info ? materialsList : null}
-                </div>
+                </StyledTable>
             )
         } else {
             return (

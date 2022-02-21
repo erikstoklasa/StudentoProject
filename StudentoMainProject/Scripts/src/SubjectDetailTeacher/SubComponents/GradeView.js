@@ -1,5 +1,14 @@
 import React from 'react'
+import { WhiteTable } from '../../../Styles/GlobalStyles'
+import InfoAlert from '../../../Components/Alerts/InfoAlert'
 import GradeRow from './GradeRow'
+import styled from 'styled-components'
+
+const Table = styled(WhiteTable)` 
+    padding: 20px 15px 20px 15px;
+    max-height: 500px;
+    overflow: auto;
+`
 
 const GradeView = ({ students, info}) => {
  
@@ -11,16 +20,14 @@ const GradeView = ({ students, info}) => {
     if (students) {
         //display array of student html elements       
             return (
-                <div className="table table-responsive table-white subject-detail-table">
+                <Table>
                     {studentList}                   
-                </div>
+                </Table>
             )
                   
     } else {        
-            return (
-                <div>
-                    <p class="alert alert-info my-1">Zatím žádní studenti 🙁</p>
-                </div>
+            return (                
+                <InfoAlert text={'Zatím žádní studenti 🙁'}/>                
             )
            
     }

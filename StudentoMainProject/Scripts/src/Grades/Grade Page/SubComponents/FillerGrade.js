@@ -1,10 +1,9 @@
 import React from 'react'
+import { Cell } from '../SharedStyles'
 
 const FillerGrade = ({ id }) => {
     return (
-        <div id={id}className="grade-cell">
-
-        </div>
+        <Cell id={id}></Cell>
     )
 
 }

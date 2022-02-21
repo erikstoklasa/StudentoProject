@@ -1,10 +1,9 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState } from 'react'
 import GradeDisplay from './GradeDisplay'
 import ColumnHeader from './ColumnHeader'
 import GradePopup from './GradePopup'
-import '../GradePage.css'
 
-const GradeDisplayColumn = ({ grade, students, studentGrades, modifyGrade, modifyGradeGroup }) => {
+const GradeDisplayColumn = ({ grade, students, studentGrades, modifyGrade, modifyGradeGroup, deleteGradeGroup }) => {
     const [displayPopup, updateDisplayPopup] = useState(false)
     const [currentStudentEdited, updateCurrentStudentEdited] = useState('none')
     const gradeList = studentGrades.filter(studentGrade => studentGrade.gradeGroupId === grade.gradeGroupId)
@@ -57,10 +56,10 @@ const GradeDisplayColumn = ({ grade, students, studentGrades, modifyGrade, modif
     }   
 
     return (
-        <div className="" onKeyDown={handleArrowClick}>
+        <div onKeyDown={handleArrowClick}>
             <ColumnHeader title={grade.gradeGroupName} grade={grade} activatePopup={activatePopup}/>
             {gradeDisplayList}
-            {displayPopup ? <GradePopup grade={grade} newGrade={false} closePopup={closePopup} modifyGradeGroup={modifyGradeGroup}/> : null}
+            {displayPopup ? <GradePopup grade={grade} newGrade={false} closePopup={closePopup} modifyGradeGroup={modifyGradeGroup}  deleteGradeGroup={deleteGradeGroup}/>: null}
         </div>
     )
 }

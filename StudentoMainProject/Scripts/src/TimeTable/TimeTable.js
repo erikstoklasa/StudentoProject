@@ -1,7 +1,59 @@
 import React, { useState, useEffect } from 'react'
+import { PrimaryButton } from '../../Styles/GlobalStyles.js'
 import { apiAdress } from './Variables.js'
 import InnerTable from './Components/InnerTable.js'
-import './TimeTable.css'
+import styled from 'styled-components'
+
+const Table = styled.div` 
+    background-color: white;
+    padding-top: 20px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 20px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+    font-size: 14px;
+`
+const Control = styled.div` 
+    display: flex;
+    flex-wrap: nowrap;
+    width: 100%;
+    justify-content: flex-end;
+    align-items: center; 
+`
+const Heading = styled.h1` 
+    margin: 0px 0px 0px 15px;    
+    @media(max-width: 450px){
+        display:none;
+    }
+`
+const ButtonContainer = styled.div` 
+    margin-right: auto;
+    margin-left: 0px;
+    display: flex;
+    flex-wrap: nowrap;
+`
+const ArrowContainer = styled.div` 
+    display: flex;
+    align-items: center;
+    margin: 0px 0px 0px 10px !important;
+`
+const Button = styled(PrimaryButton)` 
+    margin: 0px 10px;
+`
+const Arrow = styled.img` 
+    padding: 0px;
+    cursor: pointer;
+    height: 25px;
+    width: 25px;
+    user-select: none;
+    @media(min-width: 450px){
+        margin-right: 10px;
+    }
+`
+
+const LeftArrow = styled(Arrow)` 
+    transform: scaleX(-1);
+`
 
 const TimeTable = () => {
 
@@ -112,23 +164,20 @@ const TimeTable = () => {
 
     
     return (
-        <div className="outer-table">
-            
-            <div className="top-bar">
-            <h1 className="table-heading">Můj rozvrh</h1>
-                <div className="control-button-container">
-                    <a className="btn btn-primary timetable-button mr5" onClick={() => { updateDisplayVertical(!displayVertical) }}>Změnit zobrazení</a>                    
-                    {currentWeek !== initialWeek ? <a className="btn btn-primary back-button timetable-button" onClick={() => { updateCurrentWeek(initialWeek) }}>Aktualní týden</a> : null}
-                </div>
-                <div className="button-container">                    
-                    <a className="week-button week-button-left" onClick={() => { changeWeek(-1) }}><img className="arrow flip-horizontally" src='/images/rightarrow.svg'></img></a>                    
-                    <a className="week-button" onClick={() => {                     
-                        changeWeek(+1)
-                    }}><img className="arrow " src='/images/rightarrow.svg'></img></a>                    
-                </div>    
-            </div>
+        <Table>            
+            <Control>
+                <Heading>Můj rozvrh</Heading>
+                <ButtonContainer>
+                    <Button onClick={() => { updateDisplayVertical(!displayVertical) }}>Změnit zobrazení</Button>                    
+                    {currentWeek !== initialWeek ? <PrimaryButton onClick={() => { updateCurrentWeek(initialWeek) }}>Aktualní týden</PrimaryButton> : null}
+                </ButtonContainer>
+                <ArrowContainer>                    
+                    <LeftArrow  src='/images/rightarrow.svg' onClick={() => { changeWeek(-1) }}/>                 
+                    <Arrow src='/images/rightarrow.svg' onClick={() => {changeWeek(+1)}}/>                  
+                </ArrowContainer>    
+            </Control>
             <InnerTable sortedData={sortedData} week={currentWeek} type={tableType} displayVertical={displayVertical}/>                     
-        </div>
+        </Table>
     )
  }
 

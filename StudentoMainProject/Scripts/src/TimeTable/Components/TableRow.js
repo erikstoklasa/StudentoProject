@@ -1,6 +1,10 @@
 import React from 'react'
 import TableCell from './TableCell'
-import '../TimeTable.css'
+import styled from 'styled-components'
+
+const Row = styled.div` 
+    display: flex;
+`
 
 const TableRow = ({ frameArray, type}) => {  
    
@@ -9,9 +13,9 @@ const TableRow = ({ frameArray, type}) => {
     })  
 
     return (
-        <div className="table-row">       
+        <Row>       
             {cellArray}
-        </div>
+        </Row>
     )
 }
 

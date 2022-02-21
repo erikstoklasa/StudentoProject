@@ -9,7 +9,6 @@ module.exports = {
         SubjectDetail: "./Scripts/src/SubjectDetail/index.js",
         SubjectDetailTeacher: "./Scripts/src/SubjectDetailTeacher/index.js"
 
-
     },
     output: {
         path: path.resolve(__dirname, "./wwwroot/dist"),

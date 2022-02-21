@@ -1,5 +1,6 @@
-import React, {useState, useEffect, useRef} from 'react'
-import '../GradePage.css'
+import React, { useState, useEffect, useRef } from 'react'
+import { Cell, Grade, GradeInput } from '../SharedStyles'
+import styled from 'styled-components'
 
 const GradeDisplay = ({ gradeId, studentId, value, modifyGrade, gradeName, grade, gradeGroupId, currentStudentEdited, updateCurrentStudentEdited, onClickOutside }) => {
     const [initialValue, updateInitialValue] = useState();
@@ -74,18 +75,18 @@ const GradeDisplay = ({ gradeId, studentId, value, modifyGrade, gradeName, grade
 
     if (!displayInput) {
         return (
-            <div className="grade-cell">
-                <div className="grade-text" onClick={handleClick}>{gradeValue}</div>       
-            </div>
+            <Cell>
+                <Grade onClick={handleClick}>{gradeValue}</Grade>       
+            </Cell>
             
         )
     }
     if (displayInput) {
         
         return (
-            <div className="grade-cell">
-                <input className="form-control grade-input" maxLength="2" tabIndex="0" autoFocus onBlur={hideInput} value={gradeValue} onChange={(event) => { handleGradeChange(event.target.value) }}></input>
-            </div>
+            <Cell>
+                <GradeInput maxLength="2" tabIndex="0" autoFocus onBlur={hideInput} value={gradeValue} onChange={(event) => { handleGradeChange(event.target.value) }}></GradeInput>
+            </Cell>
         )
     }
 

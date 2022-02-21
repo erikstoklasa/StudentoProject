@@ -1,6 +1,12 @@
 import React from 'react'
 import GradeRow from './GradeRow'
 import InfoAlert from '../../../Components/Alerts/InfoAlert'
+import styled from 'styled-components'
+import { WhiteTable } from '../../../Styles/GlobalStyles'
+
+const Table = styled(WhiteTable)`
+        padding: 20px 20px 10px;
+`
 
 const GradeView = ({ grades, type, deleteGrade }) => {  
  
@@ -13,9 +19,9 @@ const GradeView = ({ grades, type, deleteGrade }) => {
         //display array of grade html elements
        
             return (
-                <div className="table table-responsive table-white subject-detail-table">
+                <Table>
                     {gradeList}                   
-                </div>
+                </Table>
             )
                   
     } else {

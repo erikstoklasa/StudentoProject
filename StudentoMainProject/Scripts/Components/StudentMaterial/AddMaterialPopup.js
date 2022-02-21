@@ -1,5 +1,81 @@
 import React, { useState, useEffect } from 'react'
+import { Input, StyledWarningText, PrimaryButton } from '../../Styles/GlobalStyles'
 import MaterialInputList from './MaterialInputList'
+import styled from 'styled-components'
+
+const StyledContainer = styled.div` 
+    min-width: 250px;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    right: 0;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    margin: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 5;
+`
+const StyledPopup = styled.div` 
+    max-height: 95vh;
+    width: 100%;
+    max-width: 400px;
+    margin: 20px;
+    padding: 15px;   
+    background-color: white;
+    border: none;
+    border-radius: 10px;
+    overflow-y: auto !important; 
+`
+const StyledHeadingContainer = styled.div` 
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+`
+const StyledTitle = styled.h4` 
+      margin: 0;
+`
+const StyledCloseIcon = styled.img` 
+    cursor: pointer;
+    height: 30px;
+`
+const StyledFileInput = styled.input` 
+    width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+`
+const StyledFileInputLabel = styled.label` 
+    background: #FFFFFF;
+    box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.1);
+    border: transparent;
+    outline: none;
+    border-radius: 10px;
+    cursor: pointer;
+    padding: 10px 10px 40px 10px;
+    min-height: 158.4px;
+    margin: 15px 0px;
+    width: 100%;
+`
+const StyledLabelText = styled.p` 
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 20px;
+    font-size: 0.8rem;
+` 
+const StyledFileNameInput = styled(Input)` 
+    margin: 10px 0px;
+`
+const StyledButtonContainer = styled.div` 
+    display: flex;
+    justify-content: flex-end;
+`
 
 const AddMaterialPopup = ({ upload, hidePopup }) => {    
     const [inputGroupName, updateInputName] = useState('')
@@ -113,36 +189,28 @@ const AddMaterialPopup = ({ upload, hidePopup }) => {
     }
 
     return (
-        <div className="add-material-container" onClick={hidePopup}>              
-            <div className="material-popup-inner-container" onClick={e=> {e.stopPropagation()}}>                
-                <div className="material-popup-title-container">
-                    <h4 className="popup-title">Přidat soubory</h4>
-                        <img className="pointer" src="/images/icons/delete.svg" alt="zavřít" height="30px" onClick={hidePopup}></img>
-                </div>               
-                            
-                <div className="add-group-container">
-                        
-                        <input className="multiple-file-input" type="file" name="materialy" id="materialy" multiple onChange={(event) => { handleFileInput(event.target.files)}}/>
-                    
-                    <label className="file-input-label w100" for="materialy">
-                    {showHelpText ? <p className="material-popup-help-text">Přetáhni sem soubory, které chceš sdílet se svými spolužáky</p> : null}
-                    {showGroupNameInput ?
-                            <div>
-                            <input className="form-control mb10 mt10" placeholder="Jméno skupiny materiálu, např. příprava na test" onChange={(event)=>{updateInputName(event.target.value)}}/>
-                                <div className="hline"></div>
-                            </div>
-                            : null}
+        <StyledContainer onClick={hidePopup}>              
+            <StyledPopup onClick={e=> {e.stopPropagation()}}>                
+                <StyledHeadingContainer>
+                    <StyledTitle>Přidat soubory</StyledTitle>
+                    <StyledCloseIcon src="/images/icons/delete.svg" alt="zavřít" onClick={hidePopup}/>
+                </StyledHeadingContainer>                           
+                <div>                        
+                    <StyledFileInput type="file" name="materialy" id="materialy" multiple onChange={(event) => { handleFileInput(event.target.files)}}/>                    
+                    <StyledFileInputLabel htmlFor="materialy">
+                    {showHelpText ? <StyledLabelText>Přetáhni sem soubory, které chceš sdílet se svými spolužáky</StyledLabelText> : null}
+                    {showGroupNameInput ? <StyledFileNameInput placeholder="Jméno skupiny materiálu, např. příprava na test" onChange={(event)=>{updateInputName(event.target.value)}}/> : null}
                     {inputData.length > 0 ? <MaterialInputList materials={inputData} removeFile={removeFile} changeName={changeMaterialName}/> : null}
-                    </label>
+                    </StyledFileInputLabel>
                 </div>                       
                 {showWarning? 
-                        <p className="add-warning-text">{warningMessage}</p>
+                        <StyledWarningText>{warningMessage}</StyledWarningText>
                     : null}
-                <div className="flex-right">
-                <button className="btn btn-primary next-material-button" onClick={handleUploadClick}>Přidat</button>                    
-                </div>            
-            </div>           
-        </div>
+                <StyledButtonContainer>
+                    <PrimaryButton onClick={handleUploadClick}>Přidat</PrimaryButton>                    
+                </StyledButtonContainer>            
+            </StyledPopup>           
+        </StyledContainer>
     )
 }
 

@@ -1,7 +1,32 @@
 import React from 'react'
-import InfoAlert from '../../../Components/Alerts/InfoAlert'
 import ErrorAlert from '../../../Components/Alerts/ErrorAlert'
-import '../SubjectDetail.css'
+import styled from 'styled-components'
+
+const TitleContainer = styled.div` 
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 10px;  
+`
+const HeadingContainer = styled.div` 
+    flex-basis: 760px; 
+    flex-wrap: wrap; 
+`
+const AverageContainer = styled.div` 
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap; 
+`
+const Title = styled.h2` 
+    margin-bottom: 0;
+    margin-right: 10px;
+`
+const Average = styled.h2` 
+    margin-bottom: 0;
+    white-space: nowrap;
+`
+const Teacher = styled.h5` 
+    margin-bottom: 0;
+`
 
 const SubjectTitle = ({ info, grades }) => {
     
@@ -23,7 +48,7 @@ const SubjectTitle = ({ info, grades }) => {
             });
             const average = sum / gradeNum
             const formattedAverage = 5 - (average / 25)            
-            return <h2 className="subject-heading-text">{`Ø `}{formattedAverage.toFixed(2)}</h2>
+            return <Average>{`Ø `}{formattedAverage.toFixed(2)}</Average>
         } else {
             return null
         }
@@ -33,15 +58,15 @@ const SubjectTitle = ({ info, grades }) => {
             
     if(info.loaded){
         return (
-            <div className="subject-title-container">
-                <div className="heading-container">
-                    <div className="average-container">
-                        <h2 className="subject-detail-title">{info.data.name}</h2>                        
+            <TitleContainer>
+                <HeadingContainer>
+                    <AverageContainer>
+                        <Title>{info.data.name}</Title>                        
                         { grades.loaded? calculateStudentAverage(grades.data) : null}                        
-                    </div>                    
-                    <h5 className="mb0">{`${info.data.teacher.firstName} ${info.data.teacher.lastName}`}</h5>
-                </div>                                
-            </div>
+                    </AverageContainer>                    
+                    <Teacher>{`${info.data.teacher.firstName} ${info.data.teacher.lastName}`}</Teacher>
+                </HeadingContainer>                                
+            </TitleContainer>
             )
         } else {
             return (                

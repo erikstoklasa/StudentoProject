@@ -4,17 +4,44 @@ import AddMaterialPopup from './AddMaterialPopup'
 import { fetchMaterials, postMaterialGroup, postMaterial, deleteMaterial } from '../../Services/MaterialService'
 import { fetchUserInfo } from '../../Services/AuthService'
 import LoadingScreen from '../Loading/LoadingScreen'
-import './StudentMaterial.css'
+import { PrimaryButton } from '../../Styles/GlobalStyles'
+import styled from 'styled-components'
 import moment from 'moment';
 
 export const MaterialContext = createContext()
 
-const StudentMaterial = ({authors}) => {
-    const subjectId = window.location.href.split("Details?id=").pop();    
+const StyledContainer = styled.div` 
+    flex-basis: 500px;
+    flex-grow: 1;  
+`
+const StyledHeadingContainer = styled.div` 
+    margin: 10px 0px 10px 0px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center; 
+`
+const StyledHeading = styled.p` 
+    margin: 0;   
+    white-space: nowrap;    
+    color: var(--grey);
+    text-align: start; 
+    margin-top: 10px;
+    margin-bottom: 10px;   
+`
+
+const StudentMaterial = ({ authors }) => {
+    
+    const getSubjectId = () => {
+        const queryString = window.location.search
+        const urlParams = new URLSearchParams(queryString);
+        return urlParams.get('id').split('/')[0]
+    }    
+
+    const subjectId = getSubjectId()   
     const [showMaterialPopup, updateShowMaterialPopup] = useState(false);
     const [userInfo, updateUserInfo] = useState()
-    const [materialData, updateMaterials] = useState();
-        
+    const [materialData, updateMaterials] = useState();        
 
     const getApiAddress = () => {       
         const getUserType = (data) => {           
@@ -22,9 +49,10 @@ const StudentMaterial = ({authors}) => {
             else if (data.userType === 'teacher') return 'Teacher'
             else if(data.userType === 'teacher classmaster') return 'Teacher'
         }
-        const getTypeNum = (data) => {
-            if (data.userType === 'student')    return 1          
-            else if(data.userType === 'teacher') return 0
+
+        const getTypeNum = (data) => {            
+            if (data.userType === 'student') return 1          
+            else return 0
         }
 
         const getUserData = async () => {
@@ -41,9 +69,7 @@ const StudentMaterial = ({authors}) => {
             }
         }
         getUserData()        
-    }
-
-   
+    }   
 
     const fetchData = () => {        
         if (userInfo?.loaded) {           
@@ -68,13 +94,13 @@ const StudentMaterial = ({authors}) => {
     useEffect(getApiAddress, [])
     useEffect(fetchData, [userInfo])
 
-    const uploadMaterial = async (materialProp) => {
+    const uploadMaterial = async (materialProp) => {        
         const res = await postMaterial(subjectId, userInfo.data.typeName, materialProp)
-        if (res.success) {
-           
+        if (res.success) {            
+            //materialProp.materialFile.name
             const newMaterial = {
                 id: res.data.id,
-                name: materialProp.materialFile.name,                
+                name: materialProp.materialName,                
                 addedBy: userInfo.data.typeNum,
                 addedById: userInfo.data.userId,
                 description: '',
@@ -124,8 +150,8 @@ const StudentMaterial = ({authors}) => {
 
     const deleteMaterials = async (id) => {
         const res = await deleteMaterial(userInfo.data.typeName,id)
-        if (res.success) {
-            const newMatArr = materialData.data.filter(material => { material.id !== id })
+        if (res.success) {            
+            const newMatArr = materialData.data.filter(material =>  material.id !== id )            
             updateMaterials(
                 {
                     loaded: true,
@@ -143,21 +169,33 @@ const StudentMaterial = ({authors}) => {
         updateShowMaterialPopup(true)
     }
 
+    const isLoaded = () => {
+        if (materialData && userInfo) {
+            if (userInfo.data.typeName === 'Teacher') {
+                return true
+            } else if (userInfo.data.typeName === 'Student' && authors) {
+                return true
+            } else {
+                return false
+            }
+        }
+        else return false
+    }    
+
     return (
         <MaterialContext.Provider value={authors}>
-            <div class="material-container">
-                {materialData && userInfo ?
-                <div>
-                <div className="material-container-heading-container">
-                <p class="material-table-heading">Studijní materiály</p>
-                {materialData.loaded? <a class="btn btn-primary" onClick={displayMaterialPopup}><img src="/images/add.svg" alt="Přidat" height="18px" class="btn-icon" />Přidat studijní materiál</a> : null}
-                </div>
-                        
+            <StyledContainer>
+                {isLoaded() ?
+                <>
+                <StyledHeadingContainer>
+                <StyledHeading>Studijní materiály</StyledHeading>
+                {materialData.loaded? <PrimaryButton onClick={displayMaterialPopup}>Přidat studijní materiál</PrimaryButton> : null}
+                </StyledHeadingContainer>                        
                 <MaterialContainer materials={materialData} info={userInfo} deleteMaterial={deleteMaterials} /> 
                 {showMaterialPopup ? <AddMaterialPopup upload={uploadMaterials} hidePopup={hideMaterialPopup} /> : null}
-                </div>
-                    : <LoadingScreen relative={true} />}            
-            </div>
+                </>
+                : <LoadingScreen relative={true} />}            
+            </StyledContainer>
         </MaterialContext.Provider>        
     )
 }

@@ -8,7 +8,7 @@ const MaterialView = ({ material, deleteMaterial, user }) => {
         if (user.data.typeName === "Teacher") {
             return true
         } else {
-            if (material.addedById === user.data.userId && material.addedBy !== 0) {
+            if (material.addedById === user.data.id && material.addedBy !== 0) {
                 return true
             } else {
                 return false

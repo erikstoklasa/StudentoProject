@@ -18,13 +18,12 @@ const StudentMaterial = ({authors}) => {
 
     const getApiAddress = () => {       
         const getUserType = (data) => {           
-            if (data.userType === 'student')    return 'Student'           
-            else if (data.userType === 'teacher') return 'Teacher'
-            else if(data.userType === 'teacher classmaster') return 'Teacher'
+            if (data.userType === 1)    return 'Student'           
+            else return 'Teacher'            
         }
         const getTypeNum = (data) => {
-            if (data.userType === 'student')    return 1          
-            else if(data.userType === 'teacher') return 0
+            if (data.userType === 1)    return 1          
+            else return 0
         }
 
         const getUserData = async () => {

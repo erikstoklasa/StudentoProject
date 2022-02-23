@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SchoolGradebook.Models;
 using SchoolGradebook.Services;
+using StudentoMainProject.API.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,10 @@ namespace StudentoMainProject.API
 
         private string UserId { get; set; }
 
-        public ClassesController(IHttpContextAccessor httpContextAccessor, ClassService classService, AdminService adminService, StudentService studentService)
+        public ClassesController(IHttpContextAccessor httpContextAccessor,
+                                 ClassService classService,
+                                 AdminService adminService,
+                                 StudentService studentService)
         {
             this.classService = classService;
             this.adminService = adminService;
@@ -112,15 +116,5 @@ namespace StudentoMainProject.API
                 return BadRequest();
             }
         }
-
-
-    }
-    public class ClassObject
-    {
-        public int Id { get; set; }
-        public int TeacherId { get; set; }
-        public int RoomId { set; get; }
-        public short Grade { set; get; } //např. 2 pro 2. A
-        public string Name { set; get; } //např. A pro 2. A
     }
 }

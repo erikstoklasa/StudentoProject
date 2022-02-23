@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using SchoolGradebook.Models;
 using SchoolGradebook.Services;
+using StudentoMainProject.API.Models;
 using StudentoMainProject.Models;
 using StudentoMainProject.Services;
 using System;
@@ -49,7 +49,7 @@ namespace SchoolGradebook.API
         /// <param name="credentials"></param>
         /// <returns></returns>
         [HttpPost("Login")]
-        public async Task<ActionResult<AuthResponseObject>> LogIn(InputModelObject credentials)
+        public async Task<ActionResult<LoginResponseObject>> LogIn(LoginObject credentials)
         {
             var result = await signInManager.PasswordSignInAsync(credentials.Email, credentials.Password, false, lockoutOnFailure: false);
             if (result.Succeeded)
@@ -58,7 +58,7 @@ namespace SchoolGradebook.API
                 var roles = await userManager.GetRolesAsync(user);
                 if (roles == null)
                 {
-                    return BadRequest(new AuthResponseObject() { Error = "User has no role" });
+                    return BadRequest(new LoginResponseObject() { Error = "Uživatel nemá žádnou roli" });
                 }
                 await logItemService.Log(
                     new LogItem
@@ -69,17 +69,32 @@ namespace SchoolGradebook.API
                         UserRole = roles.FirstOrDefault(),
                         IPAddress = IPAddress.ToString()
                     });
-                return new AuthResponseObject() { UserType = roles.FirstOrDefault() };
+                UserObject userObject = new();
+                switch (roles.FirstOrDefault())
+                {
+                    case "student":
+                        userObject.UserType = UserObject.USERTYPE.Student;
+                        break;
+                    case "admin":
+                        userObject.UserType = UserObject.USERTYPE.Admin;
+                        break;
+                    case "teacher":
+                        userObject.UserType = UserObject.USERTYPE.Teacher;
+                        break;
+                    default:
+                        break;
+                }
+                return new LoginResponseObject() { User = userObject};
             }
             if (result.RequiresTwoFactor)
             {
-                return BadRequest(new AuthResponseObject() { Error = "Authentication requires 2FA" });
+                return BadRequest(new LoginResponseObject() { Error = "Authentifikace vyžaduje dvoufaktotové ověření" });
             }
             if (result.IsLockedOut)
             {
-                return BadRequest(new AuthResponseObject() { Error = "Account locked out" });
+                return BadRequest(new LoginResponseObject() { Error = "Účet byl zablokován" });
             }
-            return BadRequest(new AuthResponseObject() { Error = "Neověřená emailová adresa, nebo špatné údaje" });
+            return BadRequest(new LoginResponseObject() { Error = "Neověřená emailová adresa, nebo špatné údaje" });
         }
         /// <summary>
         /// Clears the auth session cookie
@@ -116,8 +131,8 @@ namespace SchoolGradebook.API
                 {
                     return new UserObject()
                     {
-                        UserId = userId,
-                        UserType = "teacher classmaster",
+                        Id = userId,
+                        UserType = UserObject.USERTYPE.TeacherClassmaster,
                         FirstName = teacher.FirstName,
                         LastName = teacher.LastName
                     };
@@ -126,8 +141,8 @@ namespace SchoolGradebook.API
                 {
                     return new UserObject()
                     {
-                        UserId = userId,
-                        UserType = "teacher",
+                        Id = userId,
+                        UserType = UserObject.USERTYPE.Teacher,
                         FirstName = teacher.FirstName,
                         LastName = teacher.LastName
                     };
@@ -135,12 +150,11 @@ namespace SchoolGradebook.API
             }
             else //User is a student
             {
-                
                 var student = await studentService.GetStudentBasicInfoAsync(userId);
                 UserObject user = new()
                 {
-                    UserId = userId,
-                    UserType = "student",
+                    Id = userId,
+                    UserType = UserObject.USERTYPE.Student,
                     FirstName = student.FirstName,
                     LastName = student.LastName
                 };
@@ -148,22 +162,15 @@ namespace SchoolGradebook.API
             }
         }
     }
-    public class InputModelObject
+    public class LoginObject
     {
         public string Email { get; set; }
         public string Password { get; set; }
 
     }
-    public class AuthResponseObject
+    public class LoginResponseObject
     {
-        public string UserType { get; set; }
+        public UserObject User { get; set; }
         public string Error { get; set; }
-    }
-    public class UserObject
-    {
-        public int UserId { get; set; }
-        public string UserType { get; set; } //Either student, teacher, or classmaster teacher 
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
     }
 }

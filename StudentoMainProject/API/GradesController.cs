@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SchoolGradebook.Models;
 using SchoolGradebook.Services;
+using StudentoMainProject.API.Models;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
@@ -664,7 +665,10 @@ namespace SchoolGradebook.API.Grades
                     var newGrade = new GradeObject
                     {
                         Added = g.Added,
-                        AddedBy = (GradeObject.USERTYPE)utype,
+                        AddedBy = new UserObject()
+                        {
+                            UserType = (UserObject.USERTYPE)utype,
+                        },
                         Id = g.Id,
                         Name = g.Name,
                         Weight = g.Weight,
@@ -698,7 +702,10 @@ namespace SchoolGradebook.API.Grades
                     var newGrade = new GradeObject
                     {
                         Added = g.Added,
-                        AddedBy = (GradeObject.USERTYPE)utype, //Casting the Grade UserType data model enum to the response GradeObject UserType
+                        AddedBy = new UserObject()
+                        {
+                            UserType = (UserObject.USERTYPE)utype,
+                        },
                         Id = g.Id,
                         Name = g.Name,
                         Weight = g.Weight,
@@ -817,37 +824,5 @@ namespace SchoolGradebook.API.Grades
 
             return StatusCode(200);
         }
-
-    }
-    public class GradeObject
-    {
-        public enum USERTYPE { Teacher, Student }
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Value { get; set; }
-        public int? Weight { get; set; }
-        public int SubjectInstanceId { get; set; }
-        public int StudentId { get; set; }
-        public int? GradeGroupId { get; set; }
-        public string GradeGroupName { get; set; }
-        public DateTime? GradeGroupAdded { get; set; }
-        public int? GradeGroupWeight { get; set; }
-        public DateTime Added { get; set; }
-        public USERTYPE? AddedBy { get; set; }
-
-    }
-    public class GradeGroupObject
-    {
-        public enum USERTYPE { Teacher, Student }
-        public int Id { get; set; }
-        public int Weight { get; set; }
-        public string Name { get; set; }
-        public DateTime Added { get; set; }
-        public int AddedById { get; set; }
-        public USERTYPE AddedBy { get; set; }
-    }
-    public class ErrorObject
-    {
-        public string Message { get; set; }
     }
 }
